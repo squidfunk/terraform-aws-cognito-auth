@@ -31,11 +31,6 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 
 # Makefiles
-[{Makefile,Makefile.*}]
+[Makefile]
 indent_style = tab
 indent_size = 8
-
-# Tab-separated files
-[*.tsv]
-indent_style = tab
-indent_size = 4

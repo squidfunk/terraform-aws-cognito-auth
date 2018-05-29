@@ -97,7 +97,7 @@ export class VerificationProvider {
   public async claim(code: string): Promise<VerificationCode> {
     const { Attributes } = await this.dynamodb.delete({
       TableName: process.env.DYNAMODB_TABLE!,
-      Key: { code },
+      Key: { id: code },
       ReturnValues: "ALL_OLD"
     }).promise()
 

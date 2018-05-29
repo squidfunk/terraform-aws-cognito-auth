@@ -34,16 +34,18 @@ import { Client } from ".."
 export class ManagementClient extends Client {
 
   /**
-   * Initialize verification and identity provider
+   * Factory method, necessary for mocking
    *
    * @param cognito - Cognito client
+   *
+   * @return Management client
    */
-  public constructor(
+  public static factory(
     cognito = new CognitoIdentityServiceProvider({
       apiVersion: "2016-04-18"
     })
   ) {
-    super(cognito)
+    return new ManagementClient(cognito)
   }
 
   /**
@@ -57,13 +59,13 @@ export class ManagementClient extends Client {
     await Promise.all([
 
       /* Confirm user registration */
-      await this.cognito.adminConfirmSignUp({
+      this.cognito.adminConfirmSignUp({
         UserPoolId: process.env.COGNITO_USER_POOL!,
         Username: username
       }).promise(),
 
       /* Verify email address */
-      await this.cognito.adminUpdateUserAttributes({
+      this.cognito.adminUpdateUserAttributes({
         UserPoolId: process.env.COGNITO_USER_POOL!,
         Username: username,
         UserAttributes: [
@@ -82,7 +84,10 @@ export class ManagementClient extends Client {
    * Hack: Cognito doesn't allow us to change the password of a user without
    * his consent, so we have to work around this in order to implement our own
    * customized authentication flow by deleting and re-creating the user.
-   * Hopefully, this issue will be adressed: https://amzn.to/2snEPMm
+   * Hopefully, this issue will be adressed, see https://amzn.to/2snEPMm
+   *
+   * We must sign out the user to force re-authentication, but we don't need to
+   * do it explicitly as we delete the old and create a new user.
    *
    * @param username - Username or email
    * @param password - Password

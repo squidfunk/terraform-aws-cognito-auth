@@ -25,35 +25,152 @@ import {
   APIGatewayProxyResult
 } from "aws-lambda"
 
+import { AuthenticationClient } from "./clients/authentication"
+import { ManagementClient } from "./clients/management"
+// import { SessionClient } from "./clients/session"
+import { VerificationProvider } from "./verification"
+
+// tslint:disable no-empty no-duplicate-string
+
 /* ----------------------------------------------------------------------------
  * Handlers
  * ------------------------------------------------------------------------- */
 
 /**
- * Deliver incoming event to Kinesis
+ * Authenticate using credentials or refresh token
  *
  * @param event - API Gateway event
  *
  * @return Promise resolving with HTTP response
  */
-export async function handler(
+export async function register(
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> {
-  console.log(event)
+  const data = JSON.parse(event.body!)
+
+  /* Initialize client and perform authentication */
+  const client = AuthenticationClient.factory()
+  const code = await client.register(data.email, data.password)
 
   /* Always return with 202 (Accepted) and add CORS headers, as we use the
      Lambda Proxy integration which doesn't add them upon invocation */
   return {
-    statusCode: 202,
+    statusCode: 200,
     headers: {
       "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ORIGIN!
     },
-    body: ""
+    body: JSON.stringify(code)
   }
 }
 
-export const authenticate = handler
-export const register = handler
-export const register_verify = handler // tslint:disable-line variable-name
-export const reset = handler
-export const reset_verify = handler // tslint:disable-line variable-name
+/**
+ * Authenticate using credentials or refresh token
+ *
+ * @param event - API Gateway event
+ *
+ * @return Promise resolving with HTTP response
+ */
+export async function registerVerify(
+  event: APIGatewayEvent
+): Promise<APIGatewayProxyResult> {
+  const verification = new VerificationProvider()
+  const code = await verification.claim(event.pathParameters!.token)
+
+  /* Initialize client and perform authentication */
+  const client = ManagementClient.factory()
+  await client.verifyUser(code.subject)
+
+  /* Always return with 202 (Accepted) and add CORS headers, as we use the      // OR 404
+     Lambda Proxy integration which doesn't add them upon invocation */
+  return {
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ORIGIN!
+    },
+    body: JSON.stringify(code)
+  }
+}
+
+/**
+ * Authenticate using credentials or refresh token
+ *
+ * @param event - API Gateway event
+ *
+ * @return Promise resolving with HTTP response
+ */
+export async function reset(
+  event: APIGatewayEvent
+): Promise<APIGatewayProxyResult> {
+  const data = JSON.parse(event.body!)
+
+  /* Initialize client and perform authentication */
+  const client = AuthenticationClient.factory()
+  const code = await client.forgotPassword(data.username)
+
+  /* Always return with 202 (Accepted) and add CORS headers, as we use the
+     Lambda Proxy integration which doesn't add them upon invocation */
+  return {
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ORIGIN!
+    },
+    body: JSON.stringify(code)
+  }
+}
+
+/**
+ * Authenticate using credentials or refresh token
+ *
+ * @param event - API Gateway event
+ *
+ * @return Promise resolving with HTTP response
+ */
+export async function resetVerify(
+  event: APIGatewayEvent
+): Promise<APIGatewayProxyResult> {
+  const data = JSON.parse(event.body!)
+
+  const verification = new VerificationProvider()
+  const code = await verification.claim(event.pathParameters!.token)
+
+  /* Initialize client and perform authentication */
+  const client = ManagementClient.factory()
+  await client.changePassword(code.subject, data.password)
+
+  /* Always return with 202 (Accepted) and add CORS headers, as we use the      // OR 404
+     Lambda Proxy integration which doesn't add them upon invocation */
+  return {
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ORIGIN!
+    },
+    body: JSON.stringify(code)
+  }
+}
+
+/**
+ * Authenticate using credentials or refresh token
+ *
+ * @param event - API Gateway event
+ *
+ * @return Promise resolving with HTTP response
+ */
+export async function authenticate(
+  event: APIGatewayEvent
+): Promise<APIGatewayProxyResult> {
+  const data = JSON.parse(event.body!)
+
+  /* Initialize client and perform authentication */
+  const client = AuthenticationClient.factory()
+  const session = await client.authenticate(data.username || data.token, data.password)
+
+  /* Always return with 202 (Accepted) and add CORS headers, as we use the
+     Lambda Proxy integration which doesn't add them upon invocation */
+  return {
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ORIGIN!
+    },
+    body: JSON.stringify(session)
+  }
+}

@@ -33,6 +33,20 @@ variable "region" {
 }
 
 # -----------------------------------------------------------------------------
+# Variables: API Gateway
+# -----------------------------------------------------------------------------
+
+# var.api_id
+variable "api_id" {
+  description = "API identifier"
+}
+
+# var.api_resource_id
+variable "api_resource_id" {
+  description = "API resource identifier"
+}
+
+# -----------------------------------------------------------------------------
 # Variables: Cognito
 # -----------------------------------------------------------------------------
 
@@ -53,20 +67,6 @@ variable "cognito_user_pool_client" {
 # var.dynamodb_table
 variable "dynamodb_table" {
   description = "DynamoDB table"
-}
-
-# -----------------------------------------------------------------------------
-# Variables: API Gateway
-# -----------------------------------------------------------------------------
-
-# var.api_id
-variable "api_id" {
-  description = "API identifier"
-}
-
-# var.api_resource_id
-variable "api_resource_id" {
-  description = "API resource identifier"
 }
 
 # -----------------------------------------------------------------------------

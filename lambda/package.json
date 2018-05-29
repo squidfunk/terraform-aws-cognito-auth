@@ -1,11 +1,21 @@
 {
-  "name": "ginseng.access-lambda-user-create",
+  "name": "terraform-aws-cognito-idp.lambda",
   "version": "0.0.0",
-  "description": "Deliver events sent by client to Kinesis Firehose",
-  "homepage": "https://github.com/squidfunk/ginseng-infrastructure",
+  "description": "An identity provider using AWS Cognito",
+  "homepage": "https://github.com/squidfunk/terraform-aws-cognito-idp",
+  "bugs": {
+    "url": "https://github.com/squidfunk/terraform-aws-cognito-idp/",
+    "email": "martin.donath@squidfunk.com"
+  },
   "private": true,
-  "bin": {
-    "gx-access-client": "bin/client"
+  "author": {
+    "name": "Martin Donath",
+    "email": "martin.donath@squidfunk.com"
+  },
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/squidfunk/terraform-aws-cognito-idp.git"
   },
   "scripts": {
     "build": "make build",
@@ -23,7 +33,6 @@
     "@types/jasmine": "^2.8.6",
     "@types/node": "^9.6.2",
     "@types/uuid": "^3.4.3",
-    "@types/yargs": "^11.0.0",
     "aws-sdk": "^2.220.1",
     "chance": "^1.0.13",
     "dotenv": "^5.0.1",
@@ -35,7 +44,6 @@
     "tsconfig-paths": "^3.2.0",
     "tslint": "^5.9.1",
     "tslint-sonarts": "^1.6.0",
-    "typescript": "^2.8.1",
-    "yargs": "^11.0.0"
+    "typescript": "^2.8.1"
   }
 }

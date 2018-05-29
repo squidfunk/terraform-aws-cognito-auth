@@ -40,16 +40,31 @@ import { Session } from "../session"
 export class AuthenticationClient extends Client {
 
   /**
+   * Factory method, necessary for mocking
+   *
+   * @param verification - Verification provider
+   * @param cognito - Cognito client
+   *
+   * @return Authentication client
+   */
+  public static factory(
+    verification = new VerificationProvider(),
+    cognito = new CognitoIdentityServiceProvider({
+      apiVersion: "2016-04-18"
+    })
+  ) {
+    return new AuthenticationClient(verification, cognito)
+  }
+
+  /**
    * Initialize verification and identity provider
    *
    * @param verification - Verification provider
    * @param cognito - Cognito client
    */
-  public constructor(
-    protected verification = new VerificationProvider(),
-    cognito = new CognitoIdentityServiceProvider({
-      apiVersion: "2016-04-18"
-    })
+  protected constructor(
+    protected verification: VerificationProvider,
+    cognito: CognitoIdentityServiceProvider
   ) {
     super(cognito)
   }

@@ -325,13 +325,13 @@ module "register" {
   namespace = "${var.namespace}"
   region    = "${var.region}"
 
+  api_id          = "${aws_api_gateway_rest_api._.id}"
+  api_resource_id = "${aws_api_gateway_rest_api._.root_resource_id}"
+
   cognito_user_pool        = "${aws_cognito_user_pool._.id}"
   cognito_user_pool_client = "${aws_cognito_user_pool_client._.id}"
 
   dynamodb_table = "${aws_dynamodb_table._.name}"
-
-  api_id          = "${aws_api_gateway_rest_api._.id}"
-  api_resource_id = "${aws_api_gateway_rest_api._.root_resource_id}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
@@ -346,13 +346,13 @@ module "reset" {
   namespace = "${var.namespace}"
   region    = "${var.region}"
 
+  api_id          = "${aws_api_gateway_rest_api._.id}"
+  api_resource_id = "${aws_api_gateway_rest_api._.root_resource_id}"
+
   cognito_user_pool        = "${aws_cognito_user_pool._.id}"
   cognito_user_pool_client = "${aws_cognito_user_pool_client._.id}"
 
   dynamodb_table = "${aws_dynamodb_table._.name}"
-
-  api_id          = "${aws_api_gateway_rest_api._.id}"
-  api_resource_id = "${aws_api_gateway_rest_api._.root_resource_id}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"

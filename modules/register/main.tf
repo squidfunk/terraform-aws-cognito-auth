@@ -136,7 +136,9 @@ resource "aws_lambda_permission" "_" {
       var.api_id
     }/*/${
       aws_api_gateway_method._.http_method
-    }/"
+    }${
+      aws_api_gateway_resource._.path
+    }"
 }
 
 # -----------------------------------------------------------------------------
@@ -147,7 +149,7 @@ resource "aws_lambda_function" "verify" {
   role          = "${var.lambda_role_arn}"
   runtime       = "nodejs8.10"
   filename      = "${var.lambda_filename}"
-  handler       = "index.register_verify"
+  handler       = "index.registerVerify"
   timeout       = 10
 
   source_code_hash = "${
@@ -178,5 +180,7 @@ resource "aws_lambda_permission" "verify" {
       var.api_id
     }/*/${
       aws_api_gateway_method.verify.http_method
-    }/"
+    }${
+      aws_api_gateway_resource.verify.path
+    }"
 }
