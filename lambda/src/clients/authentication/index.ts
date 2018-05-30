@@ -31,6 +31,21 @@ import {
 import { Session } from "../session"
 
 /* ----------------------------------------------------------------------------
+ * Functions
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Create an ISO 8601 date string for a specific time in the future
+ *
+ * @param seconds - Validity in seconds
+ *
+ * @return Expiry date in ISO 8601
+ */
+export function expires(seconds: number): string {
+  return new Date(Date.now() + seconds * 1000).toISOString()
+}
+
+/* ----------------------------------------------------------------------------
  * Class
  * ------------------------------------------------------------------------- */
 
@@ -121,7 +136,7 @@ export class AuthenticationClient extends Client {
   }
 
   /**
-   * Trigger authentication flow for forgot password
+   * Trigger authentication flow for lost password
    *
    * @param username - Username or email
    *
@@ -135,6 +150,18 @@ export class AuthenticationClient extends Client {
 
     /* Issue and return verification code */
     return this.verification.issue(Username)
+  }
+
+  /**
+   * Claim a verification code
+   *
+   * @param code - Verification code
+   * @param password Password
+   *
+   * @return Promise resolving with verification code
+   */
+  public verify(code: string): Promise<VerificationCode> {
+    return this.verification.claim(code)
   }
 
   /**
@@ -162,8 +189,18 @@ export class AuthenticationClient extends Client {
     if (!AuthenticationResult)
       throw new Error(`Invalid authentication: challenge "${ChallengeName}"`)
     return {
-      accessToken: AuthenticationResult.AccessToken!,
-      refreshToken: AuthenticationResult.RefreshToken
+      access: {
+        token: AuthenticationResult.AccessToken!,
+        expires: expires(60 * 60) /* 1 hour */
+      },
+      ...(AuthenticationResult.RefreshToken
+        ? {
+          refresh: {
+            token: AuthenticationResult.RefreshToken,
+            expires: expires(60 * 60 * 24 * 30) /* 30 days */
+          }
+        }
+        : {})
     }
   }
 
@@ -190,7 +227,10 @@ export class AuthenticationClient extends Client {
     if (!AuthenticationResult)
       throw new Error(`Invalid authentication: challenge "${ChallengeName}"`)
     return {
-      accessToken: AuthenticationResult.AccessToken!
+      access: {
+        token: AuthenticationResult.AccessToken!,
+        expires: expires(60 * 60) /* 1 hour */
+      }
     }
   }
 }

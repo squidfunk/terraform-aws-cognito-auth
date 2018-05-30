@@ -1,10 +1,10 @@
 {
-  "name": "terraform-aws-cognito-idp.lambda",
+  "name": "terraform-aws-cognito-auth.lambda",
   "version": "0.0.0",
-  "description": "An identity provider using AWS Cognito",
-  "homepage": "https://github.com/squidfunk/terraform-aws-cognito-idp",
+  "description": "Serverless authentication as a service using AWS Cognito",
+  "homepage": "https://github.com/squidfunk/terraform-aws-cognito-auth",
   "bugs": {
-    "url": "https://github.com/squidfunk/terraform-aws-cognito-idp/",
+    "url": "https://github.com/squidfunk/terraform-aws-cognito-auth/",
     "email": "martin.donath@squidfunk.com"
   },
   "private": true,
@@ -15,7 +15,7 @@
   "contributors": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/squidfunk/terraform-aws-cognito-idp.git"
+    "url": "https://github.com/squidfunk/terraform-aws-cognito-auth.git"
   },
   "scripts": {
     "build": "make build",

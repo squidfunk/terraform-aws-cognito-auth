@@ -32,8 +32,14 @@ import { Client } from ".."
  * Session tokens
  */
 export interface Session {
-  accessToken: string                  /* Access token */
-  refreshToken?: string                /* Refresh token */
+  access: {
+    token: string                      /* Access token */
+    expires: string                    /* Access token expiry date */
+  }
+  refresh?: {
+    token: string                      /* Access token */
+    expires: string                    /* Access token expiry date */
+  }
 }
 
 /* ----------------------------------------------------------------------------
@@ -87,7 +93,7 @@ export class SessionClient extends Client {
     previous: string, proposed: string
   ): Promise<void> {
     await this.cognito.changePassword({
-      AccessToken: this.session.accessToken,
+      AccessToken: this.session.access.token,
       PreviousPassword: previous,
       ProposedPassword: proposed
     }).promise()
