@@ -25,8 +25,8 @@ import * as uuid from "uuid/v4"
 
 import { Client } from ".."
 import {
-  VerificationCode,
-  VerificationProvider
+  Verification,
+  VerificationCode
 } from "../../verification"
 import { Session } from "../session"
 
@@ -63,7 +63,7 @@ export class AuthenticationClient extends Client {
    * @return Authentication client
    */
   public static factory(
-    verification = new VerificationProvider(),
+    verification = new Verification(),
     cognito = new CognitoIdentityServiceProvider({
       apiVersion: "2016-04-18"
     })
@@ -78,7 +78,7 @@ export class AuthenticationClient extends Client {
    * @param cognito - Cognito client
    */
   protected constructor(
-    protected verification: VerificationProvider,
+    protected verification: Verification,
     cognito: CognitoIdentityServiceProvider
   ) {
     super(cognito)
@@ -112,7 +112,7 @@ export class AuthenticationClient extends Client {
       }).promise(),
 
       /* Issue verification code */
-      this.verification.issue(username)
+      this.verification.issue("register", username)
     ])
 
     /* Return verification code */
@@ -149,7 +149,7 @@ export class AuthenticationClient extends Client {
     }).promise()
 
     /* Issue and return verification code */
-    return this.verification.issue(Username)
+    return this.verification.issue("reset", Username)
   }
 
   /**

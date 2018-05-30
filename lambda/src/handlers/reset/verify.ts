@@ -49,8 +49,8 @@ export async function post(
   try {
     const { subject } = await auth.verify(event.pathParameters!.code)
     await mgmt.changePassword(subject, password)
-    return result.success()
   } catch (err) {
     return result.failure(err)
   }
+  return result.success()
 }

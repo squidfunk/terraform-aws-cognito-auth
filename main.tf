@@ -49,6 +49,7 @@ data "template_file" "lambda_iam_policy" {
   vars {
     pool_arn  = "${aws_cognito_user_pool._.arn}"
     table_arn = "${aws_dynamodb_table._.arn}"
+    topic_arn = "${aws_sns_topic._.arn}"
   }
 }
 
@@ -109,7 +110,7 @@ resource "aws_cognito_user_pool" "_" {
   }
 
   password_policy {
-    minimum_length    = 10
+    minimum_length    = 8
     require_lowercase = true
     require_numbers   = true
     require_symbols   = true
@@ -193,6 +194,15 @@ resource "aws_dynamodb_table" "_" {
 }
 
 # -----------------------------------------------------------------------------
+# Resources: SNS
+# -----------------------------------------------------------------------------
+
+# aws_sns_topic._
+resource "aws_sns_topic" "_" {
+  name = "${var.namespace}-verification"
+}
+
+# -----------------------------------------------------------------------------
 # Resources: API Gateway
 # -----------------------------------------------------------------------------
 
@@ -224,21 +234,6 @@ resource "aws_api_gateway_deployment" "_" {
     "aws_api_gateway_integration._",
     "module.register",
     "module.reset",
-  ]
-}
-
-# -----------------------------------------------------------------------------
-# Resources: API Gateway: Authorization
-# -----------------------------------------------------------------------------
-
-# aws_api_gateway_authorizer._
-resource "aws_api_gateway_authorizer" "_" {
-  name        = "${var.namespace}"
-  rest_api_id = "${aws_api_gateway_rest_api._.id}"
-  type        = "COGNITO_USER_POOLS"
-
-  provider_arns = [
-    "${aws_cognito_user_pool._.arn}",
   ]
 }
 

@@ -45,10 +45,9 @@ export async function post(
   const { username } = JSON.parse(event.body!)
   const auth = AuthenticationClient.factory()
   try {
-    return result.success(
-      await auth.forgotPassword(username)
-    )
+    await auth.forgotPassword(username)
   } catch (err) {
     return result.failure(err)
   }
+  return result.success()
 }

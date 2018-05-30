@@ -27,6 +27,13 @@
         "dynamodb:DeleteItem"
       ],
       "Resource": "${table_arn}"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sns:Publish"
+      ],
+      "Resource": "${topic_arn}"
     }
   ]
 }

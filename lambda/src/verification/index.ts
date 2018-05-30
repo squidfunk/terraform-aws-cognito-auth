@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { DynamoDB } from "aws-sdk"
+import { DynamoDB, SNS } from "aws-sdk"
 import { randomBytes } from "crypto"
 import { promisify } from "util"
 
@@ -29,10 +29,16 @@ import { promisify } from "util"
  * ------------------------------------------------------------------------- */
 
 /**
+ * Verification action
+ */
+export type VerificationAction = "register" | "reset"
+
+/**
  * Verification code
  */
 export interface VerificationCode {
   id: string                           /* Verification code */
+  action: VerificationAction           /* Action to be verified */
   subject: string                      /* Verification subject */
   expires: number                      /* Verification code validity */
 }
@@ -44,41 +50,59 @@ export interface VerificationCode {
 /**
  * Verification provider
  */
-export class VerificationProvider {
+export class Verification {
 
   /**
-   * Initialize DynamoDB client
+   * Initialize DynamoDB and SNS client
    *
    * @param dynamodb - DynamoDB client
+   * @param sns - SNS client
    */
   public constructor(
     protected dynamodb = new DynamoDB.DocumentClient({
       apiVersion: "2012-08-10"
-    })
+    }),
+    protected sns = new SNS({ apiVersion: "2010-03-31" })
   ) {}
 
   /**
    * Issue a verification code for the given subject
    *
-   * A code expires one week after creation which is automatically handled by
+   * A code expires one hour after creation which is automatically handled by
    * DynamoDB in the background. However, DynamoDB doesn't guarantee that items
    * are deleted the moment they expire which means they will still show up in
    * queries and scans, but we simply don't care if this is the case.
    *
+   * @param action - Action to be verified
    * @param subject - Verification subject
    *
    * @return Promise resolving with verification code
    */
-  public async issue(subject: string): Promise<VerificationCode> {
+  public async issue(
+    action: VerificationAction, subject: string
+  ): Promise<VerificationCode> {
     const code: VerificationCode = {
       id: (await promisify(randomBytes)(16)).toString("hex"),
-      subject,
-      expires: Math.floor(Date.now() / 1000) + 7 * 24 * 3600
+      action, subject,
+      expires: Math.floor(Date.now() / 1000) + 3600
     }
-    await this.dynamodb.put({
-      TableName: process.env.DYNAMODB_TABLE!,
-      Item: code
-    }).promise()
+
+    /* Store and publish code */
+    await Promise.all([
+
+      /* Store code in DynamoDB */
+      this.dynamodb.put({
+        TableName: process.env.DYNAMODB_TABLE!,
+        Item: code
+      }).promise(),
+
+      /* Publish code on SNS topic */
+      this.sns.publish({
+        TopicArn: process.env.SNS_TOPIC_ARN!,
+        Message: JSON.stringify(code),
+        MessageStructure: "json"
+      }).promise()
+    ])
 
     /* Return verification code */
     return code
@@ -103,7 +127,7 @@ export class VerificationProvider {
 
     /* Return verification code or throw error if it did not exist */
     if (!Attributes)
-      throw new Error(`Invalid verification code: ${code}`)
+      throw new Error(`Invalid verification code`)
     return Attributes as VerificationCode
   }
 }
