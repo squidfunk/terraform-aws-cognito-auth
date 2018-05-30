@@ -61,14 +61,14 @@ resource "aws_api_gateway_integration" "_" {
 }
 
 # -----------------------------------------------------------------------------
-# Resources: API Gateway: POST /reset/:token
+# Resources: API Gateway: POST /reset/{code}
 # -----------------------------------------------------------------------------
 
 # aws_api_gateway_resource.verify
 resource "aws_api_gateway_resource" "verify" {
   rest_api_id = "${var.api_id}"
   parent_id   = "${aws_api_gateway_resource._.id}"
-  path_part   = "{token}"
+  path_part   = "{code}"
 }
 
 # aws_api_gateway_method.verify
@@ -105,7 +105,7 @@ resource "aws_lambda_function" "_" {
   role          = "${var.lambda_role_arn}"
   runtime       = "nodejs8.10"
   filename      = "${var.lambda_filename}"
-  handler       = "index.reset"
+  handler       = "handlers/reset/index.post"
   timeout       = 10
 
   source_code_hash = "${
@@ -149,7 +149,7 @@ resource "aws_lambda_function" "verify" {
   role          = "${var.lambda_role_arn}"
   runtime       = "nodejs8.10"
   filename      = "${var.lambda_filename}"
-  handler       = "index.resetVerify"
+  handler       = "handlers/reset/verify.post"
   timeout       = 10
 
   source_code_hash = "${

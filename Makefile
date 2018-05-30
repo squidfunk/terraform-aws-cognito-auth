@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,54 +18,25 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-# -----------------------------------------------------------------------------
-# Constants
-# -----------------------------------------------------------------------------
-
-# Patch file to store working tree
-PATCH=".working-tree.patch"
+all: init
 
 # -----------------------------------------------------------------------------
-# Functions
+# Targets
 # -----------------------------------------------------------------------------
 
-# Re-create working tree from patch file and preserve exit code
-function cleanup {
-  EXIT_CODE=$?
-  if [ -f "${PATCH}" ]; then
-    git apply "${PATCH}" 2> /dev/null
-    rm "${PATCH}"
-  fi
-  exit $EXIT_CODE
-}
+# Git pre-commit hook
+.git/hooks/pre-commit:
+	ln -fs ../../.githooks/pre-commit $@
 
 # -----------------------------------------------------------------------------
-# Handlers
+# Rules
 # -----------------------------------------------------------------------------
 
-# Register signal handlers
-trap cleanup EXIT SIGINT SIGHUP
+# Initialize repository
+init: .git/hooks/pre-commit
 
 # -----------------------------------------------------------------------------
-# Program
-# -----------------------------------------------------------------------------
 
-# Remove any changes from the working tree that are not going to be committed
-git diff > "${PATCH}"
-git checkout -- .
-
-# Filter staged files and create short list for files to lint
-FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep "\.ts$")
-
-# Run check and print indicator
-if [ -n "${FILES}" ]; then
-  echo -e "\x1B[33mLinting affected files:\x1B[0m"
-  for FILE in $FILES; do
-    echo "  ${FILE}"
-  done
-  echo
-
-  # Run linter for affected files
-  make lint
-  exit $?
-fi
+# Special targets
+.PHONY: .FORCE
+.FORCE:

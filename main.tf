@@ -276,11 +276,11 @@ resource "aws_api_gateway_integration" "_" {
 
 # aws_lambda_function._
 resource "aws_lambda_function" "_" {
-  function_name = "${var.namespace}-authenticate"
+  function_name = "${var.namespace}"
   role          = "${aws_iam_role.lambda.arn}"
   runtime       = "nodejs8.10"
   filename      = "${path.module}/lambda/dist.zip"
-  handler       = "index.authenticate"
+  handler       = "handlers/index.post"
   timeout       = 10
 
   source_code_hash = "${
