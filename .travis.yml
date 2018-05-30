@@ -18,37 +18,26 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-all: lint | build
+language: node_js
+sudo: false
 
-# -----------------------------------------------------------------------------
-# Targets
-# -----------------------------------------------------------------------------
+# Node.js version
+node_js: 8
 
-# Git pre-commit hook
-.git/hooks/pre-commit:
-	ln -fs ../../.githooks/pre-commit $@
+# Limit clone depth to 5, to speed up build
+git:
+  depth: 5
 
-# -----------------------------------------------------------------------------
-# Rules
-# -----------------------------------------------------------------------------
+# Cache dependencies
+cache:
+  directories:
+    - lambda/node_modules
 
-# Initialize repository
-init: .git/hooks/pre-commit
+# Install dependencies
+install:
+  - npm install --prefix lambda
 
-# -----------------------------------------------------------------------------
-
-# Build distribution files
-build:
-	make -C lambda build
-
-# Clean distribution files
-clean:
-	make -C lambda clean
-
-# Lint source files
-lint:
-	make -C lambda lint
-
-# Special targets
-.PHONY: .FORCE build clean lint
-.FORCE:
+# Perform build and release
+script:
+  - make lint
+  - make build
