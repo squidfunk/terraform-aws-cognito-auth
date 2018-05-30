@@ -20,46 +20,23 @@
  * IN THE SOFTWARE.
  */
 
-import { APIGatewayProxyResult } from "aws-lambda"
-import { AWSError } from "aws-sdk"
+import { validate } from "jsonschema"
 
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Create a successful response
+ * Parse and validate request
  *
- * @param data - Data to be returned
- *
- * @return Response
- */
-export function success(data?: any): APIGatewayProxyResult {
-  return {
-    statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ORIGIN!
-    },
-    body: data ? JSON.stringify(data) : ""
-  }
-}
-
-/**
- * Create an error response
- *
- * @param err - Error
+ * @param data - Request data
+ * @param schema - JSON schema for validation
  *
  * @return Response
  */
-export function failure(err: AWSError): APIGatewayProxyResult {
-  return {
-    statusCode: err.statusCode,
-    headers: {
-      "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ORIGIN!
-    },
-    body: JSON.stringify({
-      code: err.statusCode,
-      message: err.message
-    })
-  }
+export function parse(data: string, schema: any): any {
+  const payload = JSON.parse(data)
+  const validation = validate(payload, schema)
+  console.log(validation) // tslint:disable-line
+  return payload
 }

@@ -26,7 +26,7 @@ import {
 } from "aws-lambda"
 
 import { AuthenticationClient } from "../clients/authentication"
-import * as result from "../util/result"
+import * as res from "../util/response"
 
 /* ----------------------------------------------------------------------------
  * Handlers
@@ -42,13 +42,13 @@ import * as result from "../util/result"
 export async function post(
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> {
-  const { username, password, token } = JSON.parse(event.body!)
   const auth = AuthenticationClient.factory()
   try {
-    return result.success(
+    const { username, password, token } = JSON.parse(event.body!)
+    return res.succeed(
       await auth.authenticate(username || token, password)
     )
   } catch (err) {
-    return result.failure(err)
+    return res.fail(err)
   }
 }

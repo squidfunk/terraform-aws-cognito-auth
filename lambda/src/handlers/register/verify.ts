@@ -27,7 +27,7 @@ import {
 
 import { AuthenticationClient } from "../../clients/authentication"
 import { ManagementClient } from "../../clients/management"
-import * as result from "../../util/result"
+import * as res from "../../util/response"
 
 /* ----------------------------------------------------------------------------
  * Handlers
@@ -49,7 +49,7 @@ export async function post(
     const { subject } = await auth.verify(event.pathParameters!.code)
     await mgmt.verifyUser(subject)
   } catch (err) {
-    return result.failure(err)
+    return res.fail(err)
   }
-  return result.success()
+  return res.succeed()
 }

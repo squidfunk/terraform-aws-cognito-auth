@@ -25,6 +25,7 @@
     "watch": "make watch"
   },
   "dependencies": {
+    "jsonschema": "^1.2.4",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
@@ -32,6 +33,7 @@
     "@types/chance": "^1.0.0",
     "@types/jasmine": "^2.8.6",
     "@types/node": "^9.6.2",
+    "@types/supertest": "^2.0.4",
     "@types/uuid": "^3.4.3",
     "aws-sdk": "^2.220.1",
     "chance": "^1.0.13",
@@ -40,6 +42,7 @@
     "jasmine-spec-reporter": "^4.2.1",
     "nodemon": "^1.17.3",
     "nyc": "^11.6.0",
+    "supertest": "^3.1.0",
     "ts-node": "^5.0.1",
     "tsconfig-paths": "^3.2.0",
     "tslint": "^5.9.1",

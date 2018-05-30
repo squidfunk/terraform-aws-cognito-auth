@@ -122,7 +122,7 @@ export class AuthenticationClient extends Client {
   /**
    * Authenticate using credentials or refresh token
    *
-   * @param usernameOrToken - Username, email or refresh token
+   * @param usernameOrToken - Username, email address or refresh token
    * @param password - Password if username is supplied
    *
    * @return Promise resolving with session
@@ -138,7 +138,7 @@ export class AuthenticationClient extends Client {
   /**
    * Trigger authentication flow for lost password
    *
-   * @param username - Username or email
+   * @param username - Username or email address
    *
    * @return Promise resolving with verification code
    */
@@ -153,21 +153,9 @@ export class AuthenticationClient extends Client {
   }
 
   /**
-   * Claim a verification code
-   *
-   * @param code - Verification code
-   * @param password Password
-   *
-   * @return Promise resolving with verification code
-   */
-  public verify(code: string): Promise<VerificationCode> {
-    return this.verification.claim(code)
-  }
-
-  /**
    * Authenticate using username or email and password
    *
-   * @param username - Username or email
+   * @param username - Username or email address
    * @param password - Password
    *
    * @return Promise resolving with session

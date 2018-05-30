@@ -29,14 +29,6 @@ node_modules:
 	npm install
 
 # -----------------------------------------------------------------------------
-# Target hooks
-# -----------------------------------------------------------------------------
-
-# Pre- and post hooks for distribution
-dist-pre_:
-dist-post_:
-
-# -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------
 
@@ -45,48 +37,52 @@ dist: $(shell find src) tsconfig.json
 	$(shell npm bin)/tsc -p tsconfig.json
 
 # Build archive for distribution
-dist.zip: | dist-pre dist dist-post
-	@(rm -f $@ && cd dist && \
+dist.zip: dist
+	@(rm -f $< && cd dist && \
 		cp ../package*.json . && npm install --production && \
 		rm -rf package*.json node_modules/aws-sdk etc && \
 		zip -rq ../$@ * && rm -rf node_modules)
 
 # -----------------------------------------------------------------------------
-# Default rules
+# Rules
 # -----------------------------------------------------------------------------
 
 # Build distribution files
-build_: node_modules dist.zip
+build: node_modules dist.zip
 
 # Clean distribution files
-clean_:
+clean:
 	rm -rf coverage dist dist.zip
 
 # Lint source files
-lint_: node_modules
+lint: node_modules
 	$(shell npm bin)/tslint -p tsconfig.json "{src,tests}/**/*.ts"
 
+# Execute acceptance tests
+test-acceptance: node_modules
+	@ $(shell npm bin)/ts-node -r tsconfig-paths/register \
+		tests/suites/acceptance.ts
+
+# Execute integration tests
+test-integration: node_modules
+	@ $(shell npm bin)/ts-node -r tsconfig-paths/register \
+		tests/suites/integration.ts
+
 # Execute unit tests
-test_: node_modules
+test: node_modules
 	@NODE_ENV=test $(shell npm bin)/nyc \
-		$(shell npm bin)/ts-node \
-			--require tsconfig-paths/register tests/suites/unit.ts
+		$(shell npm bin)/ts-node -r tsconfig-paths/register \
+			tests/suites/unit.ts
 
 # Execute unit tests in watch mode
-watch_:
+watch:
 	@NODE_ENV=development $(shell npm bin)/nodemon --quiet \
-		--watch src --watch tests \
-		--exec $(shell npm bin)/ts-node \
-			--require tsconfig-paths/register tests/suites/unit.ts
+		--watch src --watch tests --exec \
+		$(shell npm bin)/ts-node -r tsconfig-paths/register \
+			tests/suites/unit.ts
 
 # -----------------------------------------------------------------------------
 
 # Special targets
-.PHONY: .FORCE build_ clean_ lint_ test_ watch_
+.PHONY: .FORCE build clean lint test watch
 .FORCE:
-
-# -----------------------------------------------------------------------------
-
-# Default target resolution
-%: %_
-	@ true

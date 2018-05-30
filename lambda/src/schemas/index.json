@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "definitions": {
+    "AuthenticateWithCredentials": {
+      "type": "object",
+      "required": [
+        "username",
+        "password"
+      ],
+      "properties": {
+        "username": {
+          "description": "Username or email address",
+          "type": "string"
+        },
+        "password": {
+          "description": "Password",
+          "type": "string"
+        }
+      }
+    },
+    "AuthenticateWithToken": {
+      "type": "object",
+      "required": [
+        "token"
+      ],
+      "properties": {
+        "token": {
+          "description": "Refresh token",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "anyOf": [
+    {
+      "description": "Authenticate with credentials",
+      "$ref": "#/definitions/AuthenticateWithCredentials"
+    },
+    {
+      "description": "Authenticate with refresh token",
+      "$ref": "#/definitions/AuthenticateWithToken"
+    }
+  ]
+}

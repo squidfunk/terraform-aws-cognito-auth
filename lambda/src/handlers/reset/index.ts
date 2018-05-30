@@ -26,7 +26,7 @@ import {
 } from "aws-lambda"
 
 import { AuthenticationClient } from "../../clients/authentication"
-import * as result from "../../util/result"
+import * as res from "../../util/response"
 
 /* ----------------------------------------------------------------------------
  * Handlers
@@ -47,7 +47,7 @@ export async function post(
   try {
     await auth.forgotPassword(username)
   } catch (err) {
-    return result.failure(err)
+    return res.fail(err)
   }
-  return result.success()
+  return res.succeed()
 }

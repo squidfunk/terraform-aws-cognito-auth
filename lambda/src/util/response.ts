@@ -20,37 +20,46 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  APIGatewayEvent,
-  APIGatewayProxyResult
-} from "aws-lambda"
-
-import { AuthenticationClient } from "../../clients/authentication"
-import { ManagementClient } from "../../clients/management"
-import * as res from "../../util/response"
+import { APIGatewayProxyResult } from "aws-lambda"
+import { AWSError } from "aws-sdk"
 
 /* ----------------------------------------------------------------------------
- * Handlers
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Change password for user
+ * Create a successful response
  *
- * @param event - API Gateway event
+ * @param data - Response data
  *
- * @return Promise resolving with HTTP response
+ * @return Response
  */
-export async function post(
-  event: APIGatewayEvent
-): Promise<APIGatewayProxyResult> {
-  const { password } = JSON.parse(event.body!)
-  const auth = AuthenticationClient.factory()
-  const mgmt = ManagementClient.factory()
-  try {
-    const { subject } = await auth.verify(event.pathParameters!.code)
-    await mgmt.changePassword(subject, password)
-  } catch (err) {
-    return res.fail(err)
+export function succeed(data?: any): APIGatewayProxyResult {
+  return {
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ORIGIN!
+    },
+    body: data ? JSON.stringify(data) : ""
   }
-  return res.succeed()
+}
+
+/**
+ * Create an error response
+ *
+ * @param err - Error
+ *
+ * @return Response
+ */
+export function fail(err: AWSError): APIGatewayProxyResult {
+  return {
+    statusCode: err.statusCode,
+    headers: {
+      "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ORIGIN!
+    },
+    body: JSON.stringify({
+      code: err.statusCode,
+      message: err.message
+    })
+  }
 }

@@ -37,8 +37,8 @@ export interface Session {
     expires: string                    /* Access token expiry date */
   }
   refresh?: {
-    token: string                      /* Access token */
-    expires: string                    /* Access token expiry date */
+    token: string                      /* Refresh token */
+    expires: string                    /* Refresh token expiry date */
   }
 }
 

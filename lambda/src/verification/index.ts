@@ -29,16 +29,16 @@ import { promisify } from "util"
  * ------------------------------------------------------------------------- */
 
 /**
- * Verification action
+ * Verification context
  */
-export type VerificationAction = "register" | "reset"
+export type VerificationContext = "register" | "reset"
 
 /**
  * Verification code
  */
 export interface VerificationCode {
   id: string                           /* Verification code */
-  action: VerificationAction           /* Action to be verified */
+  context: VerificationContext         /* Verification context */
   subject: string                      /* Verification subject */
   expires: number                      /* Verification code validity */
 }
@@ -53,7 +53,7 @@ export interface VerificationCode {
 export class Verification {
 
   /**
-   * Initialize DynamoDB and SNS client
+   * Initialize DynamoDB and SNS clients
    *
    * @param dynamodb - DynamoDB client
    * @param sns - SNS client
@@ -73,17 +73,21 @@ export class Verification {
    * are deleted the moment they expire which means they will still show up in
    * queries and scans, but we simply don't care if this is the case.
    *
-   * @param action - Action to be verified
+   * Additionally the verification code is published to the configured SNS
+   * topic to enable fully customizable delivery.
+   *
+   * @param context - Verification context
    * @param subject - Verification subject
    *
    * @return Promise resolving with verification code
    */
   public async issue(
-    action: VerificationAction, subject: string
+    context: VerificationContext, subject: string
   ): Promise<VerificationCode> {
     const code: VerificationCode = {
       id: (await promisify(randomBytes)(16)).toString("hex"),
-      action, subject,
+      context,
+      subject,
       expires: Math.floor(Date.now() / 1000) + 3600
     }
 

@@ -20,37 +20,33 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  APIGatewayEvent,
-  APIGatewayProxyResult
-} from "aws-lambda"
+import * as path from "path"
 
-import { AuthenticationClient } from "../../clients/authentication"
-import { ManagementClient } from "../../clients/management"
-import * as res from "../../util/response"
+import { SpecReporter } from "jasmine-spec-reporter"
 
 /* ----------------------------------------------------------------------------
- * Handlers
+ * Entrypoint
  * ------------------------------------------------------------------------- */
 
-/**
- * Change password for user
- *
- * @param event - API Gateway event
- *
- * @return Promise resolving with HTTP response
- */
-export async function post(
-  event: APIGatewayEvent
-): Promise<APIGatewayProxyResult> {
-  const { password } = JSON.parse(event.body!)
-  const auth = AuthenticationClient.factory()
-  const mgmt = ManagementClient.factory()
-  try {
-    const { subject } = await auth.verify(event.pathParameters!.code)
-    await mgmt.changePassword(subject, password)
-  } catch (err) {
-    return res.fail(err)
-  }
-  return res.succeed()
+/* Reset console in watch mode */
+if (process.env.NODE_ENV === "development") {
+  process.stdout.write("\x1Bc")
 }
+
+/* Hack: must be required, since TypeScript typings are crap and don't really
+   work with the normal import syntax */
+// tslint:disable-next-line no-var-requires variable-name
+const Jasmine = require("jasmine")
+
+/* Create new test suite from config file */
+const jasmine = new Jasmine()
+jasmine.loadConfigFile(path.resolve(__dirname, "../jasmine.json"))
+
+/* Configure reporters */
+jasmine.clearReporters()
+jasmine.addReporter(new SpecReporter({
+  spec: { displayStacktrace: true }
+}))
+
+/* Start test runner */
+jasmine.execute()

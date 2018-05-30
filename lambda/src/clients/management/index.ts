@@ -51,7 +51,7 @@ export class ManagementClient extends Client {
   /**
    * Verify user
    *
-   * @param username - Username or email
+   * @param username - Username or email address
    *
    * @return promise resolving with no result
    */
@@ -89,7 +89,7 @@ export class ManagementClient extends Client {
    * We must sign out the user to force re-authentication, but we don't need to
    * do it explicitly as we delete the old and create a new user.
    *
-   * @param username - Username or email
+   * @param username - Username or email address
    * @param password - Password
    *
    * @return Promise resolving with no result
@@ -102,10 +102,6 @@ export class ManagementClient extends Client {
       Username: username
     }).promise()
 
-    /* Check is user attributes were set */
-    if (!UserAttributes)
-      throw new Error(`Invalid user: "${Username}" has no attributes`)
-
     /* Delete user */
     await this.cognito.adminDeleteUser({
       UserPoolId: process.env.COGNITO_USER_POOL!,
@@ -117,7 +113,7 @@ export class ManagementClient extends Client {
       ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
       Username,
       Password: password,
-      UserAttributes: UserAttributes.filter(attr => {
+      UserAttributes: UserAttributes!.filter(attr => {
         return ["sub", "email_verified"].indexOf(attr.Name) === -1
       })
     }).promise()

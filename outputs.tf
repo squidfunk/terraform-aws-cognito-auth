@@ -32,6 +32,11 @@ output "api_stage" {
   value = "${aws_api_gateway_stage._.stage_name}"
 }
 
+# output.api_invoke_url
+output "api_invoke_url" {
+  value = "${aws_api_gateway_stage._.invoke_url}"
+}
+
 # -----------------------------------------------------------------------------
 # Outputs: Cognito
 # -----------------------------------------------------------------------------
@@ -54,20 +59,6 @@ output "cognito_user_pool_client_id" {
 # output.cognito_identity_pool_id
 output "cognito_identity_pool_id" {
   value = "${aws_cognito_identity_pool._.id}"
-}
-
-# -----------------------------------------------------------------------------
-# Outputs: DynamoDB
-# -----------------------------------------------------------------------------
-
-# output.dynamodb_table
-output "dynamodb_table" {
-  value = "${aws_dynamodb_table._.name}"
-}
-
-# output.dynamodb_table_arn
-output "dynamodb_table_arn" {
-  value = "${aws_dynamodb_table._.arn}"
 }
 
 # -----------------------------------------------------------------------------
