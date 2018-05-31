@@ -1,13 +1,20 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "Registration request",
   "type": "object",
   "required": [
+    "email",
     "password"
   ],
   "properties": {
+    "email": {
+      "description": "Email address",
+      "type": "string"
+    },
     "password": {
       "description": "Password",
       "type": "string"
     }
-  }
+  },
+  "additionalProperties": false
 }

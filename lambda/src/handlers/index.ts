@@ -24,31 +24,67 @@ import {
   APIGatewayEvent,
   APIGatewayProxyResult
 } from "aws-lambda"
-
-import { AuthenticationClient } from "../clients/authentication"
-import * as res from "../util/response"
+import { AWSError } from "aws-sdk"
+import { validate } from "jsonschema"
 
 /* ----------------------------------------------------------------------------
- * Handlers
+ * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Authenticate using credentials or refresh token
+ * Handler response helpers
+ */
+export interface HandlerResponse {
+  succeed: (data?: any) => APIGatewayProxyResult
+  fail: (err: Error) => APIGatewayProxyResult
+}
+
+/**
+ * Handler callback
+ */
+export type HandlerCallback = (data: any) => Promise<any>
+
+/* ----------------------------------------------------------------------------
+ * Functions
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Handler factory function
  *
- * @param event - API Gateway event
+ * @param cb - Handler callback
  *
  * @return Promise resolving with HTTP response
  */
-export async function post(
-  event: APIGatewayEvent
-): Promise<APIGatewayProxyResult> {
-  const auth = AuthenticationClient.factory()
-  try {
-    const { username, password, token } = JSON.parse(event.body!)
-    return res.succeed(
-      await auth.authenticate(username || token, password)
-    )
-  } catch (err) {
-    return res.fail(err)
+export function handler(cb: HandlerCallback) {
+  return async (event: APIGatewayEvent) => {
+    const headers = {
+      "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ALLOW_ORIGIN!
+    }
+    try {
+      const data = JSON.parse(event.body || "")
+
+      /* Validate request and abort on error */
+      const result = validate(data, require(`./index.json`))
+      if (result.errors.length)
+        throw new TypeError(result.errors[0].message)
+
+      /* Execute handler and return result */
+      const body = await cb({ ...event.pathParameters, data })
+      return {
+        statusCode: 200,
+        headers,
+        body: body ? JSON.stringify(body) : ""
+      }
+
+    /* Catch errors */
+    } catch (err) {
+      return {
+        statusCode: err instanceof AWSError ? err.statusCode : 400,
+        headers,
+        body: JSON.stringify({
+          message: err.message
+        })
+      }
+    }
   }
 }

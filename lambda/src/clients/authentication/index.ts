@@ -26,7 +26,8 @@ import * as uuid from "uuid/v4"
 import { Client } from ".."
 import {
   Verification,
-  VerificationCode
+  VerificationCode,
+  VerificationContext
 } from "../../verification"
 import { Session } from "../session"
 
@@ -117,6 +118,20 @@ export class AuthenticationClient extends Client {
 
     /* Return verification code */
     return code
+  }
+
+  /**
+   * Claim verification code
+   *
+   * @param context - Verification context
+   * @param id - Verification code identifier
+   *
+   * @return Verification code
+   */
+  public verify(
+    context: VerificationContext, id: string
+  ): Promise<VerificationCode> {
+    return this.verification.claim(context, id)
   }
 
   /**

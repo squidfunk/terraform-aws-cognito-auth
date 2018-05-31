@@ -38,7 +38,7 @@ dist: $(shell find src) tsconfig.json
 
 # Build archive for distribution
 dist.zip: dist
-	@(rm -f $< && cd dist && \
+	@(rm -f $@ && cd dist && \
 		cp ../package*.json . && npm install --production && \
 		rm -rf package*.json node_modules/aws-sdk etc && \
 		zip -rq ../$@ * && rm -rf node_modules)

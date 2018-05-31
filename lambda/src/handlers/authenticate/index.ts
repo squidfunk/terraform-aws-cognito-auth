@@ -20,23 +20,21 @@
  * IN THE SOFTWARE.
  */
 
-import { validate } from "jsonschema"
+import { handler } from ".."
+import { AuthenticationClient } from "../../clients/authentication"
 
 /* ----------------------------------------------------------------------------
- * Functions
+ * Handlers
  * ------------------------------------------------------------------------- */
 
 /**
- * Parse and validate request
+ * Authenticate using credentials or refresh token
  *
- * @param data - Request data
- * @param schema - JSON schema for validation
+ * @param event - API Gateway event
  *
- * @return Response
+ * @return Promise resolving with HTTP response
  */
-export function parse(data: string, schema: any): any {
-  const payload = JSON.parse(data)
-  const validation = validate(payload, schema)
-  console.log(validation) // tslint:disable-line
-  return payload
-}
+export const post = handler(async ({ username, password, token }) => {
+  const auth = AuthenticationClient.factory()
+  return auth.authenticate(username || token, password)
+})

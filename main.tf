@@ -253,6 +253,7 @@ module "authenticate" {
 
   cognito_user_pool        = "${aws_cognito_user_pool._.id}"
   cognito_user_pool_client = "${aws_cognito_user_pool_client._.id}"
+  cognito_identity_domain  = "${var.cognito_identity_domain}"
 
   dynamodb_table = "${aws_dynamodb_table._.name}"
 
@@ -274,6 +275,7 @@ module "register" {
 
   cognito_user_pool        = "${aws_cognito_user_pool._.id}"
   cognito_user_pool_client = "${aws_cognito_user_pool_client._.id}"
+  cognito_identity_domain  = "${var.cognito_identity_domain}"
 
   dynamodb_table = "${aws_dynamodb_table._.name}"
 
@@ -295,6 +297,7 @@ module "reset" {
 
   cognito_user_pool        = "${aws_cognito_user_pool._.id}"
   cognito_user_pool_client = "${aws_cognito_user_pool_client._.id}"
+  cognito_identity_domain  = "${var.cognito_identity_domain}"
 
   dynamodb_table = "${aws_dynamodb_table._.name}"
 

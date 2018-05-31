@@ -60,6 +60,11 @@ variable "cognito_user_pool_client" {
   description = "Cognito user pool client"
 }
 
+# var.cognito_identity_domain
+variable "cognito_identity_domain" {
+  description = "Cognito identity provider domain"
+}
+
 # -----------------------------------------------------------------------------
 # Variables: DynamoDB
 # -----------------------------------------------------------------------------

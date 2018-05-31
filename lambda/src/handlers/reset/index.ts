@@ -20,13 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  APIGatewayEvent,
-  APIGatewayProxyResult
-} from "aws-lambda"
-
+import { handler } from ".."
 import { AuthenticationClient } from "../../clients/authentication"
-import * as res from "../../util/response"
 
 /* ----------------------------------------------------------------------------
  * Handlers
@@ -39,15 +34,7 @@ import * as res from "../../util/response"
  *
  * @return Promise resolving with HTTP response
  */
-export async function post(
-  event: APIGatewayEvent
-): Promise<APIGatewayProxyResult> {
-  const { username } = JSON.parse(event.body!)
+export const post = handler(async ({ username }) => {
   const auth = AuthenticationClient.factory()
-  try {
-    await auth.forgotPassword(username)
-  } catch (err) {
-    return res.fail(err)
-  }
-  return res.succeed()
-}
+  await auth.forgotPassword(username)
+})

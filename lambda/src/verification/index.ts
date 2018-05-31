@@ -118,20 +118,26 @@ export class Verification {
    * The code is claimed and immediately deleted from the DynamoDB table if it
    * exists to ensure that every verification code is only used once.
    *
-   * @param code - Verification code
+   * @param context - Verification context
+   * @param id - Verification code identifier
    *
    * @return Promise resolving with verification code
    */
-  public async claim(code: string): Promise<VerificationCode> {
+  public async claim(
+    context: VerificationContext, id: string
+  ): Promise<VerificationCode> {
     const { Attributes } = await this.dynamodb.delete({
       TableName: process.env.DYNAMODB_TABLE!,
-      Key: { id: code },
+      Key: { id },
       ReturnValues: "ALL_OLD"
     }).promise()
 
     /* Return verification code or throw error if it did not exist */
-    if (!Attributes)
+    const code = Attributes as VerificationCode
+    if (!code || code.context !== context)
       throw new Error(`Invalid verification code`)
-    return Attributes as VerificationCode
+
+    /* Return verification code */
+    return code
   }
 }

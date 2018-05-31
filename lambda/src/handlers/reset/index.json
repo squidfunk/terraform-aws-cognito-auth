@@ -1,5 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "Password reset request",
   "type": "object",
   "required": [
     "username"
@@ -9,5 +10,6 @@
       "description": "Username or email address",
       "type": "string"
     }
-  }
+  },
+  "additionalProperties": false
 }
