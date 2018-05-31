@@ -32,12 +32,16 @@ node_modules:
 # Targets
 # -----------------------------------------------------------------------------
 
+# Copy schema files
+dist/%.json: src/%.json
+	cp $< $@
+
 # Build distribution files
 dist: $(shell find src) tsconfig.json
 	$(shell npm bin)/tsc -p tsconfig.json
 
 # Build archive for distribution
-dist.zip: dist
+dist.zip: dist $(subst src, dist, $(shell find src -name "*.json"))
 	@(rm -f $@ && cd dist && \
 		cp ../package*.json . && npm install --production && \
 		rm -rf package*.json node_modules/aws-sdk etc && \

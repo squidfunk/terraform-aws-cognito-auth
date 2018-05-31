@@ -3,6 +3,7 @@
     "../tslint.json"
   ],
   "rules": {
+    "no-duplicate-string": false,
     "no-big-function": false,
     "no-identical-functions": false,
     "no-null-keyword": false,

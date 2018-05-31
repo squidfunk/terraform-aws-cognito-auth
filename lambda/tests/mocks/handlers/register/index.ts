@@ -20,25 +20,31 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from "../.."
-import { AuthenticationClient } from "../../../clients/authentication"
-import { ManagementClient } from "../../../clients/management"
+import { generate, Options } from "generate-password"
+
+import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
- * Handlers
+ * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Verify user
+ * Mock registration request
  *
- * @param event - API Gateway event
+ * @param options - Password generator options
  *
- * @return Promise resolving with HTTP response
+ * @return Registration request
  */
-export const post = handler("register/verify",
-  async ({ code }) => {
-    const auth = AuthenticationClient.factory()
-    const mgmt = ManagementClient.factory()
-    const { subject } = await auth.verify("register", code)
-    await mgmt.verifyUser(subject)
-  })
+export function mockRegisterRequest(options?: Partial<Options>) {
+  return {
+    email: chance.email(),
+    password: generate({
+      length: 8,
+      numbers: true,
+      symbols: true,
+      uppercase: true,
+      excludeSimilarCharacters: true,
+      ...options
+    })
+  }
+}

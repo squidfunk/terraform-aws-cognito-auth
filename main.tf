@@ -256,6 +256,7 @@ module "authenticate" {
   cognito_identity_domain  = "${var.cognito_identity_domain}"
 
   dynamodb_table = "${aws_dynamodb_table._.name}"
+  sns_topic_arn  = "${aws_sns_topic._.arn}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
@@ -278,6 +279,7 @@ module "register" {
   cognito_identity_domain  = "${var.cognito_identity_domain}"
 
   dynamodb_table = "${aws_dynamodb_table._.name}"
+  sns_topic_arn  = "${aws_sns_topic._.arn}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
@@ -300,6 +302,7 @@ module "reset" {
   cognito_identity_domain  = "${var.cognito_identity_domain}"
 
   dynamodb_table = "${aws_dynamodb_table._.name}"
+  sns_topic_arn  = "${aws_sns_topic._.arn}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"

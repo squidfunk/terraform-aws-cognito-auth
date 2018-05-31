@@ -34,7 +34,8 @@ import { AuthenticationClient } from "../../clients/authentication"
  *
  * @return Promise resolving with HTTP response
  */
-export const post = handler(async ({ username, password, token }) => {
-  const auth = AuthenticationClient.factory()
-  return auth.authenticate(username || token, password)
-})
+export const post = handler("authenticate",
+  ({ username, password, token }) => {
+    const auth = AuthenticationClient.factory()
+    return auth.authenticate(username || token, password)
+  })

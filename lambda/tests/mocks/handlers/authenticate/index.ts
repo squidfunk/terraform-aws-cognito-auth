@@ -20,25 +20,31 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from "../.."
-import { AuthenticationClient } from "../../../clients/authentication"
-import { ManagementClient } from "../../../clients/management"
+import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
- * Handlers
+ * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Verify user
+ * Mock authentication request with credentials
  *
- * @param event - API Gateway event
- *
- * @return Promise resolving with HTTP response
+ * @return Authentication request
  */
-export const post = handler("register/verify",
-  async ({ code }) => {
-    const auth = AuthenticationClient.factory()
-    const mgmt = ManagementClient.factory()
-    const { subject } = await auth.verify("register", code)
-    await mgmt.verifyUser(subject)
-  })
+export function mockAuthenticateRequestWithCredentials() {
+  return {
+    username: chance.string(),
+    password: chance.string()
+  }
+}
+
+/**
+ * Mock authentication request with refresh token
+ *
+ * @return Authentication request
+ */
+export function mockAuthenticateRequestWithToken() {
+  return {
+    token: chance.string()
+  }
+}

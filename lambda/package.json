@@ -38,6 +38,7 @@
     "aws-sdk": "^2.220.1",
     "chance": "^1.0.13",
     "dotenv": "^5.0.1",
+    "generate-password": "^1.4.0",
     "jasmine": "^3.1.0",
     "jasmine-spec-reporter": "^4.2.1",
     "nodemon": "^1.17.3",

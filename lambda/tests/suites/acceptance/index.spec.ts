@@ -1,10 +1,12 @@
 /*
  * Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
  *
- * All rights reserved. No part of this computer program(s) may be used,
- * reproduced, stored in any retrieval system, or transmitted, in any form or
- * by any means, electronic, mechanical, photocopying, recording, or otherwise
- * without prior written permission.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
@@ -20,17 +22,67 @@
 
 import * as request from "supertest"
 
+import { AuthenticationClient } from "~/clients/authentication"
+import { ManagementClient } from "~/clients/management"
+
+import {
+  mockAuthenticateRequestWithCredentials,
+  mockAuthenticateRequestWithToken
+} from "_/mocks/handlers/authenticate"
+import {
+  mockRegisterRequest
+} from "_/mocks/handlers/register"
+
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Lambda handler */
-describe("handler", () => {
+/* Lambda authentication handler */
+describe("handlers/authenticate", () => {
 
-  it("should invoke the shits", async () => {
-    const x = await request("https://rqaml1o2kd.execute-api.us-east-1.amazonaws.com/production")
-      .post("/")
-    console.log(x)
+  /* Initialize HTTP client */
+  const http = request(process.env.API_INVOKE_URL!)
+
+  /* Test: should respond with 400 on malformed request */
+  it("should respond with 400 on malformed request", () => {
+    return http.post("/authenticate")
+      .expect(400, { message: "Invalid request body" })
   })
 
+  /* Test: should respond with 400 on non-existent user */
+  it("should respond with 400 on non-existent user", () => {
+    return http.post("/authenticate")
+      .send(mockAuthenticateRequestWithCredentials())
+      .expect(400, { message: "User does not exist" })
+  })
+
+  /* Test: should respond with 400 on invalid refresh token */
+  it("should respond with 400 on invalid refresh token", () => {
+    return http.post("/authenticate")
+      .send(mockAuthenticateRequestWithToken())
+      .expect(400, { message: "Invalid Refresh Token" })
+  })
+
+  /* with existent user */
+  describe("with existent user", () => {
+
+    /* User */
+    const user = mockRegisterRequest()
+
+    /* Create and verify user */
+    beforeAll(async () => {
+      const auth = AuthenticationClient.factory()
+      const mgmt = ManagementClient.factory()
+      console.log(user)
+      await auth.register(user.email, user.password)
+      await mgmt.verifyUser(user.email)
+      console.log(user)
+    })
+
+    it("should whatever...", () => {
+      return http.post("/authenticate")
+        .send({ username: user.email, password: user.password })
+        .expect(200, { message: "Invalid request body" })
+    })
+  })
 })

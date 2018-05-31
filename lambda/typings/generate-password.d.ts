@@ -20,25 +20,15 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from "../.."
-import { AuthenticationClient } from "../../../clients/authentication"
-import { ManagementClient } from "../../../clients/management"
-
-/* ----------------------------------------------------------------------------
- * Handlers
- * ------------------------------------------------------------------------- */
-
-/**
- * Verify user
- *
- * @param event - API Gateway event
- *
- * @return Promise resolving with HTTP response
- */
-export const post = handler("register/verify",
-  async ({ code }) => {
-    const auth = AuthenticationClient.factory()
-    const mgmt = ManagementClient.factory()
-    const { subject } = await auth.verify("register", code)
-    await mgmt.verifyUser(subject)
-  })
+declare module "generate-password" {
+  export interface Options {
+    length?: number
+    numbers?: boolean
+    symbols?: boolean
+    uppercase?: boolean
+    excludeSimilarCharacters?: boolean
+    exclude?: string
+    strict?: boolean
+  }
+  export function generate(options: Options): string
+}

@@ -103,7 +103,10 @@ export class Verification {
       /* Publish code on SNS topic */
       this.sns.publish({
         TopicArn: process.env.SNS_TOPIC_ARN!,
-        Message: JSON.stringify(code),
+        Message: JSON.stringify({
+          default: "",
+          code
+        }),
         MessageStructure: "json"
       }).promise()
     ])

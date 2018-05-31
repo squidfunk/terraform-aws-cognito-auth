@@ -24,7 +24,6 @@ import {
   APIGatewayEvent,
   APIGatewayProxyResult
 } from "aws-lambda"
-import { AWSError } from "aws-sdk"
 import { validate } from "jsonschema"
 
 /* ----------------------------------------------------------------------------
@@ -51,25 +50,26 @@ export type HandlerCallback = (data: any) => Promise<any>
 /**
  * Handler factory function
  *
+ * @param schema - Request schema name
  * @param cb - Handler callback
  *
  * @return Promise resolving with HTTP response
  */
-export function handler(cb: HandlerCallback) {
+export function handler(schema: string, cb: HandlerCallback) {
   return async (event: APIGatewayEvent) => {
     const headers = {
       "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ALLOW_ORIGIN!
     }
     try {
-      const data = JSON.parse(event.body || "")
+      const data = JSON.parse(event.body || "{}")
 
       /* Validate request and abort on error */
-      const result = validate(data, require(`./index.json`))
+      const result = validate(data, require(`./${schema}/index.json`))
       if (result.errors.length)
-        throw new TypeError(result.errors[0].message)
+        throw new TypeError("Invalid request body")
 
       /* Execute handler and return result */
-      const body = await cb({ ...event.pathParameters, data })
+      const body = await cb({ ...event.pathParameters, ...data })
       return {
         statusCode: 200,
         headers,
@@ -79,10 +79,10 @@ export function handler(cb: HandlerCallback) {
     /* Catch errors */
     } catch (err) {
       return {
-        statusCode: err instanceof AWSError ? err.statusCode : 400,
+        statusCode: err.statusCode || 400,
         headers,
         body: JSON.stringify({
-          message: err.message
+          message: err.message.replace(/\.$/, "")
         })
       }
     }

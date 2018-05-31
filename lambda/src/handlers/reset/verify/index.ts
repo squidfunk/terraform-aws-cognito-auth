@@ -35,9 +35,10 @@ import { ManagementClient } from "../../../clients/management"
  *
  * @return Promise resolving with HTTP response
  */
-export const post = handler(async ({ code, password }) => {
-  const auth = AuthenticationClient.factory()
-  const mgmt = ManagementClient.factory()
-  const { subject } = await auth.verify("reset", code)
-  await mgmt.changePassword(subject, password)
-})
+export const post = handler("reset/verify",
+  async ({ code, password }) => {
+    const auth = AuthenticationClient.factory()
+    const mgmt = ManagementClient.factory()
+    const { subject } = await auth.verify("reset", code)
+    await mgmt.changePassword(subject, password)
+  })
