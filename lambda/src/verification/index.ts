@@ -105,7 +105,7 @@ export class Verification {
         TopicArn: process.env.SNS_TOPIC_ARN!,
         Message: JSON.stringify({
           default: "",
-          code
+          ...code
         }),
         MessageStructure: "json"
       }).promise()

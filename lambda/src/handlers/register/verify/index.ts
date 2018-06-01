@@ -37,8 +37,8 @@ import { ManagementClient } from "../../../clients/management"
  */
 export const post = handler("register/verify",
   async ({ code }) => {
-    const auth = AuthenticationClient.factory()
-    const mgmt = ManagementClient.factory()
+    const auth = new AuthenticationClient()
+    const mgmt = new ManagementClient()
     const { subject } = await auth.verify("register", code)
     await mgmt.verifyUser(subject)
   })

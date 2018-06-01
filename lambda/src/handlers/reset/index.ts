@@ -36,6 +36,6 @@ import { AuthenticationClient } from "../../clients/authentication"
  */
 export const post = handler("reset/verify",
   async ({ username }) => {
-    const auth = AuthenticationClient.factory()
+    const auth = new AuthenticationClient()
     await auth.forgotPassword(username)
   })

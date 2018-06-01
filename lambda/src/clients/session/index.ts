@@ -52,31 +52,16 @@ export interface Session {
 export class SessionClient extends Client {
 
   /**
-   * Factory method, necessary for mocking
-   *
-   * @param session - Session
-   * @param cognito - Cognito client
-   *
-   * @return Session client
-   */
-  public static factory(
-    session: Session,
-    cognito = new CognitoIdentityServiceProvider({
-      apiVersion: "2016-04-18"
-    })
-  ) {
-    return new SessionClient(session, cognito)
-  }
-
-  /**
    * Initialize client with session
    *
    * @param session - Session
    * @param cognito - Cognito client
    */
-  protected constructor(
+  public constructor(
     protected session: Session,
-    cognito: CognitoIdentityServiceProvider
+    cognito = new CognitoIdentityServiceProvider({
+      apiVersion: "2016-04-18"
+    })
   ) {
     super(cognito)
   }

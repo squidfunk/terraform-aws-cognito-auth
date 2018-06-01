@@ -40,12 +40,12 @@ export class ManagementClient extends Client {
    *
    * @return Management client
    */
-  public static factory(
+  public constructor(
     cognito = new CognitoIdentityServiceProvider({
       apiVersion: "2016-04-18"
     })
   ) {
-    return new ManagementClient(cognito)
+    super(cognito)
   }
 
   /**
@@ -53,7 +53,7 @@ export class ManagementClient extends Client {
    *
    * @param username - Username or email address
    *
-   * @return promise resolving with no result
+   * @return Promise resolving with no result
    */
   public async verifyUser(username: string): Promise<void> {
     await Promise.all([
@@ -76,6 +76,20 @@ export class ManagementClient extends Client {
         ]
       }).promise()
     ])
+  }
+
+  /**
+   * Delete user
+   *
+   * @param username - Username or email address
+   *
+   * @return Promise resolving with no result
+   */
+  public async deleteUser(username: string): Promise<void> {
+    await this.cognito.adminDeleteUser({
+      UserPoolId: process.env.COGNITO_USER_POOL!,
+      Username: username
+    }).promise()
   }
 
   /**

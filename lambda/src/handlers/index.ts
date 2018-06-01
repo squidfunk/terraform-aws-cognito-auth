@@ -82,6 +82,7 @@ export function handler(schema: string, cb: HandlerCallback) {
         statusCode: err.statusCode || 400,
         headers,
         body: JSON.stringify({
+          type: err.code || err.name,
           message: err.message.replace(/\.$/, "")
         })
       }

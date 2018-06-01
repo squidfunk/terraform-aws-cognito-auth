@@ -44,6 +44,7 @@ export function mockRegisterRequest(options?: Partial<Options>) {
       symbols: true,
       uppercase: true,
       excludeSimilarCharacters: true,
+      strict: true,
       ...options
     })
   }

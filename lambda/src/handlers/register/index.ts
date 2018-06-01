@@ -36,6 +36,6 @@ import { AuthenticationClient } from "../../clients/authentication"
  */
 export const post = handler("register",
   async ({ email, password }) => {
-    const auth = AuthenticationClient.factory()
+    const auth = new AuthenticationClient()
     await auth.register(email, password)
   })

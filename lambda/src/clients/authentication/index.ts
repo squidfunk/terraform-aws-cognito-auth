@@ -56,31 +56,16 @@ export function expires(seconds: number): string {
 export class AuthenticationClient extends Client {
 
   /**
-   * Factory method, necessary for mocking
-   *
-   * @param verification - Verification provider
-   * @param cognito - Cognito client
-   *
-   * @return Authentication client
-   */
-  public static factory(
-    verification = new Verification(),
-    cognito = new CognitoIdentityServiceProvider({
-      apiVersion: "2016-04-18"
-    })
-  ) {
-    return new AuthenticationClient(verification, cognito)
-  }
-
-  /**
    * Initialize verification and identity provider
    *
    * @param verification - Verification provider
    * @param cognito - Cognito client
    */
-  protected constructor(
-    protected verification: Verification,
-    cognito: CognitoIdentityServiceProvider
+  public constructor(
+    protected verification = new Verification(),
+    cognito = new CognitoIdentityServiceProvider({
+      apiVersion: "2016-04-18"
+    })
   ) {
     super(cognito)
   }

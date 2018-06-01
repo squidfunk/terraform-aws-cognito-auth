@@ -36,6 +36,6 @@ import { AuthenticationClient } from "../../clients/authentication"
  */
 export const post = handler("authenticate",
   ({ username, password, token }) => {
-    const auth = AuthenticationClient.factory()
+    const auth = new AuthenticationClient()
     return auth.authenticate(username || token, password)
   })
