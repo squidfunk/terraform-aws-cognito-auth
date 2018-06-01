@@ -18,39 +18,4 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-# -----------------------------------------------------------------------------
-# Variables: General
-# -----------------------------------------------------------------------------
-
-# var.namespace
-variable "namespace" {
-  description = "AWS resource namespace/prefix"
-}
-
-# var.region
-variable "region" {
-  description = "AWS region"
-}
-
-# -----------------------------------------------------------------------------
-# Variables: Cognito
-# -----------------------------------------------------------------------------
-
-# var.cognito_identity_pool
-variable "cognito_identity_pool" {
-  description = "Cognito identity pool name"
-}
-
-# var.cognito_identity_domain
-variable "cognito_identity_domain" {
-  description = "Cognito identity provider domain"
-}
-
-# -----------------------------------------------------------------------------
-# Variables: API Gateway
-# -----------------------------------------------------------------------------
-
-# var.api_stage
-variable "api_stage" {
-  description = "API deployment stage"
-}
+include ../../../share/lambda/Makefile

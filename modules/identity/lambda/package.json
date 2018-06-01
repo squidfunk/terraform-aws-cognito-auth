@@ -1,0 +1,46 @@
+{
+  "name": "terraform-aws-cognito-auth.identity-lambda",
+  "version": "0.0.0",
+  "description": "Serverless authentication as a service using AWS Cognito",
+  "homepage": "https://github.com/squidfunk/terraform-aws-cognito-auth",
+  "bugs": {
+    "url": "https://github.com/squidfunk/terraform-aws-cognito-auth/",
+    "email": "martin.donath@squidfunk.com"
+  },
+  "private": true,
+  "author": {
+    "name": "Martin Donath",
+    "email": "martin.donath@squidfunk.com"
+  },
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/squidfunk/terraform-aws-cognito-auth.git"
+  },
+  "scripts": {
+    "build": "make build",
+    "clean": "make clean",
+    "start": "make start",
+    "test": "make test",
+    "watch": "make watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.2",
+    "@types/chance": "^1.0.0",
+    "@types/jasmine": "^2.8.6",
+    "@types/node": "^9.6.2",
+    "aws-sdk": "^2.220.1",
+    "chance": "^1.0.13",
+    "dotenv": "^5.0.1",
+    "jasmine": "^3.1.0",
+    "jasmine-spec-reporter": "^4.2.1",
+    "nodemon": "^1.17.3",
+    "nyc": "^11.6.0",
+    "ts-node": "^5.0.1",
+    "tsconfig-paths": "^3.2.0",
+    "tslint": "^5.9.1",
+    "tslint-sonarts": "^1.6.0",
+    "typescript": "^2.8.1"
+  }
+}

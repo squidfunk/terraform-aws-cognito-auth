@@ -19,53 +19,29 @@
 # IN THE SOFTWARE.
 
 # -----------------------------------------------------------------------------
-# Outputs: API Gateway
+# Variables: General
 # -----------------------------------------------------------------------------
 
-# output.api_id
-output "api_id" {
-  value = "${module.api.api_id}"
+# var.namespace
+variable "namespace" {
+  description = "AWS resource namespace/prefix"
 }
 
-# output.api_stage
-output "api_stage" {
-  value = "${module.api.api_stage}"
-}
-
-# output.api_invoke_url
-output "api_invoke_url" {
-  value = "${module.api.api_invoke_url}"
+# var.region
+variable "region" {
+  description = "AWS region"
 }
 
 # -----------------------------------------------------------------------------
-# Outputs: Cognito
+# Variables: Cognito
 # -----------------------------------------------------------------------------
 
-# output.cognito_user_pool
-output "cognito_user_pool" {
-  value = "${module.identity.cognito_user_pool}"
+# var.cognito_identity_pool
+variable "cognito_identity_pool" {
+  description = "Cognito identity pool name"
 }
 
-# output.cognito_user_pool_arn
-output "cognito_user_pool_arn" {
-  value = "${module.identity.cognito_user_pool_arn}"
-}
-
-# output.cognito_user_pool_client
-output "cognito_user_pool_client" {
-  value = "${module.identity.cognito_user_pool_client}"
-}
-
-# output.cognito_identity_pool
-output "cognito_identity_pool" {
-  value = "${module.identity.cognito_identity_pool}"
-}
-
-# -----------------------------------------------------------------------------
-# Outputs: SNS
-# -----------------------------------------------------------------------------
-
-# output.sns_topic_arn
-output "sns_topic_arn" {
-  value = "${module.api.sns_topic_arn}"
+# var.cognito_identity_domain
+variable "cognito_identity_domain" {
+  description = "Cognito identity provider domain"
 }

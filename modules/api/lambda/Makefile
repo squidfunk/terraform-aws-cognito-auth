@@ -18,54 +18,33 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-# -----------------------------------------------------------------------------
-# Outputs: API Gateway
-# -----------------------------------------------------------------------------
-
-# output.api_id
-output "api_id" {
-  value = "${module.api.api_id}"
-}
-
-# output.api_stage
-output "api_stage" {
-  value = "${module.api.api_stage}"
-}
-
-# output.api_invoke_url
-output "api_invoke_url" {
-  value = "${module.api.api_invoke_url}"
-}
+include ../../../share/lambda/Makefile
 
 # -----------------------------------------------------------------------------
-# Outputs: Cognito
+# Target hooks
 # -----------------------------------------------------------------------------
 
-# output.cognito_user_pool
-output "cognito_user_pool" {
-  value = "${module.identity.cognito_user_pool}"
-}
-
-# output.cognito_user_pool_arn
-output "cognito_user_pool_arn" {
-  value = "${module.identity.cognito_user_pool_arn}"
-}
-
-# output.cognito_user_pool_client
-output "cognito_user_pool_client" {
-  value = "${module.identity.cognito_user_pool_client}"
-}
-
-# output.cognito_identity_pool
-output "cognito_identity_pool" {
-  value = "${module.identity.cognito_identity_pool}"
-}
+# Include schemas in distribution files
+dist-post: $(subst src, dist, $(shell find src -name "*.json"))
 
 # -----------------------------------------------------------------------------
-# Outputs: SNS
+# Targets
 # -----------------------------------------------------------------------------
 
-# output.sns_topic_arn
-output "sns_topic_arn" {
-  value = "${module.api.sns_topic_arn}"
-}
+# Copy schema files
+dist/%.json: src/%.json
+	cp $< $@
+
+# -----------------------------------------------------------------------------
+# Rules
+# -----------------------------------------------------------------------------
+
+# Execute acceptance tests
+test-acceptance: node_modules
+	@ $(shell npm bin)/ts-node -r tsconfig-paths/register \
+		tests/suites/acceptance.ts
+
+# Execute integration tests
+test-integration: node_modules
+	@ $(shell npm bin)/ts-node -r tsconfig-paths/register \
+		tests/suites/integration.ts

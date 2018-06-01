@@ -39,16 +39,26 @@ init: .git/hooks/pre-commit
 
 # Build distribution files
 build:
-	make -C lambda build
+	make -C modules/api/lambda build
+	make -C modules/identity/lambda build
 
 # Clean distribution files
 clean:
-	make -C lambda clean
+	make -C modules/api/lambda clean
+	make -C modules/identity/lambda clean
 
 # Lint source files
 lint:
-	make -C lambda lint
+	make -C modules/api/lambda lint
+	make -C modules/identity/lambda lint
+
+# Execute unit tests
+test:
+	make -C modules/api/lambda test
+	make -C modules/identity/lambda test
+
+# -----------------------------------------------------------------------------
 
 # Special targets
-.PHONY: .FORCE build clean lint
+.PHONY: .FORCE build clean lint test
 .FORCE:
