@@ -28,29 +28,8 @@ import { CognitoIdentityServiceProvider } from "aws-sdk"
 /**
  * Check if email is not already registered
  *
- * This function must return an error if the registration cannot proceed, so
- * we need to use the callback because otherwise unhandled promise rejections
- *
  * @param event - Trigger event
- * @param context - Handler context
- * @param cb - Handler callback
  */
-// export function trigger(
-//   event: CognitoUserPoolTriggerEvent,
-//   _context: Context, cb: Callback
-// ) {
-//   new CognitoIdentityServiceProvider({
-//     apiVersion: "2016-04-18"
-//   }).adminGetUser({
-//     UserPoolId: event.userPoolId,
-//     Username: event.request.userAttributes.email!
-//   }, (err: any) => {
-//     err.code === "UserNotFoundException"
-//       ? cb(undefined, event)
-//       : cb(err)
-//   })
-// }
-
 export async function trigger(
   event: CognitoUserPoolTriggerEvent
 ): Promise<CognitoUserPoolTriggerEvent> {
@@ -62,25 +41,26 @@ export async function trigger(
       Username: event.request.userAttributes.email
     }).promise()
 
-    /* Email address already registered, throw error */
-    throw new Error("Email address is already registered")
+    /* If email address is already registered, throw error */
+    throw new Error("Email address already registered")
 
   /* Rethrow all errors except for non-existent user */
   } catch (err) {
-    if (!err.code || err.code !== "UserNotFoundException")
-      throw err
+    if (err.code && err.code === "UserNotFoundException")
+      return event
+    throw err
   }
-  return event
 }
 
-// (async () => {
-//   await trigger({
-//     userPoolId: "us-east-1_vxtMRvciP",
-//     request: {
-//       userAttributes: {
-//         email: "do@guc.my"
-//       }
-//     }
-//   } as any)
-//   console.log("done")
-// })()
+/* ----------------------------------------------------------------------------
+ * Listeners
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Top-level promise rejection handler
+ *
+ * The Lambda Node 8.10 runtime is great, but it doesn't handle rejections
+ * appropriately. Hopefully this will be resolved in the future, but until then
+ * we will just swallow the error.
+ */
+process.on("unhandledRejection", () => { /* Nothing to be done */ })

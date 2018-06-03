@@ -86,7 +86,7 @@ clean_:
 # -----------------------------------------------------------------------------
 
 # Build distribution files
-build: node_modules | dist.zip
+build: node_modules .env | dist.zip
 
 # Clean distribution files
 clean: | clean-pre clean_ clean-post

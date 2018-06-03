@@ -191,7 +191,7 @@ describe("POST /register", () => {
         .send(user)
         .expect(400, {
           type: "AliasExistsException",
-          message: "Email address is already registered"
+          message: "Email address already registered"
         })
     })
   })

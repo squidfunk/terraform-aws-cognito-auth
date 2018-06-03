@@ -89,3 +89,16 @@ export function handler(schema: string, cb: HandlerCallback) {
     }
   }
 }
+
+/* ----------------------------------------------------------------------------
+ * Listeners
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Top-level promise rejection handler
+ *
+ * The Lambda Node 8.10 runtime is great, but it doesn't handle rejections
+ * appropriately. Hopefully this will be resolved in the future, but until then
+ * we will just swallow the error.
+ */
+process.on("unhandledRejection", () => { /* Nothing to be done */ })
