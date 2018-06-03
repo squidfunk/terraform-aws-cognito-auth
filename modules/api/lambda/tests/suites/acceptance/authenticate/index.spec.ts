@@ -80,6 +80,17 @@ describe("POST /authenticate", () => {
       })
   })
 
+  /* Test: should return error for invalid request */
+  it("should return error for invalid request", () => {
+    return http.post("/authenticate")
+      .set("Content-Type", "application/json")
+      .send(`{}`)
+      .expect(400, {
+        type: "TypeError",
+        message: "Invalid request body"
+      })
+  })
+
   /* Test: should return error for non-existent user */
   it("should return error for non-existent user", () => {
     return http.post("/authenticate")
@@ -159,8 +170,8 @@ describe("POST /authenticate", () => {
         .toBeGreaterThan(Date.now() + 59 * 60)
     })
 
-    /* Test: should return error on invalid credentials */
-    it("should return error on invalid credentials", () => {
+    /* Test: should return error for invalid credentials */
+    it("should return error for invalid credentials", () => {
       return http.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: user.email, password: chance.string() })

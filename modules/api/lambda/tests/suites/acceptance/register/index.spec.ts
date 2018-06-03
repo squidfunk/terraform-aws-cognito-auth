@@ -90,6 +90,17 @@ describe("POST /register", () => {
       })
   })
 
+  /* Test: should return error for invalid request */
+  it("should return error for invalid request", () => {
+    return http.post("/register")
+      .set("Content-Type", "application/json")
+      .send(`{}`)
+      .expect(400, {
+        type: "TypeError",
+        message: "Invalid request body"
+      })
+  })
+
   /* Test: should return error for invalid email address */
   it("should return error for invalid email address", () => {
     return http.post("/register")

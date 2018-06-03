@@ -26,10 +26,8 @@ import { AuthenticationClient } from "~/clients/authentication"
 import { ManagementClient } from "~/clients/management"
 
 import { chance } from "_/helpers"
-import {
-  mockRegisterRequest,
-  mockRegisterRequestWithInvalidEmail
-} from "_/mocks/handlers/register"
+import { mockRegisterRequest } from "_/mocks/handlers/register"
+import { mockVerificationCode } from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -45,19 +43,10 @@ describe("POST /register/:code", () => {
   /* Initialize HTTP client */
   const http = request(process.env.API_INVOKE_URL!)
 
-  /* Test: should return error for empty request */
-  it("should return error for empty request", () => {
-    return http.post(`/register/AAAA`)
-      .set("Content-Type", "application/json")
-      .expect(400, {
-        type: "TypeError",
-        message: "Invalid request body"
-      })
-  })
-
   /* Test: should return error for malformed request */
   it("should return error for malformed request", () => {
-    return http.post("/register/AAAA")
+    const { id } = mockVerificationCode("register")
+    return http.post(`/register/${id}`)
       .set("Content-Type", "application/json")
       .send(`/${chance.string()}`)
       .expect(400, {
@@ -66,20 +55,35 @@ describe("POST /register/:code", () => {
       })
   })
 
-  /* with existent user */
-  describe("with existent user", () => {
+  /* Test: should return error for invalid request */
+  it("should return error for invalid request", () => {
+    const { id } = mockVerificationCode("register")
+    return http.post(`/register/${id}`)
+      .set("Content-Type", "application/json")
+      .send(`{ "${chance.word()}": "${chance.string()}" }`)
+      .expect(400, {
+        type: "TypeError",
+        message: "Invalid request body"
+      })
+  })
 
-    /* User */
+  /* Test: should return error for invalid verification code */
+  it("should return error for invalid verification code", () => {
+    const { id } = mockVerificationCode("register")
+    return http.post(`/register/${id}`)
+      .set("Content-Type", "application/json")
+      .expect(400, {
+        type: "Error",
+        message: "Invalid verification code"
+      })
+  })
+
+  /* Test: should return successfully for unverified user */
+  it("should return successfully for unverified user", async () => {
     const user = mockRegisterRequest()
-
-    /* Test: should return error for already verified user */
-    it("should return error for already verified user", async () => {
-      const { subject } = await auth.register(user.email, user.password)
-      return http.post(`/register/${subject}`)
-        .set("Content-Type", "application/json")
-        .expect(400, {
-          code: "blalala"
-        })
-    })
+    const { id } = await auth.register(user.email, user.password)
+    return http.post(`/register/${id}`)
+      .set("Content-Type", "application/json")
+      .expect(200)
   })
 })

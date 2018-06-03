@@ -24,6 +24,7 @@ import {
   APIGatewayEvent,
   APIGatewayProxyResult
 } from "aws-lambda"
+import { AWSError } from "aws-sdk"
 import { validate } from "jsonschema"
 
 /* ----------------------------------------------------------------------------
@@ -46,6 +47,28 @@ export type HandlerCallback = (data: any) => Promise<any>
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
+
+/**
+ * Translate/map error code and message for some errors
+ *
+ * @param err - Error
+ *
+ * @return Mapped error
+ */
+export function translate<T extends AWSError>(err: T): T {
+  switch (err.code) { // tslint:disable-line no-small-switch
+
+    /* Pre-registration check failed */
+    case "UserLambdaValidationException":
+      err.code    = "AliasExistsException"
+      err.message = err.message.replace("PreSignUp failed with error ", "")
+      return err
+
+    /* Pass-through all other errors */
+    default:
+      return err
+  }
+}
 
 /**
  * Handler factory function
@@ -78,6 +101,7 @@ export function handler(schema: string, cb: HandlerCallback) {
 
     /* Catch errors */
     } catch (err) {
+      err = translate(err)
       return {
         statusCode: err.statusCode || 400,
         headers,
@@ -89,16 +113,3 @@ export function handler(schema: string, cb: HandlerCallback) {
     }
   }
 }
-
-/* ----------------------------------------------------------------------------
- * Listeners
- * ------------------------------------------------------------------------- */
-
-/**
- * Top-level promise rejection handler
- *
- * The Lambda Node 8.10 runtime is great, but it doesn't handle rejections
- * appropriately. Hopefully this will be resolved in the future, but until then
- * we will just swallow the error.
- */
-process.on("unhandledRejection", () => { /* Nothing to be done */ })
