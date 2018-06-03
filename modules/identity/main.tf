@@ -19,13 +19,6 @@
 # IN THE SOFTWARE.
 
 # -----------------------------------------------------------------------------
-# Data: General
-# -----------------------------------------------------------------------------
-
-# data.aws_caller_identity._
-data "aws_caller_identity" "_" {}
-
-# -----------------------------------------------------------------------------
 # Data: IAM
 # -----------------------------------------------------------------------------
 
@@ -122,6 +115,10 @@ resource "aws_cognito_user_pool" "_" {
     required            = true
   }
 
+  lambda_config {
+    pre_sign_up = "${aws_lambda_function._.arn}"
+  }
+
   lifecycle {
     ignore_changes = ["schema"]
   }
@@ -178,18 +175,12 @@ resource "aws_lambda_function" "_" {
   role          = "${aws_iam_role.lambda.arn}"
   runtime       = "nodejs8.10"
   filename      = "${path.module}/lambda/dist.zip"
-  handler       = "index.foo"
+  handler       = "index.trigger"
   timeout       = 10
 
   source_code_hash = "${
     base64sha256(file("${path.module}/lambda/dist.zip"))
   }"
-
-  environment {
-    variables = {
-      COGNITO_USER_POOL = "${aws_cognito_user_pool._.id}"
-    }
-  }
 }
 
 # aws_lambda_permission._
@@ -197,12 +188,5 @@ resource "aws_lambda_permission" "_" {
   principal     = "cognito-idp.amazonaws.com"
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function._.arn}"
-
-  source_arn = "arn:aws:cognito-idp:${
-      var.region
-    }:${
-      data.aws_caller_identity._.account_id
-    }:identitypool/${
-      aws_cognito_identity_pool._.id
-    }"
+  source_arn    = "${aws_cognito_user_pool._.arn}"
 }

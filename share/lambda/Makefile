@@ -21,6 +21,13 @@
 all: lint clean | build test
 
 # -----------------------------------------------------------------------------
+# Constants
+# -----------------------------------------------------------------------------
+
+# Project root
+ROOT = $(shell git rev-parse --show-toplevel)
+
+# -----------------------------------------------------------------------------
 # Prerequisites
 # -----------------------------------------------------------------------------
 
@@ -44,16 +51,27 @@ clean-post_:
 # Targets
 # -----------------------------------------------------------------------------
 
+# Auto-fill environment variables
+.env: ${ROOT}/terraform.tfstate
+	@(pushd $(shell git rev-parse --show-toplevel) > /dev/null \
+		&& terraform output \
+			| awk -F" = " '{ print toupper($$1) "=" $$2 }' \
+			> ${PWD}/$@ \
+		&& popd > /dev/null)
+
 # Build distribution files
 dist: $(shell find src) tsconfig.json
 	$(shell npm bin)/tsc -p tsconfig.json
 
 # Build archive for distribution
 dist.zip: | dist-pre dist dist-post
-	@(rm -f $@ && cd dist && \
-		cp ../package*.json . && npm install --production && \
-		rm -rf package*.json node_modules/aws-sdk etc && \
-		zip -rq ../$@ * && rm -rf node_modules)
+	@(rm -f $@ \
+		&& cd dist \
+		&& cp ../package*.json . \
+		&& npm install --production \
+		&& rm -rf package*.json node_modules/aws-sdk etc \
+		&& zip -rq ../$@ * \
+		&& rm -rf node_modules)
 
 # -----------------------------------------------------------------------------
 # Default rules
@@ -78,13 +96,13 @@ lint: node_modules
 	$(shell npm bin)/tslint -p tsconfig.json "{src,tests}/**/*.ts"
 
 # Execute unit tests
-test: node_modules
+test: node_modules .env
 	@NODE_ENV=test $(shell npm bin)/nyc \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \
 			tests/suites/unit.ts
 
 # Execute unit tests in watch mode
-watch:
+watch: node_modules .env
 	@NODE_ENV=development $(shell npm bin)/nodemon --quiet \
 		--watch src --watch tests --exec \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \

@@ -45,127 +45,26 @@ describe("POST /register/:code", () => {
   /* Initialize HTTP client */
   const http = request(process.env.API_INVOKE_URL!)
 
-  // /* Test: should accept 8-letter passwords */
-  // it("should accept 8-letter passwords", () => {
-  //   return http.post("/register/:code")
-  //     .set("Content-Type", "application/json")
-  //     .send(mockRegisterRequest({ length: 8 }))
-  //     .expect(200)
-  // })
-  //
-  // /* Test: should accept 256-letter passwords */
-  // it("should accept 256-letter passwords", () => {
-  //   return http.post("/register")
-  //     .set("Content-Type", "application/json")
-  //     .send(mockRegisterRequest({ length: 256 }))
-  //     .expect(200)
-  // })
-  //
-  // /* Test: should return empty result */
-  // it("should return empty result", () => {
-  //   return http.post("/register")
-  //     .set("Content-Type", "application/json")
-  //     .send(mockRegisterRequest())
-  //     .expect(200, "")
-  // })
-  //
-  // /* Test: should return error for empty request */
-  // it("should return error for empty request", () => {
-  //   return http.post("/register")
-  //     .set("Content-Type", "application/json")
-  //     .expect(400, {
-  //       type: "TypeError",
-  //       message: "Invalid request body"
-  //     })
-  // })
-  //
-  // /* Test: should return error for malformed request */
-  // it("should return error for malformed request", () => {
-  //   return http.post("/register")
-  //     .set("Content-Type", "application/json")
-  //     .send(`/${chance.string()}`)
-  //     .expect(400, {
-  //       type: "SyntaxError",
-  //       message: "Unexpected token / in JSON at position 0"
-  //     })
-  // })
-  //
-  // /* Test: should return error for invalid email address */
-  // it("should return error for invalid email address", () => {
-  //   return http.post("/register")
-  //     .set("Content-Type", "application/json")
-  //     .send(mockRegisterRequestWithInvalidEmail())
-  //     .expect(400, {
-  //       type: "InvalidParameterException",
-  //       message: "Invalid email address format"
-  //     })
-  // })
-  //
-  // /* Test: should return error for invalid password: length < 8 */
-  // it("should return error for invalid password: length < 8", () => {
-  //   return http.post("/register")
-  //     .set("Content-Type", "application/json")
-  //     .send(mockRegisterRequest({ length: 7 }))
-  //     .expect(400, {
-  //       type: "InvalidPasswordException",
-  //       message:
-  //         "Password did not conform with policy: " +
-  //         "Password not long enough"
-  //     })
-  // })
-  //
-  // /* Test: should return error for invalid password: length > 256 */
-  // it("should return error for invalid password: length > 256", () => {
-  //   return http.post("/register")
-  //     .set("Content-Type", "application/json")
-  //     .send(mockRegisterRequest({ length: 257 }))
-  //     .expect(400, {
-  //       type: "InvalidParameterException",
-  //       message:
-  //         "1 validation error detected: " +
-  //         "Value at 'password' failed to satisfy constraint: " +
-  //         "Member must have length less than or equal to 256"
-  //     })
-  // })
-  //
-  // /* Test: should return error for invalid password: missing numbers */
-  // it("should return error for invalid password: missing numbers", () => {
-  //   return http.post("/register")
-  //     .set("Content-Type", "application/json")
-  //     .send(mockRegisterRequest({ numbers: false }))
-  //     .expect(400, {
-  //       type: "InvalidPasswordException",
-  //       message:
-  //         "Password did not conform with policy: " +
-  //         "Password must have numeric characters"
-  //     })
-  // })
-  //
-  // /* Test: should return error for invalid password: missing symbols */
-  // it("should return error for invalid password: missing symbols", () => {
-  //   return http.post("/register")
-  //     .set("Content-Type", "application/json")
-  //     .send(mockRegisterRequest({ symbols: false }))
-  //     .expect(400, {
-  //       type: "InvalidPasswordException",
-  //       message:
-  //         "Password did not conform with policy: " +
-  //         "Password must have symbol characters"
-  //     })
-  // })
-  //
-  // /* Test: should return error for invalid password: missing uppercase */
-  // it("should return error for invalid password: missing uppercase", () => {
-  //   return http.post("/register")
-  //     .set("Content-Type", "application/json")
-  //     .send(mockRegisterRequest({ uppercase: false }))
-  //     .expect(400, {
-  //       type: "InvalidPasswordException",
-  //       message:
-  //         "Password did not conform with policy: " +
-  //         "Password must have uppercase characters"
-  //     })
-  // })
+  /* Test: should return error for empty request */
+  it("should return error for empty request", () => {
+    return http.post(`/register/AAAA`)
+      .set("Content-Type", "application/json")
+      .expect(400, {
+        type: "TypeError",
+        message: "Invalid request body"
+      })
+  })
+
+  /* Test: should return error for malformed request */
+  it("should return error for malformed request", () => {
+    return http.post("/register/AAAA")
+      .set("Content-Type", "application/json")
+      .send(`/${chance.string()}`)
+      .expect(400, {
+        type: "SyntaxError",
+        message: "Unexpected token / in JSON at position 0"
+      })
+  })
 
   /* with existent user */
   describe("with existent user", () => {
@@ -173,27 +72,14 @@ describe("POST /register/:code", () => {
     /* User */
     const user = mockRegisterRequest()
 
-    /* Create and verify user */
-    beforeAll(async () => {
+    /* Test: should return error for already verified user */
+    it("should return error for already verified user", async () => {
       const { subject } = await auth.register(user.email, user.password)
-      console.log(subject)
-      await mgmt.verifyUser(subject)
-    })
-
-    /* Delete user */
-    afterAll(async () => {
-      await mgmt.deleteUser(user.email)
-    })
-
-    it("should return error for existing user", async () => {
-      const { subject } = await auth.register(user.email, user.password)
-      console.log(subject)
-      await mgmt.verifyUser(subject)
-      // return http.post(`/register/${id}`)
-      //   .set("Content-Type", "application/json")
-      //   .expect(400, {
-      //     code: "blalala"
-      //   })
+      return http.post(`/register/${subject}`)
+        .set("Content-Type", "application/json")
+        .expect(400, {
+          code: "blalala"
+        })
     })
   })
 })

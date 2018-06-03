@@ -184,12 +184,15 @@ describe("POST /register", () => {
       await mgmt.deleteUser(user.email)
     })
 
-    /* Test: should accept existing email address */
-    it("should accept existing email address", () => {
+    /* Test: should return error for already registered email address */
+    it("should return error for already registered email address", () => {
       return http.post("/register")
         .set("Content-Type", "application/json")
         .send(user)
-        .expect(200)
+        .expect(400, {
+          type: "AliasExistsException",
+          message: "Email address is already registered"
+        })
     })
   })
 })

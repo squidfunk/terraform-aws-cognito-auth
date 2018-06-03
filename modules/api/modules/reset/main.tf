@@ -172,7 +172,7 @@ resource "aws_lambda_function" "verify" {
 resource "aws_lambda_permission" "verify" {
   principal     = "apigateway.amazonaws.com"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function._.arn}"
+  function_name = "${aws_lambda_function.verify.arn}"
 
   source_arn = "arn:aws:execute-api:${
       var.region

@@ -30,6 +30,10 @@ import { AuthenticationClient } from "../../clients/authentication"
 /**
  * Register user with email address and password
  *
+ * When registering a new user, a Lambda function triggered by Cognito checks
+ * if the email address is already registered. The error is pretty cryptic, so
+ * we exchange the type and remove unnecessary stuff to minimize confusion.
+ *
  * @param event - API Gateway event
  *
  * @return Promise resolving with HTTP response
@@ -37,5 +41,13 @@ import { AuthenticationClient } from "../../clients/authentication"
 export const post = handler("register",
   async ({ email, password }) => {
     const auth = new AuthenticationClient()
-    await auth.register(email, password)
+    try {
+      await auth.register(email, password)
+    } catch (err) {
+      if (err.code === "UserLambdaValidationException") {
+        err.code = "AliasExistsException"
+        err.message = err.message.replace("PreSignUp failed with error ", "")   // TODO: ugly
+      }
+      throw err
+    }
   })
