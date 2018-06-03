@@ -61,6 +61,7 @@ export async function trigger(
  *
  * The Lambda Node 8.10 runtime is great, but it doesn't handle rejections
  * appropriately. Hopefully this will be resolved in the future, but until then
- * we will just swallow the error.
+ * we will just swallow the error. This issue was posted in the AWS forums in
+ * the following thread: https://amzn.to/2JpoHEY
  */
 process.on("unhandledRejection", () => { /* Nothing to be done */ })

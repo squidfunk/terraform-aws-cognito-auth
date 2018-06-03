@@ -178,8 +178,40 @@ describe("POST /register", () => {
       })
   })
 
-  /* with existent user */
-  describe("with existent user", () => {
+  /* with unconfirmed user */
+  fdescribe("with unconfirmed user", () => {
+
+    /* User */
+    const user = mockRegisterRequest()
+
+    /* User identifier */
+    let id: string
+
+    /* Create and verify user */
+    beforeAll(async () => {
+      const { subject } = await auth.register(user.email, user.password)
+      id = subject
+    })
+
+    /* Delete user */
+    afterAll(async () => {
+      await mgmt.deleteUser(id)
+    })
+
+    /* Test: should return error for already registered email address */
+    it("should return error for already registered email address", () => {
+      return http.post("/register")
+        .set("Content-Type", "application/json")
+        .send(user)
+        .expect(400, {
+          type: "AliasExistsException",
+          message: "Email address already registered"
+        })
+    })
+  })
+
+  /* with confirmed user */
+  describe("with confirmed user", () => {
 
     /* User */
     const user = mockRegisterRequest()

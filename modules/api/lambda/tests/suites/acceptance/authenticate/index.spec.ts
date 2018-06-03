@@ -113,8 +113,40 @@ describe("POST /authenticate", () => {
       })
   })
 
-  /* with existent user */
-  describe("with existent user", () => {
+  /* with unconfirmed user */
+  describe("with unconfirmed user", () => {
+
+    /* User */
+    const user = mockRegisterRequest()
+
+    /* User identifier */
+    let id: string
+
+    /* Create and verify user */
+    beforeAll(async () => {
+      const { subject } = await auth.register(user.email, user.password)
+      id = subject
+    })
+
+    /* Delete user */
+    afterAll(async () => {
+      await mgmt.deleteUser(id)
+    })
+
+    /* Test: should return error for valid credentials */
+    it("should return error for valid credentials", async () => {
+      return http.post("/authenticate")
+        .set("Content-Type", "application/json")
+        .send({ username: user.email, password: user.password })
+        .expect(400, {
+          type: "UserNotFoundException",
+          message: "User does not exist"
+        })
+    })
+  })
+
+  /* with confirmed user */
+  describe("with confirmed user", () => {
 
     /* User */
     const user = mockRegisterRequest()
