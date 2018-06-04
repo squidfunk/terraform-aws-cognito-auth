@@ -84,7 +84,9 @@ export function handler(schema: string, cb: HandlerCallback) {
       "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ALLOW_ORIGIN!
     }
     try {
-      const data = JSON.parse(event.body || "{}")
+      const data = event.httpMethod === "POST"
+        ? JSON.parse(event.body || "{}")
+        : {}
 
       /* Validate request and abort on error */
       const result = validate(data, require(`./${schema}/index.json`))

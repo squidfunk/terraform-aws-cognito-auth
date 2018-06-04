@@ -19,43 +19,43 @@
 # IN THE SOFTWARE.
 
 # -----------------------------------------------------------------------------
-# Outputs: API Gateway
+# Variables: General
 # -----------------------------------------------------------------------------
 
-# output.api_id
-output "api_id" {
-  value = "${aws_api_gateway_rest_api._.id}"
+# var.namespace
+variable "namespace" {
+  description = "AWS resource namespace/prefix"
 }
 
-# output.api_stage
-output "api_stage" {
-  value = "${aws_api_gateway_stage._.stage_name}"
-}
-
-# output.api_invoke_url
-output "api_invoke_url" {
-  value = "${aws_api_gateway_stage._.invoke_url}"
-}
-
-# output.api_authorizer
-output "api_authorizer" {
-  value = "${aws_api_gateway_authorizer._.id}"
+# var.region
+variable "region" {
+  description = "AWS region"
 }
 
 # -----------------------------------------------------------------------------
-# Outputs: DynamoDB
+# Variables: API Gateway
 # -----------------------------------------------------------------------------
 
-# output.dynamodb_table
-output "dynamodb_table" {
-  value = "${aws_dynamodb_table._.name}"
+# var.api_id
+variable "api_id" {
+  description = "API identifier"
+}
+
+# var.api_resource_id
+variable "api_resource_id" {
+  description = "API resource identifier"
+}
+
+# var.api_authorizer_id
+variable "api_authorizer_id" {
+  description = "API authorizer identifier"
 }
 
 # -----------------------------------------------------------------------------
-# Outputs: SNS
+# Variables: Cognito
 # -----------------------------------------------------------------------------
 
-# output.sns_topic_arn
-output "sns_topic_arn" {
-  value = "${aws_sns_topic._.arn}"
+# var.cognito_identity_domain
+variable "cognito_identity_domain" {
+  description = "Cognito identity provider domain"
 }

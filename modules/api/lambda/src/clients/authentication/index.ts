@@ -178,7 +178,7 @@ export class AuthenticationClient extends Client {
       throw new Error(`Invalid authentication: challenge "${ChallengeName}"`)
     return {
       access: {
-        token: AuthenticationResult.AccessToken!,
+        token: AuthenticationResult.IdToken!,
         expires: expires(60 * 60) /* 1 hour */
       },
       ...(AuthenticationResult.RefreshToken
@@ -216,7 +216,7 @@ export class AuthenticationClient extends Client {
       throw new Error(`Invalid authentication: challenge "${ChallengeName}"`)
     return {
       access: {
-        token: AuthenticationResult.AccessToken!,
+        token: AuthenticationResult.IdToken!,
         expires: expires(60 * 60) /* 1 hour */
       }
     }

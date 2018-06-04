@@ -36,7 +36,7 @@ import { AuthenticationClient } from "../../clients/authentication"
  *
  * @param event - API Gateway event
  *
- * @return Promise resolving with HTTP response
+ * @return Promise resolving with no result
  */
 export const post = handler("register", async ({ email, password }) => {
   const auth = new AuthenticationClient()

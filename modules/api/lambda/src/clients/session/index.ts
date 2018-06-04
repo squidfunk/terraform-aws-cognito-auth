@@ -31,15 +31,17 @@ import { Client } from ".."
 /**
  * Session tokens
  */
+export interface SessionToken {
+  token: string                      /* Token encoded as JWT */
+  expires: string                    /* Token expiry date */
+}
+
+/**
+ * Session tokens
+ */
 export interface Session {
-  access: {
-    token: string                      /* Access token */
-    expires: string                    /* Access token expiry date */
-  }
-  refresh?: {
-    token: string                      /* Refresh token */
-    expires: string                    /* Refresh token expiry date */
-  }
+  access: SessionToken               /* Access token */
+  refresh?: SessionToken             /* Refresh token */
 }
 
 /* ----------------------------------------------------------------------------

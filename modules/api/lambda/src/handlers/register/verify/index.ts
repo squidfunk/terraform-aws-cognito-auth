@@ -33,7 +33,7 @@ import { ManagementClient } from "../../../clients/management"
  *
  * @param event - API Gateway event
  *
- * @return Promise resolving with HTTP response
+ * @return Promise resolving with no result
  */
 export const post = handler("register/verify", async ({ code }) => {
   const auth = new AuthenticationClient()

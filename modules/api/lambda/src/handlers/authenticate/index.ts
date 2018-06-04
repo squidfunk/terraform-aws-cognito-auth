@@ -32,7 +32,7 @@ import { AuthenticationClient } from "../../clients/authentication"
  *
  * @param event - API Gateway event
  *
- * @return Promise resolving with HTTP response
+ * @return Promise resolving with session
  */
 export const post = handler("authenticate", ({ username, password, token }) => {
   const auth = new AuthenticationClient()
