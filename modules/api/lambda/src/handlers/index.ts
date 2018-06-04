@@ -55,7 +55,7 @@ export type HandlerCallback = (data: any) => Promise<any>
  *
  * @return Mapped error
  */
-export function translate<T extends AWSError>(err: T): T {
+export function translate(err: AWSError): AWSError {
   switch (err.code) { // tslint:disable-line no-small-switch
 
     /* Pre-registration check failed */

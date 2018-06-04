@@ -36,7 +36,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /* Registration */
-describe("POST /register", () => {
+fdescribe("POST /register", () => {
 
   /* Authentication and management client */
   const auth = new AuthenticationClient()
@@ -179,7 +179,7 @@ describe("POST /register", () => {
   })
 
   /* with unconfirmed user */
-  fdescribe("with unconfirmed user", () => {
+  describe("with unconfirmed user", () => {
 
     /* User */
     const user = mockRegisterRequest()
@@ -198,8 +198,8 @@ describe("POST /register", () => {
       await mgmt.deleteUser(id)
     })
 
-    /* Test: should return error for already registered email address */
-    it("should return error for already registered email address", () => {
+    /* Test: should return error for existent email address */
+    it("should return error for existent email address", () => {
       return http.post("/register")
         .set("Content-Type", "application/json")
         .send(user)
@@ -227,8 +227,8 @@ describe("POST /register", () => {
       await mgmt.deleteUser(user.email)
     })
 
-    /* Test: should return error for already registered email address */
-    it("should return error for already registered email address", () => {
+    /* Test: should return error for existent email address */
+    it("should return error for existent email address", () => {
       return http.post("/register")
         .set("Content-Type", "application/json")
         .send(user)

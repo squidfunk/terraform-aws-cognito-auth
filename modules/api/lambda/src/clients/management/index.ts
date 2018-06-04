@@ -111,7 +111,7 @@ export class ManagementClient extends Client {
   public async changePassword(
     username: string, password: string
   ): Promise<void> {
-    const { Username, UserAttributes } =
+    const { Username: id, UserAttributes } =
       await this.cognito.adminGetUser({
         UserPoolId: process.env.COGNITO_USER_POOL!,
         Username: username
@@ -120,13 +120,13 @@ export class ManagementClient extends Client {
     /* Delete user */
     await this.cognito.adminDeleteUser({
       UserPoolId: process.env.COGNITO_USER_POOL!,
-      Username
+      Username: id
     }).promise()
 
     /* Re-create user */
     await this.cognito.signUp({
       ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
-      Username,
+      Username: id,
       Password: password,
       UserAttributes: UserAttributes!.filter(attr => {
         return ["sub", "email_verified"].indexOf(attr.Name) === -1
@@ -134,6 +134,6 @@ export class ManagementClient extends Client {
     }).promise()
 
     /* Auto-verify user */
-    await this.verifyUser(Username)
+    await this.verifyUser(id)
   }
 }

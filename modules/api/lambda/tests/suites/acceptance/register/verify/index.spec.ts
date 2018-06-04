@@ -23,7 +23,6 @@
 import * as request from "supertest"
 
 import { AuthenticationClient } from "~/clients/authentication"
-import { ManagementClient } from "~/clients/management"
 
 import { chance } from "_/helpers"
 import { mockRegisterRequest } from "_/mocks/handlers/register"
@@ -38,7 +37,6 @@ describe("POST /register/:code", () => {
 
   /* Authentication and management client */
   const auth = new AuthenticationClient()
-  const mgmt = new ManagementClient()
 
   /* Initialize HTTP client */
   const http = request(process.env.API_INVOKE_URL!)

@@ -33,23 +33,19 @@ import { CognitoIdentityServiceProvider } from "aws-sdk"
 export async function trigger(
   event: CognitoUserPoolTriggerEvent
 ): Promise<CognitoUserPoolTriggerEvent> {
-  try {
-    await new CognitoIdentityServiceProvider({
-      apiVersion: "2016-04-18"
-    }).adminGetUser({
-      UserPoolId: event.userPoolId,
-      Username: event.request.userAttributes.email
-    }).promise()
+  const { Users } = await new CognitoIdentityServiceProvider({
+    apiVersion: "2016-04-18"
+  }).listUsers({
+    UserPoolId: event.userPoolId,
+    Filter: `email="${event.request.userAttributes.email}"`
+  }).promise()
 
-    /* If email address is already registered, throw error */
+  /* If email address is already registered, throw error */
+  if (Users!.length)
     throw new Error("Email address already registered")
 
-  /* Rethrow all errors except for non-existent user */
-  } catch (err) {
-    if (err.code && err.code === "UserNotFoundException")
-      return event
-    throw err
-  }
+  /* Otherwise just return event */
+  return event
 }
 
 /* ----------------------------------------------------------------------------

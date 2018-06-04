@@ -143,13 +143,13 @@ export class AuthenticationClient extends Client {
    * @return Promise resolving with verification code
    */
   public async forgotPassword(username: string): Promise<VerificationCode> {
-    const { Username } = await this.cognito.adminGetUser({
+    const { Username: id } = await this.cognito.adminGetUser({
       UserPoolId: process.env.COGNITO_USER_POOL!,
       Username: username
     }).promise()
 
     /* Issue and return verification code */
-    return this.verification.issue("reset", Username)
+    return this.verification.issue("reset", id)
   }
 
   /**
