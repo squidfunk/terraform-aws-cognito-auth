@@ -20,10 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { DynamoDB } from "aws-sdk"
 import { Chance } from "chance"
-
-import { VerificationCode } from "~/verification"
 
 /* ----------------------------------------------------------------------------
  * Values
@@ -33,22 +30,3 @@ import { VerificationCode } from "~/verification"
  * Chance.js instance to generate random values
  */
 export const chance = new Chance()
-
-/* ----------------------------------------------------------------------------
- * Functions
- * ------------------------------------------------------------------------- */
-
-/**
- * Retrieve the last verification code from DynamoDB
- *
- * @return Promise resolving with verification code
- */
-export async function intercept(): Promise<VerificationCode> {
-  const dynamodb = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" })
-  const { Items } = await dynamodb.scan({
-    TableName: process.env.DYNAMODB_TABLE!,
-    ConsistentRead: true,
-    Limit: 1
-  }).promise()
-  return Items![0] as VerificationCode
-}

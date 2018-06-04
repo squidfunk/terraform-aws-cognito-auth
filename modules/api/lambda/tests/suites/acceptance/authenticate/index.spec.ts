@@ -199,7 +199,7 @@ describe("POST /authenticate", () => {
       expect(body.access.token)
         .toMatch(/^([a-zA-Z0-9\-_]+\.){2}[a-zA-Z0-9\-_]+$/)
       expect(Date.parse(body.access.expires))
-        .toBeGreaterThan(Date.now() + 59 * 60 * 24)
+        .toBeGreaterThanOrEqual(Date.now() + 59 * 60 * 24)
     })
 
     /* Test: should return error for invalid credentials */

@@ -32,15 +32,29 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
+ * Mock verification context
+ *
+ * @return Verification context
+ */
+export function mockVerificationContext(): VerificationContext {
+  return [
+    "register",
+    "reset"
+  ][Math.floor(Math.random() * 2)] as VerificationContext
+}
+
+/**
  * Mock verification code
+ *
+ * @param context - Verification context
  *
  * @return Verification code
  */
 export function mockVerificationCode(
-  context: VerificationContext
+  context: VerificationContext = mockVerificationContext()
 ): VerificationCode {
   return {
-    id: chance.string({ pool: "0123456789abcdef"}),
+    id: chance.string({ pool: "0123456789abcdef", length: 32 }),
     context,
     subject: chance.guid(),
     expires: Math.floor(chance.date().getTime() / 1000)

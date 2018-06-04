@@ -27,17 +27,17 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock Cognito IDP user retrieval
+ * Mock Cognito IDP list user operation
  *
  * @param promise - Promise returned by Cognito IDP
  *
  * @return Jasmine spy
  */
 export function mockCognitoIdentityServiceProviderListUsers<T>(
-  promise: Promise<T>
+  promise: () => Promise<T>
 ): jasmine.Spy {
   const listUsers = jasmine.createSpy("listUsers")
-    .and.returnValue({ promise: () => promise })
+    .and.returnValue({ promise })
   Object.defineProperty(_, "CognitoIdentityServiceProvider", {
     value: jasmine.createSpy("CognitoIdentityServiceProvider")
       .and.returnValue({ listUsers })
@@ -46,12 +46,12 @@ export function mockCognitoIdentityServiceProviderListUsers<T>(
 }
 
 /**
- * Mock Cognito IDP user retrieval returning with result
+ * Mock Cognito IDP list user operation returning with result
  *
  * @return Jasmine spy
  */
 export function mockCognitoIdentityServiceProviderListUsersWithResult() {
-  return mockCognitoIdentityServiceProviderListUsers(Promise.resolve({
+  return mockCognitoIdentityServiceProviderListUsers(() => Promise.resolve({
     Users: [
       {
         Username: chance.guid(),
@@ -79,18 +79,18 @@ export function mockCognitoIdentityServiceProviderListUsersWithResult() {
 }
 
 /**
- * Mock Cognito IDP user retrieval returning without result
+ * Mock Cognito IDP list user operation returning without result
  *
  * @return Jasmine spy
  */
 export function mockCognitoIdentityServiceProviderListUsersWithoutResult() {
-  return mockCognitoIdentityServiceProviderListUsers(Promise.resolve({
+  return mockCognitoIdentityServiceProviderListUsers(() => Promise.resolve({
     Users: []
   }))
 }
 
 /**
- * Mock Cognito IDP user retrieval returning with error
+ * Mock Cognito IDP list user operation throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -99,5 +99,5 @@ export function mockCognitoIdentityServiceProviderListUsersWithoutResult() {
 export function mockCognitoIdentityServiceProviderListUsersWithError(
   err: Error = new Error("mockCognitoIdentityServiceProviderListUsersWithError")
 ): jasmine.Spy {
-  return mockCognitoIdentityServiceProviderListUsers(Promise.reject(err))
+  return mockCognitoIdentityServiceProviderListUsers(() => Promise.reject(err))
 }
