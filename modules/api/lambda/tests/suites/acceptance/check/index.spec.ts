@@ -59,7 +59,7 @@ describe("POST /check", () => {
   })
 
   /* with authenticated user */
-  fdescribe("with authenticated user", () => {
+  describe("with authenticated user", () => {
 
     /* User */
     const user = mockRegisterRequest()

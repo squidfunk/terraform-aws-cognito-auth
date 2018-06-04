@@ -28,7 +28,9 @@ import { CognitoIdentityServiceProvider } from "aws-sdk"
 /**
  * Check if email is not already registered
  *
- * @param event - Trigger event
+ * @param event - Registration event
+ *
+ * @return Registration event
  */
 export async function trigger(
   event: CognitoUserPoolTriggerEvent
@@ -53,11 +55,14 @@ export async function trigger(
  * ------------------------------------------------------------------------- */
 
 /**
- * Top-level promise rejection handler
+ * Top-level Promise rejection handler
  *
  * The Lambda Node 8.10 runtime is great, but it doesn't handle rejections
  * appropriately. Hopefully this will be resolved in the future, but until then
  * we will just swallow the error. This issue was posted in the AWS forums in
  * the following thread: https://amzn.to/2JpoHEY
  */
-process.on("unhandledRejection", () => { /* Nothing to be done */ })
+/* istanbul ignore next */
+process.on("unhandledRejection", /* istanbul ignore next */ () => {
+  /* Nothing to be done */
+})

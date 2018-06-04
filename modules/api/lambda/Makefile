@@ -42,7 +42,7 @@ dist/%.json: src/%.json
 # Execute acceptance tests
 test-acceptance: node_modules .env
 	@ $(shell npm bin)/ts-node -r tsconfig-paths/register \
-		tests/suites/acceptance.ts
+		tests/index.ts "suites/acceptance/**/*.spec.ts"
 
 # Execute integration tests
 test-integration: node_modules .env

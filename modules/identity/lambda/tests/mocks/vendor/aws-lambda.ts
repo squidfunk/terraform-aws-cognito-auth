@@ -1,12 +1,10 @@
 /*
  * Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to
- * deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * All rights reserved. No part of this computer program(s) may be used,
+ * reproduced, stored in any retrieval system, or transmitted, in any form or
+ * by any means, electronic, mechanical, photocopying, recording, or otherwise
+ * without prior written permission.
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
@@ -20,6 +18,8 @@
  * IN THE SOFTWARE.
  */
 
+import { CognitoUserPoolTriggerEvent } from "aws-lambda"
+
 import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
@@ -27,24 +27,28 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock authentication request with credentials
+ * Mock API Gateway event
  *
- * @return Authentication request
+ * @return API Gateway event
  */
-export function mockAuthenticateRequestWithCredentials() {
+export function mockCognitoUserPoolTriggerEvent(): CognitoUserPoolTriggerEvent {
   return {
-    username: chance.string(),
-    password: chance.string()
-  }
-}
-
-/**
- * Mock authentication request with refresh token
- *
- * @return Authentication request
- */
-export function mockAuthenticateRequestWithToken() {
-  return {
-    token: chance.string()
+    version: 1,
+    region: chance.string(),
+    userPoolId: chance.string(),
+    userName: chance.guid(),
+    callerContext: {
+      awsSdkVersion: chance.string(),
+      clientId: chance.string()
+    },
+    triggerSource: "PreSignUp_SignUp",
+    request: {
+      userAttributes: {
+        email: chance.email()
+      }
+    },
+    response: {
+      autoConfirmUser: false
+    }
   }
 }

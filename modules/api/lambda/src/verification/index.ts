@@ -68,7 +68,7 @@ export class Verification {
   /**
    * Issue a verification code for the given subject
    *
-   * A code expires one hour after creation which is automatically handled by
+   * A code expires 24 hours after creation which is automatically handled by
    * DynamoDB in the background. However, DynamoDB doesn't guarantee that items
    * are deleted the moment they expire which means they will still show up in
    * queries and scans, but we simply don't care if this is the case.
@@ -88,7 +88,7 @@ export class Verification {
       id: (await promisify(randomBytes)(16)).toString("hex"),
       context,
       subject,
-      expires: Math.floor(Date.now() / 1000) + 3600
+      expires: Math.floor(Date.now() / 1000) + 60 * 60 * 24
     }
 
     /* Store and publish code */

@@ -22,8 +22,6 @@
 
 import "dotenv/config"
 
-import * as path from "path"
-
 import { SpecReporter } from "jasmine-spec-reporter"
 
 /* ----------------------------------------------------------------------------
@@ -37,12 +35,15 @@ if (process.env.NODE_ENV === "development") {
 
 /* Hack: must be required, since TypeScript typings are crap and don't really
    work with the normal import syntax */
-// tslint:disable-next-line no-var-requires variable-name
+// tslint:disable-next-line variable-name
 const Jasmine = require("jasmine")
 
 /* Create new test suite from config file */
 const jasmine = new Jasmine()
-jasmine.loadConfigFile(path.resolve(__dirname, "../jasmine.json"))
+jasmine.loadConfig({
+  ...require("./jasmine.json"),
+  spec_files: [process.argv[2] || "suites/**/*.spec.ts"]
+})
 
 /* Configure reporters */
 jasmine.clearReporters()
