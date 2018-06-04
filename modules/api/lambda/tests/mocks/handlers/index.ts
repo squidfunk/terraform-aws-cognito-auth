@@ -20,37 +20,44 @@
  * IN THE SOFTWARE.
  */
 
-import { CognitoUserPoolTriggerEvent } from "aws-lambda"
-
-import { chance } from "_/helpers"
-
 /* ----------------------------------------------------------------------------
- * Data
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock API Gateway event
+ * Mock handler callback
  *
- * @return API Gateway event
+ * @param promise - Promise returned by handler callback
+ *
+ * @return Jasmine spy
  */
-export function mockCognitoUserPoolTriggerEvent(): CognitoUserPoolTriggerEvent {
-  return {
-    version: 1,
-    region: chance.string(),
-    userPoolId: chance.string(),
-    userName: chance.guid(),
-    callerContext: {
-      awsSdkVersion: chance.string(),
-      clientId: chance.string()
-    },
-    triggerSource: "PreSignUp_SignUp",
-    request: {
-      userAttributes: {
-        email: chance.email()
-      }
-    },
-    response: {
-      autoConfirmUser: false
-    }
-  }
+export function mockHandlerCallback(
+  promise: () => Promise<any>
+): jasmine.Spy {
+  return jasmine.createSpy("callback")
+    .and.callFake(promise)
+}
+
+/**
+ * Mock handler callback with success
+ *
+ * @param result - Handler callback result
+ *
+ * @return Jasmine spy
+ */
+export function mockHandlerCallbackWithSuccess(result?: any): jasmine.Spy {
+  return mockHandlerCallback(() => Promise.resolve(result))
+}
+
+/**
+ * Mock handler callback
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockHandlerCallbackWithError(
+  err: Error = new Error("mockHandlerCallbackWithError")
+): jasmine.Spy {
+  return mockHandlerCallback(() => Promise.reject(err))
 }

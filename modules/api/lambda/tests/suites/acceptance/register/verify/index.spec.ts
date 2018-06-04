@@ -41,6 +41,25 @@ describe("POST /register/:code", () => {
   /* Initialize HTTP client */
   const http = request(process.env.API_INVOKE_URL!)
 
+  /* Test: should return empty result */
+  it("should return empty result", async () => {
+    const user = mockRegisterRequest()
+    const { id } = await auth.register(user.email, user.password)
+    return http.post(`/register/${id}`)
+      .set("Content-Type", "application/json")
+      .expect(200, "")
+  })
+
+  /* Test: should set necessary cross-origin headers */
+  it("should set necessary cross-origin headers", async () => {
+    const user = mockRegisterRequest()
+    const { id } = await auth.register(user.email, user.password)
+    return http.post(`/register/${id}`)
+      .set("Content-Type", "application/json")
+      .expect("Access-Control-Allow-Origin",
+        process.env.COGNITO_IDENTITY_DOMAIN!)
+  })
+
   /* Test: should return error for malformed request */
   it("should return error for malformed request", () => {
     const { id } = mockVerificationCode("register")
@@ -74,14 +93,5 @@ describe("POST /register/:code", () => {
         type: "Error",
         message: "Invalid verification code"
       })
-  })
-
-  /* Test: should return empty result */
-  it("should return empty result", async () => {
-    const user = mockRegisterRequest()
-    const { id } = await auth.register(user.email, user.password)
-    return http.post(`/register/${id}`)
-      .set("Content-Type", "application/json")
-      .expect(200, "")
   })
 })

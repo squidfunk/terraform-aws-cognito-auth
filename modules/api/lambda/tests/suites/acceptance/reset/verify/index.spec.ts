@@ -118,5 +118,15 @@ describe("POST /reset/:code", () => {
         await auth.authenticate(subject, password)
       }).not.toThrow()
     })
+
+    /* Test: should set necessary cross-origin headers */
+    it("should set necessary cross-origin headers", async () => {
+      const { id } = await auth.forgotPassword(user.email)
+      return http.post(`/reset/${id}`)
+        .set("Content-Type", "application/json")
+        .send(mockResetVerifyRequest())
+        .expect("Access-Control-Allow-Origin",
+          process.env.COGNITO_IDENTITY_DOMAIN!)
+    })
   })
 })

@@ -80,6 +80,11 @@ output "cognito_identity_pool" {
   value = "${module.identity.cognito_identity_pool}"
 }
 
+# output.cognito_identity_domain
+output "cognito_identity_domain" {
+  value = "${var.cognito_identity_domain}"
+}
+
 # -----------------------------------------------------------------------------
 # Outputs: DynamoDB
 # -----------------------------------------------------------------------------

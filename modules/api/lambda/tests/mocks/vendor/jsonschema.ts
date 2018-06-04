@@ -20,37 +20,57 @@
  * IN THE SOFTWARE.
  */
 
-import { CognitoUserPoolTriggerEvent } from "aws-lambda"
+import * as _ from "jsonschema"
 
 import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
- * Data
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock API Gateway event
+ * Mock schema validation
  *
- * @return API Gateway event
+ * @param result - Validation result
+ *
+ * @return Jasmine spy
  */
-export function mockCognitoUserPoolTriggerEvent(): CognitoUserPoolTriggerEvent {
-  return {
-    version: 1,
-    region: chance.string(),
-    userPoolId: chance.string(),
-    userName: chance.guid(),
-    callerContext: {
-      awsSdkVersion: chance.string(),
-      clientId: chance.string()
-    },
-    triggerSource: "PreSignUp_SignUp",
-    request: {
-      userAttributes: {
-        email: chance.email()
+export function mockValidate(
+  result: Partial<_.ValidatorResult>
+): jasmine.Spy {
+  return spyOn(_, "validate")
+    .and.returnValue(result)
+}
+
+/**
+ * Mock schema validation with success
+ *
+ * @return Jasmine spy
+ */
+export function mockValidateWithSuccess(): jasmine.Spy {
+  return mockValidate({
+    errors: [],
+    valid: true
+  })
+}
+
+/**
+ * Mock schema validation with error
+ *
+ * @return Jasmine spy
+ */
+export function mockValidateWithError(): jasmine.Spy {
+  return mockValidate({
+    errors: [
+      {
+        property: chance.string(),
+        message: chance.string(),
+        schema: chance.string(),
+        instance: chance.string(),
+        name: chance.string(),
+        argument: chance.string()
       }
-    },
-    response: {
-      autoConfirmUser: false
-    }
-  }
+    ],
+    valid: false
+  })
 }

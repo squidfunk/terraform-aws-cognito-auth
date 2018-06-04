@@ -84,5 +84,16 @@ describe("POST /check", () => {
         .set("Authorization", `Bearer ${body.access.token}`)
         .expect(200, "")
     })
+
+    /* Test: should set necessary cross-origin headers */
+    it("should set necessary cross-origin headers", async () => {
+      const { body }: { body: Session } =  await http.post("/authenticate")
+        .set("Content-Type", "application/json")
+        .send({ username: user.email, password: user.password })
+      return http.get("/check")
+        .set("Authorization", `Bearer ${body.access.token}`)
+        .expect("Access-Control-Allow-Origin",
+          process.env.COGNITO_IDENTITY_DOMAIN!)
+    })
   })
 })

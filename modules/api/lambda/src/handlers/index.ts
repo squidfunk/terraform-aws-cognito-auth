@@ -81,7 +81,7 @@ export function translate(err: AWSError): AWSError {
 export function handler(schema: string, cb: HandlerCallback) {
   return async (event: APIGatewayEvent) => {
     const headers = {
-      "Access-Control-Allow-Origin": process.env.ACCESS_CONTROL_ALLOW_ORIGIN!
+      "Access-Control-Allow-Origin": process.env.COGNITO_IDENTITY_DOMAIN!
     }
     try {
       const data = event.httpMethod === "POST"
@@ -90,7 +90,7 @@ export function handler(schema: string, cb: HandlerCallback) {
 
       /* Validate request and abort on error */
       const result = validate(data, require(`./${schema}/index.json`))
-      if (result.errors.length)
+      if (!result.valid)
         throw new TypeError("Invalid request body")
 
       /* Execute handler and return result */

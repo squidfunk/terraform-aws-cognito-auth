@@ -130,5 +130,14 @@ describe("POST /reset", () => {
         .send({ username: user.email })
         .expect(200, "")
     })
+
+    /* Test: should set necessary cross-origin headers */
+    it("should set necessary cross-origin headers", async () => {
+      return http.post("/reset")
+        .set("Content-Type", "application/json")
+        .send({ username: user.email })
+        .expect("Access-Control-Allow-Origin",
+          process.env.COGNITO_IDENTITY_DOMAIN!)
+    })
   })
 })

@@ -69,6 +69,15 @@ describe("POST /register", () => {
       .expect(200, "")
   })
 
+  /* Test: should set necessary cross-origin headers */
+  it("should set necessary cross-origin headers", () => {
+    return http.post("/register")
+      .set("Content-Type", "application/json")
+      .send(mockRegisterRequest())
+      .expect("Access-Control-Allow-Origin",
+        process.env.COGNITO_IDENTITY_DOMAIN!)
+  })
+
   /* Test: should return error for empty request */
   it("should return error for empty request", () => {
     return http.post("/register")

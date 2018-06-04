@@ -59,6 +59,14 @@ describe("POST /authenticate", () => {
       })
   })
 
+  /* Test: should set necessary cross-origin headers */
+  it("should set necessary cross-origin headers", () => {
+    return http.post("/authenticate")
+      .send(mockAuthenticateRequestWithCredentials())
+      .expect("Access-Control-Allow-Origin",
+        process.env.COGNITO_IDENTITY_DOMAIN!)
+  })
+
   /* Test: should return error for empty request */
   it("should return error for empty request", () => {
     return http.post("/authenticate")

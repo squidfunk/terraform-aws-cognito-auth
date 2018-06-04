@@ -66,10 +66,9 @@ resource "aws_api_gateway_integration_response" "_" {
   status_code = 200
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-    "method.response.header.Access-Control-Allow-Methods" = "'GET'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'${var.cognito_identity_domain}'"
-    "method.response.header.Access-Control-Max-Age"       = "'7200'"
+    "method.response.header.Access-Control-Allow-Origin" = "'${
+      var.cognito_identity_domain
+    }'"
   }
 
   depends_on = [
@@ -85,10 +84,7 @@ resource "aws_api_gateway_method_response" "_" {
   status_code = 200
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true
-    "method.response.header.Access-Control-Allow-Methods" = true
-    "method.response.header.Access-Control-Allow-Origin"  = true
-    "method.response.header.Access-Control-Max-Age"       = true
+    "method.response.header.Access-Control-Allow-Origin" = true
   }
 
   depends_on = [
