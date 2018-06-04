@@ -98,15 +98,15 @@ lint: node_modules
 # Execute unit tests
 test: node_modules .env
 	@NODE_ENV=test $(shell npm bin)/nyc \
-		$(shell npm bin)/ts-node -r tsconfig-paths/register \
-			tests/suites/unit.ts
+		$(shell npm bin)/ts-node -r tsconfig-paths/register --project tests/tsconfig.json \
+			tests/index.ts "suites/unit/**/*.spec.ts"
 
 # Execute unit tests in watch mode
 watch: node_modules .env
 	@NODE_ENV=development $(shell npm bin)/nodemon --quiet \
 		--watch src --watch tests --exec \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \
-			tests/suites/unit.ts
+			tests/index.ts "suites/unit/**/*.spec.ts"
 
 # -----------------------------------------------------------------------------
 
