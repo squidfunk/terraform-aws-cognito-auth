@@ -159,6 +159,34 @@ describe("verification", () => {
         })
       })
 
+      /* Test: should reject on invalid verification code */
+      it("should reject on invalid verification code", async done => {
+        const deleteMock = mockDynamoDBDocumentClientDeleteWithoutResult()
+        try {
+          const verification = new Verification()
+          await verification.claim(code.context, code.id)
+          done.fail()
+        } catch (err) {
+          expect(deleteMock).toHaveBeenCalled()
+          expect(err).toEqual(new Error("Invalid verification code"))
+          done()
+        }
+      })
+
+      /* Test: should reject on invalid verification context */
+      it("should reject on invalid verification context", async done => {
+        const deleteMock = mockDynamoDBDocumentClientDeleteWithResult(code)
+        try {
+          const verification = new Verification()
+          await verification.claim("reset", code.id)
+          done.fail()
+        } catch (err) {
+          expect(deleteMock).toHaveBeenCalled()
+          expect(err).toEqual(new Error("Invalid verification code"))
+          done()
+        }
+      })
+
       /* Test: should reject on DynamoDB delete error */
       it("should reject on DynamoDB delete error", async done => {
         const deleteMock = mockDynamoDBDocumentClientDeleteWithError()
@@ -169,20 +197,6 @@ describe("verification", () => {
         } catch (err) {
           expect(deleteMock).toHaveBeenCalled()
           expect(err).toEqual(jasmine.any(Error))
-          done()
-        }
-      })
-
-      /* Test: should reject for invalid context */
-      it("should reject for invalid context", async done => {
-        const deleteMock = mockDynamoDBDocumentClientDeleteWithResult(code)
-        try {
-          const verification = new Verification()
-          await verification.claim("reset", code.id)
-          done.fail()
-        } catch (err) {
-          expect(deleteMock).toHaveBeenCalled()
-          expect(err).toEqual(new Error("Invalid verification code"))
           done()
         }
       })

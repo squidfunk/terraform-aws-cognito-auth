@@ -93,6 +93,8 @@ export function mockDynamoDBDocumentClientDelete<T>(
 /**
  * Mock DynamoDB document client delete operation returning with result
  *
+ * @param code - Verification code
+ *
  * @return Jasmine spy
  */
 export function mockDynamoDBDocumentClientDeleteWithResult(
@@ -108,12 +110,8 @@ export function mockDynamoDBDocumentClientDeleteWithResult(
  *
  * @return Jasmine spy
  */
-export function mockDynamoDBDocumentClientDeleteWithoutResult(
-  code: VerificationCode = mockVerificationCode("register")
-) {
-  return mockDynamoDBDocumentClientDelete(() => Promise.resolve({
-    Attributes: code
-  }))
+export function mockDynamoDBDocumentClientDeleteWithoutResult() {
+  return mockDynamoDBDocumentClientDelete(() => Promise.resolve({}))
 }
 
 /**
