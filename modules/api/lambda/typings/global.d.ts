@@ -20,30 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from ".."
-import { AuthenticationClient } from "../../clients/authentication"
-
-/* ----------------------------------------------------------------------------
- * Values
- * ------------------------------------------------------------------------- */
-
-/**
- * Request schema
- */
-import schema = require("./@schema/post.json")
-
-/* ----------------------------------------------------------------------------
- * Handlers
- * ------------------------------------------------------------------------- */
-
-/**
- * Trigger authentication flow for lost password
- *
- * @param event - API Gateway event
- *
- * @return Promise resolving with no result
- */
-export const post = handler(schema, async ({ username }) => {
-  const auth = new AuthenticationClient()
-  await auth.forgotPassword(username)
-})
+declare module "*.json" {
+  const value: any
+  export = value
+}

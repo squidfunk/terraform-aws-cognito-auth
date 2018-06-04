@@ -29,9 +29,9 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock API Gateway event
+ * Mock Cognito User Pool trigger event
  *
- * @return API Gateway event
+ * @return Cognito User Pool trigger event
  */
 export function mockCognitoUserPoolTriggerEvent(): CognitoUserPoolTriggerEvent {
   return {

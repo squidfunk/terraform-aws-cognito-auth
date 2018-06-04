@@ -24,6 +24,15 @@ import { handler } from ".."
 import { AuthenticationClient } from "../../clients/authentication"
 
 /* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Request schema
+ */
+import schema = require("./@schema/post.json")
+
+/* ----------------------------------------------------------------------------
  * Handlers
  * ------------------------------------------------------------------------- */
 
@@ -38,7 +47,7 @@ import { AuthenticationClient } from "../../clients/authentication"
  *
  * @return Promise resolving with no result
  */
-export const post = handler("register", async ({ email, password }) => {
+export const post = handler(schema, async ({ email, password }) => {
   const auth = new AuthenticationClient()
   try {
     await auth.register(email, password)

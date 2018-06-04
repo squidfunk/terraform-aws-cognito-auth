@@ -33,6 +33,7 @@ dist-post: $(subst src, dist, $(shell find src -name "*.json"))
 
 # Copy schema files
 dist/%.json: src/%.json
+	@mkdir -p dist/$(dir $*)
 	cp $< $@
 
 # -----------------------------------------------------------------------------

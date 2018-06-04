@@ -73,13 +73,13 @@ export function translate(err: AWSError): AWSError {
 /**
  * Handler factory function
  *
- * @param schema - Request schema name
+ * @param schema - Request schema
  * @param cb - Handler callback
  *
  * @return Promise resolving with HTTP response
  */
-export function handler(schema: string, cb: HandlerCallback) {
-  return async (event: APIGatewayEvent) => {
+export function handler(schema: object, cb: HandlerCallback) {
+  return async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
     const headers = {
       "Access-Control-Allow-Origin": process.env.COGNITO_IDENTITY_DOMAIN!
     }
@@ -89,7 +89,7 @@ export function handler(schema: string, cb: HandlerCallback) {
         : {}
 
       /* Validate request and abort on error */
-      const result = validate(data, require(`./${schema}/index.json`))
+      const result = validate(data, schema)
       if (!result.valid)
         throw new TypeError("Invalid request body")
 

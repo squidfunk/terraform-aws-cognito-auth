@@ -81,9 +81,9 @@ describe("handlers", () => {
       mockValidateWithSuccess()
       const result = chance.string()
       const cb = mockHandlerCallbackWithSuccess(result)
-      const { statusCode, body } = await handler("authenticate", cb)(event)
+      const { statusCode, body } = await handler({}, cb)(event)
       expect(statusCode).toEqual(200)
-      expect(JSON.parse(body)).toEqual(result)
+      expect(body).toEqual(JSON.stringify(result))
     })
 
     /* Test: should resolve with error for malformed request */
@@ -91,12 +91,12 @@ describe("handlers", () => {
       const event = mockAPIGatewayEvent("POST", "/", {})
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
-      const { statusCode, body } = await handler("authenticate", cb)(event)
+      const { statusCode, body } = await handler({}, cb)(event)
       expect(statusCode).toEqual(400)
-      expect(JSON.parse(body)).toEqual({
+      expect(body).toEqual(JSON.stringify({
         type: "SyntaxError",
         message: "Unexpected token / in JSON at position 0"
-      })
+      }))
     })
 
     /* Test: should resolve with error for invalid request */
@@ -104,12 +104,12 @@ describe("handlers", () => {
       const event = mockAPIGatewayEvent("POST")
       mockValidateWithError()
       const cb = mockHandlerCallbackWithSuccess()
-      const { statusCode, body } = await handler("authenticate", cb)(event)
+      const { statusCode, body } = await handler({}, cb)(event)
       expect(statusCode).toEqual(400)
-      expect(JSON.parse(body)).toEqual({
+      expect(body).toEqual(JSON.stringify({
         type: "TypeError",
         message: "Invalid request body"
-      })
+      }))
       expect(cb)
         .not.toHaveBeenCalledWith()
     })
@@ -119,12 +119,12 @@ describe("handlers", () => {
       const event = mockAPIGatewayEvent("POST")
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithError()
-      const { statusCode, body } = await handler("authenticate", cb)(event)
+      const { statusCode, body } = await handler({}, cb)(event)
       expect(statusCode).toEqual(400)
-      expect(JSON.parse(body)).toEqual({
+      expect(body).toEqual(JSON.stringify({
         type: "Error",
         message: "mockHandlerCallbackWithError"
-      })
+      }))
       expect(cb)
         .toHaveBeenCalled()
     })
@@ -132,10 +132,10 @@ describe("handlers", () => {
     /* Test: should invoke callback with path parameters */
     it("should invoke callback with path parameters", async () => {
       const params = mockAPIGatewayEventPathParameters()
-      const event = mockAPIGatewayEvent("POST", undefined, params)
+      const event = mockAPIGatewayEvent("POST", "", params)
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
-      await handler("authenticate", cb)(event)
+      await handler({}, cb)(event)
       expect(cb)
         .toHaveBeenCalledWith(params)
     })
@@ -146,7 +146,7 @@ describe("handlers", () => {
       const event = mockAPIGatewayEvent("POST", data, {})
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
-      await handler("authenticate", cb)(event)
+      await handler({}, cb)(event)
       expect(cb)
         .toHaveBeenCalledWith(data)
     })
@@ -156,7 +156,7 @@ describe("handlers", () => {
       const event = mockAPIGatewayEvent("GET")
       mockValidateWithSuccess()
       const { headers, statusCode } =
-        await handler("authenticate", mockHandlerCallbackWithSuccess())(event)
+        await handler({}, mockHandlerCallbackWithSuccess())(event)
       expect(statusCode).toEqual(200)
       expect(headers).toEqual({
         "Access-Control-Allow-Origin": process.env.COGNITO_IDENTITY_DOMAIN!
@@ -168,7 +168,7 @@ describe("handlers", () => {
       const event = mockAPIGatewayEvent("GET")
       mockValidateWithSuccess()
       const { headers, statusCode } =
-        await handler("authenticate", mockHandlerCallbackWithError())(event)
+        await handler({}, mockHandlerCallbackWithError())(event)
       expect(statusCode).toEqual(400)
       expect(headers).toEqual({
         "Access-Control-Allow-Origin": process.env.COGNITO_IDENTITY_DOMAIN!

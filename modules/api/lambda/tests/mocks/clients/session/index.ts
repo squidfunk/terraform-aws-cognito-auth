@@ -20,30 +20,24 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from ".."
-import { AuthenticationClient } from "../../clients/authentication"
+import { Session } from "~/clients/session"
+
+import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Request schema
- */
-import schema = require("./@schema/post.json")
-
-/* ----------------------------------------------------------------------------
- * Handlers
- * ------------------------------------------------------------------------- */
-
-/**
- * Trigger authentication flow for lost password
+ * Mock session
  *
- * @param event - API Gateway event
- *
- * @return Promise resolving with no result
+ * @return Session
  */
-export const post = handler(schema, async ({ username }) => {
-  const auth = new AuthenticationClient()
-  await auth.forgotPassword(username)
-})
+export function mockSession(): Session {
+  return {
+    access: {
+      token: chance.string(),
+      expires: chance.date().toISOString()
+    }
+  }
+}

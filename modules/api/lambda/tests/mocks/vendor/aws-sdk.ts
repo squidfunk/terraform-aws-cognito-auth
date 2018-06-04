@@ -33,7 +33,7 @@ import { mockVerificationCode } from "_/mocks/verification"
 /**
  * Mock DynamoDB document client put operation
  *
- * @param promise - Promise returned by Cognito IDP
+ * @param promise - Promise returned by DynamoDB
  *
  * @return Jasmine spy
  */
@@ -76,7 +76,7 @@ export function mockDynamoDBDocumentClientPutWithError(
 /**
  * Mock DynamoDB document client delete operation
  *
- * @param promise - Promise returned by Cognito IDP
+ * @param promise - Promise returned by DynamoDB
  *
  * @return Jasmine spy
  */
@@ -134,7 +134,7 @@ export function mockDynamoDBDocumentClientDeleteWithError(
 /**
  * Mock SNS publish operation
  *
- * @param promise - Promise returned by Cognito IDP
+ * @param promise - Promise returned by SNS
  *
  * @return Jasmine spy
  */

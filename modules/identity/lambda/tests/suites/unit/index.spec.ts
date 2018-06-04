@@ -45,15 +45,15 @@ describe("trigger", () => {
   it("should resolve with input event", async () => {
     const listUsersMock =
       mockCognitoIdentityServiceProviderListUsersWithoutResult()
-    expect(await trigger(event)).toEqual(event)
+    expect(await trigger(event)).toBe(event)
     expect(listUsersMock).toHaveBeenCalledWith({
       UserPoolId: event.userPoolId,
       Filter: `email="${event.request.userAttributes.email}"`
     })
   })
 
-  /* Test: should reject on retrieve error */
-  it("should reject on retrieve error", async done => {
+  /* Test: should reject on Cognito retrieve error */
+  it("should reject on Cognito retrieve error", async done => {
     mockCognitoIdentityServiceProviderListUsersWithError()
     try {
       await trigger(event)

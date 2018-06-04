@@ -149,8 +149,8 @@ describe("verification", () => {
           .toEqual(code)
       })
 
-      /* Test: should delete verification code in DynamoDB */
-      it("should delete verification code in DynamoDB", async () => {
+      /* Test: should delete verification code from DynamoDB */
+      it("should delete verification code from DynamoDB", async () => {
         const deleteMock = mockDynamoDBDocumentClientDeleteWithResult(code)
         const verification = new Verification()
         await verification.claim(code.context, code.id)

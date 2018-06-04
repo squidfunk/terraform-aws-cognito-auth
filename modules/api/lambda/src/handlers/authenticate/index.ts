@@ -24,6 +24,15 @@ import { handler } from ".."
 import { AuthenticationClient } from "../../clients/authentication"
 
 /* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Request schema
+ */
+import schema = require("./@schema/post.json")
+
+/* ----------------------------------------------------------------------------
  * Handlers
  * ------------------------------------------------------------------------- */
 
@@ -34,7 +43,7 @@ import { AuthenticationClient } from "../../clients/authentication"
  *
  * @return Promise resolving with session
  */
-export const post = handler("authenticate", ({ username, password, token }) => {
+export const post = handler(schema, ({ username, password, token }) => {
   const auth = new AuthenticationClient()
   return auth.authenticate(username || token, password)
 })

@@ -25,6 +25,15 @@ import { AuthenticationClient } from "../../../clients/authentication"
 import { ManagementClient } from "../../../clients/management"
 
 /* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Request schema
+ */
+import schema = require("./@schema/post.json")
+
+/* ----------------------------------------------------------------------------
  * Handlers
  * ------------------------------------------------------------------------- */
 
@@ -35,7 +44,7 @@ import { ManagementClient } from "../../../clients/management"
  *
  * @return Promise resolving with no result
  */
-export const post = handler("reset/verify", async ({ code, password }) => {
+export const post = handler(schema, async ({ code, password }) => {
   const auth = new AuthenticationClient()
   const mgmt = new ManagementClient()
   const { subject } = await auth.verify("reset", code)
