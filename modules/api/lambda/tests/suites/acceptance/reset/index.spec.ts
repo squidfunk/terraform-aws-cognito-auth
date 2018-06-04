@@ -23,28 +23,38 @@
 import * as request from "supertest"
 
 import { AuthenticationClient } from "~/clients/authentication"
+import { ManagementClient } from "~/clients/management"
 
 import { chance } from "_/helpers"
 import { mockRegisterRequest } from "_/mocks/handlers/register"
-import { mockVerificationCode } from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Registration verification */
-describe("POST /register/:code", () => {
+/* Reset */
+describe("POST /reset", () => {
 
-  /* Authentication client */
+  /* Authentication and management client */
   const auth = new AuthenticationClient()
+  const mgmt = new ManagementClient()
 
   /* Initialize HTTP client */
   const http = request(process.env.API_INVOKE_URL!)
 
+  /* Test: should return error for empty request */
+  it("should return error for empty request", () => {
+    return http.post("/reset")
+      .set("Content-Type", "application/json")
+      .expect(400, {
+        type: "TypeError",
+        message: "Invalid request body"
+      })
+  })
+
   /* Test: should return error for malformed request */
   it("should return error for malformed request", () => {
-    const { id } = mockVerificationCode("register")
-    return http.post(`/register/${id}`)
+    return http.post("/reset")
       .set("Content-Type", "application/json")
       .send(`/${chance.string()}`)
       .expect(400, {
@@ -55,33 +65,70 @@ describe("POST /register/:code", () => {
 
   /* Test: should return error for invalid request */
   it("should return error for invalid request", () => {
-    const { id } = mockVerificationCode("register")
-    return http.post(`/register/${id}`)
+    return http.post("/reset")
       .set("Content-Type", "application/json")
-      .send(`{ "${chance.word()}": "${chance.string()}" }`)
+      .send(`{}`)
       .expect(400, {
         type: "TypeError",
         message: "Invalid request body"
       })
   })
 
-  /* Test: should return error for invalid verification code */
-  it("should return error for invalid verification code", () => {
-    const { id } = mockVerificationCode("register")
-    return http.post(`/register/${id}`)
-      .set("Content-Type", "application/json")
-      .expect(400, {
-        type: "Error",
-        message: "Invalid verification code"
-      })
+  /* with unconfirmed user */
+  describe("with unconfirmed user", () => {
+
+    /* User */
+    const user = mockRegisterRequest()
+
+    /* User identifier */
+    let id: string
+
+    /* Create and verify user */
+    beforeAll(async () => {
+      const { subject } = await auth.register(user.email, user.password)
+      id = subject
+    })
+
+    /* Delete user */
+    afterAll(async () => {
+      await mgmt.deleteUser(id)
+    })
+
+    /* Test: should return error for unverified user */
+    it("should return error for unverified user", () => {
+      return http.post("/reset")
+        .set("Content-Type", "application/json")
+        .send({ username: user.email })
+        .expect(400, {
+          type: "UserNotFoundException",
+          message: "User does not exist"
+        })
+    })
   })
 
-  /* Test: should return empty result */
-  it("should return empty result", async () => {
+  /* with confirmed user */
+  describe("with confirmed user", () => {
+
+    /* User */
     const user = mockRegisterRequest()
-    const { id } = await auth.register(user.email, user.password)
-    return http.post(`/register/${id}`)
-      .set("Content-Type", "application/json")
-      .expect(200, "")
+
+    /* Create and verify user */
+    beforeAll(async () => {
+      const { subject } = await auth.register(user.email, user.password)
+      await mgmt.verifyUser(subject)
+    })
+
+    /* Delete user */
+    afterAll(async () => {
+      await mgmt.deleteUser(user.email)
+    })
+
+    /* Test: should return empty result */
+    it("should return empty result", () => {
+      return http.post("/reset")
+        .set("Content-Type", "application/json")
+        .send({ username: user.email })
+        .expect(200, "")
+    })
   })
 })

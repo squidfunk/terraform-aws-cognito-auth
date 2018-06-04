@@ -23,28 +23,31 @@
 import * as request from "supertest"
 
 import { AuthenticationClient } from "~/clients/authentication"
+import { ManagementClient } from "~/clients/management"
 
 import { chance } from "_/helpers"
 import { mockRegisterRequest } from "_/mocks/handlers/register"
+import { mockResetVerifyRequest } from "_/mocks/handlers/reset/verify"
 import { mockVerificationCode } from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Registration verification */
-describe("POST /register/:code", () => {
+/* Reset verification */
+describe("POST /reset/:code", () => {
 
-  /* Authentication client */
+  /* Authentication and management client */
   const auth = new AuthenticationClient()
+  const mgmt = new ManagementClient()
 
   /* Initialize HTTP client */
   const http = request(process.env.API_INVOKE_URL!)
 
   /* Test: should return error for malformed request */
   it("should return error for malformed request", () => {
-    const { id } = mockVerificationCode("register")
-    return http.post(`/register/${id}`)
+    const { id } = mockVerificationCode("reset")
+    return http.post(`/reset/${id}`)
       .set("Content-Type", "application/json")
       .send(`/${chance.string()}`)
       .expect(400, {
@@ -55,8 +58,8 @@ describe("POST /register/:code", () => {
 
   /* Test: should return error for invalid request */
   it("should return error for invalid request", () => {
-    const { id } = mockVerificationCode("register")
-    return http.post(`/register/${id}`)
+    const { id } = mockVerificationCode("reset")
+    return http.post(`/reset/${id}`)
       .set("Content-Type", "application/json")
       .send(`{ "${chance.word()}": "${chance.string()}" }`)
       .expect(400, {
@@ -67,21 +70,53 @@ describe("POST /register/:code", () => {
 
   /* Test: should return error for invalid verification code */
   it("should return error for invalid verification code", () => {
-    const { id } = mockVerificationCode("register")
-    return http.post(`/register/${id}`)
+    const { id } = mockVerificationCode("reset")
+    return http.post(`/reset/${id}`)
       .set("Content-Type", "application/json")
+      .send(mockResetVerifyRequest())
       .expect(400, {
         type: "Error",
         message: "Invalid verification code"
       })
   })
 
-  /* Test: should return empty result */
-  it("should return empty result", async () => {
+  /* with confirmed user */
+  describe("with confirmed user", () => {
+
+    /* User */
     const user = mockRegisterRequest()
-    const { id } = await auth.register(user.email, user.password)
-    return http.post(`/register/${id}`)
-      .set("Content-Type", "application/json")
-      .expect(200, "")
+
+    /* Create and verify user */
+    beforeAll(async () => {
+      const { subject } = await auth.register(user.email, user.password)
+      await mgmt.verifyUser(subject)
+    })
+
+    /* Delete user */
+    afterAll(async () => {
+      await mgmt.deleteUser(user.email)
+    })
+
+    /* Test: should return empty result */
+    it("should return empty result", async () => {
+      const { id } = await auth.forgotPassword(user.email)
+      return http.post(`/reset/${id}`)
+        .set("Content-Type", "application/json")
+        .send(mockResetVerifyRequest())
+        .expect(200, "")
+    })
+
+    /* Test: should set new password */
+    it("should set new password", async () => {
+      const { id, subject } = await auth.forgotPassword(user.email)
+      const { password } = mockResetVerifyRequest()
+      await http.post(`/reset/${id}`)
+        .set("Content-Type", "application/json")
+        .send({ password })
+        .expect(200, "")
+      expect(async () => {
+        await auth.authenticate(subject, password)
+      }).not.toThrow()
+    })
   })
 })

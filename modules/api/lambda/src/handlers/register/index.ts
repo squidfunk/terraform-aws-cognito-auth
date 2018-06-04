@@ -38,16 +38,15 @@ import { AuthenticationClient } from "../../clients/authentication"
  *
  * @return Promise resolving with HTTP response
  */
-export const post = handler("register",
-  async ({ email, password }) => {
-    const auth = new AuthenticationClient()
-    try {
-      await auth.register(email, password)
-    } catch (err) {
-      if (err.code === "UserLambdaValidationException") {
-        err.code = "AliasExistsException"
-        err.message = err.message.replace("PreSignUp failed with error ", "")   // TODO: ugly
-      }
-      throw err
+export const post = handler("register", async ({ email, password }) => {
+  const auth = new AuthenticationClient()
+  try {
+    await auth.register(email, password)
+  } catch (err) {
+    if (err.code === "UserLambdaValidationException") {
+      err.code = "AliasExistsException"
+      err.message = err.message.replace("PreSignUp failed with error ", "")
     }
-  })
+    throw err
+  }
+})

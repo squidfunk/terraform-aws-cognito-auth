@@ -35,10 +35,9 @@ import { ManagementClient } from "../../../clients/management"
  *
  * @return Promise resolving with HTTP response
  */
-export const post = handler("register/verify",
-  async ({ code }) => {
-    const auth = new AuthenticationClient()
-    const mgmt = new ManagementClient()
-    const { subject } = await auth.verify("register", code)
-    await mgmt.verifyUser(subject)
-  })
+export const post = handler("register/verify", async ({ code }) => {
+  const auth = new AuthenticationClient()
+  const mgmt = new ManagementClient()
+  const { subject } = await auth.verify("register", code)
+  await mgmt.verifyUser(subject)
+})

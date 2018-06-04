@@ -20,21 +20,29 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from ".."
-import { AuthenticationClient } from "../../clients/authentication"
+import { generate, Options } from "generate-password"
 
 /* ----------------------------------------------------------------------------
- * Handlers
+ * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Authenticate using credentials or refresh token
+ * Mock reset verification request
  *
- * @param event - API Gateway event
+ * @param options - Password generator options
  *
- * @return Promise resolving with HTTP response
+ * @return Reset verification request
  */
-export const post = handler("authenticate", ({ username, password, token }) => {
-  const auth = new AuthenticationClient()
-  return auth.authenticate(username || token, password)
-})
+export function mockResetVerifyRequest(options?: Partial<Options>) {
+  return {
+    password: generate({
+      length: 8,
+      numbers: true,
+      symbols: true,
+      uppercase: true,
+      excludeSimilarCharacters: true,
+      strict: true,
+      ...options
+    })
+  }
+}
