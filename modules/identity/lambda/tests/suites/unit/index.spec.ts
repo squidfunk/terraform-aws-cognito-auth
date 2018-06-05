@@ -28,7 +28,8 @@ import {
 import {
   mockCognitoIDPListUsersWithError,
   mockCognitoIDPListUsersWithoutResult,
-  mockCognitoIDPListUsersWithResult
+  mockCognitoIDPListUsersWithResult,
+  restoreCognitoIDPListUsers
 } from "_/mocks/vendor/aws-sdk"
 
 /* ----------------------------------------------------------------------------
@@ -40,6 +41,11 @@ describe("trigger", () => {
 
   /* Cognito user pool trigger event */
   const event = mockCognitoUserPoolTriggerEvent()
+
+  /* Restore AWS mocks */
+  afterEach(() => {
+    restoreCognitoIDPListUsers()
+  })
 
   /* Test: should resolve with input event */
   it("should resolve with input event", async () => {

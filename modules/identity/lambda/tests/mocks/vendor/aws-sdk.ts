@@ -20,7 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-import * as _ from "aws-sdk"
+import { Callback } from "aws-lambda"
+import { mock, restore } from "aws-sdk-mock"
 
 import { chance } from "_/helpers"
 
@@ -35,16 +36,12 @@ import { chance } from "_/helpers"
  *
  * @return Jasmine spy
  */
-export function mockCognitoIDPListUsers<T>(
-  promise: () => Promise<T>
-): jasmine.Spy {
-  const listUsers = jasmine.createSpy("listUsers")
-    .and.returnValue({ promise })
-  Object.defineProperty(_, "CognitoIdentityServiceProvider", {
-    value: jasmine.createSpy("CognitoIdentityServiceProvider")
-      .and.returnValue({ listUsers })
-  })
-  return listUsers
+function mockCognitoIDPListUsers(spy: jasmine.Spy): jasmine.Spy {
+  mock("CognitoIdentityServiceProvider", "listUsers",
+    (data: any, cb: Callback) => {
+      cb(undefined, spy(data))
+    })
+  return spy
 }
 
 /**
@@ -53,42 +50,46 @@ export function mockCognitoIDPListUsers<T>(
  * @return Jasmine spy
  */
 export function mockCognitoIDPListUsersWithResult() {
-  return mockCognitoIDPListUsers(() => Promise.resolve({
-    Users: [
-      {
-        Username: chance.guid(),
-        Attributes: [
+  return mockCognitoIDPListUsers(
+    jasmine.createSpy("listUsers")
+      .and.returnValue({
+        Users: [
           {
-            Name: "sub",
-            Value: chance.guid()
-          },
-          {
-            Name: "email_verified",
-            Value: chance.bool()
-          },
-          {
-            Name: "email",
-            Value: chance.email()
+            Username: chance.guid(),
+            Attributes: [
+              {
+                Name: "sub",
+                Value: chance.guid()
+              },
+              {
+                Name: "email_verified",
+                Value: chance.bool()
+              },
+              {
+                Name: "email",
+                Value: chance.email()
+              }
+            ],
+            UserCreateDate: chance.date().getTime(),
+            UserLastModifiedDate: chance.date().getTime(),
+            Enabled: chance.bool(),
+            UserStatus: "CONFIRMED"
           }
-        ],
-        UserCreateDate: chance.date().getTime(),
-        UserLastModifiedDate: chance.date().getTime(),
-        Enabled: chance.bool(),
-        UserStatus: "CONFIRMED"
-      }
-    ]
-  }))
+        ]
+      }))
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.listUsers returning without result
+ * Mock CognitoIdentityServiceProvider.listUsers returning with no result
  *
  * @return Jasmine spy
  */
 export function mockCognitoIDPListUsersWithoutResult() {
-  return mockCognitoIDPListUsers(() => Promise.resolve({
-    Users: []
-  }))
+  return mockCognitoIDPListUsers(
+    jasmine.createSpy("listUsers")
+      .and.returnValue({
+        Users: []
+      }))
 }
 
 /**
@@ -101,5 +102,14 @@ export function mockCognitoIDPListUsersWithoutResult() {
 export function mockCognitoIDPListUsersWithError(
   err: Error = new Error("mockCognitoIDPListUsersWithError")
 ): jasmine.Spy {
-  return mockCognitoIDPListUsers(() => Promise.reject(err))
+  return mockCognitoIDPListUsers(
+    jasmine.createSpy("listUsers")
+      .and.callFake(() => { throw err }))
+}
+
+/**
+ * Restore CognitoIdentityServiceProvider.listUsers
+ */
+export function restoreCognitoIDPListUsers() {
+  restore("CognitoIdentityServiceProvider", "listUsers")
 }
