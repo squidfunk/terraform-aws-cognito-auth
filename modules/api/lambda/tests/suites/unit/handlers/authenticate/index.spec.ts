@@ -24,9 +24,9 @@ import { post } from "~/handlers/authenticate"
 
 import {
   mockAuthenticationClientAuthenticateWithError,
-  mockAuthenticationClientAuthenticateWithResult
+  mockAuthenticationClientAuthenticateWithResult,
+  mockSession
 } from "_/mocks/clients/authentication"
-import { mockSession } from "_/mocks/clients/session"
 import {
   mockAuthenticateRequestWithCredentials,
   mockAuthenticateRequestWithToken

@@ -20,10 +20,30 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "~/clients/authentication"
-import { Session } from "~/clients/session"
+import { chance } from "_/helpers"
 
-import { mockSession } from "_/mocks/clients/session"
+import {
+  AuthenticationClient,
+  Session
+} from "~/clients/authentication"
+
+/* ----------------------------------------------------------------------------
+ * Data
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Mock session
+ *
+ * @return Session
+ */
+export function mockSession(): Session {
+  return {
+    access: {
+      token: chance.string({ length: 128 }),
+      expires: chance.date().toISOString()
+    }
+  }
+}
 
 /* ----------------------------------------------------------------------------
  * Functions

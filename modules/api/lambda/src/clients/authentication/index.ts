@@ -28,7 +28,26 @@ import {
   Verification,
   VerificationCode
 } from "../../verification"
-import { Session } from "../session"
+
+/* ----------------------------------------------------------------------------
+ * Types
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Session tokens
+ */
+export interface SessionToken {
+  token: string                      /* Token encoded as JWT */
+  expires: string                    /* Token expiry date */
+}
+
+/**
+ * Session tokens
+ */
+export interface Session {
+  access: SessionToken               /* Access token */
+  refresh?: SessionToken             /* Refresh token */
+}
 
 /* ----------------------------------------------------------------------------
  * Functions
