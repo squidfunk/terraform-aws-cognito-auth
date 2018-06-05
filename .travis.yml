@@ -39,8 +39,8 @@ env:
   global:
     - COGNITO_USER_POOL=
     - COGNITO_USER_POOL_CLIENT=
-    - DYNAMODB_TABLE=_
-    - SNS_TOPIC_ARN=_
+    - DYNAMODB_TABLE=
+    - SNS_TOPIC_ARN=
 
 # Install dependencies
 install:
