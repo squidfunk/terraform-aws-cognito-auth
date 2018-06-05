@@ -24,6 +24,7 @@ import * as _ from "aws-sdk"
 
 import { VerificationCode } from "~/verification"
 
+import { chance } from "_/helpers"
 import { mockVerificationCode } from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------
@@ -31,7 +32,177 @@ import { mockVerificationCode } from "_/mocks/verification"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock DynamoDB document client put operation
+ * Mock CognitoIdentityServiceProvider.adminGetUser
+ *
+ * @param promise - Promise returned by Cognito IDP
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPAdminGetUser<T>(
+  promise: () => Promise<T>
+): jasmine.Spy {
+  const adminGetUser = jasmine.createSpy("adminGetUser")
+    .and.returnValue({ promise })
+  Object.defineProperty(_, "CognitoIdentityServiceProvider", {
+    value: jasmine.createSpy("CognitoIdentityServiceProvider")
+      .and.returnValue({ adminGetUser })
+  })
+  return adminGetUser
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.adminGetUser returning with result
+ *
+ * @param username - Username or email address
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPAdminGetUserWithResult(
+  username: string = chance.string()
+) {
+  return mockCognitoIDPAdminGetUser(() => Promise.resolve({
+    Username: username
+  }))
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.adminGetUser throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPAdminGetUserWithError(
+  err: Error = new Error("mockCognitoIDPAdminGetUserWithError")
+): jasmine.Spy {
+  return mockCognitoIDPAdminGetUser(() => Promise.reject(err))
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Mock CognitoIdentityServiceProvider.signUp
+ *
+ * @param promise - Promise returned by Cognito IDP
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPSignUp<T>(
+  promise: () => Promise<T>
+): jasmine.Spy {
+  const signUp = jasmine.createSpy("signUp")
+    .and.returnValue({ promise })
+  Object.defineProperty(_, "CognitoIdentityServiceProvider", {
+    value: jasmine.createSpy("CognitoIdentityServiceProvider")
+      .and.returnValue({ signUp })
+  })
+  return signUp
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.signUp returning with result
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPSignUpWithSuccess() {
+  return mockCognitoIDPSignUp(() => Promise.resolve())
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.signUp throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPSignUpWithError(
+  err: Error = new Error("mockCognitoIDPSignUpWithError")
+): jasmine.Spy {
+  return mockCognitoIDPSignUp(() => Promise.reject(err))
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Mock CognitoIdentityServiceProvider.initiateAuth
+ *
+ * @param promise - Promise returned by Cognito IDP
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPInitiateAuth<T>(
+  promise: () => Promise<T>
+): jasmine.Spy {
+  const initiateAuth = jasmine.createSpy("initiateAuth")
+    .and.returnValue({ promise })
+  Object.defineProperty(_, "CognitoIdentityServiceProvider", {
+    value: jasmine.createSpy("CognitoIdentityServiceProvider")
+      .and.returnValue({ initiateAuth })
+  })
+  return initiateAuth
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.initiateAuth returning with result
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPInitiateAuthWithCredentials() {
+  return mockCognitoIDPInitiateAuth(() => Promise.resolve({
+    AuthenticationResult: {
+      AccessToken: chance.string({ length: 128 }),
+      IdToken: chance.string({ length: 128 }),
+      RefreshToken: chance.string({ length: 128 })
+    }
+  }))
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.initiateAuth returning with result
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPInitiateAuthWithToken() {
+  return mockCognitoIDPInitiateAuth(() => Promise.resolve({
+    AuthenticationResult: {
+      AccessToken: chance.string({ length: 128 }),
+      IdToken: chance.string({ length: 128 })
+    }
+  }))
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.initiateAuth returning with result
+ *
+ * @param challenge - Challenge name
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPInitiateAuthWithChallenge(
+  challenge: string = chance.string()
+) {
+  return mockCognitoIDPInitiateAuth(() => Promise.resolve({
+    ChallengeName: challenge
+  }))
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.initiateAuth throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoIDPInitiateAuthWithError(
+  err: Error = new Error("mockCognitoIDPInitiateAuthWithError")
+): jasmine.Spy {
+  return mockCognitoIDPInitiateAuth(() => Promise.reject(err))
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Mock DynamoDB.DocumentClient.put
  *
  * @param promise - Promise returned by DynamoDB
  *
@@ -50,7 +221,7 @@ export function mockDynamoDBDocumentClientPut<T>(
 }
 
 /**
- * Mock DynamoDB document client put operation returning with success
+ * Mock DynamoDB.DocumentClient.put returning with success
  *
  * @return Jasmine spy
  */
@@ -59,7 +230,7 @@ export function mockDynamoDBDocumentClientPutWithResult() {
 }
 
 /**
- * Mock DynamoDB document client put operation throwing an error
+ * Mock DynamoDB.DocumentClient.put throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -74,7 +245,7 @@ export function mockDynamoDBDocumentClientPutWithError(
 /* ------------------------------------------------------------------------- */
 
 /**
- * Mock DynamoDB document client delete operation
+ * Mock DynamoDB.DocumentClient.delete operation
  *
  * @param promise - Promise returned by DynamoDB
  *
@@ -93,7 +264,7 @@ export function mockDynamoDBDocumentClientDelete<T>(
 }
 
 /**
- * Mock DynamoDB document client delete operation returning with result
+ * Mock DynamoDB.DocumentClient.delete returning with result
  *
  * @param code - Verification code
  *
@@ -108,7 +279,7 @@ export function mockDynamoDBDocumentClientDeleteWithResult(
 }
 
 /**
- * Mock DynamoDB document client delete operation returning with no result
+ * Mock DynamoDB.DocumentClient.delete returning with no result
  *
  * @return Jasmine spy
  */
@@ -117,7 +288,7 @@ export function mockDynamoDBDocumentClientDeleteWithoutResult() {
 }
 
 /**
- * Mock DynamoDB document client delete operation throwing an error
+ * Mock DynamoDB.DocumentClient.delete throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -132,7 +303,7 @@ export function mockDynamoDBDocumentClientDeleteWithError(
 /* ------------------------------------------------------------------------- */
 
 /**
- * Mock SNS publish operation
+ * Mock SNS.publish
  *
  * @param promise - Promise returned by SNS
  *
@@ -151,7 +322,7 @@ export function mockSNSPublish<T>(
 }
 
 /**
- * Mock SNS publish operation returning with success
+ * Mock SNS.publish returning with success
  *
  * @return Jasmine spy
  */
@@ -160,7 +331,7 @@ export function mockSNSPublishWithResult() {
 }
 
 /**
- * Mock SNS publish operation throwing an error
+ * Mock SNS.publish throwing an error
  *
  * @param err - Error to be thrown
  *

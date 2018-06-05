@@ -33,7 +33,8 @@ import {
   mockAuthenticateRequestWithCredentials
 } from "_/mocks/handlers/authenticate"
 import {
-  mockAPIGatewayEvent,
+  mockAPIGatewayEventHttpGet,
+  mockAPIGatewayEventHttpPost,
   mockAPIGatewayEventPathParameters
 } from "_/mocks/vendor/aws-lambda"
 import {
@@ -51,8 +52,8 @@ describe("handlers", () => {
   /* Error translation */
   describe("translate", () => {
 
-    /* Test: should convert lambda validation errors */
-    it("should convert lambda validation errors", () => {
+    /* Test: should translate lambda validation errors */
+    it("should translate lambda validation errors", () => {
       const message = chance.string()
       expect(translate({
         code: "UserLambdaValidationException",
@@ -77,7 +78,7 @@ describe("handlers", () => {
 
     /* Test: should resolve with callback result */
     it("should resolve with callback result", async () => {
-      const event = mockAPIGatewayEvent("POST")
+      const event = mockAPIGatewayEventHttpPost()
       mockValidateWithSuccess()
       const result = chance.string()
       const cb = mockHandlerCallbackWithSuccess(result)
@@ -88,7 +89,7 @@ describe("handlers", () => {
 
     /* Test: should resolve with error for malformed request */
     it("should resolve with error for malformed request", async () => {
-      const event = mockAPIGatewayEvent("POST", "/", {})
+      const event = mockAPIGatewayEventHttpPost("/")
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
       const { statusCode, body } = await handler({}, cb)(event)
@@ -101,7 +102,7 @@ describe("handlers", () => {
 
     /* Test: should resolve with error for invalid request */
     it("should resolve with error for invalid request", async () => {
-      const event = mockAPIGatewayEvent("POST")
+      const event = mockAPIGatewayEventHttpPost()
       mockValidateWithError()
       const cb = mockHandlerCallbackWithSuccess()
       const { statusCode, body } = await handler({}, cb)(event)
@@ -110,13 +111,12 @@ describe("handlers", () => {
         type: "TypeError",
         message: "Invalid request body"
       }))
-      expect(cb)
-        .not.toHaveBeenCalledWith()
+      expect(cb).not.toHaveBeenCalled()
     })
 
     /* Test: should resolve with error for internal error */
     it("should resolve with error for internal error", async () => {
-      const event = mockAPIGatewayEvent("POST")
+      const event = mockAPIGatewayEventHttpPost()
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithError()
       const { statusCode, body } = await handler({}, cb)(event)
@@ -125,38 +125,35 @@ describe("handlers", () => {
         type: "Error",
         message: "mockHandlerCallbackWithError"
       }))
-      expect(cb)
-        .toHaveBeenCalled()
+      expect(cb).toHaveBeenCalled()
     })
 
     /* Test: should invoke callback with path parameters */
     it("should invoke callback with path parameters", async () => {
       const params = mockAPIGatewayEventPathParameters()
-      const event = mockAPIGatewayEvent("POST", "", params)
+      const event = mockAPIGatewayEventHttpPost({}, params)
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
       await handler({}, cb)(event)
-      expect(cb)
-        .toHaveBeenCalledWith(params)
+      expect(cb).toHaveBeenCalledWith(params)
     })
 
     /* Test: should invoke callback with request payload */
     it("should invoke callback with request payload", async () => {
       const data = mockAuthenticateRequestWithCredentials()
-      const event = mockAPIGatewayEvent("POST", data, {})
+      const event = mockAPIGatewayEventHttpPost(data, {})
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
       await handler({}, cb)(event)
-      expect(cb)
-        .toHaveBeenCalledWith(data)
+      expect(cb).toHaveBeenCalledWith(data)
     })
 
     /* Test: should set necessary cross-origin headers */
     it("should set necessary cross-origin headers", async () => {
-      const event = mockAPIGatewayEvent("GET")
+      const event = mockAPIGatewayEventHttpGet()
       mockValidateWithSuccess()
-      const { headers, statusCode } =
-        await handler({}, mockHandlerCallbackWithSuccess())(event)
+      const cb = mockHandlerCallbackWithSuccess()
+      const { headers, statusCode } = await handler({}, cb)(event)
       expect(statusCode).toEqual(200)
       expect(headers).toEqual({
         "Access-Control-Allow-Origin": process.env.COGNITO_IDENTITY_DOMAIN!
@@ -165,10 +162,10 @@ describe("handlers", () => {
 
     /* Test: should set necessary cross-origin headers on error */
     it("should set necessary cross-origin headers on error", async () => {
-      const event = mockAPIGatewayEvent("GET")
+      const event = mockAPIGatewayEventHttpGet()
       mockValidateWithSuccess()
-      const { headers, statusCode } =
-        await handler({}, mockHandlerCallbackWithError())(event)
+      const cb = mockHandlerCallbackWithError()
+      const { headers, statusCode } = await handler({}, cb)(event)
       expect(statusCode).toEqual(400)
       expect(headers).toEqual({
         "Access-Control-Allow-Origin": process.env.COGNITO_IDENTITY_DOMAIN!

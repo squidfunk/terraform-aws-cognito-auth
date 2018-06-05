@@ -124,15 +124,15 @@ describe("POST /authenticate", () => {
   /* with unconfirmed user */
   describe("with unconfirmed user", () => {
 
-    /* User */
-    const user = mockRegisterRequest()
+    /* Registration request */
+    const { email, password } = mockRegisterRequest()
 
     /* User identifier */
     let id: string
 
     /* Create and verify user */
     beforeAll(async () => {
-      const { subject } = await auth.register(user.email, user.password)
+      const { subject } = await auth.register(email, password)
       id = subject
     })
 
@@ -145,7 +145,7 @@ describe("POST /authenticate", () => {
     it("should return error for valid credentials", async () => {
       return http.post("/authenticate")
         .set("Content-Type", "application/json")
-        .send({ username: user.email, password: user.password })
+        .send({ username: email, password })
         .expect(400, {
           type: "UserNotFoundException",
           message: "User does not exist"
@@ -156,42 +156,42 @@ describe("POST /authenticate", () => {
   /* with confirmed user */
   describe("with confirmed user", () => {
 
-    /* User */
-    const user = mockRegisterRequest()
+    /* Registration request */
+    const { email, password } = mockRegisterRequest()
 
     /* Create and verify user */
     beforeAll(async () => {
-      const { subject } = await auth.register(user.email, user.password)
+      const { subject } = await auth.register(email, password)
       await mgmt.verifyUser(subject)
     })
 
     /* Delete user */
     afterAll(async () => {
-      await mgmt.deleteUser(user.email)
+      await mgmt.deleteUser(email)
     })
 
     /* Test: should return access token for valid credentials */
     it("should return access token for valid credentials", async () => {
       const { body }: { body: Session } = await http.post("/authenticate")
         .set("Content-Type", "application/json")
-        .send({ username: user.email, password: user.password })
+        .send({ username: email, password })
         .expect(200)
       expect(body.access.token)
         .toMatch(/^([a-zA-Z0-9\-_]+\.){2}[a-zA-Z0-9\-_]+$/)
       expect(Date.parse(body.access.expires))
-        .toBeGreaterThan(Date.now() + 59 * 60)
+        .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
     })
 
     /* Test: should return refresh token for valid credentials */
     it("should return refresh token for valid credentials", async () => {
       const { body }: { body: Session } = await http.post("/authenticate")
         .set("Content-Type", "application/json")
-        .send({ username: user.email, password: user.password })
+        .send({ username: email, password })
         .expect(200)
       expect(body.refresh!.token)
         .toMatch(/^([a-zA-Z0-9\-_]+\.){4}[a-zA-Z0-9\-_]+$/)
       expect(Date.parse(body.refresh!.expires))
-        .toBeGreaterThan(Date.now() + 59 * 60 * 24 * 30)
+        .toBeGreaterThan(Date.now() + 1000 * 59 * 60 * 24 * 30)
     })
 
     /* Test: should return access token for valid refresh token */
@@ -199,7 +199,7 @@ describe("POST /authenticate", () => {
       const { body: { refresh } }: { body: Session } =
         await http.post("/authenticate")
           .set("Content-Type", "application/json")
-          .send({ username: user.email, password: user.password })
+          .send({ username: email, password })
           .expect(200)
       const { body }: { body: Session } = await http.post("/authenticate")
         .send({ token: refresh!.token })
@@ -207,14 +207,14 @@ describe("POST /authenticate", () => {
       expect(body.access.token)
         .toMatch(/^([a-zA-Z0-9\-_]+\.){2}[a-zA-Z0-9\-_]+$/)
       expect(Date.parse(body.access.expires))
-        .toBeGreaterThanOrEqual(Date.now() + 59 * 60 * 24)
+        .toBeGreaterThanOrEqual(Date.now() + 1000 * 59 * 60)
     })
 
     /* Test: should return error for invalid credentials */
     it("should return error for invalid credentials", () => {
       return http.post("/authenticate")
         .set("Content-Type", "application/json")
-        .send({ username: user.email, password: chance.string() })
+        .send({ username: email, password: chance.string() })
         .expect(400, {
           type: "NotAuthorizedException",
           message: "Incorrect username or password"

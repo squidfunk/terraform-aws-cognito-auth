@@ -27,6 +27,7 @@ import { ManagementClient } from "~/clients/management"
 
 import { chance } from "_/helpers"
 import { mockRegisterRequest } from "_/mocks/handlers/register"
+import { mockResetRequest } from "_/mocks/handlers/reset"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -74,18 +75,29 @@ describe("POST /reset", () => {
       })
   })
 
+  /* Test: should return error for invalid user */
+  it("should return error for invalid user", () => {
+    return http.post("/reset")
+      .set("Content-Type", "application/json")
+      .send(mockResetRequest())
+      .expect(400, {
+        type: "UserNotFoundException",
+        message: "User does not exist"
+      })
+  })
+
   /* with unconfirmed user */
   describe("with unconfirmed user", () => {
 
-    /* User */
-    const user = mockRegisterRequest()
+    /* Registration request */
+    const { email, password } = mockRegisterRequest()
 
     /* User identifier */
     let id: string
 
     /* Create and verify user */
     beforeAll(async () => {
-      const { subject } = await auth.register(user.email, user.password)
+      const { subject } = await auth.register(email, password)
       id = subject
     })
 
@@ -98,7 +110,7 @@ describe("POST /reset", () => {
     it("should return error for unverified user", () => {
       return http.post("/reset")
         .set("Content-Type", "application/json")
-        .send({ username: user.email })
+        .send({ username: email })
         .expect(400, {
           type: "UserNotFoundException",
           message: "User does not exist"
@@ -109,25 +121,25 @@ describe("POST /reset", () => {
   /* with confirmed user */
   describe("with confirmed user", () => {
 
-    /* User */
-    const user = mockRegisterRequest()
+    /* Registration request */
+    const { email, password } = mockRegisterRequest()
 
     /* Create and verify user */
     beforeAll(async () => {
-      const { subject } = await auth.register(user.email, user.password)
+      const { subject } = await auth.register(email, password)
       await mgmt.verifyUser(subject)
     })
 
     /* Delete user */
     afterAll(async () => {
-      await mgmt.deleteUser(user.email)
+      await mgmt.deleteUser(email)
     })
 
-    /* Test: should return empty result */
-    it("should return empty result", () => {
+    /* Test: should return empty body */
+    it("should return empty body", () => {
       return http.post("/reset")
         .set("Content-Type", "application/json")
-        .send({ username: user.email })
+        .send({ username: email })
         .expect(200, "")
     })
 
@@ -135,7 +147,7 @@ describe("POST /reset", () => {
     it("should set necessary cross-origin headers", async () => {
       return http.post("/reset")
         .set("Content-Type", "application/json")
-        .send({ username: user.email })
+        .send({ username: email })
         .expect("Access-Control-Allow-Origin",
           process.env.COGNITO_IDENTITY_DOMAIN!)
     })

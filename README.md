@@ -9,7 +9,7 @@
   [github-image]: https://img.shields.io/github/release/squidfunk/terraform-aws-cognito-auth.svg
   [github-link]: https://github.com/squidfunk/terraform-aws-cognito-auth/releases
 
-# Terraform AWS Cognito AaaS
+# Terraform AWS Cognito Auth
 
 A Terraform module to setup a serverless Authentication as a Service (AaaS)
 provider in front of API Gateway using AWS Cognito.

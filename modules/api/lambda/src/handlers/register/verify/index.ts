@@ -21,8 +21,8 @@
  */
 
 import { handler } from "../.."
-import { AuthenticationClient } from "../../../clients/authentication"
 import { ManagementClient } from "../../../clients/management"
+import { Verification } from "../../../verification"
 
 /* ----------------------------------------------------------------------------
  * Values
@@ -38,15 +38,15 @@ import schema = require("./@schema/post.json")
  * ------------------------------------------------------------------------- */
 
 /**
- * Verify user
+ * Complete user registration by verification
  *
  * @param event - API Gateway event
  *
  * @return Promise resolving with no result
  */
 export const post = handler(schema, async ({ code }) => {
-  const auth = new AuthenticationClient()
+  const verification = new Verification()
   const mgmt = new ManagementClient()
-  const { subject } = await auth.verify("register", code)
+  const { subject } = await verification.claim("register", code)
   await mgmt.verifyUser(subject)
 })

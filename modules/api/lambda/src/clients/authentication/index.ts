@@ -26,8 +26,7 @@ import * as uuid from "uuid/v4"
 import { Client } from ".."
 import {
   Verification,
-  VerificationCode,
-  VerificationContext
+  VerificationCode
 } from "../../verification"
 import { Session } from "../session"
 
@@ -106,20 +105,6 @@ export class AuthenticationClient extends Client {
   }
 
   /**
-   * Claim verification code
-   *
-   * @param context - Verification context
-   * @param id - Verification code identifier
-   *
-   * @return Verification code
-   */
-  public verify(
-    context: VerificationContext, id: string
-  ): Promise<VerificationCode> {
-    return this.verification.claim(context, id)
-  }
-
-  /**
    * Authenticate using credentials or refresh token
    *
    * @param usernameOrToken - Username, email address or refresh token
@@ -181,14 +166,10 @@ export class AuthenticationClient extends Client {
         token: AuthenticationResult.IdToken!,
         expires: expires(60 * 60) /* 1 hour */
       },
-      ...(AuthenticationResult.RefreshToken
-        ? {
-          refresh: {
-            token: AuthenticationResult.RefreshToken,
-            expires: expires(60 * 60 * 24 * 30) /* 30 days */
-          }
-        }
-        : {})
+      refresh: {
+        token: AuthenticationResult.RefreshToken!,
+        expires: expires(60 * 60 * 24 * 30) /* 30 days */
+      }
     }
   }
 

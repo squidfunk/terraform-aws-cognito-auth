@@ -83,23 +83,23 @@ describe("POST /reset/:code", () => {
   /* with confirmed user */
   describe("with confirmed user", () => {
 
-    /* User */
-    const user = mockRegisterRequest()
+    /* Registration request */
+    const { email, password } = mockRegisterRequest()
 
     /* Create and verify user */
     beforeAll(async () => {
-      const { subject } = await auth.register(user.email, user.password)
+      const { subject } = await auth.register(email, password)
       await mgmt.verifyUser(subject)
     })
 
     /* Delete user */
     afterAll(async () => {
-      await mgmt.deleteUser(user.email)
+      await mgmt.deleteUser(email)
     })
 
-    /* Test: should return empty result */
-    it("should return empty result", async () => {
-      const { id } = await auth.forgotPassword(user.email)
+    /* Test: should return empty body */
+    it("should return empty body", async () => {
+      const { id } = await auth.forgotPassword(email)
       return http.post(`/reset/${id}`)
         .set("Content-Type", "application/json")
         .send(mockResetVerifyRequest())
@@ -108,20 +108,20 @@ describe("POST /reset/:code", () => {
 
     /* Test: should set new password */
     it("should set new password", async () => {
-      const { id, subject } = await auth.forgotPassword(user.email)
-      const { password } = mockResetVerifyRequest()
+      const { id, subject } = await auth.forgotPassword(email)
+      const { password: value } = mockResetVerifyRequest()
       await http.post(`/reset/${id}`)
         .set("Content-Type", "application/json")
-        .send({ password })
+        .send({ password: value })
         .expect(200, "")
       expect(async () => {
-        await auth.authenticate(subject, password)
+        await auth.authenticate(subject, value)
       }).not.toThrow()
     })
 
     /* Test: should set necessary cross-origin headers */
     it("should set necessary cross-origin headers", async () => {
-      const { id } = await auth.forgotPassword(user.email)
+      const { id } = await auth.forgotPassword(email)
       return http.post(`/reset/${id}`)
         .set("Content-Type", "application/json")
         .send(mockResetVerifyRequest())

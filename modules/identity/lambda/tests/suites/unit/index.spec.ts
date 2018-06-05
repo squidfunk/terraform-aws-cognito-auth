@@ -26,9 +26,9 @@ import {
   mockCognitoUserPoolTriggerEvent
 } from "_/mocks/vendor/aws-lambda"
 import {
-  mockCognitoIdentityServiceProviderListUsersWithError,
-  mockCognitoIdentityServiceProviderListUsersWithoutResult,
-  mockCognitoIdentityServiceProviderListUsersWithResult
+  mockCognitoIDPListUsersWithError,
+  mockCognitoIDPListUsersWithoutResult,
+  mockCognitoIDPListUsersWithResult
 } from "_/mocks/vendor/aws-sdk"
 
 /* ----------------------------------------------------------------------------
@@ -44,7 +44,7 @@ describe("trigger", () => {
   /* Test: should resolve with input event */
   it("should resolve with input event", async () => {
     const listUsersMock =
-      mockCognitoIdentityServiceProviderListUsersWithoutResult()
+      mockCognitoIDPListUsersWithoutResult()
     expect(await trigger(event)).toBe(event)
     expect(listUsersMock).toHaveBeenCalledWith({
       UserPoolId: event.userPoolId,
@@ -52,26 +52,27 @@ describe("trigger", () => {
     })
   })
 
-  /* Test: should reject on Cognito retrieve error */
-  it("should reject on Cognito retrieve error", async done => {
-    mockCognitoIdentityServiceProviderListUsersWithError()
-    try {
-      await trigger(event)
-      done.fail()
-    } catch (err) {
-      expect(err).toEqual(jasmine.any(Error))
-      done()
-    }
-  })
-
   /* Test: should reject on already registered email address */
   it("should reject on already registered email address", async done => {
-    mockCognitoIdentityServiceProviderListUsersWithResult()
+    mockCognitoIDPListUsersWithResult()
     try {
       await trigger(event)
       done.fail()
     } catch (err) {
       expect(err).toEqual(new Error("Email address already registered"))
+      done()
+    }
+  })
+
+  /* Test: should reject on AWS Cognito IDP error */
+  it("should reject on AWS Cognito IDP error", async done => {
+    const errMock = new Error()
+    mockCognitoIDPListUsersWithError(errMock)
+    try {
+      await trigger(event)
+      done.fail()
+    } catch (err) {
+      expect(err).toBe(errMock)
       done()
     }
   })

@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import * as _ from "~/clients/authentication"
+import { AuthenticationClient } from "~/clients/authentication"
 import { Session } from "~/clients/session"
 
 import { mockSession } from "_/mocks/clients/session"
@@ -30,7 +30,7 @@ import { mockSession } from "_/mocks/clients/session"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock Authentication client authenticate operation
+ * Mock AuthenticationClient.authenticate
  *
  * @param promise - Promise returned by authentication client
  *
@@ -39,17 +39,12 @@ import { mockSession } from "_/mocks/clients/session"
 export function mockAuthenticationClientAuthenticate<T>(
   promise: () => Promise<T>
 ): jasmine.Spy {
-  const authenticate = jasmine.createSpy("authenticate")
+  return spyOn(AuthenticationClient.prototype, "authenticate")
     .and.callFake(promise)
-  Object.defineProperty(_, "AuthenticationClient", {
-    value: jasmine.createSpy("AuthenticationClient")
-      .and.returnValue({ authenticate })
-  })
-  return authenticate
 }
 
 /**
- * Mock Authentication client authenticate operation returning with success
+ * Mock AuthenticationClient.authenticate returning with success
  *
  * @param session - Session
  *
@@ -62,7 +57,7 @@ export function mockAuthenticationClientAuthenticateWithResult(
 }
 
 /**
- * Mock Authentication client authenticate operation throwing an error
+ * Mock AuthenticationClient.authenticate throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -72,4 +67,80 @@ export function mockAuthenticationClientAuthenticateWithError(
   err: Error = new Error("mockAuthenticationClientAuthenticateWithError")
 ): jasmine.Spy {
   return mockAuthenticationClientAuthenticate(() => Promise.reject(err))
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Mock AuthenticationClient.register
+ *
+ * @param promise - Promise returned by authentication client
+ *
+ * @return Jasmine spy
+ */
+export function mockAuthenticationClientRegister<T>(
+  promise: () => Promise<T>
+): jasmine.Spy {
+  return spyOn(AuthenticationClient.prototype, "register")
+    .and.callFake(promise)
+}
+
+/**
+ * Mock AuthenticationClient.register returning with success
+ *
+ * @return Jasmine spy
+ */
+export function mockAuthenticationClientRegisterWithSuccess() {
+  return mockAuthenticationClientRegister(() => Promise.resolve())
+}
+
+/**
+ * Mock AuthenticationClient.register throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockAuthenticationClientRegisterWithError(
+  err: Error = new Error("mockAuthenticationClientRegisterWithError")
+): jasmine.Spy {
+  return mockAuthenticationClientRegister(() => Promise.reject(err))
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Mock AuthenticationClient.forgotPassword
+ *
+ * @param promise - Promise returned by authentication client
+ *
+ * @return Jasmine spy
+ */
+export function mockAuthenticationClientForgotPassword<T>(
+  promise: () => Promise<T>
+): jasmine.Spy {
+  return spyOn(AuthenticationClient.prototype, "forgotPassword")
+    .and.callFake(promise)
+}
+
+/**
+ * Mock AuthenticationClient.forgotPassword returning with success
+ *
+ * @return Jasmine spy
+ */
+export function mockAuthenticationClientForgotPasswordWithSuccess() {
+  return mockAuthenticationClientForgotPassword(() => Promise.resolve())
+}
+
+/**
+ * Mock AuthenticationClient.forgotPassword throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockAuthenticationClientForgotPasswordWithError(
+  err: Error = new Error("mockAuthenticationClientForgotPasswordWithError")
+): jasmine.Spy {
+  return mockAuthenticationClientForgotPassword(() => Promise.reject(err))
 }

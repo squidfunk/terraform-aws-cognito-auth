@@ -49,7 +49,7 @@ export class ManagementClient extends Client {
   }
 
   /**
-   * Verify user
+   * Complete user registration by verification
    *
    * @param username - Username or email address
    *

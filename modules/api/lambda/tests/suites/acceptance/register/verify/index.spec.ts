@@ -41,8 +41,8 @@ describe("POST /register/:code", () => {
   /* Initialize HTTP client */
   const http = request(process.env.API_INVOKE_URL!)
 
-  /* Test: should return empty result */
-  it("should return empty result", async () => {
+  /* Test: should return empty body */
+  it("should return empty body", async () => {
     const user = mockRegisterRequest()
     const { id } = await auth.register(user.email, user.password)
     return http.post(`/register/${id}`)

@@ -61,25 +61,25 @@ describe("POST /check", () => {
   /* with authenticated user */
   describe("with authenticated user", () => {
 
-    /* User */
-    const user = mockRegisterRequest()
+    /* Registration request */
+    const { email, password } = mockRegisterRequest()
 
     /* Create and verify user */
     beforeAll(async () => {
-      const { subject } = await auth.register(user.email, user.password)
+      const { subject } = await auth.register(email, password)
       await mgmt.verifyUser(subject)
     })
 
     /* Delete user */
     afterAll(async () => {
-      await mgmt.deleteUser(user.email)
+      await mgmt.deleteUser(email)
     })
 
     /* Test: should return successfully for valid access token */
     it("should return successfully for valid access token", async () => {
       const { body }: { body: Session } =  await http.post("/authenticate")
         .set("Content-Type", "application/json")
-        .send({ username: user.email, password: user.password })
+        .send({ username: email, password })
       return http.get("/check")
         .set("Authorization", `Bearer ${body.access.token}`)
         .expect(200, "")
@@ -89,7 +89,7 @@ describe("POST /check", () => {
     it("should set necessary cross-origin headers", async () => {
       const { body }: { body: Session } =  await http.post("/authenticate")
         .set("Content-Type", "application/json")
-        .send({ username: user.email, password: user.password })
+        .send({ username: email, password })
       return http.get("/check")
         .set("Authorization", `Bearer ${body.access.token}`)
         .expect("Access-Control-Allow-Origin",

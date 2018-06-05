@@ -36,7 +36,7 @@ import { chance } from "_/helpers"
 export function mockSession(): Session {
   return {
     access: {
-      token: chance.string(),
+      token: chance.string({ length: 128 }),
       expires: chance.date().toISOString()
     }
   }

@@ -61,8 +61,8 @@ describe("POST /register", () => {
       .expect(200)
   })
 
-  /* Test: should return empty result */
-  it("should return empty result", () => {
+  /* Test: should return empty body */
+  it("should return empty body", () => {
     return http.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest())
@@ -190,15 +190,15 @@ describe("POST /register", () => {
   /* with unconfirmed user */
   describe("with unconfirmed user", () => {
 
-    /* User */
-    const user = mockRegisterRequest()
+    /* Registration request */
+    const { email, password } = mockRegisterRequest()
 
     /* User identifier */
     let id: string
 
     /* Create and verify user */
     beforeAll(async () => {
-      const { subject } = await auth.register(user.email, user.password)
+      const { subject } = await auth.register(email, password)
       id = subject
     })
 
@@ -211,7 +211,7 @@ describe("POST /register", () => {
     it("should return error for already registered email address", () => {
       return http.post("/register")
         .set("Content-Type", "application/json")
-        .send(user)
+        .send({ email, password })
         .expect(400, {
           type: "AliasExistsException",
           message: "Email address already registered"
@@ -222,25 +222,25 @@ describe("POST /register", () => {
   /* with confirmed user */
   describe("with confirmed user", () => {
 
-    /* User */
-    const user = mockRegisterRequest()
+    /* Registration request */
+    const { email, password } = mockRegisterRequest()
 
     /* Create and verify user */
     beforeAll(async () => {
-      const { subject } = await auth.register(user.email, user.password)
+      const { subject } = await auth.register(email, password)
       await mgmt.verifyUser(subject)
     })
 
     /* Delete user */
     afterAll(async () => {
-      await mgmt.deleteUser(user.email)
+      await mgmt.deleteUser(email)
     })
 
     /* Test: should return error for already registered email address */
     it("should return error for already registered email address", () => {
       return http.post("/register")
         .set("Content-Type", "application/json")
-        .send(user)
+        .send({ email, password })
         .expect(400, {
           type: "AliasExistsException",
           message: "Email address already registered"

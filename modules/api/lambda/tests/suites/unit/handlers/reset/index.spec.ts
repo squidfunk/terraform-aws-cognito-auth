@@ -20,71 +20,54 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "~/handlers/authenticate"
+import { post } from "~/handlers/reset"
 
 import {
-  mockAuthenticationClientAuthenticateWithError,
-  mockAuthenticationClientAuthenticateWithResult
+  mockAuthenticationClientForgotPasswordWithError,
+  mockAuthenticationClientForgotPasswordWithSuccess
 } from "_/mocks/clients/authentication"
-import { mockSession } from "_/mocks/clients/session"
-import {
-  mockAuthenticateRequestWithCredentials,
-  mockAuthenticateRequestWithToken
-} from "_/mocks/handlers/authenticate"
+import { mockResetRequest } from "_/mocks/handlers/reset"
 import { mockAPIGatewayEventHttpPost } from "_/mocks/vendor/aws-lambda"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Authentication */
-describe("handlers/authenticate", () => {
+/* Reset */
+describe("handlers/reset", () => {
 
-  /* POST /authenticate */
+  /* POST /reset */
   describe("post", () => {
 
-    /* Credentials, token and session */
-    const { username, password } = mockAuthenticateRequestWithCredentials()
-    const { token } = mockAuthenticateRequestWithToken()
-    const session = mockSession()
+    /* Reset request */
+    const { username } = mockResetRequest()
 
-    /* Test: should resolve with session for credentials */
-    it("should resolve with session for credentials", async () => {
-      const event = mockAPIGatewayEventHttpPost({ username, password })
-      const authenticateMock =
-        mockAuthenticationClientAuthenticateWithResult(session)
+    /* API Gateway event */
+    const event = mockAPIGatewayEventHttpPost({ username })
+
+    /* Test: should resolve with empty result */
+    it("should resolve with empty result", async () => {
+      const forgotPasswordMock =
+        mockAuthenticationClientForgotPasswordWithSuccess()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(200)
-      expect(body).toEqual(JSON.stringify(session))
-      expect(authenticateMock)
-        .toHaveBeenCalledWith(username, password)
-    })
-
-    /* Test: should resolve with session for token */
-    it("should resolve with session for token", async () => {
-      const event = mockAPIGatewayEventHttpPost({ token })
-      const authenticateMock =
-        mockAuthenticationClientAuthenticateWithResult(session)
-      const { statusCode, body } = await post(event)
-      expect(statusCode).toEqual(200)
-      expect(body).toEqual(JSON.stringify(session))
-      expect(authenticateMock)
-        .toHaveBeenCalledWith(token, undefined)
+      expect(body).toEqual("")
+      expect(forgotPasswordMock)
+        .toHaveBeenCalledWith(username)
     })
 
     /* Test: should resolve with authentication client error */
     it("should resolve with authentication client error", async () => {
-      const event = mockAPIGatewayEventHttpPost({ username, password })
-      const authenticateMock =
-        mockAuthenticationClientAuthenticateWithError()
+      const forgotPasswordMock =
+        mockAuthenticationClientForgotPasswordWithError()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
-        message: "mockAuthenticationClientAuthenticateWithError"
+        message: "mockAuthenticationClientForgotPasswordWithError"
       }))
-      expect(authenticateMock)
-        .toHaveBeenCalledWith(username, password)
+      expect(forgotPasswordMock)
+        .toHaveBeenCalledWith(username)
     })
   })
 })

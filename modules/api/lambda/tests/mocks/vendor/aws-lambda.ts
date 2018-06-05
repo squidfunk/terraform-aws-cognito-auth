@@ -47,14 +47,15 @@ export function mockAPIGatewayEventPathParameters(
  * Mock API Gateway event
  *
  * @param method - HTTP method
- * @param data - Request payload
+ * @param path - Request payload
  * @param params - Path parameters
  *
  * @return API Gateway event
  */
 export function mockAPIGatewayEvent(
-  method: "GET" | "POST", data: any = "",
-  params: { [name: string]: string } = mockAPIGatewayEventPathParameters()
+  method: "GET" | "POST", body: any = "", params: {
+    [name: string]: string
+  } = mockAPIGatewayEventPathParameters()
 ): APIGatewayEvent {
   return {
     resource: "/",
@@ -93,7 +94,39 @@ export function mockAPIGatewayEvent(
       }
     },
     stageVariables: null,
-    body: typeof data !== "string" ? JSON.stringify(data) : data,
+    body: typeof body !== "string" ? JSON.stringify(body) : body,
     isBase64Encoded: chance.bool()
   }
+}
+
+/**
+ * Mock API Gateway GET event
+ *
+ * @param body - Request payload
+ * @param params - Path parameters
+ *
+ * @return API Gateway event
+ */
+export function mockAPIGatewayEventHttpGet(
+  body: any = "", params: {
+    [name: string]: string
+  } = mockAPIGatewayEventPathParameters()
+): APIGatewayEvent {
+  return mockAPIGatewayEvent("GET", body, params)
+}
+
+/**
+ * Mock API Gateway POST event
+ *
+ * @param body - Request payload
+ * @param params - Path parameters
+ *
+ * @return API Gateway event
+ */
+export function mockAPIGatewayEventHttpPost(
+  body: any = "", params: {
+    [name: string]: string
+  } = mockAPIGatewayEventPathParameters()
+): APIGatewayEvent {
+  return mockAPIGatewayEvent("POST", body, params)
 }

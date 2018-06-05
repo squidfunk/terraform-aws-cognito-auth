@@ -20,33 +20,19 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from "../.."
-import { ManagementClient } from "../../../clients/management"
-import { Verification } from "../../../verification"
+import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Request schema
- */
-import schema = require("./@schema/post.json")
-
-/* ----------------------------------------------------------------------------
- * Handlers
- * ------------------------------------------------------------------------- */
-
-/**
- * Change password for user
+ * Mock reset request
  *
- * @param event - API Gateway event
- *
- * @return Promise resolving with no result
+ * @return Reset request
  */
-export const post = handler(schema, async ({ code, password }) => {
-  const verification = new Verification()
-  const mgmt = new ManagementClient()
-  const { subject } = await verification.claim("reset", code)
-  await mgmt.changePassword(subject, password)
-})
+export function mockResetRequest() {
+  return {
+    username: chance.email()
+  }
+}

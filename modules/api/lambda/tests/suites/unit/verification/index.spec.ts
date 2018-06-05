@@ -76,8 +76,8 @@ describe("verification", () => {
           .toBeGreaterThanOrEqual(Math.floor(Date.now() / 1000) + 59 * 60 * 24)
       })
 
-      /* Test: should store verification code in DynamoDB */
-      it("should store verification code in DynamoDB", async () => {
+      /* Test: should store verification code in AWS DynamoDB */
+      it("should store verification code in AWS DynamoDB", async () => {
         const putMock = mockDynamoDBDocumentClientPutWithResult()
         mockSNSPublishWithResult()
         const verification = new Verification()
@@ -88,8 +88,8 @@ describe("verification", () => {
         })
       })
 
-      /* Test: should publish verification code via SNS */
-      it("should publish verification code via SNS", async () => {
+      /* Test: should publish verification code via AWS SNS */
+      it("should publish verification code via AWS SNS", async () => {
         mockDynamoDBDocumentClientPutWithResult()
         const publishMock = mockSNSPublishWithResult()
         const verification = new Verification()
@@ -104,9 +104,10 @@ describe("verification", () => {
         })
       })
 
-      /* Test: should reject on DynamoDB store error */
-      it("should reject on DynamoDB store error", async done => {
-        const putMock = mockDynamoDBDocumentClientPutWithError()
+      /* Test: should reject on AWS DynamoDB error */
+      it("should reject on AWS DynamoDB error", async done => {
+        const errMock = new Error()
+        const putMock = mockDynamoDBDocumentClientPutWithError(errMock)
         mockSNSPublishWithResult()
         try {
           const verification = new Verification()
@@ -114,22 +115,23 @@ describe("verification", () => {
           done.fail()
         } catch (err) {
           expect(putMock).toHaveBeenCalled()
-          expect(err).toEqual(jasmine.any(Error))
+          expect(err).toBe(errMock)
           done()
         }
       })
 
-      /* Test: should reject on SNS publish error */
-      it("should reject on SNS publish error", async done => {
+      /* Test: should reject on AWS SNS error */
+      it("should reject on AWS SNS error", async done => {
+        const errMock = new Error()
         mockDynamoDBDocumentClientPutWithResult()
-        const publishMock = mockSNSPublishWithError()
+        const publishMock = mockSNSPublishWithError(errMock)
         try {
           const verification = new Verification()
           await verification.issue(context, subject)
           done.fail()
         } catch (err) {
           expect(publishMock).toHaveBeenCalled()
-          expect(err).toEqual(jasmine.any(Error))
+          expect(err).toBe(errMock)
           done()
         }
       })
@@ -189,16 +191,17 @@ describe("verification", () => {
         }
       })
 
-      /* Test: should reject on DynamoDB delete error */
-      it("should reject on DynamoDB delete error", async done => {
-        const deleteMock = mockDynamoDBDocumentClientDeleteWithError()
+      /* Test: should reject on AWS DynamoDB error */
+      it("should reject on AWS DynamoDB error", async done => {
+        const errMock = new Error()
+        const deleteMock = mockDynamoDBDocumentClientDeleteWithError(errMock)
         try {
           const verification = new Verification()
           await verification.claim(code.context, code.id)
           done.fail()
         } catch (err) {
           expect(deleteMock).toHaveBeenCalled()
-          expect(err).toEqual(jasmine.any(Error))
+          expect(err).toBe(errMock)
           done()
         }
       })

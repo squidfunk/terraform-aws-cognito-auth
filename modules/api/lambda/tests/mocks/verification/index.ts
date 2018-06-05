@@ -21,6 +21,7 @@
  */
 
 import {
+  Verification,
   VerificationCode,
   VerificationContext
 } from "~/verification"
@@ -59,4 +60,90 @@ export function mockVerificationCode(
     subject: chance.guid(),
     expires: Math.floor(chance.date().getTime() / 1000)
   }
+}
+
+/* ----------------------------------------------------------------------------
+ * Functions
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Mock Verification.issue
+ *
+ * @param promise - Promise returned by Verification
+ *
+ * @return Jasmine spy
+ */
+export function mockVerificationIssue<T>(
+  promise: () => Promise<T>
+): jasmine.Spy {
+  return spyOn(Verification.prototype, "issue")
+    .and.callFake(promise)
+}
+
+/**
+ * Mock Verification.issue returning with success
+ *
+ * @param code - Verification code
+ *
+ * @return Jasmine spy
+ */
+export function mockVerificationIssueWithResult(
+  code: VerificationCode = mockVerificationCode()
+) {
+  return mockVerificationIssue(() => Promise.resolve(code))
+}
+
+/**
+ * Mock Verification.issue throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockVerificationIssueWithError(
+  err: Error = new Error("mockVerificationIssueWithError")
+): jasmine.Spy {
+  return mockVerificationIssue(() => Promise.reject(err))
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Mock Verification.claim
+ *
+ * @param promise - Promise returned by Verification
+ *
+ * @return Jasmine spy
+ */
+export function mockVerificationClaim<T>(
+  promise: () => Promise<T>
+): jasmine.Spy {
+  return spyOn(Verification.prototype, "claim")
+    .and.callFake(promise)
+}
+
+/**
+ * Mock Verification.claim returning with success
+ *
+ * @param code - Verification code
+ *
+ * @return Jasmine spy
+ */
+export function mockVerificationClaimWithResult(
+  code: VerificationCode = mockVerificationCode()
+) {
+  return mockVerificationClaim(() => Promise.resolve(code))
+}
+
+/**
+ * Mock Verification.claim throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockVerificationClaimWithError(
+  err: Error = new Error("mockVerificationClaimWithError")
+): jasmine.Spy {
+  return mockVerificationClaim(() => Promise.reject(err))
 }
