@@ -34,6 +34,13 @@ cache:
     - modules/api/lambda/node_modules
     - modules/identity/lambda/node_modules
 
+# Empty environment variable for unit tests
+env:
+  - COGNITO_USER_POOL=
+  - COGNITO_USER_POOL_CLIENT=
+  - DYNAMODB_TABLE=
+  - SNS_TOPIC_ARN=
+
 # Install dependencies
 install:
   - pip install --user codecov
@@ -44,6 +51,7 @@ install:
 script:
   - make --no-print-directory lint
   - make --no-print-directory build
+  - make --no-print-directory test
 
 # Upload coverage report
 after_success:
