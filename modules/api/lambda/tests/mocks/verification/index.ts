@@ -81,7 +81,7 @@ export function mockVerificationIssue<T>(
 }
 
 /**
- * Mock Verification.issue returning with success
+ * Mock Verification.issue returning with resut
  *
  * @param code - Verification code
  *
@@ -123,7 +123,7 @@ export function mockVerificationClaim<T>(
 }
 
 /**
- * Mock Verification.claim returning with success
+ * Mock Verification.claim returning with result
  *
  * @param code - Verification code
  *

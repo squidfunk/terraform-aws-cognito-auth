@@ -20,44 +20,55 @@
  * IN THE SOFTWARE.
  */
 
+import { Callback } from "aws-lambda"
+import { mock, restore } from "aws-sdk-mock"
+
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock handler callback
+ * Mock SNS.publish
  *
- * @param promise - Promise returned by handler callback
- *
- * @return Jasmine spy
- */
-export function mockHandlerCallback(
-  promise: () => Promise<any>
-): jasmine.Spy {
-  return jasmine.createSpy("callback")
-    .and.callFake(promise)
-}
-
-/**
- * Mock handler callback returning with success
- *
- * @param result - Handler callback result
+ * @param promise - Promise returned by Cognito
  *
  * @return Jasmine spy
  */
-export function mockHandlerCallbackWithSuccess(result?: any): jasmine.Spy {
-  return mockHandlerCallback(() => Promise.resolve(result))
+function mockSNSPublish(spy: jasmine.Spy) {
+  mock("SNS", "publish", (data: any, cb: Callback) => {
+    cb(undefined, spy(data))
+  })
+  return spy
 }
 
 /**
- * Mock handler callback throwing an error
+ * Mock SNS.publish returning with success
+ *
+ * @return Jasmine spy
+ */
+export function mockSNSPublishWithSuccess() {
+  return mockSNSPublish(
+    jasmine.createSpy("publish"))
+}
+
+/**
+ * Mock SNS.publish throwing an error
  *
  * @param err - Error to be thrown
  *
  * @return Jasmine spy
  */
-export function mockHandlerCallbackWithError(
-  err: Error = new Error("mockHandlerCallbackWithError")
+export function mockSNSPublishWithError(
+  err: Error = new Error("mockSNSPublishWithError")
 ): jasmine.Spy {
-  return mockHandlerCallback(() => Promise.reject(err))
+  return mockSNSPublish(
+    jasmine.createSpy("publish")
+      .and.callFake(() => { throw err }))
+}
+
+/**
+ * Restore SNS.publish
+ */
+export function restoreSNSPublish() {
+  restore("SNS", "publish")
 }

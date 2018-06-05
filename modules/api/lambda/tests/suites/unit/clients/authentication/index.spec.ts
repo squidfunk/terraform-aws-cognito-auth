@@ -30,15 +30,18 @@ import {
 import { mockRegisterRequest } from "_/mocks/handlers/register"
 import { mockResetRequest } from "_/mocks/handlers/reset"
 import {
-  mockCognitoIDPAdminGetUserWithError,
-  mockCognitoIDPAdminGetUserWithResult,
-  mockCognitoIDPInitiateAuthWithChallenge,
-  mockCognitoIDPInitiateAuthWithCredentials,
-  mockCognitoIDPInitiateAuthWithError,
-  mockCognitoIDPInitiateAuthWithToken,
-  mockCognitoIDPSignUpWithError,
-  mockCognitoIDPSignUpWithSuccess
-} from "_/mocks/vendor/aws-sdk"
+  mockCognitoAdminGetUserWithError,
+  mockCognitoAdminGetUserWithResult,
+  mockCognitoInitiateAuthWithChallenge,
+  mockCognitoInitiateAuthWithCredentials,
+  mockCognitoInitiateAuthWithError,
+  mockCognitoInitiateAuthWithToken,
+  mockCognitoSignUpWithError,
+  mockCognitoSignUpWithSuccess,
+  restoreCognitoAdminGetUser,
+  restoreCognitoInitiateAuth,
+  restoreCognitoSignUp
+} from "_/mocks/vendor/aws-sdk/cognito"
 import {
   mockVerificationCode,
   mockVerificationIssueWithError,
@@ -58,13 +61,18 @@ describe("clients/authentication", () => {
     /* #register */
     describe("#register", () => {
 
+      /* Restore AWS mocks */
+      afterEach(() => {
+        restoreCognitoSignUp()
+      })
+
       /* Registration request and verification code */
       const { email, password } = mockRegisterRequest()
       const code = mockVerificationCode()
 
       /* Test: should resolve with verification code */
       it("should resolve with verification code", async () => {
-        mockCognitoIDPSignUpWithSuccess()
+        mockCognitoSignUpWithSuccess()
         mockVerificationIssueWithResult(code)
         const auth = new AuthenticationClient()
         expect(await auth.register(email, password))
@@ -73,7 +81,7 @@ describe("clients/authentication", () => {
 
       /* Test: should set username to random uuid */
       it("should set username to random uuid", async () => {
-        const signUpMock = mockCognitoIDPSignUpWithSuccess()
+        const signUpMock = mockCognitoSignUpWithSuccess()
         mockVerificationIssueWithResult()
         const auth = new AuthenticationClient()
         await auth.register(email, password)
@@ -87,7 +95,7 @@ describe("clients/authentication", () => {
 
       /* Test: should set password */
       it("should set password", async () => {
-        const signUpMock = mockCognitoIDPSignUpWithSuccess()
+        const signUpMock = mockCognitoSignUpWithSuccess()
         mockVerificationIssueWithResult()
         const auth = new AuthenticationClient()
         await auth.register(email, password)
@@ -99,7 +107,7 @@ describe("clients/authentication", () => {
 
       /* Test: should set email as attribute */
       it("should set email as attribute", async () => {
-        const signUpMock = mockCognitoIDPSignUpWithSuccess()
+        const signUpMock = mockCognitoSignUpWithSuccess()
         mockVerificationIssueWithResult()
         const auth = new AuthenticationClient()
         await auth.register(email, password)
@@ -117,7 +125,7 @@ describe("clients/authentication", () => {
       /* Test: should reject on verification error */
       it ("should reject on verification error", async done => {
         const errMock = new Error()
-        mockCognitoIDPSignUpWithSuccess()
+        mockCognitoSignUpWithSuccess()
         const issueMock = mockVerificationIssueWithError(errMock)
         try {
           const auth = new AuthenticationClient()
@@ -130,10 +138,10 @@ describe("clients/authentication", () => {
         }
       })
 
-      /* Test: should reject on AWS Cognito IDP error */
-      it ("should reject on AWS Cognito IDP error", async done => {
+      /* Test: should reject on AWS Cognito error */
+      it ("should reject on AWS Cognito error", async done => {
         const errMock = new Error()
-        const signUpMock = mockCognitoIDPSignUpWithError(errMock)
+        const signUpMock = mockCognitoSignUpWithError(errMock)
         mockVerificationIssueWithResult()
         try {
           const auth = new AuthenticationClient()
@@ -154,10 +162,15 @@ describe("clients/authentication", () => {
       const { username, password } = mockAuthenticateRequestWithCredentials()
       const { token } = mockAuthenticateRequestWithToken()
 
+      /* Restore AWS mocks */
+      afterEach(() => {
+        restoreCognitoInitiateAuth()
+      })
+
       /* Test: should resolve with access token for valid credentials */
       it("should resolve with access token for valid credentials",
         async () => {
-          mockCognitoIDPInitiateAuthWithCredentials()
+          mockCognitoInitiateAuthWithCredentials()
           const auth = new AuthenticationClient()
           const { access } = await auth.authenticate(username, password)
           expect(access.token).toEqual(jasmine.any(String))
@@ -168,7 +181,7 @@ describe("clients/authentication", () => {
       /* Test: should resolve with refresh token for valid credentials */
       it("should resolve with refresh token for valid credentials",
         async () => {
-          mockCognitoIDPInitiateAuthWithCredentials()
+          mockCognitoInitiateAuthWithCredentials()
           const auth = new AuthenticationClient()
           const { refresh } = await auth.authenticate(username, password)
           expect(refresh!.token).toEqual(jasmine.any(String))
@@ -179,7 +192,7 @@ describe("clients/authentication", () => {
       /* Test: should resolve with access token for valid refresh token */
       it("should resolve with access token for valid refresh token",
         async () => {
-          mockCognitoIDPInitiateAuthWithToken()
+          mockCognitoInitiateAuthWithToken()
           const auth = new AuthenticationClient()
           const { access, refresh } = await auth.authenticate(token)
           expect(access.token).toEqual(jasmine.any(String))
@@ -193,7 +206,7 @@ describe("clients/authentication", () => {
         async done => {
           const challenge = chance.string()
           const initiateAuthMock =
-            mockCognitoIDPInitiateAuthWithChallenge(challenge)
+            mockCognitoInitiateAuthWithChallenge(challenge)
           try {
             const auth = new AuthenticationClient()
             await auth.authenticate(username, password)
@@ -211,7 +224,7 @@ describe("clients/authentication", () => {
         async done => {
           const challenge = chance.string()
           const initiateAuthMock =
-            mockCognitoIDPInitiateAuthWithChallenge(challenge)
+            mockCognitoInitiateAuthWithChallenge(challenge)
           try {
             const auth = new AuthenticationClient()
             await auth.authenticate(token)
@@ -224,12 +237,12 @@ describe("clients/authentication", () => {
           }
         })
 
-      /* Test: should reject on AWS Cognito IDP error for credentials */
-      it("should reject on AWS Cognito IDP error for credentials",
+      /* Test: should reject on AWS Cognito error (credentials) */
+      it("should reject on AWS Cognito error (credentials)",
         async done => {
           const errMock = new Error()
           const initiateAuthMock =
-            mockCognitoIDPInitiateAuthWithError(errMock)
+            mockCognitoInitiateAuthWithError(errMock)
           try {
             const auth = new AuthenticationClient()
             await auth.authenticate(username, password)
@@ -241,12 +254,12 @@ describe("clients/authentication", () => {
           }
         })
 
-      /* Test: should reject on AWS Cognito IDP error for token */
-      it("should reject on AWS Cognito IDP error for token",
+      /* Test: should reject on AWS Cognito error (refresh token) */
+      it("should reject on AWS Cognito error (refresh token)",
         async done => {
           const errMock = new Error()
           const initiateAuthMock =
-            mockCognitoIDPInitiateAuthWithError(errMock)
+            mockCognitoInitiateAuthWithError(errMock)
           try {
             const auth = new AuthenticationClient()
             await auth.authenticate(token)
@@ -266,9 +279,14 @@ describe("clients/authentication", () => {
       const { username } = mockResetRequest()
       const code = mockVerificationCode()
 
+      /* Restore AWS mocks */
+      afterEach(() => {
+        restoreCognitoAdminGetUser()
+      })
+
       /* Test: should resolve with verification code */
       it("should resolve with verification code", async () => {
-        mockCognitoIDPAdminGetUserWithResult()
+        mockCognitoAdminGetUserWithResult()
         mockVerificationIssueWithResult(code)
         const auth = new AuthenticationClient()
         expect(await auth.forgotPassword(username))
@@ -278,7 +296,7 @@ describe("clients/authentication", () => {
       /* Test: should reject on verification error */
       it ("should reject on verification error", async done => {
         const errMock = new Error()
-        mockCognitoIDPAdminGetUserWithResult()
+        mockCognitoAdminGetUserWithResult()
         const issueMock = mockVerificationIssueWithError(errMock)
         try {
           const auth = new AuthenticationClient()
@@ -291,10 +309,10 @@ describe("clients/authentication", () => {
         }
       })
 
-      /* Test: should reject on AWS Cognito IDP error */
-      it ("should reject on AWS Cognito IDP error", async done => {
+      /* Test: should reject on AWS Cognito error */
+      it ("should reject on AWS Cognito error", async done => {
         const errMock = new Error()
-        const adminGetUserMock = mockCognitoIDPAdminGetUserWithError(errMock)
+        const adminGetUserMock = mockCognitoAdminGetUserWithError(errMock)
         mockVerificationIssueWithResult()
         try {
           const auth = new AuthenticationClient()

@@ -32,11 +32,11 @@ import { chance } from "_/helpers"
 /**
  * Mock CognitoIdentityServiceProvider.listUsers
  *
- * @param promise - Promise returned by Cognito IDP
+ * @param promise - Promise returned by Cognito
  *
  * @return Jasmine spy
  */
-function mockCognitoIDPListUsers(spy: jasmine.Spy): jasmine.Spy {
+function mockCognitoListUsers(spy: jasmine.Spy) {
   mock("CognitoIdentityServiceProvider", "listUsers",
     (data: any, cb: Callback) => {
       cb(undefined, spy(data))
@@ -49,8 +49,8 @@ function mockCognitoIDPListUsers(spy: jasmine.Spy): jasmine.Spy {
  *
  * @return Jasmine spy
  */
-export function mockCognitoIDPListUsersWithResult() {
-  return mockCognitoIDPListUsers(
+export function mockCognitoListUsersWithResult() {
+  return mockCognitoListUsers(
     jasmine.createSpy("listUsers")
       .and.returnValue({
         Users: [
@@ -84,8 +84,8 @@ export function mockCognitoIDPListUsersWithResult() {
  *
  * @return Jasmine spy
  */
-export function mockCognitoIDPListUsersWithoutResult() {
-  return mockCognitoIDPListUsers(
+export function mockCognitoListUsersWithoutResult() {
+  return mockCognitoListUsers(
     jasmine.createSpy("listUsers")
       .and.returnValue({
         Users: []
@@ -99,10 +99,10 @@ export function mockCognitoIDPListUsersWithoutResult() {
  *
  * @return Jasmine spy
  */
-export function mockCognitoIDPListUsersWithError(
-  err: Error = new Error("mockCognitoIDPListUsersWithError")
+export function mockCognitoListUsersWithError(
+  err: Error = new Error("mockCognitoListUsersWithError")
 ): jasmine.Spy {
-  return mockCognitoIDPListUsers(
+  return mockCognitoListUsers(
     jasmine.createSpy("listUsers")
       .and.callFake(() => { throw err }))
 }
@@ -110,6 +110,6 @@ export function mockCognitoIDPListUsersWithError(
 /**
  * Restore CognitoIdentityServiceProvider.listUsers
  */
-export function restoreCognitoIDPListUsers() {
+export function restoreCognitoListUsers() {
   restore("CognitoIdentityServiceProvider", "listUsers")
 }

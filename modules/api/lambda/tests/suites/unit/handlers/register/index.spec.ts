@@ -42,8 +42,8 @@ describe("handlers/register", () => {
     /* Registration request */
     const { email, password } = mockRegisterRequest()
 
-    /* Test: should resolve with empty result */
-    it("should resolve with empty result", async () => {
+    /* Test: should resolve with empty body */
+    it("should resolve with empty body", async () => {
       const event = mockAPIGatewayEventHttpPost({ email, password })
       const registerMock =
         mockAuthenticationClientRegisterWithSuccess()

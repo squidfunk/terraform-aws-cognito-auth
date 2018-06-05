@@ -26,11 +26,11 @@ import {
   mockCognitoUserPoolTriggerEvent
 } from "_/mocks/vendor/aws-lambda"
 import {
-  mockCognitoIDPListUsersWithError,
-  mockCognitoIDPListUsersWithoutResult,
-  mockCognitoIDPListUsersWithResult,
-  restoreCognitoIDPListUsers
-} from "_/mocks/vendor/aws-sdk"
+  mockCognitoListUsersWithError,
+  mockCognitoListUsersWithoutResult,
+  mockCognitoListUsersWithResult,
+  restoreCognitoListUsers
+} from "_/mocks/vendor/aws-sdk/cognito"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -44,13 +44,13 @@ describe("trigger", () => {
 
   /* Restore AWS mocks */
   afterEach(() => {
-    restoreCognitoIDPListUsers()
+    restoreCognitoListUsers()
   })
 
   /* Test: should resolve with input event */
   it("should resolve with input event", async () => {
     const listUsersMock =
-      mockCognitoIDPListUsersWithoutResult()
+      mockCognitoListUsersWithoutResult()
     expect(await trigger(event)).toBe(event)
     expect(listUsersMock).toHaveBeenCalledWith({
       UserPoolId: event.userPoolId,
@@ -60,7 +60,7 @@ describe("trigger", () => {
 
   /* Test: should reject on already registered email address */
   it("should reject on already registered email address", async done => {
-    mockCognitoIDPListUsersWithResult()
+    mockCognitoListUsersWithResult()
     try {
       await trigger(event)
       done.fail()
@@ -70,10 +70,10 @@ describe("trigger", () => {
     }
   })
 
-  /* Test: should reject on AWS Cognito IDP error */
-  it("should reject on AWS Cognito IDP error", async done => {
+  /* Test: should reject on AWS Cognito error */
+  it("should reject on AWS Cognito error", async done => {
     const errMock = new Error()
-    mockCognitoIDPListUsersWithError(errMock)
+    mockCognitoListUsersWithError(errMock)
     try {
       await trigger(event)
       done.fail()

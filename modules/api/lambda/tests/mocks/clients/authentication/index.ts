@@ -44,7 +44,7 @@ export function mockAuthenticationClientAuthenticate<T>(
 }
 
 /**
- * Mock AuthenticationClient.authenticate returning with success
+ * Mock AuthenticationClient.authenticate returning with result
  *
  * @param session - Session
  *

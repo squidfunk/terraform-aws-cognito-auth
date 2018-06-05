@@ -51,8 +51,8 @@ describe("handlers/reset/verify", () => {
     /* API Gateway event */
     const event = mockAPIGatewayEventHttpPost({ password }, { code: code.id })
 
-    /* Test: should resolve with empty result */
-    it("should resolve with empty result", async () => {
+    /* Test: should resolve with empty body */
+    it("should resolve with empty body", async () => {
       const claimMock = mockVerificationClaimWithResult(code)
       const changePasswordMock =
         mockManagementClientChangePasswordWithSuccess()

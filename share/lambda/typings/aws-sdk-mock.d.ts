@@ -20,44 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-/* ----------------------------------------------------------------------------
- * Functions
- * ------------------------------------------------------------------------- */
-
-/**
- * Mock handler callback
- *
- * @param promise - Promise returned by handler callback
- *
- * @return Jasmine spy
- */
-export function mockHandlerCallback(
-  promise: () => Promise<any>
-): jasmine.Spy {
-  return jasmine.createSpy("callback")
-    .and.callFake(promise)
-}
-
-/**
- * Mock handler callback returning with success
- *
- * @param result - Handler callback result
- *
- * @return Jasmine spy
- */
-export function mockHandlerCallbackWithSuccess(result?: any): jasmine.Spy {
-  return mockHandlerCallback(() => Promise.resolve(result))
-}
-
-/**
- * Mock handler callback throwing an error
- *
- * @param err - Error to be thrown
- *
- * @return Jasmine spy
- */
-export function mockHandlerCallbackWithError(
-  err: Error = new Error("mockHandlerCallbackWithError")
-): jasmine.Spy {
-  return mockHandlerCallback(() => Promise.reject(err))
+declare module "aws-sdk-mock" {
+  import * as AWS from "aws-sdk"
+  export function mock(service: string, method: string, replace: any): void
+  export function restore(service: string, method?: string): void
 }

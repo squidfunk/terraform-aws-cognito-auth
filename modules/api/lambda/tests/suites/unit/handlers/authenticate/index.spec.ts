@@ -48,8 +48,8 @@ describe("handlers/authenticate", () => {
     const { token } = mockAuthenticateRequestWithToken()
     const session = mockSession()
 
-    /* Test: should resolve with session for credentials */
-    it("should resolve with session for credentials", async () => {
+    /* Test: should resolve with session for valid credentials */
+    it("should resolve with session for valid credentials", async () => {
       const event = mockAPIGatewayEventHttpPost({ username, password })
       const authenticateMock =
         mockAuthenticationClientAuthenticateWithResult(session)
@@ -60,8 +60,8 @@ describe("handlers/authenticate", () => {
         .toHaveBeenCalledWith(username, password)
     })
 
-    /* Test: should resolve with session for token */
-    it("should resolve with session for token", async () => {
+    /* Test: should resolve with session for valid refresh token */
+    it("should resolve with session for valid refresh token", async () => {
       const event = mockAPIGatewayEventHttpPost({ token })
       const authenticateMock =
         mockAuthenticationClientAuthenticateWithResult(session)

@@ -86,7 +86,7 @@ clean_:
 # -----------------------------------------------------------------------------
 
 # Build distribution files
-build: node_modules .env | dist.zip
+build: node_modules | dist.zip
 
 # Clean distribution files
 clean: | clean-pre clean_ clean-post
@@ -96,13 +96,13 @@ lint: node_modules
 	$(shell npm bin)/tslint -p tsconfig.json "{src,tests}/**/*.ts"
 
 # Execute unit tests
-test: node_modules .env
+test: node_modules
 	@NODE_ENV=test $(shell npm bin)/nyc \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register --project tests/tsconfig.json \
 			tests/index.ts "suites/unit/**/*.spec.ts"
 
 # Execute unit tests in watch mode
-watch: node_modules .env
+watch: node_modules
 	@NODE_ENV=development $(shell npm bin)/nodemon --quiet \
 		--watch src --watch tests --exec \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \

@@ -28,10 +28,15 @@ import {
   mockDynamoDBDocumentClientDeleteWithoutResult,
   mockDynamoDBDocumentClientDeleteWithResult,
   mockDynamoDBDocumentClientPutWithError,
-  mockDynamoDBDocumentClientPutWithResult,
+  mockDynamoDBDocumentClientPutWithSuccess,
+  restoreDynamoDBDocumentClientDelete,
+  restoreDynamoDBDocumentClientPut
+} from "_/mocks/vendor/aws-sdk/dynamodb"
+import {
   mockSNSPublishWithError,
-  mockSNSPublishWithResult
-} from "_/mocks/vendor/aws-sdk"
+  mockSNSPublishWithSuccess,
+  restoreSNSPublish
+} from "_/mocks/vendor/aws-sdk/sns"
 import {
   mockVerificationCode,
   mockVerificationContext
@@ -50,14 +55,20 @@ describe("verification", () => {
     /* #issue */
     describe("#issue", () => {
 
+      /* Restore AWS mocks */
+      afterEach(() => {
+        restoreDynamoDBDocumentClientPut()
+        restoreSNSPublish()
+      })
+
       /* Verification subject and context */
       const subject = chance.guid()
       const context = mockVerificationContext()
 
       /* Test: should resolve with verification code */
       it("should resolve with verification code", async () => {
-        mockDynamoDBDocumentClientPutWithResult()
-        mockSNSPublishWithResult()
+        mockDynamoDBDocumentClientPutWithSuccess()
+        mockSNSPublishWithSuccess()
         const verification = new Verification()
         const code = await verification.issue(context, subject)
         expect(code.id).toMatch(/^[a-f0-9]{32}$/)
@@ -68,8 +79,8 @@ describe("verification", () => {
 
       /* Test: should set expiry date to 24 hours from now */
       it("should set expiry date to 24 hours from now", async () => {
-        mockDynamoDBDocumentClientPutWithResult()
-        mockSNSPublishWithResult()
+        mockDynamoDBDocumentClientPutWithSuccess()
+        mockSNSPublishWithSuccess()
         const verification = new Verification()
         const code = await verification.issue(context, subject)
         expect(code.expires)
@@ -78,8 +89,8 @@ describe("verification", () => {
 
       /* Test: should store verification code in AWS DynamoDB */
       it("should store verification code in AWS DynamoDB", async () => {
-        const putMock = mockDynamoDBDocumentClientPutWithResult()
-        mockSNSPublishWithResult()
+        const putMock = mockDynamoDBDocumentClientPutWithSuccess()
+        mockSNSPublishWithSuccess()
         const verification = new Verification()
         const code = await verification.issue(context, subject)
         expect(putMock).toHaveBeenCalledWith({
@@ -90,8 +101,8 @@ describe("verification", () => {
 
       /* Test: should publish verification code via AWS SNS */
       it("should publish verification code via AWS SNS", async () => {
-        mockDynamoDBDocumentClientPutWithResult()
-        const publishMock = mockSNSPublishWithResult()
+        mockDynamoDBDocumentClientPutWithSuccess()
+        const publishMock = mockSNSPublishWithSuccess()
         const verification = new Verification()
         const code = await verification.issue(context, subject)
         expect(publishMock).toHaveBeenCalledWith({
@@ -108,7 +119,7 @@ describe("verification", () => {
       it("should reject on AWS DynamoDB error", async done => {
         const errMock = new Error()
         const putMock = mockDynamoDBDocumentClientPutWithError(errMock)
-        mockSNSPublishWithResult()
+        mockSNSPublishWithSuccess()
         try {
           const verification = new Verification()
           await verification.issue(context, subject)
@@ -123,7 +134,7 @@ describe("verification", () => {
       /* Test: should reject on AWS SNS error */
       it("should reject on AWS SNS error", async done => {
         const errMock = new Error()
-        mockDynamoDBDocumentClientPutWithResult()
+        mockDynamoDBDocumentClientPutWithSuccess()
         const publishMock = mockSNSPublishWithError(errMock)
         try {
           const verification = new Verification()
@@ -139,6 +150,11 @@ describe("verification", () => {
 
     /* #claim */
     describe("#claim", () => {
+
+      /* Restore AWS mocks */
+      afterEach(() => {
+        restoreDynamoDBDocumentClientDelete()
+      })
 
       /* Verification code */
       const code = mockVerificationCode("register")
