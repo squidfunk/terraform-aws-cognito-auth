@@ -36,10 +36,10 @@ cache:
 
 # Empty environment variable for unit tests
 env:
-  - COGNITO_USER_POOL=
-  - COGNITO_USER_POOL_CLIENT=
-  - DYNAMODB_TABLE=
-  - SNS_TOPIC_ARN=
+  - COGNITO_USER_POOL=_
+  - COGNITO_USER_POOL_CLIENT=_
+  - DYNAMODB_TABLE=_
+  - SNS_TOPIC_ARN=_
 
 # Install dependencies
 install:
