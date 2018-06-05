@@ -31,13 +31,20 @@ git:
 # Cache dependencies
 cache:
   directories:
-    - lambda/node_modules
+    - modules/api/lambda/node_modules
+    - modules/identity/lambda/node_modules
 
 # Install dependencies
 install:
-  - npm install --prefix lambda
+  - pip install --user codecov
+  - npm install --prefix modules/api/lambda
+  - npm install --prefix modules/identity/lambda
 
 # Perform build and release
 script:
-  - make lint
-  - make build
+  - make --no-print-directory lint
+  - make --no-print-directory build
+
+# Upload coverage report
+after_success:
+  - codecov
