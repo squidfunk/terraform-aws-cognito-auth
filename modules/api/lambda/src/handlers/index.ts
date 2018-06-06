@@ -58,6 +58,12 @@ export type HandlerCallback = (data: any) => Promise<any>
 export function translate(err: AWSError): AWSError {
   switch (err.code) { // tslint:disable-line no-small-switch
 
+    /* JSON parsing failed */
+    case "SyntaxError":
+      err.code    = "TypeError"
+      err.message = "Invalid request body"
+      return err
+
     /* Pre-registration check failed */
     case "UserLambdaValidationException":
       err.code    = "AliasExistsException"
@@ -103,12 +109,13 @@ export function handler(schema: object, cb: HandlerCallback) {
 
     /* Catch errors */
     } catch (err) {
+      err.code = err.code || err.name
       err = translate(err)
       return {
         statusCode: err.statusCode || 400,
         headers,
         body: JSON.stringify({
-          type: err.code || err.name,
+          type: err.code,
           message: err.message.replace(/\.$/, "")
         })
       }

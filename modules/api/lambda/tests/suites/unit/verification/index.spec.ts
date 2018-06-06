@@ -157,7 +157,7 @@ describe("verification", () => {
       })
 
       /* Verification code */
-      const code = mockVerificationCode("register")
+      const code = mockVerificationCode()
 
       /* Test: should resolve with verification code */
       it("should resolve with verification code", async () => {
@@ -195,7 +195,9 @@ describe("verification", () => {
 
       /* Test: should reject on invalid verification context */
       it("should reject on invalid verification context", async done => {
-        const deleteMock = mockDynamoDBDocumentClientDeleteWithResult(code)
+        const deleteMock =
+          mockDynamoDBDocumentClientDeleteWithResult(
+            mockVerificationCode("register"))
         try {
           const verification = new Verification()
           await verification.claim("reset", code.id)

@@ -59,8 +59,8 @@ describe("POST /reset", () => {
       .set("Content-Type", "application/json")
       .send(`/${chance.string()}`)
       .expect(400, {
-        type: "SyntaxError",
-        message: "Unexpected token / in JSON at position 0"
+        type: "TypeError",
+        message: "Invalid request body"
       })
   })
 

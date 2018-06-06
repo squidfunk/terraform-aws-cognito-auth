@@ -77,8 +77,8 @@ describe("POST /check", () => {
       await mgmt.deleteUser(email)
     })
 
-    /* Test: should return successfully for valid access token */
-    it("should return successfully for valid access token", async () => {
+    /* Test: should return empty body for valid access token */
+    it("should return empty body for valid access token", async () => {
       const { body }: { body: Session } =  await http.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password })

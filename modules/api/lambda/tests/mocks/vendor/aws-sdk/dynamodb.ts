@@ -101,7 +101,7 @@ function mockDynamoDBDocumentClientDelete(spy: jasmine.Spy) {
  * @return Jasmine spy
  */
 export function mockDynamoDBDocumentClientDeleteWithResult(
-  code: VerificationCode = mockVerificationCode("register")
+  code: VerificationCode = mockVerificationCode()
 ) {
   return mockDynamoDBDocumentClientDelete(
     jasmine.createSpy("delete")

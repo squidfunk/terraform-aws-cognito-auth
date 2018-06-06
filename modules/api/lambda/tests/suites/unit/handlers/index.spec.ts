@@ -65,6 +65,18 @@ describe("handlers", () => {
         } as AWSError)
     })
 
+    /* Test: should translate request parsing errors */
+    it("should translate request parsing errors", () => {
+      expect(translate({
+        code: "SyntaxError",
+        message: chance.string()
+      } as AWSError))
+        .toEqual({
+          code: "TypeError",
+          message: "Invalid request body"
+        } as AWSError)
+    })
+
     /* Test: should pass-through all other errors */
     it("should pass-through all other errors", () => {
       const message = chance.string()
@@ -95,8 +107,8 @@ describe("handlers", () => {
       const { statusCode, body } = await handler({}, cb)(event)
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
-        type: "SyntaxError",
-        message: "Unexpected token / in JSON at position 0"
+        type: "TypeError",
+        message: "Invalid request body"
       }))
     })
 
