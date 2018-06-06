@@ -20,8 +20,9 @@
   "scripts": {
     "build": "make build",
     "clean": "make clean",
-    "start": "make start",
+    "lint": "make lint",
     "test": "make test",
+    "test:acceptance": "make test-acceptance",
     "watch": "make watch"
   },
   "dependencies": {

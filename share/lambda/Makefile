@@ -51,7 +51,7 @@ clean-post_:
 # Targets
 # -----------------------------------------------------------------------------
 
-# Auto-fill environment variables
+# Auto-filled environment variables
 .env: ${ROOT}/terraform.tfstate
 	@(pushd $(shell git rev-parse --show-toplevel) > /dev/null \
 		&& terraform output \
@@ -59,11 +59,11 @@ clean-post_:
 			> ${PWD}/$@ \
 		&& popd > /dev/null)
 
-# Build distribution files
+# Distribution files
 dist: $(shell find src) tsconfig.json
 	$(shell npm bin)/tsc -p tsconfig.json
 
-# Build archive for distribution
+# Archive for distribution
 dist.zip: | dist-pre dist dist-post
 	@(rm -f $@ \
 		&& cd dist \

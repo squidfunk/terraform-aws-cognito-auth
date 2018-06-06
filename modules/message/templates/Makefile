@@ -1,4 +1,4 @@
-# Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
+# Copyright (c) 2017-2018 Martin Donath <martin.donath@squidfunk.com>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -18,36 +18,69 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-include ../../../share/lambda/Makefile
+all: clean | build
 
 # -----------------------------------------------------------------------------
 # Constants
 # -----------------------------------------------------------------------------
 
-# Request schemas
-SCHEMAS = $(shell find src -name "*.json")
+# Email templates
+TEMPLATES = $(shell find src -name "*.mjml")
+
+# Images used in email templates
+IMAGES = $(shell find src -name "*.svg")
 
 # -----------------------------------------------------------------------------
-# Target hooks
+# Prerequisites
 # -----------------------------------------------------------------------------
 
-# Include schemas in distribution files
-dist-post: $(subst src, dist, ${SCHEMAS})
+# Install dependencies
+node_modules:
+	npm install
 
 # -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------
 
-# Copy schema files
-dist/%.json: src/%.json
-	@mkdir -p dist/$(dir $*)
-	cp $< $@
+# Compiled templates
+dist:
+	mkdir -p $@
+
+# Compiled email template
+dist/%.html: src/%.mjml dist
+	$(shell npm bin)/mjml -o $@ $<
+
+# Image used in email templates
+dist/%.png: src/%.svg dist
+	$(shell npm bin)/svgexport $< $@ 4x
+	$(shell npm bin)/imageoptim $@
 
 # -----------------------------------------------------------------------------
 # Rules
 # -----------------------------------------------------------------------------
 
-# Execute acceptance tests
-test-acceptance: node_modules .env
-	@$(shell npm bin)/ts-node -r tsconfig-paths/register \
-		tests/index.ts "suites/acceptance/**/*.spec.ts"
+# Build email templates
+build: node_modules \
+$(patsubst src/%.mjml, dist/%.html, ${TEMPLATES}) \
+$(patsubst src/%.svg,  dist/%.png,  ${IMAGES})
+
+# Clean compiled email templates
+clean:
+	rm -rf dist
+
+# Rebuild email templates on changes
+watch: node_modules
+	@$(shell npm bin)/browser-sync start \
+		--server dist \
+		--files dist \
+		--no-open &
+	@$(shell npm bin)/watch \
+		--pattern "src/**/*" \
+		--command "make build" \
+		> /dev/null
+
+# -----------------------------------------------------------------------------
+
+# Special targets
+.PHONY: .FORCE build clean watch
+.FORCE:
