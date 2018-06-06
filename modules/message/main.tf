@@ -18,51 +18,56 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-all: lint | build
-
 # -----------------------------------------------------------------------------
-# Targets
+# Resources: IAM
 # -----------------------------------------------------------------------------
 
-# Git pre-commit hook
-.git/hooks/pre-commit:
-	ln -fs ../../.githooks/pre-commit $@
+# aws_iam_role.lambda
+resource "aws_iam_role" "lambda" {
+  name = "${var.namespace}-message-lambda"
+
+  assume_role_policy = "${
+    file("${path.module}/iam/policies/assume-role/lambda.json")
+  }"
+}
+
+# aws_iam_policy.lambda
+resource "aws_iam_policy" "lambda" {
+  name = "${var.namespace}-message-lambda"
+
+  policy = "${file("${path.module}/iam/policies/lambda.json")}"
+}
+
+# aws_iam_policy_attachment.lambda
+resource "aws_iam_policy_attachment" "lambda" {
+  name = "${var.namespace}-message-lambda"
+
+  policy_arn = "${aws_iam_policy.lambda.arn}"
+  roles      = ["${aws_iam_role.lambda.name}"]
+}
 
 # -----------------------------------------------------------------------------
-# Rules
+# Resources: Lambda
 # -----------------------------------------------------------------------------
 
-# Initialize repository
-init: .git/hooks/pre-commit
+# aws_lambda_function._
+resource "aws_lambda_function" "_" {
+  function_name = "${var.namespace}-message"
+  role          = "${aws_iam_role.lambda.arn}"
+  runtime       = "nodejs8.10"
+  filename      = "${path.module}/lambda/dist.zip"
+  handler       = "index.send"
+  timeout       = 10
 
-# -----------------------------------------------------------------------------
+  source_code_hash = "${
+    base64sha256(file("${path.module}/lambda/dist.zip"))
+  }"
+}
 
-# Build distribution files
-build:
-	make -C modules/api/lambda build
-	make -C modules/identity/lambda build
-	make -C modules/message/lambda build
-
-# Clean distribution files
-clean:
-	make -C modules/api/lambda clean
-	make -C modules/identity/lambda clean
-	make -C modules/message/lambda clean
-
-# Lint source files
-lint:
-	make -C modules/api/lambda lint
-	make -C modules/identity/lambda lint
-	make -C modules/message/lambda lint
-
-# Execute unit tests
-test:
-	make -C modules/api/lambda test
-	make -C modules/identity/lambda test
-	make -C modules/message/lambda test
-
-# -----------------------------------------------------------------------------
-
-# Special targets
-.PHONY: .FORCE build clean lint test
-.FORCE:
+# aws_lambda_permission._
+resource "aws_lambda_permission" "_" {
+  principal     = "sns.amazonaws.com"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function._.arn}"
+  source_arn    = "${var.sns_topic_arn}"
+}

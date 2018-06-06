@@ -54,3 +54,14 @@ module "identity" {
   cognito_identity_pool   = "${var.cognito_identity_pool}"
   cognito_identity_domain = "${var.cognito_identity_domain}"
 }
+
+# module.message
+module "message" {
+  source = "./modules/message"
+
+  namespace = "${var.namespace}"
+  region    = "${var.region}"
+
+  cognito_identity_pool   = "${var.cognito_identity_pool}"
+  cognito_identity_domain = "${var.ses_domain}"
+}

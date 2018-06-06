@@ -18,9 +18,34 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-# NPM-related
-/node_modules
-/npm-debug.log*
+# -----------------------------------------------------------------------------
+# Variables: General
+# -----------------------------------------------------------------------------
 
-# Distribution files
-/dist/*
+# var.namespace
+variable "namespace" {
+  description = "AWS resource namespace/prefix"
+}
+
+# var.region
+variable "region" {
+  description = "AWS region"
+}
+
+# -----------------------------------------------------------------------------
+# Outputs: SNS
+# -----------------------------------------------------------------------------
+
+# output.sns_topic_arn
+variable "sns_topic_arn" {
+  description = "SNS topic ARN"
+}
+
+# -----------------------------------------------------------------------------
+# Variables: SES
+# -----------------------------------------------------------------------------
+
+# var.ses_domain
+variable "ses_domain" {
+  description = "SES domain name"
+}

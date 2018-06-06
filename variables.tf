@@ -54,3 +54,12 @@ variable "cognito_identity_domain" {
 variable "api_stage" {
   description = "API deployment stage"
 }
+
+# -----------------------------------------------------------------------------
+# Variables: SES domain
+# -----------------------------------------------------------------------------
+
+# var.api_stage
+variable "ses_domain" {
+  description = "SES domain name"
+}

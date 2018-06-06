@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 Martin Donath <martin.donath@squidfunk.com>
+# Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-all: clean | build
+include ../../../share/lambda/Makefile
 
 # -----------------------------------------------------------------------------
 # Constants
@@ -31,27 +31,26 @@ TEMPLATES = $(shell find src -name "*.mjml")
 IMAGES = $(shell find src -name "*.svg")
 
 # -----------------------------------------------------------------------------
-# Prerequisites
+# Target hooks
 # -----------------------------------------------------------------------------
 
-# Install dependencies
-node_modules:
-	npm install
+# Build email templates
+dist-post: \
+$(patsubst src/%.mjml, dist/%.html, ${TEMPLATES}) \
+$(patsubst src/%.svg,  dist/%.png,  ${IMAGES})
 
 # -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------
 
-# Compiled templates
-dist:
-	mkdir -p $@
-
 # Compiled email template
 dist/%.html: src/%.mjml dist
+	@mkdir -p dist/$(dir $*)
 	$(shell npm bin)/mjml -o $@ $<
 
 # Image used in email templates
 dist/%.png: src/%.svg dist
+	@mkdir -p dist/$(dir $*)
 	$(shell npm bin)/svgexport $< $@ 4x
 	$(shell npm bin)/imageoptim $@
 
@@ -59,28 +58,12 @@ dist/%.png: src/%.svg dist
 # Rules
 # -----------------------------------------------------------------------------
 
-# Build email templates
-build: node_modules \
-$(patsubst src/%.mjml, dist/%.html, ${TEMPLATES}) \
-$(patsubst src/%.svg,  dist/%.png,  ${IMAGES})
-
-# Clean compiled email templates
-clean:
-	rm -rf dist
-
 # Rebuild email templates on changes
-watch: node_modules
+watch-templates: node_modules
 	@$(shell npm bin)/browser-sync start \
 		--server dist \
-		--files dist \
-		--no-open &
+		--files dist &
 	@$(shell npm bin)/watch \
-		--pattern "src/**/*" \
+		--pattern "src/templates/**/*" \
 		--command "make build" \
 		> /dev/null
-
-# -----------------------------------------------------------------------------
-
-# Special targets
-.PHONY: .FORCE build clean watch
-.FORCE:
