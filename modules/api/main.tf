@@ -112,10 +112,14 @@ resource "aws_api_gateway_stage" "_" {
 # aws_api_gateway_deployment._
 resource "aws_api_gateway_deployment" "_" {
   rest_api_id = "${aws_api_gateway_rest_api._.id}"
+  stage_name  = "intermediate"
 
-  # Hack: force deployment, see https://bit.ly/2kYXT3Q
-  stage_description = "Deployed at ${timestamp()}"
-  stage_name        = "intermediate"
+  # Hack: force deployment on source code hash change
+  variables = {
+    "source_code_hash" = "${
+      sha256(file("${path.module}/lambda/dist.zip"))
+    }"
+  }
 
   lifecycle {
     create_before_destroy = true
