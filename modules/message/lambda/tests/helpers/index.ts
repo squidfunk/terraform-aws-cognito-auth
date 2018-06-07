@@ -20,7 +20,13 @@
  * IN THE SOFTWARE.
  */
 
-declare module "aws-sdk-mock" {
-  export function mock(service: string, method: string, replace: any): void
-  export function restore(service: string, method?: string): void
-}
+import { Chance } from "chance"
+
+/* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Chance.js instance to generate random values
+ */
+export const chance = new Chance()

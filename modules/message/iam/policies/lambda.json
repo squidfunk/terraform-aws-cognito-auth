@@ -13,6 +13,13 @@
     {
       "Effect": "Allow",
       "Action": [
+        "cognito-idp:AdminGetUser"
+      ],
+      "Resource": "${pool_arn}"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "ses:SendRawEmail"
       ],
       "Resource": "*"

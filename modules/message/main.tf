@@ -19,6 +19,19 @@
 # IN THE SOFTWARE.
 
 # -----------------------------------------------------------------------------
+# Data: IAM
+# -----------------------------------------------------------------------------
+
+# data.template_file.lambda_iam_policy.rendered
+data "template_file" "lambda_iam_policy" {
+  template = "${file("${path.module}/iam/policies/lambda.json")}"
+
+  vars {
+    pool_arn = "${var.cognito_user_pool_arn}"
+  }
+}
+
+# -----------------------------------------------------------------------------
 # Resources: IAM
 # -----------------------------------------------------------------------------
 
@@ -35,7 +48,7 @@ resource "aws_iam_role" "lambda" {
 resource "aws_iam_policy" "lambda" {
   name = "${var.namespace}-message-lambda"
 
-  policy = "${file("${path.module}/iam/policies/lambda.json")}"
+  policy = "${data.template_file.lambda_iam_policy.rendered}"
 }
 
 # aws_iam_policy_attachment.lambda
@@ -44,6 +57,17 @@ resource "aws_iam_policy_attachment" "lambda" {
 
   policy_arn = "${aws_iam_policy.lambda.arn}"
   roles      = ["${aws_iam_role.lambda.name}"]
+}
+
+# -----------------------------------------------------------------------------
+# Resources: SNS
+# -----------------------------------------------------------------------------
+
+# aws_sns_topic_subscription._
+resource "aws_sns_topic_subscription" "_" {
+  topic_arn = "${var.sns_topic_arn}"
+  protocol  = "lambda"
+  endpoint  = "${aws_lambda_function._.arn}"
 }
 
 # -----------------------------------------------------------------------------
@@ -56,12 +80,20 @@ resource "aws_lambda_function" "_" {
   role          = "${aws_iam_role.lambda.arn}"
   runtime       = "nodejs8.10"
   filename      = "${path.module}/lambda/dist.zip"
-  handler       = "index.send"
+  handler       = "index.handler"
   timeout       = 10
 
   source_code_hash = "${
     base64sha256(file("${path.module}/lambda/dist.zip"))
   }"
+
+  environment {
+    variables = {
+      COGNITO_USER_POOL       = "${var.cognito_user_pool}"
+      COGNITO_IDENTITY_NAME   = "${var.cognito_identity_name}"
+      COGNITO_IDENTITY_DOMAIN = "${var.cognito_identity_domain}"
+    }
+  }
 }
 
 # aws_lambda_permission._

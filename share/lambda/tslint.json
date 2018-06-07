@@ -3,6 +3,11 @@
     "tslint:latest",
     "tslint-sonarts"
   ],
+  "linterOptions": {
+    "exclude": [
+      "src/**/*.d.ts"
+    ]
+  },
   "rules": {
     "arrow-parens": [
       true,

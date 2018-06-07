@@ -51,7 +51,7 @@ module "identity" {
   namespace = "${var.namespace}"
   region    = "${var.region}"
 
-  cognito_identity_pool   = "${var.cognito_identity_pool}"
+  cognito_identity_name   = "${var.cognito_identity_name}"
   cognito_identity_domain = "${var.cognito_identity_domain}"
 }
 
@@ -62,6 +62,10 @@ module "message" {
   namespace = "${var.namespace}"
   region    = "${var.region}"
 
-  cognito_identity_pool   = "${var.cognito_identity_pool}"
-  cognito_identity_domain = "${var.ses_domain}"
+  cognito_user_pool       = "${module.identity.cognito_user_pool}"
+  cognito_user_pool_arn   = "${module.identity.cognito_user_pool_arn}"
+  cognito_identity_name   = "${var.cognito_identity_name}"
+  cognito_identity_domain = "${var.cognito_identity_domain}"
+
+  sns_topic_arn = "${module.api.sns_topic_arn}"
 }

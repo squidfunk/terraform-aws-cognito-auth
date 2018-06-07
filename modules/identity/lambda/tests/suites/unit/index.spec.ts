@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { trigger } from "~/index"
+import { handler } from "~/index"
 
 import {
   mockCognitoUserPoolTriggerEvent
@@ -36,8 +36,8 @@ import {
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Lambda trigger */
-describe("trigger", () => {
+/* Lambda handler */
+describe("handler", () => {
 
   /* Cognito user pool trigger event */
   const event = mockCognitoUserPoolTriggerEvent()
@@ -51,7 +51,7 @@ describe("trigger", () => {
   it("should resolve with input event", async () => {
     const listUsersMock =
       mockCognitoListUsersWithoutResult()
-    expect(await trigger(event)).toBe(event)
+    expect(await handler(event)).toBe(event)
     expect(listUsersMock).toHaveBeenCalledWith({
       UserPoolId: event.userPoolId,
       Filter: `email="${event.request.userAttributes.email}"`
@@ -62,7 +62,7 @@ describe("trigger", () => {
   it("should reject on already registered email address", async done => {
     mockCognitoListUsersWithResult()
     try {
-      await trigger(event)
+      await handler(event)
       done.fail()
     } catch (err) {
       expect(err).toEqual(new Error("Email address already registered"))
@@ -75,7 +75,7 @@ describe("trigger", () => {
     const errMock = new Error()
     mockCognitoListUsersWithError(errMock)
     try {
-      await trigger(event)
+      await handler(event)
       done.fail()
     } catch (err) {
       expect(err).toBe(errMock)

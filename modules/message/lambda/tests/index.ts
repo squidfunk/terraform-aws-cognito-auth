@@ -20,7 +20,36 @@
  * IN THE SOFTWARE.
  */
 
-declare module "aws-sdk-mock" {
-  export function mock(service: string, method: string, replace: any): void
-  export function restore(service: string, method?: string): void
+import "dotenv/config"
+
+import { SpecReporter } from "jasmine-spec-reporter"
+
+/* ----------------------------------------------------------------------------
+ * Entrypoint
+ * ------------------------------------------------------------------------- */
+
+/* Reset console in watch mode */
+if (process.env.NODE_ENV === "development") {
+  process.stdout.write("\x1Bc")
 }
+
+/* Hack: must be required, since TypeScript typings are crap and don't really
+   work with the normal import syntax */
+// tslint:disable-next-line variable-name
+const Jasmine = require("jasmine")
+
+/* Create new test suite from config file */
+const jasmine = new Jasmine()
+jasmine.loadConfig({
+  ...require("./jasmine.json"),
+  spec_files: [process.argv[2] || "suites/**/*.spec.ts"]
+})
+
+/* Configure reporters */
+jasmine.clearReporters()
+jasmine.addReporter(new SpecReporter({
+  spec: { displayStacktrace: true }
+}))
+
+/* Start test runner */
+jasmine.execute()

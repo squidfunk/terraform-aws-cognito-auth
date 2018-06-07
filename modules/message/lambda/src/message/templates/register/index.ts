@@ -20,50 +20,49 @@
  * IN THE SOFTWARE.
  */
 
-import { CognitoUserPoolTriggerEvent } from "aws-lambda"
-import { CognitoIdentityServiceProvider } from "aws-sdk"
+import { render } from "mustache"
+
+import { Message } from ".."
 
 /* ----------------------------------------------------------------------------
- * Handlers
+ * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Check if email is not already registered
- *
- * @param event - User pool trigger event
- *
- * @return Promise resolving with user pool trigger event
+ * Registration verification message data
  */
-export async function handler(
-  event: CognitoUserPoolTriggerEvent
-): Promise<CognitoUserPoolTriggerEvent> {
-  const { Users } = await new CognitoIdentityServiceProvider({
-    apiVersion: "2016-04-18"
-  }).listUsers({
-    UserPoolId: event.userPoolId,
-    Filter: `email="${event.request.userAttributes.email}"`
-  }).promise()
-
-  /* If email address is already registered, throw error */
-  if (Users!.length)
-    throw new Error("Email address already registered")
-
-  /* Otherwise just return event */
-  return event
+export interface RegisterMessageData {
+  name: string                         /* Cognito identity name */
+  domain: string                       /* Cognito identity domain */
+  code: string                         /* Verification code */
 }
 
 /* ----------------------------------------------------------------------------
- * Listeners
+ * Class
  * ------------------------------------------------------------------------- */
 
 /**
- * Top-level Promise rejection handler
- *
- * The Lambda Node 8.10 runtime is great, but it doesn't handle rejections
- * appropriately. Hopefully this will be resolved in the future, but until then
- * we will just swallow the error. This issue was posted in the AWS forums in
- * the following thread: https://amzn.to/2JpoHEY
+ * Registration verification message
  */
-process.on("unhandledRejection", /* istanbul ignore next */ () => {
-  /* Nothing to be done */
-})
+export class RegisterMessage extends Message<RegisterMessageData> {
+
+  /**
+   * Inititalize registration verification message
+   *
+   * @param data - Message data
+   */
+  public constructor(
+    protected data: RegisterMessageData
+  ) {
+    super("register", data)
+  }
+
+  /**
+   * Return message subject
+   *
+   * @return Message subject
+   */
+  public get subject(): string {
+    return render("Activate your {{name}} account", this.data)
+  }
+}

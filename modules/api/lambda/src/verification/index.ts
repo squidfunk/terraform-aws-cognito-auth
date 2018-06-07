@@ -49,6 +49,8 @@ export interface VerificationCode {
 
 /**
  * Verification provider
+ *
+ * @internal
  */
 export class Verification {
 
@@ -103,11 +105,7 @@ export class Verification {
       /* Publish code on SNS topic */
       this.sns.publish({
         TopicArn: process.env.SNS_TOPIC_ARN!,
-        Message: JSON.stringify({
-          default: "",
-          ...code
-        }),
-        MessageStructure: "json"
+        Message: JSON.stringify(code)
       }).promise()
     ])
 

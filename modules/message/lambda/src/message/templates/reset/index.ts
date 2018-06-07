@@ -20,7 +20,49 @@
  * IN THE SOFTWARE.
  */
 
-declare module "aws-sdk-mock" {
-  export function mock(service: string, method: string, replace: any): void
-  export function restore(service: string, method?: string): void
+import { render } from "mustache"
+
+import { Message } from ".."
+
+/* ----------------------------------------------------------------------------
+ * Types
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Reset verification message data
+ */
+export interface ResetMessageData {
+  name: string                         /* Cognito identity name */
+  domain: string                       /* Cognito identity domain */
+  code: string                         /* Verification code */
+}
+
+/* ----------------------------------------------------------------------------
+ * Class
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Reset verification message
+ */
+export class ResetMessage extends Message<ResetMessageData> {
+
+  /**
+   * Inititalize reset verification message
+   *
+   * @param data - Message data
+   */
+  public constructor(
+    protected data: ResetMessageData
+  ) {
+    super("reset", data)
+  }
+
+  /**
+   * Return message subject
+   *
+   * @return Message subject
+   */
+  public get subject(): string {
+    return render("Unlock your {{name}} account", this.data)
+  }
 }

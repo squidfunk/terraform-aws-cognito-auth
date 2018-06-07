@@ -1,0 +1,1 @@
+../../../../share/lambda/typings/aws-sdk-mock.d.ts

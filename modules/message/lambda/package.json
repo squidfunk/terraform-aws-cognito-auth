@@ -25,12 +25,16 @@
     "watch": "make watch"
   },
   "dependencies": {
-    "emailjs": "^2.0.0"
+    "emailjs": "^2.0.0",
+    "mime": "^2.3.1",
+    "mustache": "^2.3.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.2",
     "@types/chance": "^1.0.0",
     "@types/jasmine": "^2.8.6",
+    "@types/mime": "^2.0.0",
+    "@types/mustache": "^0.8.30",
     "@types/node": "^9.6.2",
     "aws-sdk": "^2.220.1",
     "aws-sdk-mock": "^2.0.0",

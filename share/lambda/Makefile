@@ -79,7 +79,7 @@ dist.zip: | dist-pre dist dist-post
 
 # Clean distribution files
 clean_:
-	rm -rf coverage dist dist.zip
+	rm -rf .nyc_output coverage dist dist.zip
 
 # -----------------------------------------------------------------------------
 # Rules
@@ -96,17 +96,19 @@ lint: node_modules
 	$(shell npm bin)/tslint -p tsconfig.json "{src,tests}/**/*.ts"
 
 # Execute unit tests
-test: node_modules
+test: node_modules | dist-pre .env
 	@NODE_ENV=test $(shell npm bin)/nyc \
-		$(shell npm bin)/ts-node -r tsconfig-paths/register --project tests/tsconfig.json \
-			tests/index.ts "suites/unit/**/*.spec.ts"
+		$(shell npm bin)/ts-node -r tsconfig-paths/register \
+			--project tests/tsconfig.json \
+				tests/index.ts "suites/unit/**/*.spec.ts"
 
 # Execute unit tests in watch mode
 watch: node_modules
 	@NODE_ENV=development $(shell npm bin)/nodemon --quiet \
 		--watch src --watch tests --exec \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \
-			tests/index.ts "suites/unit/**/*.spec.ts"
+			--project tests/tsconfig.json \
+				tests/index.ts "suites/unit/**/*.spec.ts"
 
 # -----------------------------------------------------------------------------
 

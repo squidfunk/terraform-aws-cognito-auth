@@ -18,30 +18,6 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-# -----------------------------------------------------------------------------
-# Variables: General
-# -----------------------------------------------------------------------------
-
-# var.namespace
-variable "namespace" {
-  description = "AWS resource namespace/prefix"
-}
-
-# var.region
-variable "region" {
-  description = "AWS region"
-}
-
-# -----------------------------------------------------------------------------
-# Variables: Cognito
-# -----------------------------------------------------------------------------
-
-# var.cognito_identity_name
-variable "cognito_identity_name" {
-  description = "Cognito identity pool name"
-}
-
-# var.cognito_identity_domain
-variable "cognito_identity_domain" {
-  description = "Cognito identity provider domain"
-}
+# Intermediate files
+*.html
+*.png

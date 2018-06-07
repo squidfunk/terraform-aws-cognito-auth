@@ -107,11 +107,7 @@ describe("verification", () => {
         const code = await verification.issue(context, subject)
         expect(publishMock).toHaveBeenCalledWith({
           TopicArn: jasmine.any(String),
-          Message: JSON.stringify({
-            default: "",
-            ...code
-          }),
-          MessageStructure: "json"
+          Message: JSON.stringify(code)
         })
       })
 

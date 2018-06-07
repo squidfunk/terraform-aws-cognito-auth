@@ -25,6 +25,9 @@
 # Distribution files
 /dist/*
 
+# Cross-referenced declarations in source directories
+/src/**/*.d.ts
+
 # Coverage reports
 /.nyc_output
 /coverage

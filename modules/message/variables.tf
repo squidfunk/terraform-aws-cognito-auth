@@ -33,19 +33,34 @@ variable "region" {
 }
 
 # -----------------------------------------------------------------------------
+# Variables: Cognito
+# -----------------------------------------------------------------------------
+
+# var.cognito_user_pool
+variable "cognito_user_pool" {
+  description = "Cognito user pool"
+}
+
+# var.cognito_user_pool
+variable "cognito_user_pool_arn" {
+  description = "Cognito user pool ARN"
+}
+
+# var.cognito_identity_name
+variable "cognito_identity_name" {
+  description = "Cognito identity pool name"
+}
+
+# var.cognito_identity_domain
+variable "cognito_identity_domain" {
+  description = "Cognito identity provider domain"
+}
+
+# -----------------------------------------------------------------------------
 # Outputs: SNS
 # -----------------------------------------------------------------------------
 
 # output.sns_topic_arn
 variable "sns_topic_arn" {
   description = "SNS topic ARN"
-}
-
-# -----------------------------------------------------------------------------
-# Variables: SES
-# -----------------------------------------------------------------------------
-
-# var.ses_domain
-variable "ses_domain" {
-  description = "SES domain name"
 }

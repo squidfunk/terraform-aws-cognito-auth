@@ -1,26 +1,60 @@
-import { message as builder } from "emailjs"
+/*
+ * Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ */
 
-const message = builder.create({
-  from: "you <scifish@gmail.com>",
-  to: "someone <scifish@gmail.com>",
-  subject: "testing emailjs",
-  text: "i hope this works",
-  attachment:
-    [
-      {
-        data: "<p>HTML message</p>",
-        alternative: true
-      },
-      {
-        path: "dist/templates/images/register.png",
-        type: "image/png",
-        headers: {
-          "Content-ID": "<my-image>"
-        }
-      }
-    ]
-})
+import { SNSEvent } from "aws-lambda"
 
-message.stream().on("data", data => {
-  console.log(data) // tslint:disable-line
+import { Message } from "./message"
+
+/* ----------------------------------------------------------------------------
+ * Functions
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Send email for verification
+ *
+ * @param event - SNS event
+ *
+ * @return Promise resolving with no result
+ */
+export async function handler(event: SNSEvent): Promise<void> {
+  await event.Records.reduce(async (promise, record) =>
+    promise.then(async () => {
+      const code = JSON.parse(record.Sns.Message)
+      await new Message(code).send()
+    }), Promise.resolve())
+}
+
+/* ----------------------------------------------------------------------------
+ * Listeners
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Top-level Promise rejection handler
+ *
+ * The Lambda Node 8.10 runtime is great, but it doesn't handle rejections
+ * appropriately. Hopefully this will be resolved in the future, but until then
+ * we will just swallow the error. This issue was posted in the AWS forums in
+ * the following thread: https://amzn.to/2JpoHEY
+ */
+process.on("unhandledRejection", /* istanbul ignore next */ () => {
+  /* Nothing to be done */
 })

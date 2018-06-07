@@ -21,49 +21,67 @@
 include ../../../share/lambda/Makefile
 
 # -----------------------------------------------------------------------------
-# Constants
-# -----------------------------------------------------------------------------
-
-# Email templates
-TEMPLATES = $(shell find src -name "*.mjml")
-
-# Images used in email templates
-IMAGES = $(shell find src -name "*.svg")
-
-# -----------------------------------------------------------------------------
 # Target hooks
 # -----------------------------------------------------------------------------
 
-# Build email templates
-dist-post: \
-$(patsubst src/%.mjml, dist/%.html, ${TEMPLATES}) \
-$(patsubst src/%.svg,  dist/%.png,  ${IMAGES})
+# Generate declarations from other modules and build email templates
+dist-pre: src/verification/index.d.ts \
+$(patsubst %.mjml, %.html, $(shell find src -name "*.mjml")) \
+$(patsubst %.svg,  %.png,  $(shell find src -name "*.svg"))
+
+# Copy everything but MJML templates and SVGs
+dist-post: $(subst src, dist, $(shell find src | grep -E "(html|txt|png)"))
 
 # -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------
 
-# Compiled email template
-dist/%.html: src/%.mjml dist
+# Copied email HTML template
+dist/%.html: src/%.html
+	@mkdir -p dist/$(dir $*)
+	cp -r $< $@
+
+# Copied email text template
+dist/%.txt: src/%.txt
+	@mkdir -p dist/$(dir $*)
+	cp -r $< $@
+
+# Copied image used in email template
+dist/%.png: src/%.png
+	@mkdir -p dist/$(dir $*)
+	cp -r $< $@
+
+# -----------------------------------------------------------------------------
+
+# Compiled email HTML template
+src/%.html: src/%.mjml
 	@mkdir -p dist/$(dir $*)
 	$(shell npm bin)/mjml -o $@ $<
 
 # Image used in email templates
-dist/%.png: src/%.svg dist
+src/%.png: src/%.svg
 	@mkdir -p dist/$(dir $*)
 	$(shell npm bin)/svgexport $< $@ 4x
 	$(shell npm bin)/imageoptim $@
+
+# Verification code typings
+src/verification/index.d.ts: ../../api/lambda/src/verification/index.ts
+	$(shell npm bin)/tsc -d \
+		--declarationDir $(dir $@) \
+		--emitDeclarationOnly \
+		--moduleResolution node \
+		--stripInternal \
+		--target es2017 $<
 
 # -----------------------------------------------------------------------------
 # Rules
 # -----------------------------------------------------------------------------
 
 # Rebuild email templates on changes
-watch-templates: node_modules
+watch-templates: node_modules | dist-post
 	@$(shell npm bin)/browser-sync start \
-		--server dist \
-		--files dist &
+		--server src/message/templates \
+		--files "src/message/templates/**/*.html" &
 	@$(shell npm bin)/watch \
-		--pattern "src/templates/**/*" \
-		--command "make build" \
-		> /dev/null
+		--pattern "src/message/templates/**/*.mjml" \
+		--command 'make $$(echo $$FILENAME | sed "s/mjml$$/html/")'

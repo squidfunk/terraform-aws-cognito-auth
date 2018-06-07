@@ -36,9 +36,9 @@ variable "region" {
 # Variables: Cognito
 # -----------------------------------------------------------------------------
 
-# var.cognito_identity_pool
-variable "cognito_identity_pool" {
-  description = "Cognito identity pool name"
+# var.cognito_identity_name
+variable "cognito_identity_name" {
+  description = "Cognito identity provider name"
 }
 
 # var.cognito_identity_domain
@@ -53,13 +53,4 @@ variable "cognito_identity_domain" {
 # var.api_stage
 variable "api_stage" {
   description = "API deployment stage"
-}
-
-# -----------------------------------------------------------------------------
-# Variables: SES domain
-# -----------------------------------------------------------------------------
-
-# var.api_stage
-variable "ses_domain" {
-  description = "SES domain name"
 }

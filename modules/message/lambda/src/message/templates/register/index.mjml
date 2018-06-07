@@ -22,11 +22,11 @@
 
 <mjml>
   <mj-head>
-    <mj-title>Activate your {{company}} account</mj-title>
+    <mj-title>Activate your {{name}} account</mj-title>
 
     <!-- Preview text within recipient's inbox -->
     <mj-preview>
-      Please confirm your email address to start using your {{company}} account
+      Please confirm your email address to start using your {{name}} account
     </mj-preview>
 
     <!-- Custom CSS styles -->
@@ -51,7 +51,7 @@
       <mj-column>
 
         <!-- Header image/icon -->
-        <mj-image width="40px" src="images/register.png" />
+        <mj-image width="40px" src="attachments/user-check.png" />
 
         <!-- Headline -->
         <mj-text font-size="20px">
@@ -66,13 +66,14 @@
 
         <!-- Teaser -->
         <mj-text padding="10px 10%">
-          Thanks for joining {{company}}! Please confirm your
-          email address by clicking the following link:
+          Thanks for joining {{name}}! Please confirm your email address by
+          clicking the following link:
         </mj-text>
 
         <!-- Verification button -->
-        <mj-button href="{{domain}}/register/{{code}}"
+        <mj-button href="https://{{domain}}/register/{{code}}"
             padding="15px 0"
+            inner-padding="7px 15px"
             font-size="16px"
             background-color="#4CAF50"
             color="#FFFFFF"

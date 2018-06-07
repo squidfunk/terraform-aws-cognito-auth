@@ -20,7 +20,37 @@
  * IN THE SOFTWARE.
  */
 
-declare module "aws-sdk-mock" {
-  export function mock(service: string, method: string, replace: any): void
-  export function restore(service: string, method?: string): void
+import { CognitoUserPoolTriggerEvent } from "aws-lambda"
+
+import { chance } from "_/helpers"
+
+/* ----------------------------------------------------------------------------
+ * Data
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Mock Cognito User Pool trigger event
+ *
+ * @return Cognito User Pool trigger event
+ */
+export function mockCognitoUserPoolTriggerEvent(): CognitoUserPoolTriggerEvent {
+  return {
+    version: 1,
+    region: chance.string(),
+    userPoolId: chance.string(),
+    userName: chance.guid(),
+    callerContext: {
+      awsSdkVersion: chance.string(),
+      clientId: chance.string()
+    },
+    triggerSource: "PreSignUp_SignUp",
+    request: {
+      userAttributes: {
+        email: chance.email()
+      }
+    },
+    response: {
+      autoConfirmUser: false
+    }
+  }
 }

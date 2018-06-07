@@ -1,0 +1,7 @@
+Thanks for joining {{name}}! Please confirm your email address by clicking
+the following link:
+
+https://{{domain}}/register/{{code}}
+
+If you did not sign up for this account you can ignore this email and the
+account will be deleted. The link is valid for 24 hours.

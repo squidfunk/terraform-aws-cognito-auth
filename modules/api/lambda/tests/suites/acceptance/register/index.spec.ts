@@ -46,7 +46,7 @@ describe("POST /register", () => {
   const http = request(process.env.API_INVOKE_URL!)
 
   /* Test: should accept 8-letter passwords */
-  it("should accept 8-letter passwords", () => {
+  fit("should accept 8-letter passwords", () => {
     return http.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ length: 8 }))
