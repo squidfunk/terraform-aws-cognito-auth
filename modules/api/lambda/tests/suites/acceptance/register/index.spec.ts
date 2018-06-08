@@ -49,7 +49,7 @@ describe("POST /register", () => {
   fit("should accept 8-letter passwords", () => {
     return http.post("/register")
       .set("Content-Type", "application/json")
-      .send(mockRegisterRequest({ length: 8 }))
+      .send({ ...mockRegisterRequest({ length: 8 }), email: "scifish@gmail.com" })
       .expect(200)
   })
 

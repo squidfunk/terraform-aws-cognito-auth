@@ -20,36 +20,24 @@
  * IN THE SOFTWARE.
  */
 
-declare module "emailjs" {
-  interface MessageAttachment {
-    type?: string
-    name?: string
-    charset?: string
-    alternative?: boolean
-    inline?: boolean
-    headers?: {
-      [name: string]: string
+declare module "mimemessage" {
+  export interface Headers {
+    [name: string]: {
+      value: string
     }
-    related?: MessageAttachment[]
   }
-  interface MessageFileAttachment extends MessageAttachment {
-    path: string
+  export type Body = string | Array<string | Entity>
+  export class Entity {
+    protected _headers: Headers
+    protected _body: Body
+    public header(name: string, value: string): void
+    public toString(): string
   }
-  interface MessageBinaryAttachment extends MessageAttachment {
-    data: string
+  export interface Options {
+    contentType: string
+    contentTransferEncoding?: "7bit" | "quoted-printable" | "base64"
+    body: Body,
+    headers?: Headers
   }
-  interface MessageOptions {
-    from: string
-    to: string
-    subject: string
-    text: string
-    attachment?: Array<MessageFileAttachment | MessageBinaryAttachment>
-  }
-  interface Message {
-    stream(): NodeJS.ReadableStream
-  }
-  interface MessageBuilder {
-    create(options: MessageOptions): Message
-  }
-  export const message: MessageBuilder
+  export function factory(options: Options): Entity
 }

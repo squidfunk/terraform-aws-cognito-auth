@@ -107,3 +107,12 @@ output "dynamodb_table" {
 output "sns_topic_arn" {
   value = "${module.api.sns_topic_arn}"
 }
+
+# -----------------------------------------------------------------------------
+# Outputs: SES
+# -----------------------------------------------------------------------------
+
+# output.ses_sender_address
+output "ses_sender_address" {
+  value = "${var.ses_sender_address}"
+}

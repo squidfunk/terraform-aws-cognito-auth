@@ -68,4 +68,6 @@ module "message" {
   cognito_identity_domain = "${var.cognito_identity_domain}"
 
   sns_topic_arn = "${module.api.sns_topic_arn}"
+
+  ses_sender_address = "${var.ses_sender_address}"
 }

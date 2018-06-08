@@ -56,7 +56,10 @@ dist/%.png: src/%.png
 # Compiled email HTML template
 src/%.html: src/%.mjml
 	@mkdir -p dist/$(dir $*)
-	$(shell npm bin)/mjml -o $@ $<
+	$(shell npm bin)/mjml \
+		--config.minify true \
+		--config.validationlevel strict \
+		-o $@ $<
 
 # Image used in email templates
 src/%.png: src/%.svg

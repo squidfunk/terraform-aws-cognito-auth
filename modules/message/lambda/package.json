@@ -25,9 +25,10 @@
     "watch": "make watch"
   },
   "dependencies": {
-    "emailjs": "^2.0.0",
     "mime": "^2.3.1",
-    "mustache": "^2.3.0"
+    "mimemessage": "^1.0.5",
+    "mustache": "^2.3.0",
+    "quoted-printable": "^1.0.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.2",
@@ -36,11 +37,13 @@
     "@types/mime": "^2.0.0",
     "@types/mustache": "^0.8.30",
     "@types/node": "^9.6.2",
+    "@types/quoted-printable": "^0.2.2",
     "aws-sdk": "^2.220.1",
     "aws-sdk-mock": "^2.0.0",
     "browser-sync": "^2.24.4",
     "chance": "^1.0.13",
     "dotenv": "^5.0.1",
+    "html-minifier": "^3.5.16",
     "imageoptim": "^0.5.0",
     "jasmine": "^3.1.0",
     "jasmine-spec-reporter": "^4.2.1",

@@ -64,3 +64,13 @@ variable "cognito_identity_domain" {
 variable "sns_topic_arn" {
   description = "SNS topic ARN"
 }
+
+# -----------------------------------------------------------------------------
+# Variables: SES
+# -----------------------------------------------------------------------------
+
+# var.ses_sender_address
+variable "ses_sender_address" {
+  description = "SES sender email address"
+  default     = ""
+}

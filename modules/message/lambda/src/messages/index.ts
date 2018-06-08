@@ -20,11 +20,13 @@
  * IN THE SOFTWARE.
  */
 
-import { message } from "emailjs"
 import { readdir, readFile } from "fs"
 import { getType } from "mime"
+import { Entity, factory } from "mimemessage"
 import { render } from "mustache"
 import * as path from "path"
+// tslint:disable-next-line no-duplicate-string
+import { encode as quote } from "quoted-printable"
 import { promisify } from "util"
 
 /* ----------------------------------------------------------------------------
@@ -44,8 +46,8 @@ export interface MessageBody {
  */
 export interface MessageAttachment {
   id: string                           /* Attachment identifier */
-  path: string                         /* Path to attachment */
-  type: string                         /* Mime type */
+  type: string                         /* Attachment mime type */
+  data: string                         /* Attachment data */
 }
 
 /* ----------------------------------------------------------------------------
@@ -57,20 +59,25 @@ export interface MessageAttachment {
  *
  * @template T - Message data type
  */
-export abstract class Message<T = {}> {
+export abstract class Message<T> {
+
+  /**
+   * Base directory
+   */
+  protected base: string
 
   /**
    * Initialize message
    *
    * @param template - Template
    * @param data - Message date
-   * @param base - Base directory
    */
   public constructor(
     protected template: string,
-    protected data: T,
-    protected base = path.join(__dirname, template)
-  ) {}
+    protected data: T
+  ) {
+    this.base = path.join(__dirname, template)
+  }
 
   /**
    * Return message subject
@@ -103,60 +110,77 @@ export abstract class Message<T = {}> {
   public async attachments(): Promise<MessageAttachment[]> {
     const base = path.resolve(this.base, "attachments")
     const filelist = await promisify(readdir)(base)
-    return filelist.reduce<MessageAttachment[]>((attachments, file) => {
-      const type = getType(file)
-      if (type === "image/png") {
-        attachments.push({
-          id: `cid:${file}`,
-          path: path.resolve(base, file),
-          type
-        })
-      }
-      return attachments
-    }, [])
+    return Promise.all(filelist
+      .filter(file => getType(file) === "image/png")
+      .map(async file => {
+        const data = await promisify(readFile)(path.resolve(base, file))
+        return {
+          id: file,
+          data: data.toString("base64").match(/.{1,76}/g)!.join("\r\n"),
+          type: getType(file)!
+        }
+      }))
   }
 
   /**
-   * Return raw message
+   * Compose MIME message
    *
-   * @return Raw message
+   * @return Mime entity
    */
-  public async send(_to?: string): Promise<string> {
+  public async compose(): Promise<Entity> {
     const [body, attachments] = await Promise.all([
       this.body(),
       this.attachments()
     ])
 
-    const stream = message.create({
-      from: "you <scifish@gmail.com>",
-      to: "someone <scifish@gmail.com>",
-      subject: this.subject,
-      text: body.text,
-      attachment: [
-        {
-          charset: "utf8",
-          data: body.html,
-          alternative: true
-        },
-        ...attachments.map(attachment => ({
-          path: attachment.path,
-          type: attachment.type,
-          headers: {
-            "Content-ID": attachment.id
-          }
-        }))
-      ]
-    }).stream()
+    /* Compose message entity */
+    const message = factory({
+      contentType: "multipart/mixed",
+      body: [
 
-    return new Promise<string>((resolve, reject) => {
-      stream.on("data", resolve)
-      stream.on("error", reject)
+        /* MIME entity containing HTML and plain text entities */
+        factory({
+          contentType: "multipart/alternative",
+          body: [
+
+            /* Plain text entity */
+            factory({
+              contentType:  "text/plain; charset=UTF-8",
+              contentTransferEncoding: "quoted-printable",
+              body: quote(body.text)
+            }),
+
+            /* HTML entity */
+            factory({
+              contentType:  "text/html; charset=UTF-8",
+              contentTransferEncoding: "quoted-printable",
+              body: quote(body.html)
+            })
+          ]
+        }),
+
+        /* Attachments */
+        ...attachments.map(attachment => {
+          const entity = factory({
+            contentType: attachment.type,
+            contentTransferEncoding: "base64",
+            body: attachment.data
+          })
+          entity.header("Content-Disposition", "inline")
+          entity.header("Content-ID", `<${attachment.id}>`)
+          return entity
+        })
+      ]
     })
+
+    /* Set subject and return MIME entity */
+    message.header("Subject", this.subject)
+    return message
   }
 }
 
 /* ----------------------------------------------------------------------------
- * Re-export templates
+ * Re-export messages
  * ------------------------------------------------------------------------- */
 
 export { RegisterMessage } from "./register"

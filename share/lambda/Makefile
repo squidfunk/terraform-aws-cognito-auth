@@ -64,7 +64,7 @@ dist: $(shell find src) tsconfig.json
 	$(shell npm bin)/tsc -p tsconfig.json
 
 # Archive for distribution
-dist.zip: | dist-pre dist dist-post
+dist.zip: $(shell find src) | dist-pre dist dist-post
 	@(rm -f $@ \
 		&& cd dist \
 		&& cp ../package*.json . \

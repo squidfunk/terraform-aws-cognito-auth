@@ -21,40 +21,97 @@
  */
 
 import { SNSEvent } from "aws-lambda"
+import { CognitoIdentityServiceProvider, SES } from "aws-sdk"
 
-import { Message } from "./message"
+import {
+  RegisterMessage,
+  ResetMessage
+} from "./messages"
+import { VerificationCode } from "./verification"
 
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Send email for verification
+ * Return a message for the given context
+ *
+ * @param context - Verification context
+ *
+ * @return Message
+ */
+function template(code: VerificationCode) {
+  switch (code.context) {
+
+    /* Registration verification message */
+    case "register":
+      return new RegisterMessage({
+        name: process.env.COGNITO_IDENTITY_NAME!,
+        domain: process.env.COGNITO_IDENTITY_DOMAIN!,
+        code: code.id
+      })
+
+    /* Reset verification message */
+    case "reset":
+      return new ResetMessage({
+        name: process.env.COGNITO_IDENTITY_NAME!,
+        domain: process.env.COGNITO_IDENTITY_DOMAIN!,
+        code: code.id
+      })
+
+    /* Catch invalid contexts */
+    default:
+      throw new Error(`Invalid context: "${code.context}"`)
+  }
+}
+
+/* ----------------------------------------------------------------------------
+ * Handlers
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Send email via SNS for verification
  *
  * @param event - SNS event
  *
  * @return Promise resolving with no result
  */
 export async function handler(event: SNSEvent): Promise<void> {
-  await event.Records.reduce(async (promise, record) =>
-    promise.then(async () => {
-      const code = JSON.parse(record.Sns.Message)
-      await new Message(code).send()
-    }), Promise.resolve())
+  try {
+    await event.Records.reduce(async (promise, record) =>
+      promise.then(async () => {
+        const code: VerificationCode = JSON.parse(record.Sns.Message)
+        const [{ UserAttributes }, message] = await Promise.all([
+
+          /* Retrieve user */
+          new CognitoIdentityServiceProvider({ apiVersion: "2016-04-18" })
+            .adminGetUser({
+              UserPoolId: process.env.COGNITO_USER_POOL!,
+              Username: code.subject
+            }).promise(),
+
+          /* Compose message */
+          template(code).compose()
+        ])
+
+        /* Retrieve email address from user attributes */
+        const { Value: email } = UserAttributes!.find(attr => {
+          return attr.Name === "email"
+        })!
+
+        /* Send message */
+        await new SES({ apiVersion: "2010-12-01" })
+          .sendRawEmail({
+            Source: process.env.SES_SENDER_ADDRESS!,
+            Destinations: [email!],
+            RawMessage: {
+              Data: message.toString()
+            }
+          }).promise()
+      }), Promise.resolve())
+
+  /* Catch and re-throw errors */
+  } catch (err) {
+    throw err
+  }
 }
-
-/* ----------------------------------------------------------------------------
- * Listeners
- * ------------------------------------------------------------------------- */
-
-/**
- * Top-level Promise rejection handler
- *
- * The Lambda Node 8.10 runtime is great, but it doesn't handle rejections
- * appropriately. Hopefully this will be resolved in the future, but until then
- * we will just swallow the error. This issue was posted in the AWS forums in
- * the following thread: https://amzn.to/2JpoHEY
- */
-process.on("unhandledRejection", /* istanbul ignore next */ () => {
-  /* Nothing to be done */
-})
