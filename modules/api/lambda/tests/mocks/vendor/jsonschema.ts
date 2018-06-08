@@ -35,7 +35,7 @@ import { chance } from "_/helpers"
  *
  * @return Jasmine spy
  */
-export function mockValidate(
+function mockValidate(
   result: Partial<_.ValidatorResult>
 ): jasmine.Spy {
   return spyOn(_, "validate")

@@ -20,82 +20,94 @@
  * IN THE SOFTWARE.
  */
 
-import { ManagementClient } from "~/clients/management"
+import * as fs from "fs"
+
+import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock ManagementClient.verifyUser
+ * Mock fs.readFile
  *
- * @param promise - Promise returned by management client
+ * @param cb - Fake callback
  *
  * @return Jasmine spy
  */
-function mockManagementClientVerifyUser<T>(
-  promise: () => Promise<T>
-): jasmine.Spy {
-  return spyOn(ManagementClient.prototype, "verifyUser")
-    .and.callFake(promise)
+function mockFsReadFile(
+  cb: (path: string, encoding: any, cb: (...args: any[]) => void) => void
+) {
+  return spyOn(fs, "readFile")
+    .and.callFake(cb)
 }
 
 /**
- * Mock ManagementClient.verifyUser returning with success
+ * Mock fs.readFile returning with result
+ *
+ * @param data - File contents
  *
  * @return Jasmine spy
  */
-export function mockManagementClientVerifyUserWithSuccess() {
-  return mockManagementClientVerifyUser(() => Promise.resolve())
+export function mockFsReadFileWithResult(
+  data: string = chance.string()
+) {
+  return mockFsReadFile((_path, encodingOrCb, cb) => {
+    (cb || encodingOrCb)(undefined, data)
+  })
 }
 
 /**
- * Mock ManagementClient.verifyUser throwing an error
+ * Mock fs.readFile throwing an error
  *
- * @param err - Error to be thrown
+ * @param data - File contents
  *
  * @return Jasmine spy
  */
-export function mockManagementClientVerifyUserWithError(
-  err: Error = new Error("mockManagementClientVerifyUserWithError")
-): jasmine.Spy {
-  return mockManagementClientVerifyUser(() => Promise.reject(err))
+export function mockFsReadFileWithError(
+  err: Error = new Error("mockFsReadFileWithError")
+) {
+  return mockFsReadFile((_path, _encoding, cb) => cb(err))
 }
 
 /* ------------------------------------------------------------------------- */
 
 /**
- * Mock ManagementClient.changePassword
+ * Mock fs.readdir
  *
- * @param promise - Promise returned by management client
+ * @param cb - Fake callback
  *
  * @return Jasmine spy
  */
-function mockManagementClientChangePassword<T>(
-  promise: () => Promise<T>
-): jasmine.Spy {
-  return spyOn(ManagementClient.prototype, "changePassword")
-    .and.callFake(promise)
+function mockFsReaddir(
+  cb: (path: string, cb: (...args: any[]) => void) => void
+) {
+  return spyOn(fs, "readdir")
+    .and.callFake(cb)
 }
 
 /**
- * Mock ManagementClient.changePassword returning with success
+ * Mock fs.readdir returning with result
+ *
+ * @param files - File list
  *
  * @return Jasmine spy
  */
-export function mockManagementClientChangePasswordWithSuccess() {
-  return mockManagementClientChangePassword(() => Promise.resolve())
+export function mockFsReaddirWithResult(
+  files: string[] = [chance.string()]
+) {
+  return mockFsReaddir((_path, cb) => cb(undefined, files))
 }
 
 /**
- * Mock ManagementClient.changePassword throwing an error
+ * Mock fs.readdir throwing an error
  *
- * @param err - Error to be thrown
+ * @param data - File contents
  *
  * @return Jasmine spy
  */
-export function mockManagementClientChangePasswordWithError(
-  err: Error = new Error("mockManagementClientChangePasswordWithError")
-): jasmine.Spy {
-  return mockManagementClientChangePassword(() => Promise.reject(err))
+export function mockFsReaddirWithError(
+  err: Error = new Error("mockFsReaddirWithError")
+) {
+  return mockFsReaddir((_path, cb) => cb(err))
 }

@@ -32,7 +32,7 @@ import { chance } from "_/helpers"
 /**
  * Mock CognitoIdentityServiceProvider.adminConfirmSignUp
  *
- * @param promise - Promise returned by Cognito
+ * @param spy - Spy/fake to mock Cognito
  *
  * @return Jasmine spy
  */
@@ -81,7 +81,7 @@ export function restoreCognitoAdminConfirmSignUp() {
 /**
  * Mock CognitoIdentityServiceProvider.adminDeleteUser
  *
- * @param promise - Promise returned by Cognito
+ * @param spy - Spy/fake to mock Cognito
  *
  * @return Jasmine spy
  */
@@ -130,7 +130,7 @@ export function restoreCognitoAdminDeleteUser() {
 /**
  * Mock CognitoIdentityServiceProvider.adminGetUser
  *
- * @param promise - Promise returned by Cognito
+ * @param spy - Spy/fake to mock Cognito
  *
  * @return Jasmine spy
  */
@@ -145,7 +145,7 @@ function mockCognitoAdminGetUser(spy: jasmine.Spy) {
 /**
  * Mock CognitoIdentityServiceProvider.adminGetUser returning with success
  *
- * @param username - Username or email address
+ * @param username - Username
  *
  * @return Jasmine spy
  */
@@ -204,7 +204,7 @@ export function restoreCognitoAdminGetUser() {
 /**
  * Mock CognitoIdentityServiceProvider.adminUpdateUserAttributes
  *
- * @param promise - Promise returned by Cognito
+ * @param spy - Spy/fake to mock Cognito
  *
  * @return Jasmine spy
  */
@@ -260,7 +260,7 @@ export function restoreCognitoAdminUpdateUserAttributes() {
 /**
  * Mock CognitoIdentityServiceProvider.initiateAuth
  *
- * @param promise - Promise returned by Cognito
+ * @param spy - Spy/fake to mock Cognito
  *
  * @return Jasmine spy
  */
@@ -349,7 +349,7 @@ export function restoreCognitoInitiateAuth() {
 /**
  * Mock CognitoIdentityServiceProvider.signUp
  *
- * @param promise - Promise returned by Cognito
+ * @param spy - Spy/fake to mock Cognito
  *
  * @return Jasmine spy
  */

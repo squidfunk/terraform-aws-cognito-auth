@@ -20,55 +20,49 @@
  * IN THE SOFTWARE.
  */
 
-import { Callback } from "aws-lambda"
-import { mock, restore } from "aws-sdk-mock"
+import { Message } from "~/messages"
+
+import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
- * Functions
+ * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SNS.publish
- *
- * @param spy - Spy/fake to mock SNS
- *
- * @return Jasmine spy
+ * Test verification message data
  */
-function mockSNSPublish(spy: jasmine.Spy) {
-  mock("SNS", "publish", (data: any, cb: Callback) => {
-    cb(undefined, spy(data))
-  })
-  return spy
+export interface TestMessageData {
+  name: string                         /* Cognito identity name */
+  domain: string                       /* Cognito identity domain */
+  code: string                         /* Verification code */
 }
 
-/**
- * Mock SNS.publish returning with success
- *
- * @return Jasmine spy
- */
-export function mockSNSPublishWithSuccess() {
-  return mockSNSPublish(
-    jasmine.createSpy("publish"))
-}
+/* ----------------------------------------------------------------------------
+ * Class
+ * ------------------------------------------------------------------------- */
 
 /**
- * Mock SNS.publish throwing an error
- *
- * @param err - Error to be thrown
- *
- * @return Jasmine spy
+ * Test verification message
  */
-export function mockSNSPublishWithError(
-  err: Error = new Error("mockSNSPublishWithError")
-): jasmine.Spy {
-  return mockSNSPublish(
-    jasmine.createSpy("publish")
-      .and.callFake(() => { throw err }))
-}
+export class TestMessage extends Message<TestMessageData> {
 
-/**
- * Restore SNS.publish
- */
-export function restoreSNSPublish() {
-  restore("SNS", "publish")
+  /**
+   * Inititalize test verification message
+   *
+   * @param data - Message data
+   */
+  public constructor(
+    protected data: TestMessageData
+  ) {
+    super("test", data)
+  }
+
+  /**
+   * Return message subject
+   *
+   * @return Message subject
+   */
+  public get subject(): string {
+    return chance.string()
+  }
 }

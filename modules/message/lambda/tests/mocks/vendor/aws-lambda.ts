@@ -20,37 +20,47 @@
  * IN THE SOFTWARE.
  */
 
-import { CognitoUserPoolTriggerEvent } from "aws-lambda"
+import { SNSEvent } from "aws-lambda"
+
+import { VerificationCode } from "~/verification"
 
 import { chance } from "_/helpers"
+import { mockVerificationCode } from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------
  * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock Cognito User Pool trigger event
+ * Mock SNS event
  *
- * @return Cognito User Pool trigger event
+ * @param code - Verification code
+ *
+ * @return SNS event
  */
-export function mockCognitoUserPoolTriggerEvent(): CognitoUserPoolTriggerEvent {
+export function mockSNSEvent(
+  code: VerificationCode = mockVerificationCode()
+): SNSEvent {
   return {
-    version: 1,
-    region: chance.string(),
-    userPoolId: chance.string(),
-    userName: chance.guid(),
-    callerContext: {
-      awsSdkVersion: chance.string(),
-      clientId: chance.string()
-    },
-    triggerSource: "PreSignUp_SignUp",
-    request: {
-      userAttributes: {
-        email: chance.email()
+    Records: [
+      {
+        EventSource: chance.string(),
+        EventVersion: "1.0",
+        EventSubscriptionArn: chance.string(),
+        Sns: {
+          Type: "Notification",
+          MessageId: chance.guid(),
+          TopicArn: chance.string(),
+          Subject: chance.string(),
+          Message: JSON.stringify(code),
+          MessageAttributes: {},
+          Timestamp: chance.date().toISOString(),
+          SignatureVersion: "1",
+          Signature: chance.string(),
+          SigningCertUrl: chance.url(),
+          UnsubscribeUrl: chance.url()
+        }
       }
-    },
-    response: {
-      autoConfirmUser: false
-    }
+    ]
   }
 }

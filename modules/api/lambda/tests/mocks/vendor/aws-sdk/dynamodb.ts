@@ -34,7 +34,7 @@ import { mockVerificationCode } from "_/mocks/verification"
 /**
  * Mock DynamoDB.DocumentClient.put
  *
- * @param promise - Promise returned by Cognito
+ * @param spy - Spy/fake to mock DynamoDB
  *
  * @return Jasmine spy
  */
@@ -82,7 +82,7 @@ export function restoreDynamoDBDocumentClientPut() {
 /**
  * Mock DynamoDB.DocumentClient.delete
  *
- * @param promise - Promise returned by Cognito
+ * @param spy - Spy/fake to mock DynamoDB
  *
  * @return Jasmine spy
  */

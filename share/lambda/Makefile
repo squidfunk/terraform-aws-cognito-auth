@@ -107,8 +107,7 @@ watch: node_modules
 	@NODE_ENV=development $(shell npm bin)/nodemon --quiet \
 		--watch src --watch tests --exec \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \
-			--project tests/tsconfig.json \
-				tests/index.ts "suites/unit/**/*.spec.ts"
+			tests/index.ts "suites/unit/**/*.spec.ts"
 
 # -----------------------------------------------------------------------------
 

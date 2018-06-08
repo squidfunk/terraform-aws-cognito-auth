@@ -37,8 +37,8 @@ import { promisify } from "util"
  * Message body type
  */
 export interface MessageBody {
-  html: string                         /* HTML message */
   text: string                         /* Plain-text message */
+  html: string                         /* HTML message */
 }
 
 /**
@@ -92,13 +92,13 @@ export abstract class Message<T> {
    * @return Promise resolving with message body
    */
   public async body(): Promise<MessageBody> {
-    const [html, text] = await Promise.all([
-      promisify(readFile)(path.resolve(this.base, "index.html"), "utf8"),
-      promisify(readFile)(path.resolve(this.base, "index.txt"), "utf8")
+    const [text, html] = await Promise.all([
+      promisify(readFile)(path.resolve(this.base, "index.txt"), "utf8"),
+      promisify(readFile)(path.resolve(this.base, "index.html"), "utf8")
     ])
     return {
-      html: render(html, this.data).replace(/attachments\//, "cid:"),
-      text: render(text, this.data)
+      text: render(text, this.data),
+      html: render(html, this.data).replace(/attachments\//, "cid:")
     }
   }
 
@@ -138,7 +138,7 @@ export abstract class Message<T> {
       contentType: "multipart/mixed",
       body: [
 
-        /* MIME entity containing HTML and plain text entities */
+        /* Entity containing plain text and HTML entities */
         factory({
           contentType: "multipart/alternative",
           body: [
@@ -159,7 +159,7 @@ export abstract class Message<T> {
           ]
         }),
 
-        /* Attachments */
+        /* Attachment entities */
         ...attachments.map(attachment => {
           const entity = factory({
             contentType: attachment.type,

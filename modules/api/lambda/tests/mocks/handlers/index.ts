@@ -31,7 +31,7 @@
  *
  * @return Jasmine spy
  */
-export function mockHandlerCallback(
+function mockHandlerCallback(
   promise: () => Promise<any>
 ): jasmine.Spy {
   return jasmine.createSpy("callback")

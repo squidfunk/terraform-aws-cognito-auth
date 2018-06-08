@@ -49,8 +49,7 @@ describe("handler", () => {
 
   /* Test: should resolve with input event */
   it("should resolve with input event", async () => {
-    const listUsersMock =
-      mockCognitoListUsersWithoutResult()
+    const listUsersMock = mockCognitoListUsersWithoutResult()
     expect(await handler(event)).toBe(event)
     expect(listUsersMock).toHaveBeenCalledWith({
       UserPoolId: event.userPoolId,

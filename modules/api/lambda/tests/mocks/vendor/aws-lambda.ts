@@ -52,7 +52,7 @@ export function mockAPIGatewayEventPathParameters(
  *
  * @return API Gateway event
  */
-export function mockAPIGatewayEvent(
+function mockAPIGatewayEvent(
   method: "GET" | "POST", body: any = "", params: {
     [name: string]: string
   } = mockAPIGatewayEventPathParameters()

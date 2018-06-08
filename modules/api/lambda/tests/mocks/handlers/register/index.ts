@@ -31,13 +31,16 @@ import { chance } from "_/helpers"
 /**
  * Mock registration request
  *
+ * We hardcode the domain example.com (see RFC 2606) because we don't want SES
+ * to send out emails for our acceptance tests, so we know what to check for.
+ *
  * @param options - Password generator options
  *
  * @return Registration request
  */
 export function mockRegisterRequest(options?: Partial<Options>) {
   return {
-    email: chance.email(),
+    email: chance.email({ domain: "example.com" }),
     password: generate({
       length: 8,
       numbers: true,

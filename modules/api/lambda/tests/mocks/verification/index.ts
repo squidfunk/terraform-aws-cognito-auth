@@ -69,7 +69,7 @@ export function mockVerificationCode(
 /**
  * Mock Verification.issue
  *
- * @param promise - Promise returned by Verification
+ * @param promise - Promise returned by verification
  *
  * @return Jasmine spy
  */
@@ -111,7 +111,7 @@ export function mockVerificationIssueWithError(
 /**
  * Mock Verification.claim
  *
- * @param promise - Promise returned by Verification
+ * @param promise - Promise returned by verification
  *
  * @return Jasmine spy
  */

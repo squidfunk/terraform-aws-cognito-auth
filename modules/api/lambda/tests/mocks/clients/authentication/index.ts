@@ -56,7 +56,7 @@ export function mockSession(): Session {
  *
  * @return Jasmine spy
  */
-export function mockAuthenticationClientAuthenticate<T>(
+function mockAuthenticationClientAuthenticate<T>(
   promise: () => Promise<T>
 ): jasmine.Spy {
   return spyOn(AuthenticationClient.prototype, "authenticate")
@@ -98,7 +98,7 @@ export function mockAuthenticationClientAuthenticateWithError(
  *
  * @return Jasmine spy
  */
-export function mockAuthenticationClientRegister<T>(
+function mockAuthenticationClientRegister<T>(
   promise: () => Promise<T>
 ): jasmine.Spy {
   return spyOn(AuthenticationClient.prototype, "register")
@@ -136,7 +136,7 @@ export function mockAuthenticationClientRegisterWithError(
  *
  * @return Jasmine spy
  */
-export function mockAuthenticationClientForgotPassword<T>(
+function mockAuthenticationClientForgotPassword<T>(
   promise: () => Promise<T>
 ): jasmine.Spy {
   return spyOn(AuthenticationClient.prototype, "forgotPassword")

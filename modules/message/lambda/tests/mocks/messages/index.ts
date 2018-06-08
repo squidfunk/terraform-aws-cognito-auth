@@ -20,55 +20,50 @@
  * IN THE SOFTWARE.
  */
 
-import { Callback } from "aws-lambda"
-import { mock, restore } from "aws-sdk-mock"
+import { chance } from "_/helpers"
+
+import { Message } from "~/messages"
 
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SNS.publish
+ * Mock Message.compose
  *
- * @param spy - Spy/fake to mock SNS
- *
- * @return Jasmine spy
- */
-function mockSNSPublish(spy: jasmine.Spy) {
-  mock("SNS", "publish", (data: any, cb: Callback) => {
-    cb(undefined, spy(data))
-  })
-  return spy
-}
-
-/**
- * Mock SNS.publish returning with success
+ * @param promise - Promise returned by message
  *
  * @return Jasmine spy
  */
-export function mockSNSPublishWithSuccess() {
-  return mockSNSPublish(
-    jasmine.createSpy("publish"))
+function mockMessageCompose<T>(
+  promise: () => Promise<T>
+): jasmine.Spy {
+  return spyOn(Message.prototype, "compose")
+    .and.callFake(promise)
 }
 
 /**
- * Mock SNS.publish throwing an error
+ * Mock Message.compose returning with result
+ *
+ * @param result - Mime entity
+ *
+ * @return Jasmine spy
+ */
+export function mockMessageComposeWithResult(
+  result: string = chance.string()
+) {
+  return mockMessageCompose(() => Promise.resolve(result))
+}
+
+/**
+ * Mock Message.compose throwing an error
  *
  * @param err - Error to be thrown
  *
  * @return Jasmine spy
  */
-export function mockSNSPublishWithError(
-  err: Error = new Error("mockSNSPublishWithError")
+export function mockMessageComposeWithError(
+  err: Error = new Error("mockMessageComposeWithError")
 ): jasmine.Spy {
-  return mockSNSPublish(
-    jasmine.createSpy("publish")
-      .and.callFake(() => { throw err }))
-}
-
-/**
- * Restore SNS.publish
- */
-export function restoreSNSPublish() {
-  restore("SNS", "publish")
+  return mockMessageCompose(() => Promise.reject(err))
 }

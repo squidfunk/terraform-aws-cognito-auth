@@ -20,55 +20,48 @@
  * IN THE SOFTWARE.
  */
 
-import { Callback } from "aws-lambda"
-import { mock, restore } from "aws-sdk-mock"
+import * as mime from "mime"
 
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SNS.publish
+ * Mock Mime.getType
  *
- * @param spy - Spy/fake to mock SNS
- *
- * @return Jasmine spy
- */
-function mockSNSPublish(spy: jasmine.Spy) {
-  mock("SNS", "publish", (data: any, cb: Callback) => {
-    cb(undefined, spy(data))
-  })
-  return spy
-}
-
-/**
- * Mock SNS.publish returning with success
+ * @param cb - Fake callback
  *
  * @return Jasmine spy
  */
-export function mockSNSPublishWithSuccess() {
-  return mockSNSPublish(
-    jasmine.createSpy("publish"))
+function mockMimeGetType(
+  cb: () => void
+) {
+  return spyOn(mime, "getType")
+    .and.callFake(cb)
 }
 
 /**
- * Mock SNS.publish throwing an error
+ * Mock Mime.getType returning with result
+ *
+ * @param type - Returned type
+ *
+ * @return Jasmine spy
+ */
+export function mockMimeGetTypeWithResult(
+  type: string = "image/png"
+) {
+  return mockMimeGetType(() => type)
+}
+
+/**
+ * Mock Mime.getType throwing an error
  *
  * @param err - Error to be thrown
  *
  * @return Jasmine spy
  */
-export function mockSNSPublishWithError(
-  err: Error = new Error("mockSNSPublishWithError")
-): jasmine.Spy {
-  return mockSNSPublish(
-    jasmine.createSpy("publish")
-      .and.callFake(() => { throw err }))
-}
-
-/**
- * Restore SNS.publish
- */
-export function restoreSNSPublish() {
-  restore("SNS", "publish")
+export function mockMimeGetTypeWithError(
+  err: Error = new Error("mockMimeGetTypeWithError")
+) {
+  return mockMimeGetType(() => { throw err })
 }

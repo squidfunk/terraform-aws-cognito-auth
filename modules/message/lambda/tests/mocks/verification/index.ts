@@ -20,55 +20,43 @@
  * IN THE SOFTWARE.
  */
 
-import { Callback } from "aws-lambda"
-import { mock, restore } from "aws-sdk-mock"
+import {
+  VerificationCode,
+  VerificationContext
+} from "~/verification"
+
+import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
- * Functions
+ * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SNS.publish
+ * Mock verification context
  *
- * @param spy - Spy/fake to mock SNS
- *
- * @return Jasmine spy
+ * @return Verification context
  */
-function mockSNSPublish(spy: jasmine.Spy) {
-  mock("SNS", "publish", (data: any, cb: Callback) => {
-    cb(undefined, spy(data))
-  })
-  return spy
+export function mockVerificationContext(): VerificationContext {
+  return [
+    "register",
+    "reset"
+  ][Math.floor(Math.random() * 2)] as VerificationContext
 }
 
 /**
- * Mock SNS.publish returning with success
+ * Mock verification code
  *
- * @return Jasmine spy
- */
-export function mockSNSPublishWithSuccess() {
-  return mockSNSPublish(
-    jasmine.createSpy("publish"))
-}
-
-/**
- * Mock SNS.publish throwing an error
+ * @param context - Verification context
  *
- * @param err - Error to be thrown
- *
- * @return Jasmine spy
+ * @return Verification code
  */
-export function mockSNSPublishWithError(
-  err: Error = new Error("mockSNSPublishWithError")
-): jasmine.Spy {
-  return mockSNSPublish(
-    jasmine.createSpy("publish")
-      .and.callFake(() => { throw err }))
-}
-
-/**
- * Restore SNS.publish
- */
-export function restoreSNSPublish() {
-  restore("SNS", "publish")
+export function mockVerificationCode(
+  context: VerificationContext = mockVerificationContext()
+): VerificationCode {
+  return {
+    id: chance.string({ pool: "0123456789abcdef", length: 32 }),
+    context,
+    subject: chance.guid(),
+    expires: Math.floor(chance.date().getTime() / 1000)
+  }
 }

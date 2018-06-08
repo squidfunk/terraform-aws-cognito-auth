@@ -29,10 +29,13 @@ import { chance } from "_/helpers"
 /**
  * Mock reset request
  *
+ * We hardcode the domain example.com (see RFC 2606) because we don't want SES
+ * to send out emails for our acceptance tests, so we know what to check for.
+ *
  * @return Reset request
  */
 export function mockResetRequest() {
   return {
-    username: chance.email()
+    username: chance.email({ domain: "example.com" })
   }
 }

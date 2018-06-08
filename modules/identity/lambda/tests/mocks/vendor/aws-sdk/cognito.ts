@@ -32,7 +32,7 @@ import { chance } from "_/helpers"
 /**
  * Mock CognitoIdentityServiceProvider.listUsers
  *
- * @param promise - Promise returned by Cognito
+ * @param spy - Spy/fake to mock Cognito
  *
  * @return Jasmine spy
  */

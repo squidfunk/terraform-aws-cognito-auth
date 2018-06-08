@@ -20,55 +20,50 @@
  * IN THE SOFTWARE.
  */
 
-import { Callback } from "aws-lambda"
-import { mock, restore } from "aws-sdk-mock"
+import * as mustache from "mustache"
+
+import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SNS.publish
+ * Mock Mustache.render
  *
- * @param spy - Spy/fake to mock SNS
- *
- * @return Jasmine spy
- */
-function mockSNSPublish(spy: jasmine.Spy) {
-  mock("SNS", "publish", (data: any, cb: Callback) => {
-    cb(undefined, spy(data))
-  })
-  return spy
-}
-
-/**
- * Mock SNS.publish returning with success
+ * @param cb - Fake callback
  *
  * @return Jasmine spy
  */
-export function mockSNSPublishWithSuccess() {
-  return mockSNSPublish(
-    jasmine.createSpy("publish"))
+function mockMustacheRender(
+  cb: () => void
+) {
+  return spyOn(mustache, "render")
+    .and.callFake(cb)
 }
 
 /**
- * Mock SNS.publish throwing an error
+ * Mock Mustache.render returning with result
+ *
+ * @param result - Rendered string
+ *
+ * @return Jasmine spy
+ */
+export function mockMustacheRenderWithResult(
+  result: string = chance.string()
+) {
+  return mockMustacheRender(() => result)
+}
+
+/**
+ * Mock Mustache.render throwing an error
  *
  * @param err - Error to be thrown
  *
  * @return Jasmine spy
  */
-export function mockSNSPublishWithError(
-  err: Error = new Error("mockSNSPublishWithError")
-): jasmine.Spy {
-  return mockSNSPublish(
-    jasmine.createSpy("publish")
-      .and.callFake(() => { throw err }))
-}
-
-/**
- * Restore SNS.publish
- */
-export function restoreSNSPublish() {
-  restore("SNS", "publish")
+export function mockMustacheRenderWithError(
+  err: Error = new Error("mockMustacheRenderWithError")
+) {
+  return mockMustacheRender(() => { throw err })
 }
