@@ -45,7 +45,7 @@ function mockManagementClientVerifyUser<T>(
  *
  * @return Jasmine spy
  */
-export function mockManagementClientVerifyUserWithSuccess() {
+export function mockManagementClientVerifyUserWithSuccess(): jasmine.Spy {
   return mockManagementClientVerifyUser(() => Promise.resolve())
 }
 
@@ -83,7 +83,7 @@ function mockManagementClientChangePassword<T>(
  *
  * @return Jasmine spy
  */
-export function mockManagementClientChangePasswordWithSuccess() {
+export function mockManagementClientChangePasswordWithSuccess(): jasmine.Spy {
   return mockManagementClientChangePassword(() => Promise.resolve())
 }
 

@@ -22,7 +22,7 @@
 
 <mjml>
   <mj-head>
-    <mj-title>Activate your {{name}} account</mj-title>
+    <mj-title>Unlock your {{name}} account</mj-title>
 
     <!-- Preview text within recipient's inbox -->
     <mj-preview>

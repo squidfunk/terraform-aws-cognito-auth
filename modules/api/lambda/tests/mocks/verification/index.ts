@@ -89,7 +89,7 @@ export function mockVerificationIssue<T>(
  */
 export function mockVerificationIssueWithResult(
   code: VerificationCode = mockVerificationCode()
-) {
+): jasmine.Spy {
   return mockVerificationIssue(() => Promise.resolve(code))
 }
 
@@ -131,7 +131,7 @@ export function mockVerificationClaim<T>(
  */
 export function mockVerificationClaimWithResult(
   code: VerificationCode = mockVerificationCode()
-) {
+): jasmine.Spy {
   return mockVerificationClaim(() => Promise.resolve(code))
 }
 

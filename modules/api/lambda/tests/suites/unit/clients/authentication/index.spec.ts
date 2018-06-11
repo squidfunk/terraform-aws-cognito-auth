@@ -61,14 +61,14 @@ describe("clients/authentication", () => {
     /* #register */
     describe("#register", () => {
 
+      /* Registration request and verification code */
+      const { email, password } = mockRegisterRequest()
+      const code = mockVerificationCode()
+
       /* Restore AWS mocks */
       afterEach(() => {
         restoreCognitoSignUp()
       })
-
-      /* Registration request and verification code */
-      const { email, password } = mockRegisterRequest()
-      const code = mockVerificationCode()
 
       /* Test: should resolve with verification code */
       it("should resolve with verification code", async () => {

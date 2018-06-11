@@ -116,8 +116,8 @@ export abstract class Message<T> {
         const data = await promisify(readFile)(path.resolve(base, file))
         return {
           id: file,
-          data: data.toString("base64").match(/.{1,76}/g)!.join("\r\n"),
-          type: getType(file)!
+          type: getType(file)!,
+          data: data.toString("base64").match(/.{1,76}/g)!.join("\r\n")
         }
       }))
   }

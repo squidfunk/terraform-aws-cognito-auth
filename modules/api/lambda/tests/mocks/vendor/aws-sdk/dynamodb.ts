@@ -38,7 +38,9 @@ import { mockVerificationCode } from "_/mocks/verification"
  *
  * @return Jasmine spy
  */
-function mockDynamoDBDocumentClientPut(spy: jasmine.Spy) {
+function mockDynamoDBDocumentClientPut(
+  spy: jasmine.Spy
+): jasmine.Spy {
   mock("DynamoDB.DocumentClient", "put", (data: any, cb: Callback) => {
     cb(undefined, spy(data))
   })
@@ -50,7 +52,7 @@ function mockDynamoDBDocumentClientPut(spy: jasmine.Spy) {
  *
  * @return Jasmine spy
  */
-export function mockDynamoDBDocumentClientPutWithSuccess() {
+export function mockDynamoDBDocumentClientPutWithSuccess(): jasmine.Spy {
   return mockDynamoDBDocumentClientPut(
     jasmine.createSpy("put"))
 }
@@ -86,7 +88,9 @@ export function restoreDynamoDBDocumentClientPut() {
  *
  * @return Jasmine spy
  */
-function mockDynamoDBDocumentClientDelete(spy: jasmine.Spy) {
+function mockDynamoDBDocumentClientDelete(
+  spy: jasmine.Spy
+): jasmine.Spy {
   mock("DynamoDB.DocumentClient", "delete", (data: any, cb: Callback) => {
     cb(undefined, spy(data))
   })
@@ -102,7 +106,7 @@ function mockDynamoDBDocumentClientDelete(spy: jasmine.Spy) {
  */
 export function mockDynamoDBDocumentClientDeleteWithResult(
   code: VerificationCode = mockVerificationCode()
-) {
+): jasmine.Spy {
   return mockDynamoDBDocumentClientDelete(
     jasmine.createSpy("delete")
       .and.returnValue({
@@ -115,7 +119,7 @@ export function mockDynamoDBDocumentClientDeleteWithResult(
  *
  * @return Jasmine spy
  */
-export function mockDynamoDBDocumentClientDeleteWithoutResult() {
+export function mockDynamoDBDocumentClientDeleteWithoutResult(): jasmine.Spy {
   return mockDynamoDBDocumentClientDelete(
     jasmine.createSpy("delete")
       .and.returnValue({}))

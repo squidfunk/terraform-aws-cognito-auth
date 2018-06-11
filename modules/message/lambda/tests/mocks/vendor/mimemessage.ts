@@ -20,61 +20,52 @@
  * IN THE SOFTWARE.
  */
 
-import { Callback } from "aws-lambda"
-import { mock, restore } from "aws-sdk-mock"
+import * as _ from "mimemessage"
 
-import { chance } from "_/helpers"
+/* ----------------------------------------------------------------------------
+ * Data
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Mock a mime message entity
+ *
+ * @return Mime message entity
+ */
+export function mockMimeMessageEntity(): jasmine.SpyObj<_.Entity> {
+  return jasmine.createSpyObj("Entity", [
+    "header",
+    "toString"
+  ])
+}
 
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SES.sendRawEmail
+ * Mock MimeMessage.factory
  *
- * @param spy - Spy/fake to mock SNS
- *
- * @return Jasmine spy
- */
-function mockSESSendRawEmail(spy: jasmine.Spy): jasmine.Spy {
-  mock("SES", "sendRawEmail",
-    (data: any, cb: Callback) => {
-      cb(undefined, spy(data))
-    })
-  return spy
-}
-
-/**
- * Mock SES.sendRawEmail returning with success
+ * @param entity - Mime entity
  *
  * @return Jasmine spy
  */
-export function mockSESSendRawEmailWithSuccess(): jasmine.Spy {
-  return mockSESSendRawEmail(
-    jasmine.createSpy("sendRawEmail")
-      .and.returnValue({
-        MessageId: chance.guid()
-      }))
+export function mockMimeMessageFactoryWithResult(
+  entity: _.Entity = mockMimeMessageEntity()
+): jasmine.Spy {
+  return spyOn(_, "factory")
+    .and.returnValue(entity)
 }
 
 /**
- * Mock SES.sendRawEmail throwing an error
+ * Mock MimeMessage.factory throwing an error
  *
  * @param err - Error to be thrown
  *
  * @return Jasmine spy
  */
-export function mockSESSendRawEmailWithError(
-  err: Error = new Error("mockSESSendRawEmailWithError")
+export function mockMimeMessageFactoryWithError(
+  err: Error = new Error("mockMimeMessageFactoryWithError")
 ): jasmine.Spy {
-  return mockSESSendRawEmail(
-    jasmine.createSpy("sendRawEmail")
-      .and.callFake(() => { throw err }))
-}
-
-/**
- * Restore SES.sendRawEmail
- */
-export function restoreSESSendRawEmail() {
-  restore("SES", "sendRawEmail")
+  return spyOn(_, "factory")
+    .and.callFake(() => { throw err })
 }

@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import * as mime from "mime"
+import * as _ from "mime"
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -35,8 +35,8 @@ import * as mime from "mime"
  */
 function mockMimeGetType(
   cb: () => void
-) {
-  return spyOn(mime, "getType")
+): jasmine.Spy {
+  return spyOn(_, "getType")
     .and.callFake(cb)
 }
 
@@ -49,7 +49,7 @@ function mockMimeGetType(
  */
 export function mockMimeGetTypeWithResult(
   type: string = "image/png"
-) {
+): jasmine.Spy {
   return mockMimeGetType(() => type)
 }
 
@@ -62,6 +62,6 @@ export function mockMimeGetTypeWithResult(
  */
 export function mockMimeGetTypeWithError(
   err: Error = new Error("mockMimeGetTypeWithError")
-) {
+): jasmine.Spy {
   return mockMimeGetType(() => { throw err })
 }

@@ -34,7 +34,7 @@ import { mock, restore } from "aws-sdk-mock"
  *
  * @return Jasmine spy
  */
-function mockSNSPublish(spy: jasmine.Spy) {
+function mockSNSPublish(spy: jasmine.Spy): jasmine.Spy {
   mock("SNS", "publish", (data: any, cb: Callback) => {
     cb(undefined, spy(data))
   })
@@ -46,7 +46,7 @@ function mockSNSPublish(spy: jasmine.Spy) {
  *
  * @return Jasmine spy
  */
-export function mockSNSPublishWithSuccess() {
+export function mockSNSPublishWithSuccess(): jasmine.Spy {
   return mockSNSPublish(
     jasmine.createSpy("publish"))
 }

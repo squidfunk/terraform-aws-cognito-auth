@@ -20,9 +20,9 @@
  * IN THE SOFTWARE.
  */
 
-import { chance } from "_/helpers"
-
 import { Message } from "~/messages"
+
+import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -51,7 +51,7 @@ function mockMessageCompose<T>(
  */
 export function mockMessageComposeWithResult(
   result: string = chance.string()
-) {
+): jasmine.Spy {
   return mockMessageCompose(() => Promise.resolve(result))
 }
 

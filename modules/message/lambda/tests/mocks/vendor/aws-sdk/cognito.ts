@@ -36,7 +36,9 @@ import { chance } from "_/helpers"
  *
  * @return Jasmine spy
  */
-function mockCognitoAdminGetUser(spy: jasmine.Spy) {
+function mockCognitoAdminGetUser(
+  spy: jasmine.Spy
+): jasmine.Spy {
   mock("CognitoIdentityServiceProvider", "adminGetUser",
     (data: any, cb: Callback) => {
       cb(undefined, spy(data))
@@ -55,7 +57,7 @@ function mockCognitoAdminGetUser(spy: jasmine.Spy) {
 export function mockCognitoAdminGetUserWithResult(
   username: string = chance.guid(),
   email: string = chance.email()
-) {
+): jasmine.Spy {
   return mockCognitoAdminGetUser(
     jasmine.createSpy("adminGetUser")
     .and.returnValue({

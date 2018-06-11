@@ -72,7 +72,7 @@ function mockAuthenticationClientAuthenticate<T>(
  */
 export function mockAuthenticationClientAuthenticateWithResult(
   session: Session = mockSession()
-) {
+): jasmine.Spy {
   return mockAuthenticationClientAuthenticate(() => Promise.resolve(session))
 }
 
@@ -110,7 +110,7 @@ function mockAuthenticationClientRegister<T>(
  *
  * @return Jasmine spy
  */
-export function mockAuthenticationClientRegisterWithSuccess() {
+export function mockAuthenticationClientRegisterWithSuccess(): jasmine.Spy {
   return mockAuthenticationClientRegister(() => Promise.resolve())
 }
 

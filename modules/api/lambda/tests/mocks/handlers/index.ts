@@ -45,7 +45,9 @@ function mockHandlerCallback(
  *
  * @return Jasmine spy
  */
-export function mockHandlerCallbackWithSuccess(result?: any): jasmine.Spy {
+export function mockHandlerCallbackWithSuccess(
+  result?: any
+): jasmine.Spy {
   return mockHandlerCallback(() => Promise.resolve(result))
 }
 

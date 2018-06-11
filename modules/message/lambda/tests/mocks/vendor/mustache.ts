@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import * as mustache from "mustache"
+import * as _ from "mustache"
 
 import { chance } from "_/helpers"
 
@@ -37,8 +37,8 @@ import { chance } from "_/helpers"
  */
 function mockMustacheRender(
   cb: () => void
-) {
-  return spyOn(mustache, "render")
+): jasmine.Spy {
+  return spyOn(_, "render")
     .and.callFake(cb)
 }
 
@@ -51,7 +51,7 @@ function mockMustacheRender(
  */
 export function mockMustacheRenderWithResult(
   result: string = chance.string()
-) {
+): jasmine.Spy {
   return mockMustacheRender(() => result)
 }
 
@@ -64,6 +64,6 @@ export function mockMustacheRenderWithResult(
  */
 export function mockMustacheRenderWithError(
   err: Error = new Error("mockMustacheRenderWithError")
-) {
+): jasmine.Spy {
   return mockMustacheRender(() => { throw err })
 }

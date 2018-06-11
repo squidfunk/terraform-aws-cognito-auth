@@ -20,61 +20,39 @@
  * IN THE SOFTWARE.
  */
 
-import { Callback } from "aws-lambda"
-import { mock, restore } from "aws-sdk-mock"
+import {
+  RegisterMessage,
+  RegisterMessageData
+} from "~/messages/register"
 
 import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
- * Functions
+ * Tests
  * ------------------------------------------------------------------------- */
 
-/**
- * Mock SES.sendRawEmail
- *
- * @param spy - Spy/fake to mock SNS
- *
- * @return Jasmine spy
- */
-function mockSESSendRawEmail(spy: jasmine.Spy): jasmine.Spy {
-  mock("SES", "sendRawEmail",
-    (data: any, cb: Callback) => {
-      cb(undefined, spy(data))
+/* Registration verification message */
+describe("messages/register", () => {
+
+  /* RegisterMessage */
+  describe("RegisterMessage", () => {
+
+    /* Message data */
+    const data: RegisterMessageData = {
+      name: chance.word(),
+      domain: chance.string(),
+      code: chance.string()
+    }
+
+    /* #subject */
+    describe("#subject", () => {
+
+      /* Test: should return message subject */
+      it("should return message subject", async () => {
+        const message = new RegisterMessage(data)
+        expect(message.subject)
+          .toEqual(`Activate your ${data.name} account`)
+      })
     })
-  return spy
-}
-
-/**
- * Mock SES.sendRawEmail returning with success
- *
- * @return Jasmine spy
- */
-export function mockSESSendRawEmailWithSuccess(): jasmine.Spy {
-  return mockSESSendRawEmail(
-    jasmine.createSpy("sendRawEmail")
-      .and.returnValue({
-        MessageId: chance.guid()
-      }))
-}
-
-/**
- * Mock SES.sendRawEmail throwing an error
- *
- * @param err - Error to be thrown
- *
- * @return Jasmine spy
- */
-export function mockSESSendRawEmailWithError(
-  err: Error = new Error("mockSESSendRawEmailWithError")
-): jasmine.Spy {
-  return mockSESSendRawEmail(
-    jasmine.createSpy("sendRawEmail")
-      .and.callFake(() => { throw err }))
-}
-
-/**
- * Restore SES.sendRawEmail
- */
-export function restoreSESSendRawEmail() {
-  restore("SES", "sendRawEmail")
-}
+  })
+})

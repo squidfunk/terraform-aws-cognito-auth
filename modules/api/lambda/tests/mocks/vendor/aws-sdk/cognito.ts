@@ -36,7 +36,9 @@ import { chance } from "_/helpers"
  *
  * @return Jasmine spy
  */
-function mockCognitoAdminConfirmSignUp(spy: jasmine.Spy) {
+function mockCognitoAdminConfirmSignUp(
+  spy: jasmine.Spy
+): jasmine.Spy {
   mock("CognitoIdentityServiceProvider", "adminConfirmSignUp",
     (data: any, cb: Callback) => {
       cb(undefined, spy(data))
@@ -49,7 +51,7 @@ function mockCognitoAdminConfirmSignUp(spy: jasmine.Spy) {
  *
  * @return Jasmine spy
  */
-export function mockCognitoAdminConfirmSignUpWithSuccess() {
+export function mockCognitoAdminConfirmSignUpWithSuccess(): jasmine.Spy {
   return mockCognitoAdminConfirmSignUp(
     jasmine.createSpy("adminConfirmSignUp"))
 }
@@ -85,7 +87,9 @@ export function restoreCognitoAdminConfirmSignUp() {
  *
  * @return Jasmine spy
  */
-function mockCognitoAdminDeleteUser(spy: jasmine.Spy) {
+function mockCognitoAdminDeleteUser(
+  spy: jasmine.Spy
+): jasmine.Spy {
   mock("CognitoIdentityServiceProvider", "adminDeleteUser",
     (data: any, cb: Callback) => {
       cb(undefined, spy(data))
@@ -98,7 +102,7 @@ function mockCognitoAdminDeleteUser(spy: jasmine.Spy) {
  *
  * @return Jasmine spy
  */
-export function mockCognitoAdminDeleteUserWithSuccess() {
+export function mockCognitoAdminDeleteUserWithSuccess(): jasmine.Spy {
   return mockCognitoAdminDeleteUser(
     jasmine.createSpy("adminDeleteUser"))
 }
@@ -134,7 +138,9 @@ export function restoreCognitoAdminDeleteUser() {
  *
  * @return Jasmine spy
  */
-function mockCognitoAdminGetUser(spy: jasmine.Spy) {
+function mockCognitoAdminGetUser(
+  spy: jasmine.Spy
+): jasmine.Spy {
   mock("CognitoIdentityServiceProvider", "adminGetUser",
     (data: any, cb: Callback) => {
       cb(undefined, spy(data))
@@ -151,7 +157,7 @@ function mockCognitoAdminGetUser(spy: jasmine.Spy) {
  */
 export function mockCognitoAdminGetUserWithResult(
   username: string = chance.guid()
-) {
+): jasmine.Spy {
   return mockCognitoAdminGetUser(
     jasmine.createSpy("adminGetUser")
     .and.returnValue({
@@ -208,7 +214,9 @@ export function restoreCognitoAdminGetUser() {
  *
  * @return Jasmine spy
  */
-function mockCognitoAdminUpdateUserAttributes(spy: jasmine.Spy) {
+function mockCognitoAdminUpdateUserAttributes(
+  spy: jasmine.Spy
+): jasmine.Spy {
   mock("CognitoIdentityServiceProvider", "adminUpdateUserAttributes",
     (data: any, cb: Callback) => {
       cb(undefined, spy(data))
@@ -225,7 +233,7 @@ function mockCognitoAdminUpdateUserAttributes(spy: jasmine.Spy) {
  */
 export function mockCognitoAdminUpdateUserAttributesWithSuccess(
   username: string = chance.guid()
-) {
+): jasmine.Spy {
   return mockCognitoAdminUpdateUserAttributes(
     jasmine.createSpy("adminUpdateUserAttributes")
     .and.returnValue({
@@ -264,7 +272,9 @@ export function restoreCognitoAdminUpdateUserAttributes() {
  *
  * @return Jasmine spy
  */
-function mockCognitoInitiateAuth(spy: jasmine.Spy) {
+function mockCognitoInitiateAuth(
+  spy: jasmine.Spy
+): jasmine.Spy {
   mock("CognitoIdentityServiceProvider", "initiateAuth",
     (data: any, cb: Callback) => {
       cb(undefined, spy(data))
@@ -277,7 +287,7 @@ function mockCognitoInitiateAuth(spy: jasmine.Spy) {
  *
  * @return Jasmine spy
  */
-export function mockCognitoInitiateAuthWithCredentials() {
+export function mockCognitoInitiateAuthWithCredentials(): jasmine.Spy {
   return mockCognitoInitiateAuth(
     jasmine.createSpy("initiateAuth")
       .and.returnValue({
@@ -294,7 +304,7 @@ export function mockCognitoInitiateAuthWithCredentials() {
  *
  * @return Jasmine spy
  */
-export function mockCognitoInitiateAuthWithToken() {
+export function mockCognitoInitiateAuthWithToken(): jasmine.Spy {
   return mockCognitoInitiateAuth(
     jasmine.createSpy("initiateAuth")
       .and.returnValue({
@@ -314,7 +324,7 @@ export function mockCognitoInitiateAuthWithToken() {
  */
 export function mockCognitoInitiateAuthWithChallenge(
   challenge: string = chance.string()
-) {
+): jasmine.Spy {
   return mockCognitoInitiateAuth(
     jasmine.createSpy("initiateAuth")
       .and.returnValue({
@@ -353,7 +363,9 @@ export function restoreCognitoInitiateAuth() {
  *
  * @return Jasmine spy
  */
-function mockCognitoSignUp(spy: jasmine.Spy) {
+function mockCognitoSignUp(
+  spy: jasmine.Spy
+): jasmine.Spy {
   mock("CognitoIdentityServiceProvider", "signUp",
     (data: any, cb: Callback) => {
       cb(undefined, spy(data))
@@ -366,7 +378,7 @@ function mockCognitoSignUp(spy: jasmine.Spy) {
  *
  * @return Jasmine spy
  */
-export function mockCognitoSignUpWithSuccess() {
+export function mockCognitoSignUpWithSuccess(): jasmine.Spy {
   return mockCognitoSignUp(
     jasmine.createSpy("signUp"))
 }

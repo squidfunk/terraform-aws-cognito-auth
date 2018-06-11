@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import * as fs from "fs"
+import * as _ from "fs"
 
 import { chance } from "_/helpers"
 
@@ -37,8 +37,8 @@ import { chance } from "_/helpers"
  */
 function mockFsReadFile(
   cb: (path: string, encoding: any, cb: (...args: any[]) => void) => void
-) {
-  return spyOn(fs, "readFile")
+): jasmine.Spy {
+  return spyOn(_, "readFile")
     .and.callFake(cb)
 }
 
@@ -51,7 +51,7 @@ function mockFsReadFile(
  */
 export function mockFsReadFileWithResult(
   data: string = chance.string()
-) {
+): jasmine.Spy {
   return mockFsReadFile((_path, encodingOrCb, cb) => {
     (cb || encodingOrCb)(undefined, data)
   })
@@ -66,8 +66,10 @@ export function mockFsReadFileWithResult(
  */
 export function mockFsReadFileWithError(
   err: Error = new Error("mockFsReadFileWithError")
-) {
-  return mockFsReadFile((_path, _encoding, cb) => cb(err))
+): jasmine.Spy {
+  return mockFsReadFile((_path, encodingOrCb, cb) => {
+    (cb || encodingOrCb)(err)
+  })
 }
 
 /* ------------------------------------------------------------------------- */
@@ -81,8 +83,8 @@ export function mockFsReadFileWithError(
  */
 function mockFsReaddir(
   cb: (path: string, cb: (...args: any[]) => void) => void
-) {
-  return spyOn(fs, "readdir")
+): jasmine.Spy {
+  return spyOn(_, "readdir")
     .and.callFake(cb)
 }
 
@@ -95,7 +97,7 @@ function mockFsReaddir(
  */
 export function mockFsReaddirWithResult(
   files: string[] = [chance.string()]
-) {
+): jasmine.Spy {
   return mockFsReaddir((_path, cb) => cb(undefined, files))
 }
 
@@ -108,6 +110,6 @@ export function mockFsReaddirWithResult(
  */
 export function mockFsReaddirWithError(
   err: Error = new Error("mockFsReaddirWithError")
-) {
+): jasmine.Spy {
   return mockFsReaddir((_path, cb) => cb(err))
 }

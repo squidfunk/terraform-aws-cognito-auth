@@ -20,8 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { Callback } from "aws-lambda"
-import { mock, restore } from "aws-sdk-mock"
+import * as _ from "quoted-printable"
 
 import { chance } from "_/helpers"
 
@@ -30,51 +29,37 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SES.sendRawEmail
+ * Mock QuotedPrintable.encode
  *
- * @param spy - Spy/fake to mock SNS
- *
- * @return Jasmine spy
- */
-function mockSESSendRawEmail(spy: jasmine.Spy): jasmine.Spy {
-  mock("SES", "sendRawEmail",
-    (data: any, cb: Callback) => {
-      cb(undefined, spy(data))
-    })
-  return spy
-}
-
-/**
- * Mock SES.sendRawEmail returning with success
+ * @param cb - Fake callback
  *
  * @return Jasmine spy
  */
-export function mockSESSendRawEmailWithSuccess(): jasmine.Spy {
-  return mockSESSendRawEmail(
-    jasmine.createSpy("sendRawEmail")
-      .and.returnValue({
-        MessageId: chance.guid()
-      }))
+function mockQuotedPrintableEncode(
+  cb: () => void
+): jasmine.Spy {
+  return spyOn(_, "encode")
+    .and.callFake(cb)
 }
 
 /**
- * Mock SES.sendRawEmail throwing an error
+ * Mock QuotedPrintable.encode returning with success
+ *
+ * @return Jasmine spy
+ */
+export function mockQuotedPrintableEncodeWithSuccess(): jasmine.Spy {
+  return mockQuotedPrintableEncode(() => chance.string())
+}
+
+/**
+ * Mock QuotedPrintable.encode throwing an error
  *
  * @param err - Error to be thrown
  *
  * @return Jasmine spy
  */
-export function mockSESSendRawEmailWithError(
-  err: Error = new Error("mockSESSendRawEmailWithError")
+export function mockQuotedPrintableEncodeWithError(
+  err: Error = new Error("mockQuotedPrintableEncodeWithError")
 ): jasmine.Spy {
-  return mockSESSendRawEmail(
-    jasmine.createSpy("sendRawEmail")
-      .and.callFake(() => { throw err }))
-}
-
-/**
- * Restore SES.sendRawEmail
- */
-export function restoreSESSendRawEmail() {
-  restore("SES", "sendRawEmail")
+  return mockQuotedPrintableEncode(() => { throw err })
 }

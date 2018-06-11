@@ -55,15 +55,15 @@ describe("verification", () => {
     /* #issue */
     describe("#issue", () => {
 
+      /* Verification subject and context */
+      const subject = chance.guid()
+      const context = mockVerificationContext()
+
       /* Restore AWS mocks */
       afterEach(() => {
         restoreDynamoDBDocumentClientPut()
         restoreSNSPublish()
       })
-
-      /* Verification subject and context */
-      const subject = chance.guid()
-      const context = mockVerificationContext()
 
       /* Test: should resolve with verification code */
       it("should resolve with verification code", async () => {
@@ -147,13 +147,13 @@ describe("verification", () => {
     /* #claim */
     describe("#claim", () => {
 
+      /* Verification code */
+      const code = mockVerificationCode()
+
       /* Restore AWS mocks */
       afterEach(() => {
         restoreDynamoDBDocumentClientDelete()
       })
-
-      /* Verification code */
-      const code = mockVerificationCode()
 
       /* Test: should resolve with verification code */
       it("should resolve with verification code", async () => {
