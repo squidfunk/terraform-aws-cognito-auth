@@ -20,12 +20,15 @@
  * IN THE SOFTWARE.
  */
 
+import * as fs from "fs"
+import * as path from "path"
+
 import {
   ResetMessage,
   ResetMessageData
 } from "~/messages/reset"
 
-import { chance } from "_/helpers"
+import { printMimeMessage } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -37,21 +40,36 @@ describe("messages/reset", () => {
   /* ResetMessage */
   describe("ResetMessage", () => {
 
-    /* Message data */
+    /* Fixture base path */
+    const base = path.resolve(__dirname, "../../../../fixtures/message")
+
+    /* Message data (reproducible for fixtures) */
     const data: ResetMessageData = {
-      name: chance.word(),
-      domain: chance.string(),
-      code: chance.string()
+      name: "Example",
+      domain: "example.com",
+      code: "1234567890ABCDEF"
     }
 
     /* #subject */
     describe("#subject", () => {
 
       /* Test: should return message subject */
-      it("should return message subject", async () => {
+      it("should return message subject", () => {
         const message = new ResetMessage(data)
         expect(message.subject)
           .toEqual(`Unlock your ${data.name} account`)
+      })
+    })
+
+    /* #compose */
+    describe("#compose", () => {
+
+      /* Test: should return raw message */
+      it("should return raw message", async () => {
+        const message = new ResetMessage(data)
+        const raw = (await message.compose()).toString()
+        expect(printMimeMessage(raw))
+          .toEqual(fs.readFileSync(path.resolve(base, "reset.raw"), "utf8"))
       })
     })
   })

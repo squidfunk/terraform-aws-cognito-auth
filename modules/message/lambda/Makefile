@@ -83,8 +83,8 @@ src/verification/index.d.ts: ../../api/lambda/src/verification/index.ts
 # Rebuild email templates on changes
 watch-templates: node_modules | dist-post
 	@$(shell npm bin)/browser-sync start \
-		--server src/message/templates \
-		--files "src/message/templates/**/*.html" &
+		--server src/messages \
+		--files "src/messages/**/*.html" &
 	@$(shell npm bin)/watch \
-		--pattern "src/message/templates/**/*.mjml" \
+		--pattern "src/messages/**/*.mjml" \
 		--command 'make $$(echo $$FILENAME | sed "s/mjml$$/html/")'

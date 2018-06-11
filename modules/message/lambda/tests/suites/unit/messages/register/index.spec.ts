@@ -20,12 +20,15 @@
  * IN THE SOFTWARE.
  */
 
+import * as fs from "fs"
+import * as path from "path"
+
 import {
   RegisterMessage,
   RegisterMessageData
 } from "~/messages/register"
 
-import { chance } from "_/helpers"
+import { printMimeMessage } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -34,24 +37,44 @@ import { chance } from "_/helpers"
 /* Registration verification message */
 describe("messages/register", () => {
 
+  /* Add jasmine-diff if available */
+  beforeEach(() => {
+    jasmine.addMatchers(require("jasmine-diff")(jasmine, {}))
+  })
+
   /* RegisterMessage */
   describe("RegisterMessage", () => {
 
-    /* Message data */
+    /* Fixture base path */
+    const base = path.resolve(__dirname, "../../../../fixtures/message")
+
+    /* Message data (reproducible for fixtures) */
     const data: RegisterMessageData = {
-      name: chance.word(),
-      domain: chance.string(),
-      code: chance.string()
+      name: "Example",
+      domain: "example.com",
+      code: "1234567890ABCDEF"
     }
 
     /* #subject */
     describe("#subject", () => {
 
       /* Test: should return message subject */
-      it("should return message subject", async () => {
+      it("should return message subject", () => {
         const message = new RegisterMessage(data)
         expect(message.subject)
           .toEqual(`Activate your ${data.name} account`)
+      })
+    })
+
+    /* #compose */
+    describe("#compose", () => {
+
+      /* Test: should return raw message */
+      it("should return raw message", async () => {
+        const message = new RegisterMessage(data)
+        const raw = (await message.compose()).toString()
+        expect(printMimeMessage(raw))
+          .toEqual(fs.readFileSync(path.resolve(base, "register.raw"), "utf8"))
       })
     })
   })

@@ -30,3 +30,23 @@ import { Chance } from "chance"
  * Chance.js instance to generate random values
  */
 export const chance = new Chance()
+
+/* ----------------------------------------------------------------------------
+ * Functions
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Print comparable mime message (normalize boundaries)
+ *
+ * @param message - Mime message
+ *
+ * @return Mime message with normalized boundaries
+ */
+export function printMimeMessage(message: string): string {
+  message.match(/boundary=(\w+)/g)!
+    .map((boundary, index) => {
+      const id = boundary.split("=").pop()
+      message = message.replace(new RegExp(id!, "g"), `\${boundary-${index}}`)
+    })
+  return `${message.replace(/\r/g, "")}\n`
+}

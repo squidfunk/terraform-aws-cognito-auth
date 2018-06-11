@@ -1,0 +1,128 @@
+Content-Type: multipart/mixed;boundary=${boundary-0}
+Subject: Activate your Example account
+
+--${boundary-0}
+Content-Type: multipart/alternative;boundary=${boundary-1}
+
+--${boundary-1}
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Thanks for joining Example! Please confirm your email address by clicking=
+=0Athe following link:=0A=0Ahttps://example.com/register/1234567890ABCDEF=
+=0A=0AIf you did not sign up for this account you can ignore this email and=
+ the=0Aaccount will be deleted. The link is valid for 24 hours.=0A
+--${boundary-1}
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head><title>Activate your Example account</title><!--[if !mso]><!-- --=
+><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!--<![endif]--=
+><meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8"><=
+meta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=3D1"><=
+style type=3D"text/css">#outlook a {=0A      padding: 0;=0A    }=0A=0A    .=
+ReadMsgBody {=0A      width: 100%;=0A    }=0A=0A    .ExternalClass {=0A    =
+  width: 100%;=0A    }=0A=0A    .ExternalClass * {=0A      line-height: 100=
+%;=0A    }=0A=0A    body {=0A      margin: 0;=0A      padding: 0;=0A      -=
+webkit-text-size-adjust: 100%;=0A      -ms-text-size-adjust: 100%;=0A    }=
+=0A=0A    table,=0A    td {=0A      border-collapse: collapse;=0A      mso-=
+table-lspace: 0pt;=0A      mso-table-rspace: 0pt;=0A    }=0A=0A    img {=0A=
+      border: 0;=0A      height: auto;=0A      line-height: 100%;=0A      o=
+utline: none;=0A      text-decoration: none;=0A      -ms-interpolation-mode=
+: bicubic;=0A    }=0A=0A    p {=0A      display: block;=0A      margin: 13p=
+x 0;=0A    }</style><!--[if !mso]><!--><style type=3D"text/css">@media only=
+ screen and (max-width:480px) {=0A      @-ms-viewport {=0A        width: 32=
+0px;=0A      }=0A      @viewport {=0A        width: 320px;=0A      }=0A    =
+}</style><!--<![endif]--><!--[if mso]><xml><o:officedocumentsettings><o:all=
+owpng><o:pixelsperinch>96</o:pixelsperinch></o:officedocumentsettings></xml=
+><![endif]--><!--[if lte mso 11]><style type=3D"text/css">.outlook-group-fi=
+x { width:100% !important; }</style><![endif]--><style type=3D"text/css">@m=
+edia only screen and (min-width:480px) {=0A      .mj-column-per-100 {=0A   =
+     width: 100% !important;=0A        max-width: 100%;=0A      }=0A    }</=
+style><style type=3D"text/css"></style><style type=3D"text/css">body {=0A  =
+    padding-top: 20px;=0A    }</style></head><body><div style=3D"display:no=
+ne;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px=
+;opacity:0;overflow:hidden;">Please confirm your email address to start usi=
+ng your Example account</div><div><!--[if mso | IE]><table align=3D"center"=
+ border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"width:600px;" wi=
+dth=3D"600"><tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-=
+rule:exactly;"><![endif]--><div style=3D"Margin:0px auto;border-radius:2px;=
+max-width:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" role=3D"presentation" style=3D"width:100%;border-radius:2px=
+;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20px 10%;tex=
+t-align:center;vertical-align:top;"><!--[if mso | IE]><table role=3D"presen=
+tation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td align=3D"c=
+enter" style=3D"vertical-align:top;width:580px;"><![endif]--><div class=3D"=
+mj-column-per-100 outlook-group-fix" style=3D"font-size:13px;text-align:lef=
+t;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table=
+ border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" sty=
+le=3D"vertical-align:top;" width=3D"100%"><!-- Header image/icon --><tr><td=
+ align=3D"center" style=3D"font-size:0px;padding:10px 25px;word-break:break=
+-word;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"border-collapse:collapse;border-spaci=
+ng:0px;"><tbody><tr><td style=3D"width:40px;"><img height=3D"auto" src=3D"c=
+id:user-check.png" style=3D"border:0;display:block;outline:none;text-decora=
+tion:none;height:auto;width:100%;" width=3D"40"></td></tr></tbody></table><=
+/td></tr><!-- Headline --><tr><td align=3D"center" style=3D"font-size:0px;p=
+adding:10px 25px;word-break:break-word;"><div style=3D"font-family:Helvetic=
+a Neue;font-size:20px;line-height:1.75;text-align:center;color:#455A64;">Ac=
+tivate your account</div></td></tr><!-- Divider --><tr><td align=3D"center"=
+ style=3D"font-size:0px;padding:15px 0;word-break:break-word;"><p style=3D"=
+border-top:solid 1px #ECEFF1;font-size:1;margin:0px auto;width:100%;"></p><=
+!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cel=
+lspacing=3D"0" style=3D"border-top:solid 1px #ECEFF1;font-size:1;margin:0px=
+ auto;width:580px;" role=3D"presentation" width=3D"580px"><tr><td style=3D"=
+height:0;line-height:0;">&nbsp;</td></tr></table><![endif]--></td></tr><!--=
+ Teaser --><tr><td align=3D"center" style=3D"font-size:0px;padding:10px 10%=
+;word-break:break-word;"><div style=3D"font-family:Helvetica Neue;font-size=
+:13px;line-height:1.75;text-align:center;color:#455A64;">Thanks for joining=
+ Example! Please confirm your email address by clicking the following link:=
+</div></td></tr><!-- Verification button --><tr><td align=3D"center" vertic=
+al-align=3D"middle" style=3D"font-size:0px;padding:15px 0;word-break:break-=
+word;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"border-collapse:separate;line-height:=
+100%;"><tr><td align=3D"center" bgcolor=3D"#4CAF50" role=3D"presentation" s=
+tyle=3D"border:none;border-bottom:1px solid #43A047;border-radius:2px;curso=
+r:auto;padding:7px 15px;" valign=3D"middle"><a href=3D"https://example.com/=
+register/1234567890ABCDEF" style=3D"background:#4CAF50;color:#FFFFFF;font-f=
+amily:Helvetica Neue;font-size:16px;font-weight:normal;line-height:1.75;Mar=
+gin:0;text-decoration:none;text-transform:none;" target=3D"_blank">Confirm =
+my email address</a></td></tr></table></td></tr><!-- Divider --><tr><td ali=
+gn=3D"center" style=3D"font-size:0px;padding:15px 0;word-break:break-word;"=
+><p style=3D"border-top:solid 1px #ECEFF1;font-size:1;margin:0px auto;width=
+:40px;"></p><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" style=3D"border-top:solid 1px #ECEFF1;font-size=
+:1;margin:0px auto;width:40px;" role=3D"presentation" width=3D"40px"><tr><t=
+d style=3D"height:0;line-height:0;">&nbsp;</td></tr></table><![endif]--></t=
+d></tr><!-- Abuse notice --><tr><td align=3D"center" style=3D"font-size:0px=
+;padding:10px 10%;word-break:break-word;"><div style=3D"font-family:Helveti=
+ca Neue;font-size:13px;line-height:1.75;text-align:center;color:#B0BEC5;">I=
+f you did not sign up for this account you can ignore this email and the ac=
+count will be deleted. The link is valid for 24 hours.</div></td></tr></tab=
+le></div><!--[if mso | IE]><![endif]--></td></tr></tbody></table></div><!--=
+[if mso | IE]><![endif]--></div></body></html>
+--${boundary-1}--
+--${boundary-0}
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+Content-ID: <user-check.png>
+
+iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAh1BMVEUAAABQr1BLrlFLr1BNr1BN
+r1BMr1CAgIBMsE9Mr1BNr1BMr1BMr1BMr1BMr1BKqlVMr1BOsU5Kr1BMr1BMrlFNr1BMr1BMr1BM
+r1BLr1BLr1BMr1BJqlVVqlVNr1BLrVNMr1BNrlFNrlFOsU5Nr1BMr1BMr1BMsE9PsE9Mr1BNrVJM
+r1BNrlF9S2zYAAAALXRSTlMAEF+m0vD+Alez+v9Azs0Yrxcw4i9Q9fT9um02FQOjIvFMPzFWsvle
+KvY44U+ZSW9SAAACRUlEQVR4Ae2YBa8jQQyDy+02ZWaGhfv/f+9wolJqza0fv/3EjcaudjDOZWRk
+YPKFYqlcqZRLxUL+5dWrtaAuitSDWvVl9RtNuaPVeEH5dkcMOt2X0u/1xaQ/eBn94UieMB6+iH5F
+nlJ5AYfeWADjAT2/fVEm09l8sVwu5rPpRJQ+O9MdUVbry6/rlSgdcv2rzmZ7W9hutLKj9m9T9ff3
+pb06tJg9XRPH9rG21dqBMAj0+1tFnYcjcX7W3fpZW9W1W0un9GdrQf4xtctTVz6nNig6hZldnrly
+MbVBySnM7fLclUupDcpOYWGXF65cTm2gx9zSLi/1yHt/A/4Tvf8k88v0vTdaGERREL7eURFv5Deb
+kD/skL5IwB/XUF+i+0q1xV84qq8G9JUJ9CWgL32sf5nkC138bJGk+x/6cc5g4P/wuqx3rM88HcON
+Svnoq8P46f//YW8cFcP6FwZ9MUkeH6bRRc5HX+l6NyDRRRDo+7VQO/shdZEE+gbVw/F0UT8dD1Wt
+GJOsIH2D/Fnb2HMeLHugT4AcsD7vgPV5B6zPO2B93gHr8w5Yn3fA+hzhMYqOoV9CJABNj+iECKDp
+EZ8QIVoNIiHyo9PlEyJMf8AnRJjxkE+IMJUhnxBhxoNUCVEOgNMj/4QIgx6SOCHC2E9hIiFCgMc8
+aDkAoB1hEiIFNlRMQqQQLSFsXBWmqYWtt8K05TA8UJhgAcYfChONwABHYcIdcWAtPPazG2QGmUGk
+uQ6EGHvEhzo/NtTwDoPH8u96ZmxGRsYvMrZz8FCvV68AAAAASUVORK5CYII=
+--${boundary-0}--
