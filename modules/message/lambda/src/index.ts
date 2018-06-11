@@ -106,7 +106,7 @@ export async function handler(event: SNSEvent): Promise<void> {
         await new SES({ apiVersion: "2010-12-01" })
           .sendRawEmail({
             Source: process.env.SES_SENDER_ADDRESS!,
-            Destinations: [email!],
+            Destinations: [email],
             RawMessage: {
               Data: message.toString()
             }
