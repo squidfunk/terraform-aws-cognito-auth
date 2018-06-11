@@ -96,7 +96,8 @@ lint: node_modules
 	$(shell npm bin)/tslint -p tsconfig.json "{src,tests}/**/*.ts"
 
 # Execute unit tests
-test: node_modules | dist-pre .env
+test: node_modules | dist-pre
+	@[ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
 	@NODE_ENV=test $(shell npm bin)/nyc \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \
 			--project tests/tsconfig.json \
