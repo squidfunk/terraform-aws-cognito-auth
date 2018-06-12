@@ -18,7 +18,8 @@
           "description": "Password",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "AuthenticateWithToken": {
       "type": "object",
@@ -30,7 +31,8 @@
           "description": "Refresh token",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     }
   },
   "anyOf": [

@@ -38,24 +38,24 @@ dist-post: $(subst src, dist, $(shell find src | grep -E "(html|txt|png)"))
 
 # Copied email HTML template
 dist/%.html: src/%.html
-	@mkdir -p dist/$(dir $*)
+	@ mkdir -p dist/$(dir $*)
 	cp -r $< $@
 
 # Copied email text template
 dist/%.txt: src/%.txt
-	@mkdir -p dist/$(dir $*)
+	@ mkdir -p dist/$(dir $*)
 	cp -r $< $@
 
 # Copied image used in email template
 dist/%.png: src/%.png
-	@mkdir -p dist/$(dir $*)
+	@ mkdir -p dist/$(dir $*)
 	cp -r $< $@
 
 # -----------------------------------------------------------------------------
 
 # Compiled email HTML template
 src/%.html: src/%.mjml
-	@mkdir -p dist/$(dir $*)
+	@ mkdir -p dist/$(dir $*)
 	$(shell npm bin)/mjml \
 		--config.minify true \
 		--config.validationlevel strict \
@@ -63,7 +63,7 @@ src/%.html: src/%.mjml
 
 # Image used in email templates
 src/%.png: src/%.svg
-	@mkdir -p dist/$(dir $*)
+	@ mkdir -p dist/$(dir $*)
 	$(shell npm bin)/svgexport $< $@ 4x
 	$(shell npm bin)/imageoptim $@
 
@@ -82,9 +82,9 @@ src/verification/index.d.ts: ../../api/lambda/src/verification/index.ts
 
 # Rebuild email templates on changes
 watch-templates: node_modules | dist-post
-	@$(shell npm bin)/browser-sync start \
+	@ $(shell npm bin)/browser-sync start \
 		--server src/messages \
 		--files "src/messages/**/*.html" &
-	@$(shell npm bin)/watch \
+	@ $(shell npm bin)/watch \
 		--pattern "src/messages/**/*.mjml" \
 		--command 'make $$(echo $$FILENAME | sed "s/mjml$$/html/")'

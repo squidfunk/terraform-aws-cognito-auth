@@ -38,8 +38,8 @@ cache:
 # Empty environment variable for unit tests
 env:
   global:
-    - COGNITO_IDENTITY_NAME=
     - COGNITO_IDENTITY_DOMAIN=
+    - COGNITO_IDENTITY_NAME=
     - COGNITO_USER_POOL=
     - COGNITO_USER_POOL_CLIENT=
     - DYNAMODB_TABLE=
@@ -48,7 +48,6 @@ env:
 
 # Install dependencies
 install:
-  - pip install --user codecov
   - npm install --prefix modules/api/lambda
   - npm install --prefix modules/identity/lambda
   - npm install --prefix modules/message/lambda
@@ -61,4 +60,5 @@ script:
 
 # Upload coverage report
 after_success:
+  - pip install --user codecov
   - codecov

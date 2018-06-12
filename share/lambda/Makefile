@@ -53,7 +53,7 @@ clean-post_:
 
 # Auto-filled environment variables
 .env: ${ROOT}/terraform.tfstate
-	@(pushd $(shell git rev-parse --show-toplevel) > /dev/null \
+	@ (pushd $(shell git rev-parse --show-toplevel) > /dev/null \
 		&& terraform output \
 			| awk -F" = " '{ print toupper($$1) "=" $$2 }' \
 			> ${PWD}/$@ \
@@ -65,7 +65,7 @@ dist: $(shell find src) tsconfig.json
 
 # Archive for distribution
 dist.zip: $(shell find src) | dist-pre dist dist-post
-	@(rm -f $@ \
+	@ (rm -f $@ \
 		&& cd dist \
 		&& cp ../package*.json . \
 		&& npm install --production \
@@ -97,15 +97,15 @@ lint: node_modules
 
 # Execute unit tests
 test: node_modules | dist-pre
-	@[ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
-	@NODE_ENV=test $(shell npm bin)/nyc \
+	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
+	@ NODE_ENV=test $(shell npm bin)/nyc \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \
 			--project tests/tsconfig.json \
 				tests/index.ts "suites/unit/**/*.spec.ts"
 
 # Execute unit tests in watch mode
 watch: node_modules
-	@NODE_ENV=development $(shell npm bin)/nodemon --quiet \
+	@ NODE_ENV=development $(shell npm bin)/nodemon --quiet \
 		--watch src --watch tests --exec \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \
 			tests/index.ts "suites/unit/**/*.spec.ts"

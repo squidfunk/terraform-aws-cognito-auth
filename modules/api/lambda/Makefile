@@ -40,7 +40,7 @@ dist-post: $(subst src, dist, ${SCHEMAS})
 
 # Copy schema files
 dist/%.json: src/%.json
-	@mkdir -p dist/$(dir $*)
+	@ mkdir -p dist/$(dir $*)
 	cp $< $@
 
 # -----------------------------------------------------------------------------
@@ -49,5 +49,5 @@ dist/%.json: src/%.json
 
 # Execute acceptance tests
 test-acceptance: node_modules .env
-	@$(shell npm bin)/ts-node -r tsconfig-paths/register \
+	@ $(shell npm bin)/ts-node -r tsconfig-paths/register \
 		tests/index.ts "suites/acceptance/**/*.spec.ts"
