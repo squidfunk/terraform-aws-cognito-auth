@@ -186,3 +186,19 @@ resource "aws_lambda_permission" "verify" {
       aws_api_gateway_resource.verify.path
     }"
 }
+
+# -----------------------------------------------------------------------------
+# Modules
+# -----------------------------------------------------------------------------
+
+# module.cors
+module "cors" {
+  source = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
+
+  api_id          = "${var.api_id}"
+  api_resource_id = "${aws_api_gateway_resource._.id}"
+
+  allowed_methods = ["OPTIONS", "POST"]
+
+  # allowed_origin  = "${var.cognito_identity_domain}"
+}

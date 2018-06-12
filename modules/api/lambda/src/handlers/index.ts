@@ -87,7 +87,7 @@ export function translate(err: AWSError): AWSError {
 export function handler(schema: object, cb: HandlerCallback) {
   return async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
     const headers = {
-      "Access-Control-Allow-Origin": process.env.COGNITO_IDENTITY_DOMAIN!
+      "Access-Control-Allow-Origin": "*" // process.env.COGNITO_IDENTITY_DOMAIN! // TODO
     }
     try {
       const data = event.httpMethod === "POST"
