@@ -49,7 +49,7 @@ describe("handlers/register", () => {
         mockAuthenticationClientRegisterWithSuccess()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(200)
-      expect(body).toEqual("")
+      expect(body).toEqual("{}")
       expect(registerMock)
         .toHaveBeenCalledWith(email, password)
     })

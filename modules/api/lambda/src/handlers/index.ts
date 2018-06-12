@@ -87,7 +87,7 @@ export function translate(err: AWSError): AWSError {
 export function handler(schema: object, cb: HandlerCallback) {
   return async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
     const headers = {
-      "Access-Control-Allow-Origin": "*" // process.env.COGNITO_IDENTITY_DOMAIN! // TODO
+      "Access-Control-Allow-Origin": process.env.COGNITO_IDENTITY_DOMAIN!
     }
     try {
       const data = event.httpMethod === "POST"
@@ -104,7 +104,7 @@ export function handler(schema: object, cb: HandlerCallback) {
       return {
         statusCode: 200,
         headers,
-        body: body ? JSON.stringify(body) : ""
+        body: body ? JSON.stringify(body) : "{}"
       }
 
     /* Catch errors */

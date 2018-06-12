@@ -140,7 +140,7 @@ describe("POST /reset", () => {
       return http.post("/reset")
         .set("Content-Type", "application/json")
         .send({ username: email })
-        .expect(200, "")
+        .expect(200, "{}")
     })
 
     /* Test: should set necessary cross-origin headers */

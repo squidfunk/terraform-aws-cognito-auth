@@ -66,7 +66,7 @@ describe("POST /register", () => {
     return http.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest())
-      .expect(200, "")
+      .expect(200, "{}")
   })
 
   /* Test: should set necessary cross-origin headers */

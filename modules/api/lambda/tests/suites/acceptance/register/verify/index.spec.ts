@@ -47,7 +47,7 @@ describe("POST /register/:code", () => {
     const { id } = await auth.register(user.email, user.password)
     return http.post(`/register/${id}`)
       .set("Content-Type", "application/json")
-      .expect(200, "")
+      .expect(200, "{}")
   })
 
   /* Test: should set necessary cross-origin headers */

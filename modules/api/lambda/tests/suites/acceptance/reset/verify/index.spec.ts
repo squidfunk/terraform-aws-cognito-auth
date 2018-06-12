@@ -103,7 +103,7 @@ describe("POST /reset/:code", () => {
       return http.post(`/reset/${id}`)
         .set("Content-Type", "application/json")
         .send(mockResetVerifyRequest())
-        .expect(200, "")
+        .expect(200, "{}")
     })
 
     /* Test: should set new password */
@@ -113,7 +113,7 @@ describe("POST /reset/:code", () => {
       await http.post(`/reset/${id}`)
         .set("Content-Type", "application/json")
         .send({ password: value })
-        .expect(200, "")
+        .expect(200, "{}")
       expect(async () => {
         await auth.authenticate(subject, value)
       }).not.toThrow()

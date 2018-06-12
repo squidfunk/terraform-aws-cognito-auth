@@ -58,7 +58,7 @@ describe("handlers/reset/verify", () => {
         mockManagementClientChangePasswordWithSuccess()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(200)
-      expect(body).toEqual("")
+      expect(body).toEqual("{}")
       expect(claimMock)
         .toHaveBeenCalledWith("reset", code.id)
       expect(changePasswordMock)
