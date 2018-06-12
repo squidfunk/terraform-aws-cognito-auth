@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "removeComments": false
+  },
+  "extends": "../tsconfig.json",
+  "include": [
+    "../src",
+    "../tests",
+    "../typings"
+  ]
+}
