@@ -93,7 +93,8 @@ clean: | clean-pre clean_ clean-post
 
 # Lint source files
 lint: node_modules
-	$(shell npm bin)/tslint -p tsconfig.json "{src,tests}/**/*.ts"
+	$(shell npm bin)/tslint -p tsconfig.json "src/**/*.ts"
+	$(shell npm bin)/tslint -p tests/tsconfig.json "tests/**/*.ts"
 
 # Execute unit tests
 test: node_modules | dist-pre

@@ -36,7 +36,7 @@ data "template_file" "lambda_iam_policy" {
   template = "${file("${path.module}/iam/policies/lambda.json")}"
 
   vars {
-    pool_arn = "${var.cognito_user_pool_arn}"
+    cognito_user_pool_arn = "${var.cognito_user_pool_arn}"
   }
 }
 

@@ -29,7 +29,7 @@ data "template_file" "cognito_iam_assume_role_policy" {
   }"
 
   vars {
-    identity_pool_id = "${aws_cognito_identity_pool._.id}"
+    cognito_identity_pool_id = "${aws_cognito_identity_pool._.id}"
   }
 }
 
@@ -40,7 +40,7 @@ data "template_file" "lambda_iam_policy" {
   template = "${file("${path.module}/iam/policies/lambda.json")}"
 
   vars {
-    pool_arn = "${aws_cognito_user_pool._.arn}"
+    cognito_user_pool_arn = "${aws_cognito_user_pool._.arn}"
   }
 }
 

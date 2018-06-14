@@ -36,6 +36,7 @@
     ],
     "interface-name": false,
     "jsdoc-format": true,
+    "no-empty-interface": false,
     "no-implicit-dependencies": false,
     "no-internal-module": true,
     "no-null-keyword": true,

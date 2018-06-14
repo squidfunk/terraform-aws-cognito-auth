@@ -27,9 +27,9 @@ data "template_file" "lambda_iam_policy" {
   template = "${file("${path.module}/iam/policies/lambda.json")}"
 
   vars {
-    pool_arn  = "${var.cognito_user_pool_arn}"
-    table_arn = "${aws_dynamodb_table._.arn}"
-    topic_arn = "${aws_sns_topic._.arn}"
+    cognito_user_pool_arn = "${var.cognito_user_pool_arn}"
+    dynamodb_table_arn    = "${aws_dynamodb_table._.arn}"
+    sns_topic_arn         = "${aws_sns_topic._.arn}"
   }
 }
 

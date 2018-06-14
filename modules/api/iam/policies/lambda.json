@@ -18,7 +18,7 @@
         "cognito-idp:AdminGetUser",
         "cognito-idp:AdminUpdateUserAttributes"
       ],
-      "Resource": "${pool_arn}"
+      "Resource": "${cognito_user_pool_arn}"
     },
     {
       "Effect": "Allow",
@@ -26,14 +26,14 @@
         "dynamodb:PutItem",
         "dynamodb:DeleteItem"
       ],
-      "Resource": "${table_arn}"
+      "Resource": "${dynamodb_table_arn}"
     },
     {
       "Effect": "Allow",
       "Action": [
         "sns:Publish"
       ],
-      "Resource": "${topic_arn}"
+      "Resource": "${sns_topic_arn}"
     }
   ]
 }
