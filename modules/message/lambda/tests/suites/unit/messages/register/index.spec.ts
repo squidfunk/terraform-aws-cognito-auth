@@ -37,11 +37,6 @@ import { printMimeMessage } from "_/helpers"
 /* Registration verification message */
 describe("messages/register", () => {
 
-  /* Add jasmine-diff if available */
-  beforeEach(() => {
-    jasmine.addMatchers(require("jasmine-diff")(jasmine, {}))
-  })
-
   /* RegisterMessage */
   describe("RegisterMessage", () => {
 
