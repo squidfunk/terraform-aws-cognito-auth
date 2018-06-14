@@ -13,7 +13,7 @@
     {
       "Effect": "Allow",
       "Action": [
-        "cognito-idp:listUsers"
+        "cognito-idp:AdminGetUser"
       ],
       "Resource": "${pool_arn}"
     },

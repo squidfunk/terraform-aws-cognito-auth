@@ -29,7 +29,7 @@ dist-pre: \
 $(patsubst %.ts, %.json, $(shell find src/common/requests/*/* -name "*.ts"))
 
 # Include schemas in distribution files
-dist-post: $(subst src, dist, $(shell find src -name "*.json"))
+dist-post: $(subst src, dist, $(shell find src/common/* -name "*.json"))
 
 # -----------------------------------------------------------------------------
 # Targets

@@ -34,7 +34,7 @@ import { Verification } from "../../../verification"
 import schema = require("../../../common/requests/register/verify/index.json")
 
 /* ----------------------------------------------------------------------------
- * Handlers
+ * Handler
  * ------------------------------------------------------------------------- */
 
 /**

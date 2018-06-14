@@ -33,7 +33,7 @@ import { AuthenticationClient } from "../../clients/authentication"
 import schema = require("../../common/requests/register/index.json")
 
 /* ----------------------------------------------------------------------------
- * Handlers
+ * Handler
  * ------------------------------------------------------------------------- */
 
 /**

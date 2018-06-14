@@ -22,6 +22,7 @@
 
 import { handler } from ".."
 import { AuthenticationClient } from "../../clients/authentication"
+
 /* ----------------------------------------------------------------------------
  * Values
  * ------------------------------------------------------------------------- */
@@ -32,7 +33,7 @@ import { AuthenticationClient } from "../../clients/authentication"
 import schema = require("../../common/requests/authenticate/index.json")
 
 /* ----------------------------------------------------------------------------
- * Handlers
+ * Handler
  * ------------------------------------------------------------------------- */
 
 /**
