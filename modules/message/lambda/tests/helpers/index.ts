@@ -51,5 +51,7 @@ export function printMimeMessage(message: string): string {
       const id = boundary.split("=").pop()
       message = message.replace(new RegExp(id!, "g"), `\${boundary-${index}}`)
     })
-  return `${message.replace(/\r/g, "").trim()}`
+  return message
+    .replace(/\r/g, "")
+    .replace(/[a-zA-Z0-9+\/]{3,}\n[a-zA-Z0-9+\/\n]+==?/gm, "\${base64}")
 }

@@ -68,11 +68,9 @@ describe("messages/reset", () => {
       it("should return raw message", async () => {
         const message = new ResetMessage(data)
         const raw = (await message.compose()).toString()
-        console.log("1", printMimeMessage(raw), "X")
-        console.log("2", fs.readFileSync(path.resolve(base, "reset.raw"), "utf8").trim(), "X")
-        expect(printMimeMessage(raw)).toEqual(
-          fs.readFileSync(path.resolve(base, "reset.raw"), "utf8")
-            .trim())
+        expect(printMimeMessage(raw).trim()).toEqual(
+          fs.readFileSync(path.resolve(base, "reset.raw"), "utf8").trim()
+        )
       })
     })
   })
