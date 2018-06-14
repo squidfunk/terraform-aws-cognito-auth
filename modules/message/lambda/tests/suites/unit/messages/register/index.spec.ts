@@ -73,8 +73,9 @@ describe("messages/register", () => {
       it("should return raw message", async () => {
         const message = new RegisterMessage(data)
         const raw = (await message.compose()).toString()
-        expect(printMimeMessage(raw))
-          .toEqual(fs.readFileSync(path.resolve(base, "register.raw"), "utf8"))
+        expect(printMimeMessage(raw)).toEqual(fs
+          .readFileSync(path.resolve(base, "register.raw"), "utf8")
+          .trim())
       })
     })
   })

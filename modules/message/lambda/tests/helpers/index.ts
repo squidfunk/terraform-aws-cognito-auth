@@ -36,11 +36,14 @@ export const chance = new Chance()
  * ------------------------------------------------------------------------- */
 
 /**
- * Print comparable mime message (normalize boundaries)
+ * Print comparable mime message
+ *
+ * This function normalizes MIME boundaries and removes excess line feeds for
+ * easier comparability.
  *
  * @param message - Mime message
  *
- * @return Mime message with normalized boundaries
+ * @return Normalized mime message
  */
 export function printMimeMessage(message: string): string {
   message.match(/boundary=(\w+)/g)!
@@ -48,5 +51,5 @@ export function printMimeMessage(message: string): string {
       const id = boundary.split("=").pop()
       message = message.replace(new RegExp(id!, "g"), `\${boundary-${index}}`)
     })
-  return `${message.replace(/\r/g, "")}\n`
+  return `${message.replace(/\r/g, "").trim()}`
 }
