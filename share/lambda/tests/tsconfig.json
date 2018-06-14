@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "paths": {
+      "~/*": ["src/*"],
+      "_/*": ["tests/*"]
+    },
     "removeComments": false
   },
   "extends": "../tsconfig.json",

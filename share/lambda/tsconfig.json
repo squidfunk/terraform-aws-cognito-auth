@@ -16,10 +16,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "dist",
-    "paths": {
-      "~/*": ["src/*"],
-      "_/*": ["tests/*"]
-    },
     "preserveConstEnums": true,
     "removeComments": true,
     "sourceMap": false,
