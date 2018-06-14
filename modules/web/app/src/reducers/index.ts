@@ -20,10 +20,17 @@
  * IN THE SOFTWARE.
  */
 
-declare interface Window {
-  __REDUX_DEVTOOLS_EXTENSION__?: any
-  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
-  env: {
-    API_INVOKE_URL: string
-  }
-}
+import { combineReducers } from "redux"
+
+import { authenticateReducer } from "./authenticate"
+
+/* ----------------------------------------------------------------------------
+ * Reducers
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Combined reducers
+ */
+export const reducers = combineReducers({
+  authenticateReducer
+})

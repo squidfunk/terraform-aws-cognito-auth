@@ -20,38 +20,84 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import { render } from "react-dom"
-import { Provider as StateProvider } from "react-redux"
-import { BrowserRouter } from "react-router-dom"
-import { applyMiddleware, createStore } from "redux"
-import { composeWithDevTools } from "redux-devtools-extension"
+import { Action } from "redux"
 
-import { App } from "components/App"
-
-import { requestMiddleware } from "middlewares/request"
-import { reducers } from "reducers"
+import { RegisterRequest } from "common/requests"
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Redux store with HTTP client middleware and DevTools extension
+ * Registration action types
  */
-export const store = createStore(
-  reducers, composeWithDevTools(applyMiddleware(requestMiddleware))
-)
+export enum RegisterActionTypes {
+  REQUEST = "REGISTER_REQUEST",
+  SUCCESS = "REGISTER_SUCCESS",
+  FAILURE = "REGISTER_FAILURE"
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Registration request action
+ */
+export interface RegisterRequestAction extends Action {
+  type: RegisterActionTypes.REQUEST,
+  body: RegisterRequest
+}
+
+/**
+ * Registration success action
+ */
+export interface RegisterSuccessAction extends Action {
+  type: RegisterActionTypes.SUCCESS
+}
+
+/**
+ * Registration failure action
+ */
+export interface RegisterFailureAction extends Action {
+  type: RegisterActionTypes.FAILURE,
+  err: Error
+}
 
 /* ----------------------------------------------------------------------------
- * Application
+ * Actions
  * ------------------------------------------------------------------------- */
 
-render(
-  <StateProvider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StateProvider>,
-  document.getElementById("root")
-)
+/**
+ * Registration request
+ *
+ * @param body - Request body
+ *
+ * @return Action
+ */
+export const registerRequestAction =
+  (body: RegisterRequest): RegisterRequestAction => ({
+    type: RegisterActionTypes.REQUEST, body
+  })
+
+/**
+ * Registration succeeded
+ *
+ * @param data - Response
+ *
+ * @return Action
+ */
+export const registerSuccessAction =
+  (): RegisterSuccessAction => ({
+    type: RegisterActionTypes.SUCCESS
+  })
+
+/**
+ * Registration failed
+ *
+ * @param err - Error
+ *
+ * @return Action
+ */
+export const registerFailureAction =
+  (err: Error): RegisterFailureAction => ({
+    type: RegisterActionTypes.FAILURE, err
+  })

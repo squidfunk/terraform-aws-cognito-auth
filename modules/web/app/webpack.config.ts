@@ -21,9 +21,11 @@
  */
 
 import * as autoprefixer from "autoprefixer"
+import * as dotenv from "dotenv"
 import * as HtmlPlugin from "html-webpack-plugin"
 import * as MiniCssExtractPlugin from "mini-css-extract-plugin"
 import * as path from "path"
+import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin"
 import {
   Configuration,
   NoEmitOnErrorsPlugin
@@ -36,13 +38,15 @@ import {
 /**
  * Webpack configuration
  *
- * @param env - Webpack environment
+ * @param env - Webpack environment arguments
  * @param args - Command-line arguments
  *
  * @return Webpack configuration
  */
-export default (_env: any, args: any) => {
+export default (_env: never, args: Configuration) => {
+  const { parsed: env } = dotenv.config()
   const config: Configuration = {
+    mode: args.mode,
 
     /* Entrypoint */
     entry: ["src"],
@@ -60,7 +64,7 @@ export default (_env: any, args: any) => {
               loader: "ts-loader",
               options: {
                 compilerOptions: {
-                  target: "es2015"     /* Use ES modules for tree-shaking */
+                  module: "es2015"     /* Use ES modules for tree-shaking */
                 }
               }
             }
@@ -98,10 +102,23 @@ export default (_env: any, args: any) => {
           ]
         },
 
-        /* HTML */
+        /* HTML with environment variables */
         {
           test: /\.html$/,
           use: [
+            {
+              loader: "string-replace-loader",
+              options: {
+                multiple: Object.keys(args.mode === "development" ? env! : {})
+                  .reduce((variables: any[], key: string) => ([
+                    ...variables,
+                    {
+                      search: `\${${key.toLowerCase()}}`,
+                      replace: env![key]
+                    }
+                  ]), [])
+              }
+            },
             {
               loader: "html-loader",
               options: { minimize: true }
@@ -141,7 +158,10 @@ export default (_env: any, args: any) => {
         __dirname,
         "node_modules"
       ],
-      extensions: [".ts", ".tsx", ".js", ".json"]
+      extensions: [".ts", ".tsx", ".js", ".json"],
+      plugins: [
+        new TsconfigPathsPlugin()
+      ]
     },
 
     /* Sourcemaps */

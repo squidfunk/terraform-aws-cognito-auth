@@ -20,10 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-declare interface Window {
-  __REDUX_DEVTOOLS_EXTENSION__?: any
-  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
-  env: {
-    API_INVOKE_URL: string
-  }
-}
+/* ----------------------------------------------------------------------------
+ * Re-exports
+ * ------------------------------------------------------------------------- */
+
+export { App } from "./App"

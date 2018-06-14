@@ -20,10 +20,36 @@
  * IN THE SOFTWARE.
  */
 
-declare interface Window {
-  __REDUX_DEVTOOLS_EXTENSION__?: any
-  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
-  env: {
-    API_INVOKE_URL: string
-  }
-}
+import { AxiosError, AxiosInstance } from "axios"
+import { AnyAction } from "redux"
+import { ActionsObservable } from "redux-observable"
+
+import "rxjs/add/operator/switchMap"
+
+import {
+  AuthenticateActionTypes,
+  authenticateFailureAction,
+  AuthenticateRequestAction,
+  authenticateSuccessAction
+} from "actions/authenticate"
+import { Session } from "common/session"
+
+/* ----------------------------------------------------------------------------
+ * Epics
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Authenticate using credentials or refresh token
+ *
+ * @param request - Axios instance
+ *
+ * @return Function returning an Observable
+ */
+export const createAuthenticateEpic = (request: AxiosInstance) =>
+  (action$: ActionsObservable<AnyAction>) => action$
+    .ofType<AuthenticateRequestAction>(AuthenticateActionTypes.REQUEST)
+    .switchMap(({ body }) =>
+      request.post<Session>("/authenticate", body)
+        .then(({ data }) => authenticateSuccessAction(data))
+        .catch((err: AxiosError) => authenticateFailureAction(err))
+    )

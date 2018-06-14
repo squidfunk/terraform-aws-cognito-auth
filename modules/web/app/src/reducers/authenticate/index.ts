@@ -20,10 +20,39 @@
  * IN THE SOFTWARE.
  */
 
-declare interface Window {
-  __REDUX_DEVTOOLS_EXTENSION__?: any
-  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
-  env: {
-    API_INVOKE_URL: string
+import {
+  AuthenticateActions,
+  AuthenticateActionTypes
+} from "actions/authenticate"
+
+/* ----------------------------------------------------------------------------
+ * Reducers
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Authentication reducer
+ *
+ * @param state - Current state
+ * @param action - Action
+ *
+ * @return Updated state
+ */
+export const authenticateReducer =
+  (state = {}, action: AuthenticateActions) => {
+    switch (action.type) {
+
+      /* Authentication success action */
+      case AuthenticateActionTypes.SUCCESS:
+        console.log("Request succeeded", action.session)
+        return state
+
+      /* Authentication success action */
+      case AuthenticateActionTypes.FAILURE:
+        console.log("Request failed", action.err)
+        return state
+
+      /* Catch-all */
+      default:
+        return state
+    }
   }
-}

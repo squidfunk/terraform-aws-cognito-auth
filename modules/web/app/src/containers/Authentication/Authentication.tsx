@@ -20,38 +20,70 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import { render } from "react-dom"
-import { Provider as StateProvider } from "react-redux"
-import { BrowserRouter } from "react-router-dom"
-import { applyMiddleware, createStore } from "redux"
-import { composeWithDevTools } from "redux-devtools-extension"
+import { connect, Dispatch } from "react-redux"
 
-import { App } from "components/App"
-
-import { requestMiddleware } from "middlewares/request"
-import { reducers } from "reducers"
+import { authenticateRequestAction } from "actions/authenticate"
+import { AuthenticateRequestWithCredentials } from "common/requests"
+import { AuthenticationForm } from "components/Forms/AuthenticationForm"
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Redux store with HTTP client middleware and DevTools extension
+ * Authentification state for Redux
  */
-export const store = createStore(
-  reducers, composeWithDevTools(applyMiddleware(requestMiddleware))
-)
+interface StateFromProps {
+  authenticated: boolean               /* Whether the user is authenticated */
+}
+
+/**
+ * Authentification dispatchers for Redux
+ */
+interface DispatchFromProps {
+
+}
 
 /* ----------------------------------------------------------------------------
- * Application
+ * Functions
  * ------------------------------------------------------------------------- */
 
-render(
-  <StateProvider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StateProvider>,
-  document.getElementById("root")
-)
+/**
+ * Map state to properties
+ *
+ * @param state - State
+ *
+ * @return Properties
+ */
+function mapStateToProps(_state: any): StateFromProps {                         // TODO: Store typings
+  return {
+    authenticated: false
+  }
+}
+
+/**
+ * Map actions to properties and dispatch
+ *
+ * @param dispatch - Dispatch
+ *
+ * @return Properties
+ */
+function mapDispatchToProps(dispatch: Dispatch): DispatchFromProps {
+  return {
+    handleSubmit(data: AuthenticateRequestWithCredentials) {
+      dispatch(authenticateRequestAction(data))
+    }
+  }
+}
+
+/* ----------------------------------------------------------------------------
+ * Connected component
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Connected authentication form component
+ */
+export const Authentication = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AuthenticationForm)

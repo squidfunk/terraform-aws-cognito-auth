@@ -20,10 +20,33 @@
  * IN THE SOFTWARE.
  */
 
-declare interface Window {
-  __REDUX_DEVTOOLS_EXTENSION__?: any
-  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
-  env: {
-    API_INVOKE_URL: string
-  }
-}
+import * as React from "react"
+import { connect } from "react-redux"
+import { Route } from "react-router-dom"
+
+import { Authentication } from "containers/Authentication"
+import { Registration } from "containers/Registration"
+
+/* ----------------------------------------------------------------------------
+ * Component
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Application component
+ */
+const App = () => (
+  <div>
+    <Route exact path="/" component={Authentication} />
+    <Route exact path="/register" component={Registration} />
+  </div>
+)
+
+/* ----------------------------------------------------------------------------
+ * Connected component
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Connected application component
+ */
+const connectedApp = connect()(App)
+export { connectedApp as App }

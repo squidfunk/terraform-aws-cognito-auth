@@ -20,17 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-import { combineReducers } from "redux"
-
-import ui from "./test"
-
 /* ----------------------------------------------------------------------------
- * Values
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Combined reducers
- */
-export const reducers = combineReducers({
-  ui
-})
+export { AuthenticationForm } from "./AuthenticationForm"

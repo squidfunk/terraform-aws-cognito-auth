@@ -20,27 +20,40 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import { Activity } from "react-feather"
-import { connect } from "react-redux"
+import axios from "axios"
+import { AnyAction } from "redux"
+import {
+  combineEpics,
+  createEpicMiddleware
+} from "redux-observable"
+import { Observable } from "rxjs"
 
-import "./Application.scss"
+import { createAuthenticateEpic } from "./authenticate"
+import { createRegisterEpic } from "./register"
 
 /* ----------------------------------------------------------------------------
- * Component
+ * Values
  * ------------------------------------------------------------------------- */
 
-export const DisconnectedApp = (_props: any) => (
-  <div>
-    Hello world <Activity color="red" />
-  </div>
-)
-
-function mapStateToProps(state: any) {
-  const { alert } = state
-  return {
-    alert
+/**
+ * HTTP request client
+ */
+export const request = axios.create({
+  baseURL: window.env.API_INVOKE_URL,
+  headers: {
+    "Content-Type": "application/json"
   }
-}
+})
 
-export const Application = connect(mapStateToProps)(DisconnectedApp)
+/* ----------------------------------------------------------------------------
+ * Middleware
+ * ------------------------------------------------------------------------- */
+
+/**
+ * HTTP request middleware
+ */
+export const requestMiddleware = createEpicMiddleware(
+  combineEpics<AnyAction, Observable<AnyAction>>(
+    createAuthenticateEpic(request),
+    createRegisterEpic(request)
+  ))

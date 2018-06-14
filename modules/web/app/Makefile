@@ -21,6 +21,16 @@
 all: lint clean | build test
 
 # -----------------------------------------------------------------------------
+# Constants
+# -----------------------------------------------------------------------------
+
+# Project root
+ROOT = $(shell git rev-parse --show-toplevel)
+
+# Request schemas
+SCHEMAS = $(shell find ../../api/lambda/src/handlers -name "*.json")
+
+# -----------------------------------------------------------------------------
 # Prerequisites
 # -----------------------------------------------------------------------------
 
@@ -32,8 +42,17 @@ node_modules:
 # Targets
 # -----------------------------------------------------------------------------
 
+# Auto-filled environment variables
+.env: ${ROOT}/terraform.tfstate
+	@ (pushd $(shell git rev-parse --show-toplevel) > /dev/null \
+		&& terraform output \
+			| awk -F" = " '{ print toupper($$1) "=" $$2 }' \
+			> ${PWD}/$@ \
+		&& popd > /dev/null)
+
 # Distribution files
 dist: $(shell find src) webpack.config.ts
+	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
 	$(shell npm bin)/webpack --mode production
 
 # -----------------------------------------------------------------------------
@@ -45,7 +64,7 @@ build: node_modules | dist
 
 # Clean distribution files
 clean:
-	rm -rf coverage dist
+	rm -rf dist
 
 # Lint source files
 lint: node_modules
@@ -57,6 +76,7 @@ start: node_modules
 
 # Execute unit tests
 test: node_modules
+	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
 	@ echo "TBD"
 
 # Execute unit tests in watch mode
@@ -66,11 +86,5 @@ watch: node_modules
 # -----------------------------------------------------------------------------
 
 # Special targets
-.PHONY: .FORCE build clean lint test watch
+.PHONY: .FORCE build clean lint start test watch
 .FORCE:
-
-# -----------------------------------------------------------------------------
-
-# Default target resolution
-%: %_
-	@ true

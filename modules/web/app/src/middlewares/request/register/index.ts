@@ -20,10 +20,35 @@
  * IN THE SOFTWARE.
  */
 
-declare interface Window {
-  __REDUX_DEVTOOLS_EXTENSION__?: any
-  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
-  env: {
-    API_INVOKE_URL: string
-  }
-}
+import { AxiosError, AxiosInstance } from "axios"
+import { AnyAction } from "redux"
+import { ActionsObservable } from "redux-observable"
+
+import "rxjs/add/operator/switchMap"
+
+import {
+  RegisterActionTypes,
+  registerFailureAction,
+  RegisterRequestAction,
+  registerSuccessAction
+} from "actions/register"
+
+/* ----------------------------------------------------------------------------
+ * Epics
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Register user with email address and password
+ *
+ * @param request - Axios instance
+ *
+ * @return Function returning an Observable
+ */
+export const createRegisterEpic = (request: AxiosInstance) =>
+  (action$: ActionsObservable<AnyAction>) => action$
+    .ofType<RegisterRequestAction>(RegisterActionTypes.REQUEST)
+    .switchMap(({ body }) =>
+      request.post<{}>("/register", body)
+        .then(() => registerSuccessAction())
+        .catch((err: AxiosError) => registerFailureAction(err))
+    )

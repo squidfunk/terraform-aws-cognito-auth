@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "alwaysStrict": true,
     "baseUrl": ".",
     "experimentalDecorators": true,
@@ -19,8 +20,12 @@
     "noUnusedParameters": true,
     "outDir": "dist",
     "paths": {
-      "~/*": ["src/*"],
-      "_/*": ["tests/*"]
+      "actions/*": ["src/actions/*"],
+      "common/*": ["src/common/*"],
+      "components/*": ["src/components/*"],
+      "containers/*": ["src/containers/*"],
+      "middlewares/*": ["src/middlewares/*"],
+      "reducers": ["src/reducers"]
     },
     "preserveConstEnums": true,
     "removeComments": true,
@@ -31,7 +36,8 @@
   },
   "include": [
     "src",
-    "typings"
+    "typings",
+    "webpack.config.ts"
   ],
   "exclude": [
     "node_modules"

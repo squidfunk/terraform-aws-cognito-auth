@@ -20,4 +20,4 @@
  * IN THE SOFTWARE.
  */
 
-declare module "react-feather"
+declare module "react-feather/dist/icons/*"
