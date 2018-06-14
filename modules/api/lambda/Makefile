@@ -21,27 +21,30 @@
 include ../../../share/lambda/Makefile
 
 # -----------------------------------------------------------------------------
-# Constants
-# -----------------------------------------------------------------------------
-
-# Request schemas
-SCHEMAS = $(shell find src -name "*.json")
-
-# -----------------------------------------------------------------------------
 # Target hooks
 # -----------------------------------------------------------------------------
 
+# Generate declarations from other modules and build email templates
+dist-pre: $(patsubst %.ts, %.json, $(shell find src/requests/*/* -name "*.ts"))
+
 # Include schemas in distribution files
-dist-post: $(subst src, dist, ${SCHEMAS})
+dist-post: $(subst src, dist, $(shell find src -name "*.json"))
 
 # -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------
 
-# Copy schema files
+# Copied JSON schema file
 dist/%.json: src/%.json
 	@ mkdir -p dist/$(dir $*)
 	cp $< $@
+
+# JSON schema file generated from request typings
+src/%.json: src/%.ts
+	$(shell npm bin)/typescript-json-schema \
+		--required \
+		--noExtraProps \
+		$< __JSON__ > $@
 
 # -----------------------------------------------------------------------------
 # Rules

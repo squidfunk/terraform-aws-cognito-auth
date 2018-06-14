@@ -29,9 +29,9 @@ import { Verification } from "../../../verification"
  * ------------------------------------------------------------------------- */
 
 /**
- * Request schema
+ * JSON schema for request
  */
-import schema = require("./@schema/post.json")
+import schema = require("../../../requests/reset/verify/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handlers

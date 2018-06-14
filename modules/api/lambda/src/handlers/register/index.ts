@@ -28,9 +28,9 @@ import { AuthenticationClient } from "../../clients/authentication"
  * ------------------------------------------------------------------------- */
 
 /**
- * Request schema
+ * JSON schema for request
  */
-import schema = require("./@schema/post.json")
+import schema = require("../../requests/register/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handlers
