@@ -22,10 +22,8 @@
 
 import { chance } from "_/helpers"
 
-import {
-  AuthenticationClient,
-  Session
-} from "~/clients/authentication"
+import { AuthenticationClient } from "~/clients/authentication"
+import { Session } from "~/common/session"
 
 /* ----------------------------------------------------------------------------
  * Data

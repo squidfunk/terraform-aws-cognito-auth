@@ -24,8 +24,9 @@ include ../../../share/lambda/Makefile
 # Target hooks
 # -----------------------------------------------------------------------------
 
-# Generate declarations from other modules and build email templates
-dist-pre: $(patsubst %.ts, %.json, $(shell find src/requests/*/* -name "*.ts"))
+# Generate JSON schema files from request typings
+dist-pre: \
+$(patsubst %.ts, %.json, $(shell find src/common/requests/*/* -name "*.ts"))
 
 # Include schemas in distribution files
 dist-post: $(subst src, dist, $(shell find src -name "*.json"))

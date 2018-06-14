@@ -31,7 +31,7 @@ import { Verification } from "../../../verification"
 /**
  * JSON schema for request
  */
-import schema = require("../../../requests/reset/verify/index.json")
+import schema = require("../../../common/requests/reset/verify/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handlers

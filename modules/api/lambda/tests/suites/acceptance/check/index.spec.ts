@@ -22,11 +22,9 @@
 
 import * as request from "supertest"
 
-import {
-  AuthenticationClient,
-  Session
-} from "~/clients/authentication"
+import { AuthenticationClient } from "~/clients/authentication"
 import { ManagementClient } from "~/clients/management"
+import { Session } from "~/common/session"
 
 import { chance } from "_/helpers"
 import {

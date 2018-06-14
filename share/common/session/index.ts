@@ -20,33 +20,22 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from "../.."
-import { ManagementClient } from "../../../clients/management"
-import { Verification } from "../../../verification"
-
 /* ----------------------------------------------------------------------------
- * Values
+ * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * JSON schema for request
+ * Session tokens
  */
-import schema = require("../../../common/requests/register/verify/index.json")
-
-/* ----------------------------------------------------------------------------
- * Handlers
- * ------------------------------------------------------------------------- */
+export interface SessionToken {
+  token: string                      /* Token encoded as JWT */
+  expires: string                    /* Token expiry date */
+}
 
 /**
- * Complete user registration by verification
- *
- * @param event - API Gateway event
- *
- * @return Promise resolving with no result
+ * Session tokens
  */
-export const post = handler(schema, async ({ code }) => {
-  const verification = new Verification()
-  const mgmt = new ManagementClient()
-  const { subject } = await verification.claim("register", code)
-  await mgmt.verifyUser(subject)
-})
+export interface Session {
+  access: SessionToken               /* Access token */
+  refresh?: SessionToken             /* Refresh token */
+}

@@ -28,18 +28,15 @@
  * Authentication request with credentials
  */
 export interface AuthenticateRequestWithCredentials {
-  /** Username or email address */
-  username: string
-  /** Password */
-  password: string
+  username: string                     /* Username or email address */
+  password: string                     /* Password */
 }
 
 /**
  * Authentication request with refresh token
  */
 export interface AuthenticateRequestWithToken {
-  /** Refresh token */
-  token: string
+  token: string                        /* Refresh token */
 }
 
 /**

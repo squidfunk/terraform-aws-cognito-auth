@@ -28,8 +28,7 @@
  * Password reset verification request
  */
 export interface ResetVerificationRequest {
-  /** Password */
-  password: string
+  password: string                     /* Password */
 }
 
 /* ------------------------------------------------------------------------- */

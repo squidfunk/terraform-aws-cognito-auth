@@ -30,7 +30,7 @@ import { AuthenticationClient } from "../../clients/authentication"
 /**
  * JSON schema for request
  */
-import schema = require("../../requests/register/index.json")
+import schema = require("../../common/requests/register/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handlers

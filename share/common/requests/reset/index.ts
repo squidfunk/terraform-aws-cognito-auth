@@ -28,8 +28,7 @@
  * Password reset request
  */
 export interface ResetRequest {
-  /** Username or email address */
-  username: string
+  username: string                     /* Username or email address */
 }
 
 /* ------------------------------------------------------------------------- */

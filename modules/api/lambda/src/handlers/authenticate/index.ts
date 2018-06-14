@@ -29,7 +29,7 @@ import { AuthenticationClient } from "../../clients/authentication"
 /**
  * JSON schema for request
  */
-import schema = require("../../requests/authenticate/index.json")
+import schema = require("../../common/requests/authenticate/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handlers

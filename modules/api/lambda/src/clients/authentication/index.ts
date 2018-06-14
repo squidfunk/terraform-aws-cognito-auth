@@ -24,30 +24,11 @@ import { CognitoIdentityServiceProvider } from "aws-sdk"
 import * as uuid from "uuid/v4"
 
 import { Client } from ".."
+import { Session } from "../../common/session"
 import {
   Verification,
   VerificationCode
 } from "../../verification"
-
-/* ----------------------------------------------------------------------------
- * Types
- * ------------------------------------------------------------------------- */
-
-/**
- * Session tokens
- */
-export interface SessionToken {
-  token: string                      /* Token encoded as JWT */
-  expires: string                    /* Token expiry date */
-}
-
-/**
- * Session tokens
- */
-export interface Session {
-  access: SessionToken               /* Access token */
-  refresh?: SessionToken             /* Refresh token */
-}
 
 /* ----------------------------------------------------------------------------
  * Functions
