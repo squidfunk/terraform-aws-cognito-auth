@@ -120,6 +120,21 @@ describe("handlers/authenticate", () => {
         })
       })
 
+    /* Test: should resolve with error for missing token (body, cookie) */
+    it("should resolve with error for missing token (body, cookie)",
+      async () => {
+        const event = mockAPIGatewayEvent<RequestWithToken>()
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithResult()
+        const { statusCode, body } = await post(event)
+        expect(statusCode).toEqual(400)
+        expect(body).toEqual(JSON.stringify({
+          type: "TypeError",
+          message: "Invalid request"
+        }))
+        expect(authenticateMock).not.toHaveBeenCalled()
+      })
+
     /* Test: should resolve with authentication client error */
     it("should resolve with authentication client error", async () => {
       const event = mockAPIGatewayEvent<RequestWithCredentials>({
