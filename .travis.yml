@@ -38,10 +38,10 @@ cache:
 # Empty environment variable for unit tests
 env:
   global:
-    - COGNITO_IDENTITY_DOMAIN=
-    - COGNITO_IDENTITY_NAME=
     - COGNITO_USER_POOL=
     - COGNITO_USER_POOL_CLIENT=
+    - COGNITO_IDENTITY_NAME=
+    - COGNITO_IDENTITY_DOMAIN=auth.example.com
     - DYNAMODB_TABLE=
     - SES_SENDER_ADDRESS=
     - SNS_TOPIC_ARN=

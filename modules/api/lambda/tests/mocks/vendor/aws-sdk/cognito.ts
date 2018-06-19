@@ -149,7 +149,7 @@ function mockCognitoAdminGetUser(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminGetUser returning with success
+ * Mock CognitoIdentityServiceProvider.adminGetUser returning with result
  *
  * @param username - Username
  *
