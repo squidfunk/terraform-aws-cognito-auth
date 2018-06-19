@@ -25,13 +25,22 @@
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification request
+ * Password reset verification parameters
  */
-export interface RegisterVerificationRequest {}
+export interface ResetVerificationParameters {
+  code: string                         /* Verification code */
+}
+
+/**
+ * Password reset verification request
+ */
+export interface ResetVerificationRequest {
+  password: string                     /* Password */
+}
 
 /* ------------------------------------------------------------------------- */
 
 /**
  * Type used for JSON schema
  */
-export type __JSON__ = RegisterVerificationRequest
+export type __JSON__ = ResetVerificationRequest

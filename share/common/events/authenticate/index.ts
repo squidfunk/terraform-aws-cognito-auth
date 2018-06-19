@@ -36,7 +36,7 @@ export interface AuthenticateRequestWithCredentials {
  * Authentication request with refresh token
  */
 export interface AuthenticateRequestWithToken {
-  token: string                        /* Refresh token */
+  token?: string                       /* Refresh token */
 }
 
 /**

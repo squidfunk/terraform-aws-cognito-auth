@@ -29,7 +29,7 @@
  */
 export interface SessionToken {
   token: string                      /* Token encoded as JWT */
-  expires: string                    /* Token expiry date */
+  expires: Date                      /* Token expiry date */
 }
 
 /**

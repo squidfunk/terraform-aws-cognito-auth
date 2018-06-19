@@ -30,6 +30,12 @@ export {
   AuthenticateRequestWithToken
 } from "./authenticate"
 export { RegisterRequest } from "./register"
-export { RegisterVerificationRequest } from "./register/verify"
+export {
+  RegisterVerificationParameters,
+  RegisterVerificationRequest
+} from "./register/verify"
 export { ResetRequest } from "./reset"
-export { ResetVerificationRequest } from "./reset/verify"
+export {
+  ResetVerificationParameters,
+  ResetVerificationRequest
+} from "./reset/verify"
