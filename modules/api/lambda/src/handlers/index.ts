@@ -32,17 +32,42 @@ import { validate } from "jsonschema"
  * ------------------------------------------------------------------------- */
 
 /**
- * Handler response helpers
+ * Handler callback event
+ *
+ * @template P - Callback event path parameter type
+ * @template B - Callback event body type
  */
-export interface HandlerResponse {
-  succeed: (data?: any) => APIGatewayProxyResult
-  fail: (err: Error) => APIGatewayProxyResult
+export interface HandlerCallbackEvent<P extends {}, B extends {}> {
+  path: string                         /* Event path */
+  pathParameters: P                    /* Event path parameters */
+  headers: {                           /* Event headers */
+    [name: string]: string
+  }
+  body: B                              /* Event body */
+}
+
+/**
+ * Handler callback response
+ *
+ * @template T - Callback response body type
+ */
+export interface HandlerCallbackResponse<T> {
+  headers?: {                          /* Response headers */
+    [name: string]: string
+  }
+  body?: T                             /* Response body */
 }
 
 /**
  * Handler callback
+ *
+ * @template P - Callback event path parameter type
+ * @template B - Callback event body type
+ * @template T - Callback response body type
  */
-export type HandlerCallback = (data: any) => Promise<any>
+export type HandlerCallback<P extends {}, B extends {}, T = void> =
+  (event: HandlerCallbackEvent<P, B>) =>
+    Promise<HandlerCallbackResponse<T> | void>
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -56,12 +81,12 @@ export type HandlerCallback = (data: any) => Promise<any>
  * @return Mapped error
  */
 export function translate(err: AWSError): AWSError {
-  switch (err.code) { // tslint:disable-line no-small-switch
+  switch (err.code) {
 
     /* JSON parsing failed */
     case "SyntaxError":
       err.code    = "TypeError"
-      err.message = "Invalid request body"
+      err.message = "Invalid request"
       return err
 
     /* Pre-registration check failed */
@@ -79,28 +104,40 @@ export function translate(err: AWSError): AWSError {
 /**
  * Handler factory function
  *
+ * @template P - Callback event path parameter type
+ * @template B - Callback event body type
+ * @template T - Callback response body type
+ *
  * @param schema - Request schema
  * @param cb - Handler callback
  *
  * @return Promise resolving with HTTP response
  */
-export function handler(schema: object, cb: HandlerCallback) {
+export function handler<P extends {}, B extends {}, T = void>(
+  schema: object, cb: HandlerCallback<P, B, T>
+) {
   return async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
-    const headers = {
-      "Access-Control-Allow-Origin": process.env.COGNITO_IDENTITY_DOMAIN!
-    }
     try {
-      const data = event.httpMethod === "POST"
+      const data: B = event.httpMethod === "POST"
         ? JSON.parse(event.body || "{}")
         : {}
 
       /* Validate request and abort on error */
       const result = validate(data, schema)
       if (!result.valid)
-        throw new TypeError("Invalid request body")
+        throw new TypeError("Invalid request")
 
-      /* Execute handler and return result */
-      const body = await cb({ ...event.pathParameters, ...data })
+      /* Execute handler and return response */
+      const { body, headers } = {
+        body: undefined,
+        headers: {},
+        ...(await cb({
+          path: event.path,
+          pathParameters: event.pathParameters as P,
+          headers: event.headers,
+          body: data
+        }))
+      }
       return {
         statusCode: 200,
         headers,
@@ -113,7 +150,6 @@ export function handler(schema: object, cb: HandlerCallback) {
       err = translate(err)
       return {
         statusCode: err.statusCode || 400,
-        headers,
         body: JSON.stringify({
           type: err.code,
           message: err.message.replace(/\.$/, "")

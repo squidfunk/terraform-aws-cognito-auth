@@ -20,8 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-// tslint:disable no-empty-interface
-
 /* error TS2304: Cannot find name 'XMLHttpRequest' */
 declare interface XMLHttpRequest {}
 

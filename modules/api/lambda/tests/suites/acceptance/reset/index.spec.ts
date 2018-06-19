@@ -20,14 +20,12 @@
  * IN THE SOFTWARE.
  */
 
-import * as request from "supertest"
+import { AuthenticationClient } from "clients/authentication"
+import { ManagementClient } from "clients/management"
 
-import { AuthenticationClient } from "~/clients/authentication"
-import { ManagementClient } from "~/clients/management"
-
-import { chance } from "_/helpers"
-import { mockRegisterRequest } from "_/mocks/handlers/register"
-import { mockResetRequest } from "_/mocks/handlers/reset"
+import { chance, request } from "_/helpers"
+import { mockRegisterRequest } from "_/mocks/common/events/register"
+import { mockResetRequest } from "_/mocks/common/events/reset"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -40,44 +38,41 @@ describe("POST /reset", () => {
   const auth = new AuthenticationClient()
   const mgmt = new ManagementClient()
 
-  /* Initialize HTTP client */
-  const http = request(process.env.API_INVOKE_URL!)
-
   /* Test: should return error for empty request */
   it("should return error for empty request", () => {
-    return http.post("/reset")
+    return request.post("/reset")
       .set("Content-Type", "application/json")
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for malformed request */
   it("should return error for malformed request", () => {
-    return http.post("/reset")
+    return request.post("/reset")
       .set("Content-Type", "application/json")
       .send(`/${chance.string()}`)
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for invalid request */
   it("should return error for invalid request", () => {
-    return http.post("/reset")
+    return request.post("/reset")
       .set("Content-Type", "application/json")
       .send(`{}`)
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for invalid user */
   it("should return error for invalid user", () => {
-    return http.post("/reset")
+    return request.post("/reset")
       .set("Content-Type", "application/json")
       .send(mockResetRequest())
       .expect(400, {
@@ -108,7 +103,7 @@ describe("POST /reset", () => {
 
     /* Test: should return error for unverified user */
     it("should return error for unverified user", () => {
-      return http.post("/reset")
+      return request.post("/reset")
         .set("Content-Type", "application/json")
         .send({ username: email })
         .expect(400, {
@@ -137,19 +132,10 @@ describe("POST /reset", () => {
 
     /* Test: should return empty body */
     it("should return empty body", () => {
-      return http.post("/reset")
+      return request.post("/reset")
         .set("Content-Type", "application/json")
         .send({ username: email })
         .expect(200, "{}")
-    })
-
-    /* Test: should set necessary cross-origin headers */
-    it("should set necessary cross-origin headers", async () => {
-      return http.post("/reset")
-        .set("Content-Type", "application/json")
-        .send({ username: email })
-        .expect("Access-Control-Allow-Origin",
-          process.env.COGNITO_IDENTITY_DOMAIN!)
     })
   })
 })

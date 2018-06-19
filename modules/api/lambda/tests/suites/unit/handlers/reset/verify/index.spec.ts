@@ -20,14 +20,21 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "~/handlers/reset/verify"
+import { post } from "handlers/reset/verify"
+
+import {
+  ResetVerificationParameters as Parameters,
+  ResetVerificationRequest as Request
+} from "common/events/reset/verify"
 
 import {
   mockManagementClientChangePasswordWithError,
   mockManagementClientChangePasswordWithSuccess
 } from "_/mocks/clients/management"
-import { mockResetVerifyRequest } from "_/mocks/handlers/reset/verify"
-import { mockAPIGatewayEventHttpPost } from "_/mocks/vendor/aws-lambda"
+import {
+  mockResetVerifyRequest
+} from "_/mocks/common/events/reset/verify"
+import { mockAPIGatewayEvent } from "_/mocks/vendor/aws-lambda"
 import {
   mockVerificationClaimWithError,
   mockVerificationClaimWithResult,
@@ -49,7 +56,9 @@ describe("handlers/reset/verify", () => {
     const code = mockVerificationCode()
 
     /* API Gateway event */
-    const event = mockAPIGatewayEventHttpPost({ password }, { code: code.id })
+    const event = mockAPIGatewayEvent<Parameters, Request>({
+      body: { password }, pathParameters: { code: code.id }
+    })
 
     /* Test: should resolve with empty body */
     it("should resolve with empty body", async () => {
@@ -74,7 +83,7 @@ describe("handlers/reset/verify", () => {
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
-        message: "mockVerificationClaimWithError"
+        message: "claim"
       }))
       expect(claimMock)
         .toHaveBeenCalledWith("reset", code.id)
@@ -91,7 +100,7 @@ describe("handlers/reset/verify", () => {
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
-        message: "mockManagementClientChangePasswordWithError"
+        message: "changePassword"
       }))
       expect(claimMock)
         .toHaveBeenCalledWith("reset", code.id)

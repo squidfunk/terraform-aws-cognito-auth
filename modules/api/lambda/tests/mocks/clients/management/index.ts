@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { ManagementClient } from "~/clients/management"
+import { ManagementClient } from "clients/management"
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -57,7 +57,7 @@ export function mockManagementClientVerifyUserWithSuccess(): jasmine.Spy {
  * @return Jasmine spy
  */
 export function mockManagementClientVerifyUserWithError(
-  err: Error = new Error("mockManagementClientVerifyUserWithError")
+  err: Error = new Error("verifyUser")
 ): jasmine.Spy {
   return mockManagementClientVerifyUser(() => Promise.reject(err))
 }
@@ -95,7 +95,7 @@ export function mockManagementClientChangePasswordWithSuccess(): jasmine.Spy {
  * @return Jasmine spy
  */
 export function mockManagementClientChangePasswordWithError(
-  err: Error = new Error("mockManagementClientChangePasswordWithError")
+  err: Error = new Error("changePassword")
 ): jasmine.Spy {
   return mockManagementClientChangePassword(() => Promise.reject(err))
 }

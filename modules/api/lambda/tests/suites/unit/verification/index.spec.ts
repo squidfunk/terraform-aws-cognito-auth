@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { Verification } from "~/verification"
+import { Verification } from "verification"
 
 import { chance } from "_/helpers"
 import {

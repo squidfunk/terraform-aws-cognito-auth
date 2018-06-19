@@ -20,15 +20,15 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "~/clients/authentication"
+import { AuthenticationClient } from "clients/authentication"
 
 import { chance } from "_/helpers"
 import {
   mockAuthenticateRequestWithCredentials,
   mockAuthenticateRequestWithToken
-} from "_/mocks/handlers/authenticate"
-import { mockRegisterRequest } from "_/mocks/handlers/register"
-import { mockResetRequest } from "_/mocks/handlers/reset"
+} from "_/mocks/common/events/authenticate"
+import { mockRegisterRequest } from "_/mocks/common/events/register"
+import { mockResetRequest } from "_/mocks/common/events/reset"
 import {
   mockCognitoAdminGetUserWithError,
   mockCognitoAdminGetUserWithResult,
@@ -174,7 +174,7 @@ describe("clients/authentication", () => {
           const auth = new AuthenticationClient()
           const { access } = await auth.authenticate(username, password)
           expect(access.token).toEqual(jasmine.any(String))
-          expect(Date.parse(access.expires))
+          expect(access.expires)
             .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
         })
 
@@ -185,7 +185,7 @@ describe("clients/authentication", () => {
           const auth = new AuthenticationClient()
           const { refresh } = await auth.authenticate(username, password)
           expect(refresh!.token).toEqual(jasmine.any(String))
-          expect(Date.parse(refresh!.expires))
+          expect(refresh!.expires)
             .toBeGreaterThan(Date.now() + 1000 * 59 * 60 * 24 * 30)
         })
 
@@ -196,7 +196,7 @@ describe("clients/authentication", () => {
           const auth = new AuthenticationClient()
           const { access, refresh } = await auth.authenticate(token)
           expect(access.token).toEqual(jasmine.any(String))
-          expect(Date.parse(access.expires))
+          expect(access.expires)
             .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
           expect(refresh).toBeUndefined()
         })

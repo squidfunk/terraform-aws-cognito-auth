@@ -24,7 +24,7 @@ import {
   Verification,
   VerificationCode,
   VerificationContext
-} from "~/verification"
+} from "verification"
 
 import { chance } from "_/helpers"
 
@@ -101,7 +101,7 @@ export function mockVerificationIssueWithResult(
  * @return Jasmine spy
  */
 export function mockVerificationIssueWithError(
-  err: Error = new Error("mockVerificationIssueWithError")
+  err: Error = new Error("issue")
 ): jasmine.Spy {
   return mockVerificationIssue(() => Promise.reject(err))
 }
@@ -143,7 +143,7 @@ export function mockVerificationClaimWithResult(
  * @return Jasmine spy
  */
 export function mockVerificationClaimWithError(
-  err: Error = new Error("mockVerificationClaimWithError")
+  err: Error = new Error("claim")
 ): jasmine.Spy {
   return mockVerificationClaim(() => Promise.reject(err))
 }

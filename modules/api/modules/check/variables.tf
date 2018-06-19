@@ -50,12 +50,3 @@ variable "api_resource_id" {
 variable "api_authorizer_id" {
   description = "API authorizer identifier"
 }
-
-# -----------------------------------------------------------------------------
-# Variables: Cognito
-# -----------------------------------------------------------------------------
-
-# var.cognito_identity_domain
-variable "cognito_identity_domain" {
-  description = "Cognito identity provider domain"
-}

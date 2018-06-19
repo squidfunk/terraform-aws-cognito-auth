@@ -20,20 +20,17 @@
  * IN THE SOFTWARE.
  */
 
-import * as request from "supertest"
+import { AuthenticationClient } from "clients/authentication"
+import { ManagementClient } from "clients/management"
 
-import { AuthenticationClient } from "~/clients/authentication"
-import { ManagementClient } from "~/clients/management"
-import { Session } from "~/common/session"
-
-import { chance } from "_/helpers"
+import { chance, request } from "_/helpers"
 import {
   mockAuthenticateRequestWithCredentials,
   mockAuthenticateRequestWithToken
-} from "_/mocks/handlers/authenticate"
+} from "_/mocks/common/events/authenticate"
 import {
   mockRegisterRequest
-} from "_/mocks/handlers/register"
+} from "_/mocks/common/events/register"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -46,62 +43,41 @@ describe("POST /authenticate", () => {
   const auth = new AuthenticationClient()
   const mgmt = new ManagementClient()
 
-  /* Initialize HTTP client */
-  const http = request(process.env.API_INVOKE_URL!)
-
-  /* Test: should force application/json as content type */
-  it("should force application/json as content type", () => {
-    return http.post("/authenticate")
-      .send(mockAuthenticateRequestWithCredentials())
-      .expect(400, {
-        type: "UserNotFoundException",
-        message: "User does not exist"
-      })
-  })
-
-  /* Test: should set necessary cross-origin headers */
-  it("should set necessary cross-origin headers", () => {
-    return http.post("/authenticate")
-      .send(mockAuthenticateRequestWithCredentials())
-      .expect("Access-Control-Allow-Origin",
-        process.env.COGNITO_IDENTITY_DOMAIN!)
-  })
-
   /* Test: should return error for empty request */
   it("should return error for empty request", () => {
-    return http.post("/authenticate")
+    return request.post("/authenticate")
       .set("Content-Type", "application/json")
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for malformed request */
   it("should return error for malformed request", () => {
-    return http.post("/authenticate")
+    return request.post("/authenticate")
       .set("Content-Type", "application/json")
       .send(`/${chance.string()}`)
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for invalid request */
   it("should return error for invalid request", () => {
-    return http.post("/authenticate")
+    return request.post("/authenticate")
       .set("Content-Type", "application/json")
       .send(`{}`)
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for non-existent user */
   it("should return error for non-existent user", () => {
-    return http.post("/authenticate")
+    return request.post("/authenticate")
       .set("Content-Type", "application/json")
       .send(mockAuthenticateRequestWithCredentials())
       .expect(400, {
@@ -112,7 +88,7 @@ describe("POST /authenticate", () => {
 
   /* Test: should return error for invalid refresh token */
   it("should return error for invalid refresh token", () => {
-    return http.post("/authenticate")
+    return request.post("/authenticate")
       .set("Content-Type", "application/json")
       .send(mockAuthenticateRequestWithToken())
       .expect(400, {
@@ -143,7 +119,7 @@ describe("POST /authenticate", () => {
 
     /* Test: should return error for valid credentials */
     it("should return error for valid credentials", async () => {
-      return http.post("/authenticate")
+      return request.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password })
         .expect(400, {
@@ -172,7 +148,7 @@ describe("POST /authenticate", () => {
 
     /* Test: should return access token for valid credentials */
     it("should return access token for valid credentials", async () => {
-      const { body }: { body: Session } = await http.post("/authenticate")
+      const { body } = await request.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password })
         .expect(200)
@@ -182,26 +158,45 @@ describe("POST /authenticate", () => {
         .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
     })
 
-    /* Test: should return refresh token for valid credentials */
-    it("should return refresh token for valid credentials", async () => {
-      const { body }: { body: Session } = await http.post("/authenticate")
-        .set("Content-Type", "application/json")
-        .send({ username: email, password })
-        .expect(200)
-      expect(body.refresh!.token)
-        .toMatch(/^([a-zA-Z0-9\-_]+\.){4}[a-zA-Z0-9\-_]+$/)
-      expect(Date.parse(body.refresh!.expires))
-        .toBeGreaterThan(Date.now() + 1000 * 59 * 60 * 24 * 30)
-    })
-
-    /* Test: should return access token for valid refresh token */
-    it("should return access token for valid refresh token", async () => {
-      const { body: { refresh } }: { body: Session } =
-        await http.post("/authenticate")
+    /* Test: should return refresh token for valid credentials (body) */
+    it("should return refresh token for valid credentials (body)",
+      async () => {
+        const { body } = await request.post("/authenticate")
           .set("Content-Type", "application/json")
           .send({ username: email, password })
           .expect(200)
-      const { body }: { body: Session } = await http.post("/authenticate")
+        expect(body.refresh!.token)
+          .toMatch(/^([a-zA-Z0-9\-_]+\.){4}[a-zA-Z0-9\-_]+$/)
+        expect(Date.parse(body.refresh!.expires))
+          .toBeGreaterThan(Date.now() + 1000 * 59 * 60 * 24 * 30)
+      })
+
+    /* Test: should return refresh token for valid credentials (cookie) */
+    it("should return refresh token for valid credentials (cookie)",
+      async () => {
+        const { body, header } = await request.post("/authenticate")
+          .set("Content-Type", "application/json")
+          .send({ username: email, password })
+          .expect(200)
+        expect(header["set-cookie"]).toMatch(
+          `__Secure-token=${
+            encodeURIComponent(body.refresh!.token)
+          }; Domain=${
+            process.env.COGNITO_IDENTITY_DOMAIN!
+          }; Path=/${
+            process.env.API_BASE_PATH
+          }/authenticate; Expires=${
+            new Date(Date.parse(body.refresh!.expires)).toUTCString()
+          }; HttpOnly; Secure; SameSite=Strict`)
+      })
+
+    /* Test: should return access token for valid refresh token */
+    it("should return access token for valid refresh token", async () => {
+      const { body: { refresh } } = await request.post("/authenticate")
+        .set("Content-Type", "application/json")
+        .send({ username: email, password })
+        .expect(200)
+      const { body } = await request.post("/authenticate")
         .send({ token: refresh!.token })
         .expect(200)
       expect(body.access.token)
@@ -212,7 +207,7 @@ describe("POST /authenticate", () => {
 
     /* Test: should return error for invalid credentials */
     it("should return error for invalid credentials", () => {
-      return http.post("/authenticate")
+      return request.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password: chance.string() })
         .expect(400, {

@@ -20,7 +20,34 @@
  * IN THE SOFTWARE.
  */
 
-declare module "*.json" {
-  const value: any
-  export = value
+import { Session } from "common/session"
+
+import { chance } from "_/helpers"
+
+/* ----------------------------------------------------------------------------
+ * Data
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Mock session
+ *
+ * @param refresh - Whether to return a refresh token
+ *
+ * @return Session
+ */
+export function mockSession(refresh: boolean = false): Session {
+  return {
+    access: {
+      token: chance.string({ length: 128 }),
+      expires: chance.date()
+    },
+    ...(refresh
+      ? {
+        refresh: {
+          token: chance.string({ length: 128 }),
+          expires: chance.date()
+        }
+      }
+      : {})
+  }
 }

@@ -25,6 +25,26 @@ import { APIGatewayEvent } from "aws-lambda"
 import { chance } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
+ * Types
+ * ------------------------------------------------------------------------- */
+
+/**
+ * API Gateway event mock options
+ *
+ * @template P - Event path parameter type
+ * @template B - Event body type
+ */
+interface APIGatewayEventOptions<P extends {}, B extends {}> {
+  path: string                         /* Event path */
+  pathParameters: P                    /* Event path parameters */
+  method: "GET" | "POST"               /* Event HTTP method */
+  headers: {                           /* Event headers */
+    [name: string]: string
+  }
+  body: B | string                     /* Event body */
+}
+
+/* ----------------------------------------------------------------------------
  * Data
  * ------------------------------------------------------------------------- */
 
@@ -44,30 +64,63 @@ export function mockAPIGatewayEventPathParameters(
 }
 
 /**
- * Mock API Gateway event
+ * Mock API Gateway event options
  *
- * @param method - HTTP method
- * @param path - Request payload
- * @param params - Path parameters
+ * @template P - Event path parameter type
+ * @template B - Event body type
  *
- * @return API Gateway event
+ * @param options - Event option overrides
+ *
+ * @return API Gateway event options
  */
-function mockAPIGatewayEvent(
-  method: "GET" | "POST", body: any = "", params: {
-    [name: string]: string
-  } = mockAPIGatewayEventPathParameters()
-): APIGatewayEvent {
+export function mockAPIGatewayEventOptions<P extends {}, B extends {}>(
+  override?: Partial<APIGatewayEventOptions<P, B>>
+): APIGatewayEventOptions<P, B> {
   return {
-    resource: "/",
     path: "/",
-    httpMethod: method,
+    pathParameters: mockAPIGatewayEventPathParameters(),
+    method: "POST",
+    body: "",
+    ...override,
     headers: {
       "Host": chance.url(),
       "Referer": chance.url(),
-      "User-Agent": chance.string()
-    },
+      "User-Agent": chance.string(),
+      ...(override ? override.headers : {})
+    }
+  }
+}
+
+/**
+ * Mock API Gateway event
+ *
+ * @template P - Event path parameter type
+ * @template B - Event body type
+ *
+ * @param options - Event option overrides
+ *
+ * @return API Gateway event
+ */
+export function mockAPIGatewayEvent<B extends {}>(
+  override?: Partial<APIGatewayEventOptions<{}, B>>
+): APIGatewayEvent
+export function mockAPIGatewayEvent<P extends {}, B extends {}>(
+  override?: Partial<APIGatewayEventOptions<P, B>>
+): APIGatewayEvent
+export function mockAPIGatewayEvent<P extends {}, B extends {}>(
+  override?: Partial<APIGatewayEventOptions<P, B>>
+): APIGatewayEvent {
+  const options = mockAPIGatewayEventOptions<P, B>(override)
+  const body = typeof options.body !== "string"
+    ? JSON.stringify(options.body)
+    : options.body
+  return {
+    resource: "/",
+    path: options.path,
+    httpMethod: options.method,
+    headers: options.headers,
     queryStringParameters: null,
-    pathParameters: params,
+    pathParameters: options.pathParameters,
     requestContext: {
       accountId: chance.string(),
       apiId: chance.string(),
@@ -94,39 +147,7 @@ function mockAPIGatewayEvent(
       }
     },
     stageVariables: null,
-    body: typeof body !== "string" ? JSON.stringify(body) : body,
+    body,
     isBase64Encoded: chance.bool()
   }
-}
-
-/**
- * Mock API Gateway GET event
- *
- * @param body - Request payload
- * @param params - Path parameters
- *
- * @return API Gateway event
- */
-export function mockAPIGatewayEventHttpGet(
-  body: any = "", params: {
-    [name: string]: string
-  } = mockAPIGatewayEventPathParameters()
-): APIGatewayEvent {
-  return mockAPIGatewayEvent("GET", body, params)
-}
-
-/**
- * Mock API Gateway POST event
- *
- * @param body - Request payload
- * @param params - Path parameters
- *
- * @return API Gateway event
- */
-export function mockAPIGatewayEventHttpPost(
-  body: any = "", params: {
-    [name: string]: string
-  } = mockAPIGatewayEventPathParameters()
-): APIGatewayEvent {
-  return mockAPIGatewayEvent("POST", body, params)
 }

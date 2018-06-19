@@ -20,14 +20,18 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "~/handlers/register"
+import { post } from "handlers/register"
+
+import {
+  RegisterRequest as Request
+} from "common/events/register"
 
 import {
   mockAuthenticationClientRegisterWithError,
   mockAuthenticationClientRegisterWithSuccess
 } from "_/mocks/clients/authentication"
-import { mockRegisterRequest } from "_/mocks/handlers/register"
-import { mockAPIGatewayEventHttpPost } from "_/mocks/vendor/aws-lambda"
+import { mockRegisterRequest } from "_/mocks/common/events/register"
+import { mockAPIGatewayEvent } from "_/mocks/vendor/aws-lambda"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -44,7 +48,9 @@ describe("handlers/register", () => {
 
     /* Test: should resolve with empty body */
     it("should resolve with empty body", async () => {
-      const event = mockAPIGatewayEventHttpPost({ email, password })
+      const event = mockAPIGatewayEvent<Request>({
+        body: { email, password }
+      })
       const registerMock =
         mockAuthenticationClientRegisterWithSuccess()
       const { statusCode, body } = await post(event)
@@ -56,14 +62,16 @@ describe("handlers/register", () => {
 
     /* Test: should resolve with authentication client error */
     it("should resolve with authentication client error", async () => {
-      const event = mockAPIGatewayEventHttpPost({ email, password })
+      const event = mockAPIGatewayEvent<Request>({
+        body: { email, password }
+      })
       const registerMock =
         mockAuthenticationClientRegisterWithError()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
-        message: "mockAuthenticationClientRegisterWithError"
+        message: "register"
       }))
       expect(registerMock)
         .toHaveBeenCalledWith(email, password)

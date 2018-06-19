@@ -20,30 +20,25 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from ".."
-import { AuthenticationClient } from "../../clients/authentication"
+import { AuthenticationClient } from "clients/authentication"
+import { handler } from "handlers"
 
-/* ----------------------------------------------------------------------------
- * Values
- * ------------------------------------------------------------------------- */
-
-/**
- * JSON schema for request
- */
-import schema = require("../../common/requests/reset/index.json")
+import { ResetRequest as Request } from "common/events/reset"
+import schema = require("common/events/reset/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handler
  * ------------------------------------------------------------------------- */
 
 /**
- * Trigger authentication flow for lost password
+ * Trigger authentication flow for password reset
  *
  * @param event - API Gateway event
  *
  * @return Promise resolving with no result
  */
-export const post = handler(schema, async ({ username }) => {
-  const auth = new AuthenticationClient()
-  await auth.forgotPassword(username)
-})
+export const post = handler<{}, Request>(schema,
+  async ({ body: { username } }) => {
+    const auth = new AuthenticationClient()
+    await auth.forgotPassword(username)
+  })

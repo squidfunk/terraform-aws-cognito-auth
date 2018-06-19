@@ -20,18 +20,15 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from "../.."
-import { ManagementClient } from "../../../clients/management"
-import { Verification } from "../../../verification"
+import { ManagementClient } from "clients/management"
+import { handler } from "handlers"
+import { Verification } from "verification"
 
-/* ----------------------------------------------------------------------------
- * Values
- * ------------------------------------------------------------------------- */
-
-/**
- * JSON schema for request
- */
-import schema = require("../../../common/requests/register/verify/index.json")
+import {
+  RegisterVerificationParameters as Parameters,
+  RegisterVerificationRequest as Request
+} from "common/events"
+import schema = require("common/events/register/verify/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handler
@@ -44,9 +41,10 @@ import schema = require("../../../common/requests/register/verify/index.json")
  *
  * @return Promise resolving with no result
  */
-export const post = handler(schema, async ({ code }) => {
-  const verification = new Verification()
-  const mgmt = new ManagementClient()
-  const { subject } = await verification.claim("register", code)
-  await mgmt.verifyUser(subject)
-})
+export const post = handler<Parameters, Request>(schema,
+  async ({ pathParameters: { code } }) => {
+    const verification = new Verification()
+    const mgmt = new ManagementClient()
+    const { subject } = await verification.claim("register", code)
+    await mgmt.verifyUser(subject)
+  })

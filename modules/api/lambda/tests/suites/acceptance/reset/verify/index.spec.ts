@@ -20,14 +20,12 @@
  * IN THE SOFTWARE.
  */
 
-import * as request from "supertest"
+import { AuthenticationClient } from "clients/authentication"
+import { ManagementClient } from "clients/management"
 
-import { AuthenticationClient } from "~/clients/authentication"
-import { ManagementClient } from "~/clients/management"
-
-import { chance } from "_/helpers"
-import { mockRegisterRequest } from "_/mocks/handlers/register"
-import { mockResetVerifyRequest } from "_/mocks/handlers/reset/verify"
+import { chance, request } from "_/helpers"
+import { mockRegisterRequest } from "_/mocks/common/events/register"
+import { mockResetVerifyRequest } from "_/mocks/common/events/reset/verify"
 import { mockVerificationCode } from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------
@@ -41,37 +39,34 @@ describe("POST /reset/:code", () => {
   const auth = new AuthenticationClient()
   const mgmt = new ManagementClient()
 
-  /* Initialize HTTP client */
-  const http = request(process.env.API_INVOKE_URL!)
-
   /* Test: should return error for malformed request */
   it("should return error for malformed request", () => {
     const { id } = mockVerificationCode("reset")
-    return http.post(`/reset/${id}`)
+    return request.post(`/reset/${id}`)
       .set("Content-Type", "application/json")
       .send(`/${chance.string()}`)
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for invalid request */
   it("should return error for invalid request", () => {
     const { id } = mockVerificationCode("reset")
-    return http.post(`/reset/${id}`)
+    return request.post(`/reset/${id}`)
       .set("Content-Type", "application/json")
       .send(`{ "${chance.word()}": "${chance.string()}" }`)
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for invalid verification code */
   it("should return error for invalid verification code", () => {
     const { id } = mockVerificationCode("reset")
-    return http.post(`/reset/${id}`)
+    return request.post(`/reset/${id}`)
       .set("Content-Type", "application/json")
       .send(mockResetVerifyRequest())
       .expect(400, {
@@ -100,7 +95,7 @@ describe("POST /reset/:code", () => {
     /* Test: should return empty body */
     it("should return empty body", async () => {
       const { id } = await auth.forgotPassword(email)
-      return http.post(`/reset/${id}`)
+      return request.post(`/reset/${id}`)
         .set("Content-Type", "application/json")
         .send(mockResetVerifyRequest())
         .expect(200, "{}")
@@ -110,23 +105,13 @@ describe("POST /reset/:code", () => {
     it("should set new password", async () => {
       const { id, subject } = await auth.forgotPassword(email)
       const { password: value } = mockResetVerifyRequest()
-      await http.post(`/reset/${id}`)
+      await request.post(`/reset/${id}`)
         .set("Content-Type", "application/json")
         .send({ password: value })
         .expect(200, "{}")
       expect(async () => {
         await auth.authenticate(subject, value)
       }).not.toThrow()
-    })
-
-    /* Test: should set necessary cross-origin headers */
-    it("should set necessary cross-origin headers", async () => {
-      const { id } = await auth.forgotPassword(email)
-      return http.post(`/reset/${id}`)
-        .set("Content-Type", "application/json")
-        .send(mockResetVerifyRequest())
-        .expect("Access-Control-Allow-Origin",
-          process.env.COGNITO_IDENTITY_DOMAIN!)
     })
   })
 })

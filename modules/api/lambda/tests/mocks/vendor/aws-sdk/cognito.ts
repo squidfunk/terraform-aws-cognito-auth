@@ -64,7 +64,7 @@ export function mockCognitoAdminConfirmSignUpWithSuccess(): jasmine.Spy {
  * @return Jasmine spy
  */
 export function mockCognitoAdminConfirmSignUpWithError(
-  err: Error = new Error("mockCognitoAdminConfirmSignUpWithError")
+  err: Error = new Error("adminConfirmSignUp")
 ): jasmine.Spy {
   return mockCognitoAdminConfirmSignUp(
     jasmine.createSpy("adminConfirmSignUp")
@@ -115,7 +115,7 @@ export function mockCognitoAdminDeleteUserWithSuccess(): jasmine.Spy {
  * @return Jasmine spy
  */
 export function mockCognitoAdminDeleteUserWithError(
-  err: Error = new Error("mockCognitoAdminDeleteUserWithError")
+  err: Error = new Error("adminDeleteUser")
 ): jasmine.Spy {
   return mockCognitoAdminDeleteUser(
     jasmine.createSpy("adminDeleteUser")
@@ -191,7 +191,7 @@ export function mockCognitoAdminGetUserWithResult(
  * @return Jasmine spy
  */
 export function mockCognitoAdminGetUserWithError(
-  err: Error = new Error("mockCognitoAdminGetUserWithError")
+  err: Error = new Error("adminGetUser")
 ): jasmine.Spy {
   return mockCognitoAdminGetUser(
     jasmine.createSpy("adminGetUser")
@@ -249,7 +249,7 @@ export function mockCognitoAdminUpdateUserAttributesWithSuccess(
  * @return Jasmine spy
  */
 export function mockCognitoAdminUpdateUserAttributesWithError(
-  err: Error = new Error("mockCognitoAdminUpdateUserAttributesWithError")
+  err: Error = new Error("adminUpdateUserAttributes")
 ): jasmine.Spy {
   return mockCognitoAdminUpdateUserAttributes(
     jasmine.createSpy("adminUpdateUserAttributes")
@@ -340,7 +340,7 @@ export function mockCognitoInitiateAuthWithChallenge(
  * @return Jasmine spy
  */
 export function mockCognitoInitiateAuthWithError(
-  err: Error = new Error("mockCognitoInitiateAuthWithError")
+  err: Error = new Error("initiateAuth")
 ): jasmine.Spy {
   return mockCognitoInitiateAuth(
     jasmine.createSpy("initiateAuth")
@@ -391,7 +391,7 @@ export function mockCognitoSignUpWithSuccess(): jasmine.Spy {
  * @return Jasmine spy
  */
 export function mockCognitoSignUpWithError(
-  err: Error = new Error("mockCognitoSignUpWithError")
+  err: Error = new Error("signUp")
 ): jasmine.Spy {
   return mockCognitoSignUp(
     jasmine.createSpy("signUp")

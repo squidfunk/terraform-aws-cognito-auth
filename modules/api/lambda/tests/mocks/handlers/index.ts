@@ -20,6 +20,8 @@
  * IN THE SOFTWARE.
  */
 
+import { HandlerCallbackResponse } from "handlers"
+
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
@@ -31,8 +33,8 @@
  *
  * @return Jasmine spy
  */
-function mockHandlerCallback(
-  promise: () => Promise<any>
+function mockHandlerCallback<T extends object>(
+  promise: () => Promise<HandlerCallbackResponse<T>>
 ): jasmine.Spy {
   return jasmine.createSpy("callback")
     .and.callFake(promise)
@@ -41,14 +43,15 @@ function mockHandlerCallback(
 /**
  * Mock handler callback returning with success
  *
- * @param result - Handler callback result
+ * @param body - Response body
+ * @param headers - Response headers
  *
  * @return Jasmine spy
  */
 export function mockHandlerCallbackWithSuccess(
-  result?: any
+  body?: any, headers?: { [name: string]: string }
 ): jasmine.Spy {
-  return mockHandlerCallback(() => Promise.resolve(result))
+  return mockHandlerCallback(() => Promise.resolve({ body, headers }))
 }
 
 /**
@@ -59,7 +62,7 @@ export function mockHandlerCallbackWithSuccess(
  * @return Jasmine spy
  */
 export function mockHandlerCallbackWithError(
-  err: Error = new Error("mockHandlerCallbackWithError")
+  err: Error = new Error("callback")
 ): jasmine.Spy {
   return mockHandlerCallback(() => Promise.reject(err))
 }

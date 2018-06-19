@@ -20,33 +20,31 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from "../.."
-import { ManagementClient } from "../../../clients/management"
-import { Verification } from "../../../verification"
+import { ManagementClient } from "clients/management"
+import { handler } from "handlers"
+import { Verification } from "verification"
 
-/* ----------------------------------------------------------------------------
- * Values
- * ------------------------------------------------------------------------- */
-
-/**
- * JSON schema for request
- */
-import schema = require("../../../common/requests/reset/verify/index.json")
+import {
+  ResetVerificationParameters as Parameters,
+  ResetVerificationRequest as Request
+} from "common/events/reset/verify"
+import schema = require("common/events/reset/verify/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handler
  * ------------------------------------------------------------------------- */
 
 /**
- * Change password for user
+ * Reset password for user
  *
  * @param event - API Gateway event
  *
  * @return Promise resolving with no result
  */
-export const post = handler(schema, async ({ code, password }) => {
-  const verification = new Verification()
-  const mgmt = new ManagementClient()
-  const { subject } = await verification.claim("reset", code)
-  await mgmt.changePassword(subject, password)
-})
+export const post = handler<Parameters, Request>(schema,
+  async ({ pathParameters: { code }, body: { password } }) => {
+    const verification = new Verification()
+    const mgmt = new ManagementClient()
+    const { subject } = await verification.claim("reset", code)
+    await mgmt.changePassword(subject, password)
+  })

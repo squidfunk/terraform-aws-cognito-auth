@@ -59,7 +59,7 @@ export function mockSNSPublishWithSuccess(): jasmine.Spy {
  * @return Jasmine spy
  */
 export function mockSNSPublishWithError(
-  err: Error = new Error("mockSNSPublishWithError")
+  err: Error = new Error("publish")
 ): jasmine.Spy {
   return mockSNSPublish(
     jasmine.createSpy("publish")

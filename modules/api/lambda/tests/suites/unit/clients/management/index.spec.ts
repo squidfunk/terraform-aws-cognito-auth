@@ -20,10 +20,12 @@
  * IN THE SOFTWARE.
  */
 
-import { ManagementClient } from "~/clients/management"
+import { ManagementClient } from "clients/management"
 
 import { chance } from "_/helpers"
-import { mockResetVerifyRequest } from "_/mocks/handlers/reset/verify"
+import {
+  mockResetVerifyRequest
+} from "_/mocks/common/events/reset/verify"
 import {
   mockCognitoAdminConfirmSignUpWithError,
   mockCognitoAdminConfirmSignUpWithSuccess,

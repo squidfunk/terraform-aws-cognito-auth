@@ -20,17 +20,11 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from ".."
-import { AuthenticationClient } from "../../clients/authentication"
+import { AuthenticationClient } from "clients/authentication"
+import { handler } from "handlers"
 
-/* ----------------------------------------------------------------------------
- * Values
- * ------------------------------------------------------------------------- */
-
-/**
- * JSON schema for request
- */
-import schema = require("../../common/requests/register/index.json")
+import { RegisterRequest as Request } from "common/events"
+import schema = require("common/events/register/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handler
@@ -39,15 +33,12 @@ import schema = require("../../common/requests/register/index.json")
 /**
  * Register user with email address and password
  *
- * When registering a new user, a Lambda function triggered by Cognito checks
- * if the email address is already registered. The error is pretty cryptic, so
- * we exchange the type and remove unnecessary stuff to minimize confusion.
- *
  * @param event - API Gateway event
  *
  * @return Promise resolving with no result
  */
-export const post = handler(schema, async ({ email, password }) => {
-  const auth = new AuthenticationClient()
-  await auth.register(email, password)
-})
+export const post = handler<{}, Request>(schema,
+  async ({ body: { email, password } }) => {
+    const auth = new AuthenticationClient()
+    await auth.register(email, password)
+  })

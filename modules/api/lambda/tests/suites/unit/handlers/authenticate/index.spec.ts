@@ -20,18 +20,24 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "~/handlers/authenticate"
+import { post } from "handlers/authenticate"
 
 import {
+  AuthenticateRequestWithCredentials as RequestWithCredentials,
+  AuthenticateRequestWithToken as RequestWithToken
+} from "common/events/authenticate"
+
+import { chance } from "_/helpers"
+import {
   mockAuthenticationClientAuthenticateWithError,
-  mockAuthenticationClientAuthenticateWithResult,
-  mockSession
+  mockAuthenticationClientAuthenticateWithResult
 } from "_/mocks/clients/authentication"
 import {
   mockAuthenticateRequestWithCredentials,
   mockAuthenticateRequestWithToken
-} from "_/mocks/handlers/authenticate"
-import { mockAPIGatewayEventHttpPost } from "_/mocks/vendor/aws-lambda"
+} from "_/mocks/common/events/authenticate"
+import { mockSession } from "_/mocks/common/session"
+import { mockAPIGatewayEvent } from "_/mocks/vendor/aws-lambda"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -50,7 +56,9 @@ describe("handlers/authenticate", () => {
 
     /* Test: should resolve with session for valid credentials */
     it("should resolve with session for valid credentials", async () => {
-      const event = mockAPIGatewayEventHttpPost({ username, password })
+      const event = mockAPIGatewayEvent<RequestWithCredentials>({
+        body: { username, password }
+      })
       const authenticateMock =
         mockAuthenticationClientAuthenticateWithResult(session)
       const { statusCode, body } = await post(event)
@@ -60,28 +68,70 @@ describe("handlers/authenticate", () => {
         .toHaveBeenCalledWith(username, password)
     })
 
-    /* Test: should resolve with session for valid refresh token */
-    it("should resolve with session for valid refresh token", async () => {
-      const event = mockAPIGatewayEventHttpPost({ token })
-      const authenticateMock =
-        mockAuthenticationClientAuthenticateWithResult(session)
-      const { statusCode, body } = await post(event)
-      expect(statusCode).toEqual(200)
-      expect(body).toEqual(JSON.stringify(session))
-      expect(authenticateMock)
-        .toHaveBeenCalledWith(token, undefined)
-    })
+    /* Test: should resolve with session for valid refresh token (body) */
+    it("should resolve with session for valid refresh token (body)",
+      async () => {
+        const event = mockAPIGatewayEvent<RequestWithToken>({
+          body: { token }
+        })
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithResult(session)
+        const { statusCode, body } = await post(event)
+        expect(statusCode).toEqual(200)
+        expect(body).toEqual(JSON.stringify(session))
+        expect(authenticateMock)
+          .toHaveBeenCalledWith(token, undefined)
+      })
+
+    /* Test: should resolve with session for valid refresh token (cookie) */
+    it("should resolve with session for valid refresh token (cookie)",
+      async () => {
+        const event = mockAPIGatewayEvent<RequestWithToken>({
+          headers: { Cookie: `__Secure-token=${token}` }
+        })
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithResult(session)
+        const { statusCode, body } = await post(event)
+        expect(statusCode).toEqual(200)
+        expect(body).toEqual(JSON.stringify(session))
+        expect(authenticateMock)
+          .toHaveBeenCalledWith(token, undefined)
+      })
+
+    /* Test: should resolve with scoped, secure, http-only cookie */
+    it("should resolve with scoped, secure, http-only cookie",
+      async () => {
+        const sessionWithRefreshToken = mockSession(true)
+        const path = chance.string()
+        const event = mockAPIGatewayEvent<RequestWithCredentials>({
+          path, body: { username, password }
+        })
+        mockAuthenticationClientAuthenticateWithResult(sessionWithRefreshToken)
+        const { statusCode, headers } = await post(event)
+        expect(statusCode).toEqual(200)
+        expect(headers).toEqual({
+          "Set-Cookie": `__Secure-token=${
+            encodeURIComponent(sessionWithRefreshToken.refresh!.token)
+          }; Domain=${
+            process.env.COGNITO_IDENTITY_DOMAIN!
+          }; Path=${path}; Expires=${
+            sessionWithRefreshToken.refresh!.expires.toUTCString()
+          }; HttpOnly; Secure; SameSite=Strict`
+        })
+      })
 
     /* Test: should resolve with authentication client error */
     it("should resolve with authentication client error", async () => {
-      const event = mockAPIGatewayEventHttpPost({ username, password })
+      const event = mockAPIGatewayEvent<RequestWithCredentials>({
+        body: { username, password }
+      })
       const authenticateMock =
         mockAuthenticationClientAuthenticateWithError()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
-        message: "mockAuthenticationClientAuthenticateWithError"
+        message: "authenticate"
       }))
       expect(authenticateMock)
         .toHaveBeenCalledWith(username, password)

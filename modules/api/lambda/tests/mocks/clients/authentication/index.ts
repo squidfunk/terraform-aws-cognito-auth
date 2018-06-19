@@ -20,28 +20,11 @@
  * IN THE SOFTWARE.
  */
 
-import { chance } from "_/helpers"
+import { AuthenticationClient } from "clients/authentication"
 
-import { AuthenticationClient } from "~/clients/authentication"
-import { Session } from "~/common/session"
+import { Session } from "common/session"
 
-/* ----------------------------------------------------------------------------
- * Data
- * ------------------------------------------------------------------------- */
-
-/**
- * Mock session
- *
- * @return Session
- */
-export function mockSession(): Session {
-  return {
-    access: {
-      token: chance.string({ length: 128 }),
-      expires: chance.date().toISOString()
-    }
-  }
-}
+import { mockSession } from "_/mocks/common/session"
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -82,7 +65,7 @@ export function mockAuthenticationClientAuthenticateWithResult(
  * @return Jasmine spy
  */
 export function mockAuthenticationClientAuthenticateWithError(
-  err: Error = new Error("mockAuthenticationClientAuthenticateWithError")
+  err: Error = new Error("authenticate")
 ): jasmine.Spy {
   return mockAuthenticationClientAuthenticate(() => Promise.reject(err))
 }
@@ -120,7 +103,7 @@ export function mockAuthenticationClientRegisterWithSuccess(): jasmine.Spy {
  * @return Jasmine spy
  */
 export function mockAuthenticationClientRegisterWithError(
-  err: Error = new Error("mockAuthenticationClientRegisterWithError")
+  err: Error = new Error("register")
 ): jasmine.Spy {
   return mockAuthenticationClientRegister(() => Promise.reject(err))
 }
@@ -158,7 +141,7 @@ export function mockAuthenticationClientForgotPasswordWithSuccess() {
  * @return Jasmine spy
  */
 export function mockAuthenticationClientForgotPasswordWithError(
-  err: Error = new Error("mockAuthenticationClientForgotPasswordWithError")
+  err: Error = new Error("forgotPassword")
 ): jasmine.Spy {
   return mockAuthenticationClientForgotPassword(() => Promise.reject(err))
 }

@@ -66,9 +66,7 @@ resource "aws_api_gateway_integration_response" "_" {
   status_code = 200
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = "'${
-      var.cognito_identity_domain
-    }'"
+    "method.response.header.Cache-Control" = "'public, max-age=0, must-revalidate'"
   }
 
   depends_on = [
@@ -84,7 +82,7 @@ resource "aws_api_gateway_method_response" "_" {
   status_code = 200
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Cache-Control" = true
   }
 
   response_models = {
@@ -94,20 +92,4 @@ resource "aws_api_gateway_method_response" "_" {
   depends_on = [
     "aws_api_gateway_method._",
   ]
-}
-
-# -----------------------------------------------------------------------------
-# Modules
-# -----------------------------------------------------------------------------
-
-# module.cors
-module "cors" {
-  source = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
-
-  api_id          = "${var.api_id}"
-  api_resource_id = "${aws_api_gateway_resource._.id}"
-
-  allowed_methods = ["OPTIONS", "GET"]
-
-  # allowed_origin  = "${var.cognito_identity_domain}"
 }

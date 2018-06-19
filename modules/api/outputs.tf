@@ -37,6 +37,11 @@ output "api_invoke_url" {
   value = "${aws_api_gateway_stage._.invoke_url}"
 }
 
+# output.api_base_path
+output "api_base_path" {
+  value = "${aws_api_gateway_resource._.path_part}"
+}
+
 # output.api_authorizer
 output "api_authorizer" {
   value = "${aws_api_gateway_authorizer._.id}"

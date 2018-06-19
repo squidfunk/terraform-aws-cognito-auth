@@ -21,6 +21,7 @@
  */
 
 import { Chance } from "chance"
+import * as superagent from "supertest"
 
 /* ----------------------------------------------------------------------------
  * Values
@@ -30,3 +31,12 @@ import { Chance } from "chance"
  * Chance.js instance to generate random values
  */
 export const chance = new Chance()
+
+/**
+ * HTTP client for acceptance tests
+ */
+export const request = superagent(`${
+  process.env.API_INVOKE_URL!
+}/${
+  process.env.API_BASE_PATH!
+}`)

@@ -20,16 +20,13 @@
  * IN THE SOFTWARE.
  */
 
-import * as request from "supertest"
+import { AuthenticationClient } from "clients/authentication"
+import { ManagementClient } from "clients/management"
 
-import { AuthenticationClient } from "~/clients/authentication"
-import { ManagementClient } from "~/clients/management"
-import { Session } from "~/common/session"
-
-import { chance } from "_/helpers"
+import { chance, request } from "_/helpers"
 import {
   mockRegisterRequest
-} from "_/mocks/handlers/register"
+} from "_/mocks/common/events/register"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -42,18 +39,15 @@ describe("POST /check", () => {
   const auth = new AuthenticationClient()
   const mgmt = new ManagementClient()
 
-  /* Initialize HTTP client */
-  const http = request(process.env.API_INVOKE_URL!)
-
   /* Test: should return error for missing authentication header */
   it("should return error for missing authentication header", () => {
-    return http.get("/check")
+    return request.get("/check")
       .expect(401)
   })
 
   /* Test: should return error for invalid authentication header */
   it("should return error for invalid authentication header", () => {
-    return http.get("/check")
+    return request.get("/check")
       .set("Authorization", chance.string())
       .expect(401)
   })
@@ -77,23 +71,24 @@ describe("POST /check", () => {
 
     /* Test: should return empty body for valid access token */
     it("should return empty body for valid access token", async () => {
-      const { body }: { body: Session } =  await http.post("/authenticate")
+      const { body } =  await request.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password })
-      return http.get("/check")
+      return request.get("/check")
         .set("Authorization", `Bearer ${body.access.token}`)
         .expect(200, "")
     })
 
-    /* Test: should set necessary cross-origin headers */
-    it("should set necessary cross-origin headers", async () => {
-      const { body }: { body: Session } =  await http.post("/authenticate")
+    /* Test: should return appropriate cache-control header */
+    it("should return appropriate cache-control header", async () => {
+      const { body } =  await request.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password })
-      return http.get("/check")
+      const { header } = await request.get("/check")
         .set("Authorization", `Bearer ${body.access.token}`)
-        .expect("Access-Control-Allow-Origin",
-          process.env.COGNITO_IDENTITY_DOMAIN!)
+        .expect(200, "")
+      expect(header["cache-control"])
+        .toEqual("public, max-age=0, must-revalidate")
     })
   })
 })

@@ -20,14 +20,18 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "~/handlers/reset"
+import { post } from "handlers/reset"
+
+import {
+  ResetRequest as Request
+} from "common/events/reset"
 
 import {
   mockAuthenticationClientForgotPasswordWithError,
   mockAuthenticationClientForgotPasswordWithSuccess
 } from "_/mocks/clients/authentication"
-import { mockResetRequest } from "_/mocks/handlers/reset"
-import { mockAPIGatewayEventHttpPost } from "_/mocks/vendor/aws-lambda"
+import { mockResetRequest } from "_/mocks/common/events/reset"
+import { mockAPIGatewayEvent } from "_/mocks/vendor/aws-lambda"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -43,7 +47,7 @@ describe("handlers/reset", () => {
     const { username } = mockResetRequest()
 
     /* API Gateway event */
-    const event = mockAPIGatewayEventHttpPost({ username })
+    const event = mockAPIGatewayEvent<Request>({ body: { username } })
 
     /* Test: should resolve with empty body */
     it("should resolve with empty body", async () => {
@@ -64,7 +68,7 @@ describe("handlers/reset", () => {
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
-        message: "mockAuthenticationClientForgotPasswordWithError"
+        message: "forgotPassword"
       }))
       expect(forgotPasswordMock)
         .toHaveBeenCalledWith(username)

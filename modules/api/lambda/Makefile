@@ -24,9 +24,9 @@ include ../../../share/lambda/Makefile
 # Target hooks
 # -----------------------------------------------------------------------------
 
-# Generate JSON schema files from request typings
+# Generate JSON schema files from event typings
 dist-pre: \
-$(patsubst %.ts, %.json, $(shell find src/common/requests/*/* -name "*.ts"))
+$(patsubst %.ts, %.json, $(shell find src/common/events/*/* -name "*.ts"))
 
 # Include schemas in distribution files
 dist-post: $(subst src, dist, $(shell find src/common/* -name "*.json"))
@@ -54,4 +54,5 @@ src/%.json: src/%.ts
 # Execute acceptance tests
 test-acceptance: node_modules .env
 	@ $(shell npm bin)/ts-node -r tsconfig-paths/register \
-		tests/index.ts "suites/acceptance/**/*.spec.ts"
+		--project tests/tsconfig.json \
+			tests/index.ts "suites/acceptance/**/*.spec.ts"

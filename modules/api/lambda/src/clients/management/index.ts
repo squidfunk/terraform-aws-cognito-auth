@@ -22,7 +22,7 @@
 
 import { CognitoIdentityServiceProvider } from "aws-sdk"
 
-import { Client } from ".."
+import { Client } from "clients"
 
 /* ----------------------------------------------------------------------------
  * Class
@@ -93,7 +93,7 @@ export class ManagementClient extends Client {
   }
 
   /**
-   * Change password for user
+   * Reset password for user
    *
    * Hack: Cognito doesn't allow us to change the password of a user without
    * his consent, so we have to work around this in order to implement our own

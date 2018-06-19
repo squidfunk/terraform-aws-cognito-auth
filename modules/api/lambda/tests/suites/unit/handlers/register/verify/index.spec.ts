@@ -20,13 +20,18 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "~/handlers/register/verify"
+import { post } from "handlers/register/verify"
+
+import {
+  RegisterVerificationParameters as Parameters,
+  RegisterVerificationRequest as Request
+} from "common/events/register/verify"
 
 import {
   mockManagementClientVerifyUserWithError,
   mockManagementClientVerifyUserWithSuccess
 } from "_/mocks/clients/management"
-import { mockAPIGatewayEventHttpPost } from "_/mocks/vendor/aws-lambda"
+import { mockAPIGatewayEvent } from "_/mocks/vendor/aws-lambda"
 import {
   mockVerificationClaimWithError,
   mockVerificationClaimWithResult,
@@ -47,7 +52,9 @@ describe("handlers/register/verify", () => {
     const code = mockVerificationCode()
 
     /* API Gateway event */
-    const event = mockAPIGatewayEventHttpPost({}, { code: code.id })
+    const event = mockAPIGatewayEvent<Parameters, Request>({
+      pathParameters: { code: code.id }
+    })
 
     /* Test: should resolve with empty body */
     it("should resolve with empty body", async () => {
@@ -72,7 +79,7 @@ describe("handlers/register/verify", () => {
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
-        message: "mockVerificationClaimWithError"
+        message: "claim"
       }))
       expect(claimMock)
         .toHaveBeenCalledWith("register", code.id)
@@ -89,7 +96,7 @@ describe("handlers/register/verify", () => {
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
-        message: "mockManagementClientVerifyUserWithError"
+        message: "verifyUser"
       }))
       expect(claimMock)
         .toHaveBeenCalledWith("register", code.id)

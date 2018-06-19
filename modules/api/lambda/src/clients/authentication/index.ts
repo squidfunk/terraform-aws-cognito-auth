@@ -23,26 +23,27 @@
 import { CognitoIdentityServiceProvider } from "aws-sdk"
 import * as uuid from "uuid/v4"
 
-import { Client } from ".."
-import { Session } from "../../common/session"
+import { Client } from "clients"
 import {
   Verification,
   VerificationCode
-} from "../../verification"
+} from "verification"
+
+import { Session } from "common/session"
 
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Create an ISO 8601 date string for a specific time in the future
+ * Create a date for a specific time in the future
  *
  * @param seconds - Validity in seconds
  *
- * @return Expiry date in ISO 8601
+ * @return Expiry date
  */
-export function expires(seconds: number): string {
-  return new Date(Date.now() + seconds * 1000).toISOString()
+export function expires(seconds: number): Date {
+  return new Date(Date.now() + seconds * 1000)
 }
 
 /* ----------------------------------------------------------------------------
@@ -107,6 +108,13 @@ export class AuthenticationClient extends Client {
   /**
    * Authenticate using credentials or refresh token
    *
+   * Both authentication flows will return an identity token (and not access
+   * token) because we're currently not defining any OAuth scopes and API
+   * Gateway demands OAuth scopes in order to accept an access token. For now,
+   * the identity token is automatically  checked against the user pool.
+   *
+   * For more information, see https://amzn.to/2tcKVR2. Also, feel free to PR.
+   *
    * @param usernameOrToken - Username, email address or refresh token
    * @param password - Password if username is supplied
    *
@@ -121,7 +129,7 @@ export class AuthenticationClient extends Client {
   }
 
   /**
-   * Trigger authentication flow for lost password
+   * Trigger authentication flow for password reset
    *
    * @param username - Username or email address
    *

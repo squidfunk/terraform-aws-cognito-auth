@@ -20,16 +20,14 @@
  * IN THE SOFTWARE.
  */
 
-import * as request from "supertest"
+import { AuthenticationClient } from "clients/authentication"
+import { ManagementClient } from "clients/management"
 
-import { AuthenticationClient } from "~/clients/authentication"
-import { ManagementClient } from "~/clients/management"
-
-import { chance } from "_/helpers"
+import { chance, request } from "_/helpers"
 import {
   mockRegisterRequest,
   mockRegisterRequestWithInvalidEmail
-} from "_/mocks/handlers/register"
+} from "_/mocks/common/events/register"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -42,12 +40,9 @@ describe("POST /register", () => {
   const auth = new AuthenticationClient()
   const mgmt = new ManagementClient()
 
-  /* Initialize HTTP client */
-  const http = request(process.env.API_INVOKE_URL!)
-
   /* Test: should accept 8-letter passwords */
   it("should accept 8-letter passwords", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ length: 8 }))
       .expect(200)
@@ -55,7 +50,7 @@ describe("POST /register", () => {
 
   /* Test: should accept 256-letter passwords */
   it("should accept 256-letter passwords", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ length: 256 }))
       .expect(200)
@@ -63,56 +58,47 @@ describe("POST /register", () => {
 
   /* Test: should return empty body */
   it("should return empty body", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest())
       .expect(200, "{}")
   })
 
-  /* Test: should set necessary cross-origin headers */
-  it("should set necessary cross-origin headers", () => {
-    return http.post("/register")
-      .set("Content-Type", "application/json")
-      .send(mockRegisterRequest())
-      .expect("Access-Control-Allow-Origin",
-        process.env.COGNITO_IDENTITY_DOMAIN!)
-  })
-
   /* Test: should return error for empty request */
   it("should return error for empty request", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for malformed request */
   it("should return error for malformed request", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(`/${chance.string()}`)
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for invalid request */
   it("should return error for invalid request", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(`{}`)
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for invalid email address */
   it("should return error for invalid email address", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequestWithInvalidEmail())
       .expect(400, {
@@ -123,7 +109,7 @@ describe("POST /register", () => {
 
   /* Test: should return error for invalid password: length < 8 */
   it("should return error for invalid password: length < 8", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ length: 7 }))
       .expect(400, {
@@ -136,7 +122,7 @@ describe("POST /register", () => {
 
   /* Test: should return error for invalid password: length > 256 */
   it("should return error for invalid password: length > 256", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ length: 257 }))
       .expect(400, {
@@ -150,7 +136,7 @@ describe("POST /register", () => {
 
   /* Test: should return error for invalid password: missing numbers */
   it("should return error for invalid password: missing numbers", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ numbers: false }))
       .expect(400, {
@@ -163,7 +149,7 @@ describe("POST /register", () => {
 
   /* Test: should return error for invalid password: missing symbols */
   it("should return error for invalid password: missing symbols", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ symbols: false }))
       .expect(400, {
@@ -176,7 +162,7 @@ describe("POST /register", () => {
 
   /* Test: should return error for invalid password: missing uppercase */
   it("should return error for invalid password: missing uppercase", () => {
-    return http.post("/register")
+    return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ uppercase: false }))
       .expect(400, {
@@ -209,7 +195,7 @@ describe("POST /register", () => {
 
     /* Test: should return error for already registered email address */
     it("should return error for already registered email address", () => {
-      return http.post("/register")
+      return request.post("/register")
         .set("Content-Type", "application/json")
         .send({ email, password })
         .expect(400, {
@@ -238,7 +224,7 @@ describe("POST /register", () => {
 
     /* Test: should return error for already registered email address */
     it("should return error for already registered email address", () => {
-      return http.post("/register")
+      return request.post("/register")
         .set("Content-Type", "application/json")
         .send({ email, password })
         .expect(400, {

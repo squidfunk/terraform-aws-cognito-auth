@@ -102,6 +102,13 @@ resource "aws_api_gateway_rest_api" "_" {
   name = "${var.namespace}"
 }
 
+# aws_api_gateway_resource._
+resource "aws_api_gateway_resource" "_" {
+  rest_api_id = "${aws_api_gateway_rest_api._.id}"
+  parent_id   = "${aws_api_gateway_rest_api._.root_resource_id}"
+  path_part   = "identity"
+}
+
 # aws_api_gateway_stage._
 resource "aws_api_gateway_stage" "_" {
   stage_name    = "${var.api_stage}"
@@ -157,7 +164,7 @@ module "authenticate" {
   region    = "${var.region}"
 
   api_id          = "${aws_api_gateway_rest_api._.id}"
-  api_resource_id = "${aws_api_gateway_rest_api._.root_resource_id}"
+  api_resource_id = "${aws_api_gateway_resource._.id}"
 
   cognito_user_pool        = "${var.cognito_user_pool}"
   cognito_user_pool_client = "${var.cognito_user_pool_client}"
@@ -180,10 +187,8 @@ module "check" {
   region    = "${var.region}"
 
   api_id            = "${aws_api_gateway_rest_api._.id}"
-  api_resource_id   = "${aws_api_gateway_rest_api._.root_resource_id}"
+  api_resource_id   = "${aws_api_gateway_resource._.id}"
   api_authorizer_id = "${aws_api_gateway_authorizer._.id}"
-
-  cognito_identity_domain = "${var.cognito_identity_domain}"
 }
 
 # -----------------------------------------------------------------------------
@@ -196,11 +201,10 @@ module "register" {
   region    = "${var.region}"
 
   api_id          = "${aws_api_gateway_rest_api._.id}"
-  api_resource_id = "${aws_api_gateway_rest_api._.root_resource_id}"
+  api_resource_id = "${aws_api_gateway_resource._.id}"
 
   cognito_user_pool        = "${var.cognito_user_pool}"
   cognito_user_pool_client = "${var.cognito_user_pool_client}"
-  cognito_identity_domain  = "${var.cognito_identity_domain}"
 
   dynamodb_table = "${aws_dynamodb_table._.name}"
   sns_topic_arn  = "${aws_sns_topic._.arn}"
@@ -219,11 +223,10 @@ module "reset" {
   region    = "${var.region}"
 
   api_id          = "${aws_api_gateway_rest_api._.id}"
-  api_resource_id = "${aws_api_gateway_rest_api._.root_resource_id}"
+  api_resource_id = "${aws_api_gateway_resource._.id}"
 
   cognito_user_pool        = "${var.cognito_user_pool}"
   cognito_user_pool_client = "${var.cognito_user_pool_client}"
-  cognito_identity_domain  = "${var.cognito_identity_domain}"
 
   dynamodb_table = "${aws_dynamodb_table._.name}"
   sns_topic_arn  = "${aws_sns_topic._.arn}"

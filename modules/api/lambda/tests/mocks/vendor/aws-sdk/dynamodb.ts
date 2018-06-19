@@ -23,7 +23,7 @@
 import { Callback } from "aws-lambda"
 import { mock, restore } from "aws-sdk-mock"
 
-import { VerificationCode } from "~/verification"
+import { VerificationCode } from "verification"
 
 import { mockVerificationCode } from "_/mocks/verification"
 
@@ -65,7 +65,7 @@ export function mockDynamoDBDocumentClientPutWithSuccess(): jasmine.Spy {
  * @return Jasmine spy
  */
 export function mockDynamoDBDocumentClientPutWithError(
-  err: Error = new Error("mockDynamoDBDocumentClientPutWithError")
+  err: Error = new Error("put")
 ): jasmine.Spy {
   return mockDynamoDBDocumentClientPut(
     jasmine.createSpy("put")
@@ -133,7 +133,7 @@ export function mockDynamoDBDocumentClientDeleteWithoutResult(): jasmine.Spy {
  * @return Jasmine spy
  */
 export function mockDynamoDBDocumentClientDeleteWithError(
-  err: Error = new Error("mockDynamoDBDocumentClientDeleteWithError")
+  err: Error = new Error("delete")
 ): jasmine.Spy {
   return mockDynamoDBDocumentClientDelete(
     jasmine.createSpy("delete")

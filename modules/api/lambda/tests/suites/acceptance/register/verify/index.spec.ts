@@ -20,12 +20,10 @@
  * IN THE SOFTWARE.
  */
 
-import * as request from "supertest"
+import { AuthenticationClient } from "clients/authentication"
 
-import { AuthenticationClient } from "~/clients/authentication"
-
-import { chance } from "_/helpers"
-import { mockRegisterRequest } from "_/mocks/handlers/register"
+import { chance, request } from "_/helpers"
+import { mockRegisterRequest } from "_/mocks/common/events/register"
 import { mockVerificationCode } from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------
@@ -38,56 +36,43 @@ describe("POST /register/:code", () => {
   /* Authentication client */
   const auth = new AuthenticationClient()
 
-  /* Initialize HTTP client */
-  const http = request(process.env.API_INVOKE_URL!)
-
   /* Test: should return empty body */
   it("should return empty body", async () => {
     const user = mockRegisterRequest()
     const { id } = await auth.register(user.email, user.password)
-    return http.post(`/register/${id}`)
+    return request.post(`/register/${id}`)
       .set("Content-Type", "application/json")
       .expect(200, "{}")
-  })
-
-  /* Test: should set necessary cross-origin headers */
-  it("should set necessary cross-origin headers", async () => {
-    const user = mockRegisterRequest()
-    const { id } = await auth.register(user.email, user.password)
-    return http.post(`/register/${id}`)
-      .set("Content-Type", "application/json")
-      .expect("Access-Control-Allow-Origin",
-        process.env.COGNITO_IDENTITY_DOMAIN!)
   })
 
   /* Test: should return error for malformed request */
   it("should return error for malformed request", () => {
     const { id } = mockVerificationCode("register")
-    return http.post(`/register/${id}`)
+    return request.post(`/register/${id}`)
       .set("Content-Type", "application/json")
       .send(`/${chance.string()}`)
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for invalid request */
   it("should return error for invalid request", () => {
     const { id } = mockVerificationCode("register")
-    return http.post(`/register/${id}`)
+    return request.post(`/register/${id}`)
       .set("Content-Type", "application/json")
       .send(`{ "${chance.word()}": "${chance.string()}" }`)
       .expect(400, {
         type: "TypeError",
-        message: "Invalid request body"
+        message: "Invalid request"
       })
   })
 
   /* Test: should return error for invalid verification code */
   it("should return error for invalid verification code", () => {
     const { id } = mockVerificationCode("register")
-    return http.post(`/register/${id}`)
+    return request.post(`/register/${id}`)
       .set("Content-Type", "application/json")
       .expect(400, {
         type: "Error",
