@@ -33,13 +33,27 @@ variable "region" {
 }
 
 # -----------------------------------------------------------------------------
-# Variables: Cognito
+# Variables: API Gateway
 # -----------------------------------------------------------------------------
 
-# var.cognito_identity_name
-variable "cognito_identity_name" {
-  description = "Cognito identity pool name"
+# var.api_id
+variable "api_id" {
+  description = "API identifier"
 }
+
+# var.api_stage
+variable "api_stage" {
+  description = "API deployment stage"
+}
+
+# var.api_base_path
+variable "api_base_path" {
+  description = "API base path"
+}
+
+# -----------------------------------------------------------------------------
+# Variables: Cognito
+# -----------------------------------------------------------------------------
 
 # var.cognito_identity_domain
 variable "cognito_identity_domain" {

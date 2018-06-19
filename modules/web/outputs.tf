@@ -19,29 +19,15 @@
 # IN THE SOFTWARE.
 
 # -----------------------------------------------------------------------------
-# Variables: General
+# Variables: Cloudfront
 # -----------------------------------------------------------------------------
 
-# var.namespace
-variable "namespace" {
-  description = "AWS resource namespace/prefix"
+# output.cloudfront_distribution_domain_name
+output "cloudfront_distribution_domain_name" {
+  value = "${aws_cloudfront_distribution._.domain_name}"
 }
 
-# var.region
-variable "region" {
-  description = "AWS region"
-}
-
-# -----------------------------------------------------------------------------
-# Variables: Cognito
-# -----------------------------------------------------------------------------
-
-# var.cognito_identity_name
-variable "cognito_identity_name" {
-  description = "Cognito identity pool name"
-}
-
-# var.cognito_identity_domain
-variable "cognito_identity_domain" {
-  description = "Cognito identity provider domain"
+# output.cloudfront_distribution_hosted_zone_id
+output "cloudfront_distribution_hosted_zone_id" {
+  value = "${aws_cloudfront_distribution._.hosted_zone_id}"
 }

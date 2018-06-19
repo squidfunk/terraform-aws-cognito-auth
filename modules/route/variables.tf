@@ -36,12 +36,21 @@ variable "region" {
 # Variables: Cognito
 # -----------------------------------------------------------------------------
 
-# var.cognito_identity_name
-variable "cognito_identity_name" {
-  description = "Cognito identity pool name"
-}
-
 # var.cognito_identity_domain
 variable "cognito_identity_domain" {
   description = "Cognito identity provider domain"
+}
+
+# -----------------------------------------------------------------------------
+# Variables: Cloudfront
+# -----------------------------------------------------------------------------
+
+# var.cloudfront_distribution_domain_name
+variable "cloudfront_distribution_domain_name" {
+  description = "CloudFront distribution domain name"
+}
+
+# var.cloudfront_distribution_hosted_zone_id
+variable "cloudfront_distribution_hosted_zone_id" {
+  description = "CloudFront distribution hosted zone identifier"
 }

@@ -53,6 +53,7 @@ variable "cognito_identity_domain" {
 # var.api_stage
 variable "api_stage" {
   description = "API deployment stage"
+  default     = "production"
 }
 
 # -----------------------------------------------------------------------------

@@ -108,11 +108,10 @@ resource "aws_lambda_function" "_" {
 
   environment {
     variables = {
-      COGNITO_USER_POOL          = "${var.cognito_user_pool}"
-      COGNITO_IDENTITY_NAME      = "${var.cognito_identity_name}"
-      COGNITO_IDENTITY_DOMAIN    = "${var.cognito_identity_domain}"
-      COGNITO_IDENTITY_SUBDOMAIN = "${var.cognito_identity_subdomain}"
-      SES_SENDER_ADDRESS         = "${var.ses_sender_address}"
+      COGNITO_USER_POOL       = "${var.cognito_user_pool}"
+      COGNITO_IDENTITY_NAME   = "${var.cognito_identity_name}"
+      COGNITO_IDENTITY_DOMAIN = "${var.cognito_identity_domain}"
+      SES_SENDER_ADDRESS      = "${var.ses_sender_address}"
     }
   }
 }

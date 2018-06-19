@@ -26,16 +26,20 @@
 
 /**
  * Session tokens
+ *
+ * @template T - Session token expiry type
  */
-export interface SessionToken {
+export interface SessionToken<T = Date> {
   token: string                      /* Token encoded as JWT */
-  expires: Date                      /* Token expiry date */
+  expires: T                         /* Token expiry date */
 }
 
 /**
- * Session tokens
+ * Session
+ *
+ * @template T - Session token expiry type (JSON = string, JS = Date)
  */
-export interface Session {
-  access: SessionToken               /* Access token */
-  refresh?: SessionToken             /* Refresh token */
+export interface Session<T = Date> {
+  access: SessionToken<T>            /* Access token */
+  refresh?: SessionToken<T>          /* Refresh token */
 }

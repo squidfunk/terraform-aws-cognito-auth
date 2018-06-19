@@ -19,29 +19,39 @@
 # IN THE SOFTWARE.
 
 # -----------------------------------------------------------------------------
-# Variables: General
+# Providers
 # -----------------------------------------------------------------------------
 
-# var.namespace
-variable "namespace" {
-  description = "AWS resource namespace/prefix"
-}
-
-# var.region
-variable "region" {
-  description = "AWS region"
+# provider.aws
+provider "aws" {
+  version = ">= 1.20.0, <= 2.0.0"
+  alias   = "acm"
+  region  = "us-east-1"
 }
 
 # -----------------------------------------------------------------------------
-# Variables: Cognito
+# Data: Route53
 # -----------------------------------------------------------------------------
 
-# var.cognito_identity_name
-variable "cognito_identity_name" {
-  description = "Cognito identity pool name"
+# data.aws_route53_zone._
+data "aws_route53_zone" "_" {
+  name = "${replace(var.cognito_identity_domain, "/^[^.]+./", "")}"
 }
 
-# var.cognito_identity_domain
-variable "cognito_identity_domain" {
-  description = "Cognito identity provider domain"
+# -----------------------------------------------------------------------------
+# Resources: Route 53
+# -----------------------------------------------------------------------------
+
+# aws_route53_record._
+resource "aws_route53_record" "_" {
+  zone_id = "${data.aws_route53_zone._.id}"
+  name    = "${var.cognito_identity_domain}"
+  type    = "A"
+
+  alias {
+    name    = "${var.cloudfront_distribution_domain_name}"
+    zone_id = "${var.cloudfront_distribution_hosted_zone_id}"
+
+    evaluate_target_health = false
+  }
 }

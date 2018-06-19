@@ -51,6 +51,11 @@ output "api_invoke_url" {
   value = "${module.api.api_invoke_url}"
 }
 
+# output.api_base_path
+output "api_base_path" {
+  value = "${module.api.api_base_path}"
+}
+
 # output.api_authorizer
 output "api_authorizer" {
   value = "${module.api.api_authorizer}"

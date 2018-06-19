@@ -71,3 +71,35 @@ module "message" {
 
   ses_sender_address = "${var.ses_sender_address}"
 }
+
+# module.route
+module "route" {
+  source = "./modules/route"
+
+  namespace = "${var.namespace}"
+  region    = "${var.region}"
+
+  cognito_identity_domain = "${var.cognito_identity_domain}"
+
+  cloudfront_distribution_domain_name = "${
+    module.web.cloudfront_distribution_domain_name
+  }"
+
+  cloudfront_distribution_hosted_zone_id = "${
+    module.web.cloudfront_distribution_hosted_zone_id
+  }"
+}
+
+# module.web
+module "web" {
+  source = "./modules/web"
+
+  namespace = "${var.namespace}"
+  region    = "${var.region}"
+
+  api_id        = "${module.api.api_id}"
+  api_stage     = "${module.api.api_stage}"
+  api_base_path = "${module.api.api_base_path}"
+
+  cognito_identity_domain = "${var.cognito_identity_domain}"
+}

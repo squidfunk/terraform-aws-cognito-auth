@@ -28,19 +28,6 @@ import { ResetMessage } from "messages/reset"
 import { VerificationCode } from "verification"
 
 /* ----------------------------------------------------------------------------
- * Values
- * ------------------------------------------------------------------------- */
-
-/**
- * Fully-qualified domain name
- */
-const domain = `${
-  process.env.COGNITO_IDENTITY_SUBDOMAIN!
-}.${
-  process.env.COGNITO_IDENTITY_DOMAIN!
-}`
-
-/* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
@@ -58,7 +45,7 @@ function template(code: VerificationCode) {
     case "register":
       return new RegisterMessage({
         name: process.env.COGNITO_IDENTITY_NAME!,
-        domain,
+        domain: process.env.COGNITO_IDENTITY_DOMAIN!,
         code: code.id
       })
 
@@ -66,7 +53,7 @@ function template(code: VerificationCode) {
     case "reset":
       return new ResetMessage({
         name: process.env.COGNITO_IDENTITY_NAME!,
-        domain,
+        domain: process.env.COGNITO_IDENTITY_DOMAIN!,
         code: code.id
       })
 
