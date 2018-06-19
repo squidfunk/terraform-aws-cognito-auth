@@ -19,6 +19,19 @@
 # IN THE SOFTWARE.
 
 # -----------------------------------------------------------------------------
+# Locals
+# -----------------------------------------------------------------------------
+
+# local.*
+locals {
+  domain = "${
+      var.cognito_identity_subdomain
+    }.${
+      var.cognito_identity_domain
+    }"
+}
+
+# -----------------------------------------------------------------------------
 # Data: IAM
 # -----------------------------------------------------------------------------
 
@@ -140,7 +153,7 @@ resource "aws_cognito_user_pool_client" "_" {
 # aws_cognito_identity_pool._
 resource "aws_cognito_identity_pool" "_" {
   identity_pool_name      = "${var.cognito_identity_name}"
-  developer_provider_name = "${var.cognito_identity_domain}"
+  developer_provider_name = "${local.domain}"
 
   allow_unauthenticated_identities = false
 

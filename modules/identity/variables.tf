@@ -43,5 +43,10 @@ variable "cognito_identity_name" {
 
 # var.cognito_identity_domain
 variable "cognito_identity_domain" {
-  description = "Cognito identity provider domain"
+  description = "Cognito identity provider domain part"
+}
+
+# var.cognito_identity_subdomain
+variable "cognito_identity_subdomain" {
+  description = "Cognito identity provider subdomain part"
 }
