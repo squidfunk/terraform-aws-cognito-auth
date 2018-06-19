@@ -165,9 +165,9 @@ describe("POST /authenticate", () => {
           .set("Content-Type", "application/json")
           .send({ username: email, password })
           .expect(200)
-        expect(body.refresh!.token)
+        expect(body.refresh.token)
           .toMatch(/^([a-zA-Z0-9\-_]+\.){4}[a-zA-Z0-9\-_]+$/)
-        expect(Date.parse(body.refresh!.expires))
+        expect(Date.parse(body.refresh.expires))
           .toBeGreaterThan(Date.now() + 1000 * 59 * 60 * 24 * 30)
       })
 
@@ -180,13 +180,13 @@ describe("POST /authenticate", () => {
           .expect(200)
         expect(header["set-cookie"]).toMatch(
           `__Secure-token=${
-            encodeURIComponent(body.refresh!.token)
+            encodeURIComponent(body.refresh.token)
           }; Domain=${
             process.env.COGNITO_IDENTITY_DOMAIN!
           }; Path=/${
             process.env.API_BASE_PATH
           }/authenticate; Expires=${
-            new Date(Date.parse(body.refresh!.expires)).toUTCString()
+            new Date(Date.parse(body.refresh.expires)).toUTCString()
           }; HttpOnly; Secure; SameSite=Strict`)
       })
 
@@ -197,7 +197,7 @@ describe("POST /authenticate", () => {
         .send({ username: email, password })
         .expect(200)
       const { body } = await request.post("/authenticate")
-        .send({ token: refresh!.token })
+        .send({ token: refresh.token })
         .expect(200)
       expect(body.access.token)
         .toMatch(/^([a-zA-Z0-9\-_]+\.){2}[a-zA-Z0-9\-_]+$/)
