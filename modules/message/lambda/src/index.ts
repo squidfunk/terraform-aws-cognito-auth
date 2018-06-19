@@ -23,11 +23,22 @@
 import { SNSEvent } from "aws-lambda"
 import { CognitoIdentityServiceProvider, SES } from "aws-sdk"
 
-import {
-  RegisterMessage,
-  ResetMessage
-} from "./messages"
-import { VerificationCode } from "./verification"
+import { RegisterMessage } from "messages/register"
+import { ResetMessage } from "messages/reset"
+import { VerificationCode } from "verification"
+
+/* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Fully-qualified domain name
+ */
+const domain = `${
+  process.env.COGNITO_IDENTITY_SUBDOMAIN!
+}.${
+  process.env.COGNITO_IDENTITY_DOMAIN!
+}`
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -47,7 +58,7 @@ function template(code: VerificationCode) {
     case "register":
       return new RegisterMessage({
         name: process.env.COGNITO_IDENTITY_NAME!,
-        domain: process.env.COGNITO_IDENTITY_DOMAIN!,
+        domain,
         code: code.id
       })
 
@@ -55,7 +66,7 @@ function template(code: VerificationCode) {
     case "reset":
       return new ResetMessage({
         name: process.env.COGNITO_IDENTITY_NAME!,
-        domain: process.env.COGNITO_IDENTITY_DOMAIN!,
+        domain,
         code: code.id
       })
 

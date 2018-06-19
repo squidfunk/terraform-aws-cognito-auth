@@ -107,9 +107,10 @@ test: node_modules | dist-pre
 # Execute unit tests in watch mode
 watch: node_modules
 	@ NODE_ENV=development $(shell npm bin)/nodemon --quiet \
-		--watch src --watch tests --exec \
+		--watch src --watch tests --ext json,ts --exec \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \
-			tests/index.ts "suites/unit/**/*.spec.ts"
+			--project tests/tsconfig.json \
+				tests/index.ts "suites/unit/**/*.spec.ts"
 
 # -----------------------------------------------------------------------------
 

@@ -23,7 +23,7 @@
 import {
   VerificationCode,
   VerificationContext
-} from "~/verification"
+} from "verification"
 
 import { chance } from "_/helpers"
 

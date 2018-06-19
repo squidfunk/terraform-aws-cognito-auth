@@ -26,7 +26,7 @@ import * as path from "path"
 import {
   ResetMessage,
   ResetMessageData
-} from "~/messages/reset"
+} from "messages/reset"
 
 import { printMimeMessage } from "_/helpers"
 

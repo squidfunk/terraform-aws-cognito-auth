@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { MessageAttachment } from "~/messages"
+import { MessageAttachment } from "messages"
 
 import { chance } from "_/helpers"
 import {

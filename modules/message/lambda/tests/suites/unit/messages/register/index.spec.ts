@@ -26,7 +26,7 @@ import * as path from "path"
 import {
   RegisterMessage,
   RegisterMessageData
-} from "~/messages/register"
+} from "messages/register"
 
 import { printMimeMessage } from "_/helpers"
 

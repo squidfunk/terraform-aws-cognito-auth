@@ -178,10 +178,3 @@ export abstract class Message<T> {
     return message
   }
 }
-
-/* ----------------------------------------------------------------------------
- * Re-export messages
- * ------------------------------------------------------------------------- */
-
-export { RegisterMessage } from "./register"
-export { ResetMessage } from "./reset"

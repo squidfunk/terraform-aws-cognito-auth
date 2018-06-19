@@ -22,7 +22,7 @@
 
 import { render } from "mustache"
 
-import { Message } from ".."
+import { Message } from "messages"
 
 /* ----------------------------------------------------------------------------
  * Types

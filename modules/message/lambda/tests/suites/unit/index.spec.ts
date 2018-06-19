@@ -20,8 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-import { handler } from "~/index"
-import { VerificationContext } from "~/verification"
+import { handler } from "index"
+import { VerificationContext } from "verification"
 
 import { chance } from "_/helpers"
 import {

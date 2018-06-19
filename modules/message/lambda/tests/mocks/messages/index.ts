@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { Message } from "~/messages"
+import { Message } from "messages"
 
 import { chance } from "_/helpers"
 
