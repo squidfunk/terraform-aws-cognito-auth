@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "experimentalDecorators": true,
     "lib": [
       "es2017",
