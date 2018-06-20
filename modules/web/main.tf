@@ -80,7 +80,7 @@ resource "aws_cloudfront_distribution" "_" {
   aliases         = ["${var.cognito_identity_domain}"]
   enabled         = true
   is_ipv6_enabled = true
-  price_class     = "PriceClass_100"
+  price_class     = "PriceClass_All"
 
   origin {
     domain_name = "${aws_s3_bucket._.bucket_domain_name}"
