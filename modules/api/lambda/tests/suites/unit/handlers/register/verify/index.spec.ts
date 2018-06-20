@@ -31,7 +31,7 @@ import {
   mockManagementClientVerifyUserWithError,
   mockManagementClientVerifyUserWithSuccess
 } from "_/mocks/clients/management"
-import { mockAPIGatewayEvent } from "_/mocks/vendor/aws-lambda"
+import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 import {
   mockVerificationClaimWithError,
   mockVerificationClaimWithResult,
@@ -52,7 +52,7 @@ describe("handlers/register/verify", () => {
     const code = mockVerificationCode()
 
     /* API Gateway event */
-    const event = mockAPIGatewayEvent<Parameters, Request>({
+    const event = mockAPIGatewayProxyEvent<Parameters, Request>({
       pathParameters: { code: code.id }
     })
 

@@ -51,8 +51,15 @@ src/%.json: src/%.ts
 # Rules
 # -----------------------------------------------------------------------------
 
+# Start development server
+start: node_modules .env
+	@ NODE_ENV=development $(shell npm bin)/nodemon --quiet \
+		--watch src --watch tools --ext json,ts --exec \
+		$(shell npm bin)/ts-node -r tsconfig-paths/register \
+			--project tools/tsconfig.json tools/server
+
 # Execute acceptance tests
 test-acceptance: node_modules .env
 	@ $(shell npm bin)/ts-node -r tsconfig-paths/register \
-		--project tests/tsconfig.json \
-			tests/index.ts "suites/acceptance/**/*.spec.ts"
+		--project tests/tsconfig.json tests \
+			"suites/acceptance/**/*.spec.ts"

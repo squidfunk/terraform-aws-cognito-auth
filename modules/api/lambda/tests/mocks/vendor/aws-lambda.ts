@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { APIGatewayEvent } from "aws-lambda"
+import { APIGatewayProxyEvent } from "aws-lambda"
 
 import { chance } from "_/helpers"
 
@@ -34,7 +34,7 @@ import { chance } from "_/helpers"
  * @template P - Event path parameter type
  * @template B - Event body type
  */
-interface APIGatewayEventOptions<P extends {}, B extends {}> {
+interface APIGatewayProxyEventOptions<P extends {}, B extends {}> {
   path: string                         /* Event path */
   pathParameters: P                    /* Event path parameters */
   method: "GET" | "POST"               /* Event HTTP method */
@@ -55,7 +55,7 @@ interface APIGatewayEventOptions<P extends {}, B extends {}> {
  *
  * @return API Gateway event path parameters
  */
-export function mockAPIGatewayEventPathParameters(
+export function mockAPIGatewayProxyEventPathParameters(
   count: number = chance.integer({ min: 0, max: 2 })
 ) {
   return [...Array(count)].reduce(params => {
@@ -73,12 +73,12 @@ export function mockAPIGatewayEventPathParameters(
  *
  * @return API Gateway event options
  */
-export function mockAPIGatewayEventOptions<P extends {}, B extends {}>(
-  override?: Partial<APIGatewayEventOptions<P, B>>
-): APIGatewayEventOptions<P, B> {
+export function mockAPIGatewayProxyEventOptions<P extends {}, B extends {}>(
+  override?: Partial<APIGatewayProxyEventOptions<P, B>>
+): APIGatewayProxyEventOptions<P, B> {
   return {
     path: "/",
-    pathParameters: mockAPIGatewayEventPathParameters(),
+    pathParameters: mockAPIGatewayProxyEventPathParameters(),
     method: "POST",
     body: "",
     ...override,
@@ -101,16 +101,16 @@ export function mockAPIGatewayEventOptions<P extends {}, B extends {}>(
  *
  * @return API Gateway event
  */
-export function mockAPIGatewayEvent<B extends {}>(
-  override?: Partial<APIGatewayEventOptions<{}, B>>
-): APIGatewayEvent
-export function mockAPIGatewayEvent<P extends {}, B extends {}>(
-  override?: Partial<APIGatewayEventOptions<P, B>>
-): APIGatewayEvent
-export function mockAPIGatewayEvent<P extends {}, B extends {}>(
-  override?: Partial<APIGatewayEventOptions<P, B>>
-): APIGatewayEvent {
-  const options = mockAPIGatewayEventOptions<P, B>(override)
+export function mockAPIGatewayProxyEvent<B extends {}>(
+  override?: Partial<APIGatewayProxyEventOptions<{}, B>>
+): APIGatewayProxyEvent
+export function mockAPIGatewayProxyEvent<P extends {}, B extends {}>(
+  override?: Partial<APIGatewayProxyEventOptions<P, B>>
+): APIGatewayProxyEvent
+export function mockAPIGatewayProxyEvent<P extends {}, B extends {}>(
+  override?: Partial<APIGatewayProxyEventOptions<P, B>>
+): APIGatewayProxyEvent {
+  const options = mockAPIGatewayProxyEventOptions<P, B>(override)
   const body = typeof options.body !== "string"
     ? JSON.stringify(options.body)
     : options.body

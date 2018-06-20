@@ -34,7 +34,7 @@ import {
 import {
   mockResetVerifyRequest
 } from "_/mocks/common/events/reset/verify"
-import { mockAPIGatewayEvent } from "_/mocks/vendor/aws-lambda"
+import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 import {
   mockVerificationClaimWithError,
   mockVerificationClaimWithResult,
@@ -56,7 +56,7 @@ describe("handlers/reset/verify", () => {
     const code = mockVerificationCode()
 
     /* API Gateway event */
-    const event = mockAPIGatewayEvent<Parameters, Request>({
+    const event = mockAPIGatewayProxyEvent<Parameters, Request>({
       body: { password }, pathParameters: { code: code.id }
     })
 

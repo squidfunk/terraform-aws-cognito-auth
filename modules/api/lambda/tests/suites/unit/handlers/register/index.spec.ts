@@ -31,7 +31,7 @@ import {
   mockAuthenticationClientRegisterWithSuccess
 } from "_/mocks/clients/authentication"
 import { mockRegisterRequest } from "_/mocks/common/events/register"
-import { mockAPIGatewayEvent } from "_/mocks/vendor/aws-lambda"
+import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -48,7 +48,7 @@ describe("handlers/register", () => {
 
     /* Test: should resolve with empty body */
     it("should resolve with empty body", async () => {
-      const event = mockAPIGatewayEvent<Request>({
+      const event = mockAPIGatewayProxyEvent<Request>({
         body: { email, password }
       })
       const registerMock =
@@ -62,7 +62,7 @@ describe("handlers/register", () => {
 
     /* Test: should resolve with authentication client error */
     it("should resolve with authentication client error", async () => {
-      const event = mockAPIGatewayEvent<Request>({
+      const event = mockAPIGatewayProxyEvent<Request>({
         body: { email, password }
       })
       const registerMock =

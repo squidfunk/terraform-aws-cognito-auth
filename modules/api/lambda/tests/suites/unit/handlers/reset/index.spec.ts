@@ -31,7 +31,7 @@ import {
   mockAuthenticationClientForgotPasswordWithSuccess
 } from "_/mocks/clients/authentication"
 import { mockResetRequest } from "_/mocks/common/events/reset"
-import { mockAPIGatewayEvent } from "_/mocks/vendor/aws-lambda"
+import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -47,7 +47,7 @@ describe("handlers/reset", () => {
     const { username } = mockResetRequest()
 
     /* API Gateway event */
-    const event = mockAPIGatewayEvent<Request>({ body: { username } })
+    const event = mockAPIGatewayProxyEvent<Request>({ body: { username } })
 
     /* Test: should resolve with empty body */
     it("should resolve with empty body", async () => {

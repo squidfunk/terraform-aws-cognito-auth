@@ -21,7 +21,7 @@
  */
 
 import {
-  APIGatewayEvent,
+  APIGatewayProxyEvent,
   APIGatewayProxyResult
 } from "aws-lambda"
 import { AWSError } from "aws-sdk"
@@ -116,7 +116,8 @@ export function translate(err: AWSError): AWSError {
 export function handler<P extends {}, B extends {}, T = void>(
   schema: object, cb: HandlerCallback<P, B, T>
 ) {
-  return async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+  return async (event: APIGatewayProxyEvent):
+      Promise<APIGatewayProxyResult> => {
     try {
       const data: B = event.httpMethod === "POST"
         ? JSON.parse(event.body || "{}")

@@ -37,8 +37,8 @@ import {
   mockHandlerCallbackWithSuccess
 } from "_/mocks/handlers"
 import {
-  mockAPIGatewayEvent,
-  mockAPIGatewayEventPathParameters
+  mockAPIGatewayProxyEvent,
+  mockAPIGatewayProxyEventPathParameters
 } from "_/mocks/vendor/aws-lambda"
 import {
   mockValidateWithError,
@@ -93,7 +93,7 @@ describe("handlers", () => {
 
     /* Test: should resolve with callback response body */
     it("should resolve with callback response body", async () => {
-      const event = mockAPIGatewayEvent()
+      const event = mockAPIGatewayProxyEvent()
       mockValidateWithSuccess()
       const result = chance.string()
       const cb = mockHandlerCallbackWithSuccess(result)
@@ -104,7 +104,7 @@ describe("handlers", () => {
 
     /* Test: should resolve with callback response headers */
     it("should resolve with callback response headers", async () => {
-      const event = mockAPIGatewayEvent()
+      const event = mockAPIGatewayProxyEvent()
       mockValidateWithSuccess()
       const result = { [chance.string()]: chance.string() }
       const cb = mockHandlerCallbackWithSuccess(undefined, result)
@@ -115,7 +115,7 @@ describe("handlers", () => {
 
     /* Test: should resolve with error for malformed request */
     it("should resolve with error for malformed request", async () => {
-      const event = mockAPIGatewayEvent({ body: "/" })
+      const event = mockAPIGatewayProxyEvent({ body: "/" })
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
       const { statusCode, body } = await handler({}, cb)(event)
@@ -128,7 +128,7 @@ describe("handlers", () => {
 
     /* Test: should resolve with error for invalid request */
     it("should resolve with error for invalid request", async () => {
-      const event = mockAPIGatewayEvent()
+      const event = mockAPIGatewayProxyEvent()
       mockValidateWithError()
       const cb = mockHandlerCallbackWithSuccess()
       const { statusCode, body } = await handler({}, cb)(event)
@@ -142,7 +142,7 @@ describe("handlers", () => {
 
     /* Test: should resolve with error for internal error */
     it("should resolve with error for internal error", async () => {
-      const event = mockAPIGatewayEvent()
+      const event = mockAPIGatewayProxyEvent()
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithError()
       const { statusCode, body } = await handler({}, cb)(event)
@@ -156,8 +156,8 @@ describe("handlers", () => {
 
     /* Test: should invoke callback with path parameters */
     it("should invoke callback with path parameters", async () => {
-      const pathParameters = mockAPIGatewayEventPathParameters()
-      const event = mockAPIGatewayEvent({ pathParameters })
+      const pathParameters = mockAPIGatewayProxyEventPathParameters()
+      const event = mockAPIGatewayProxyEvent({ pathParameters })
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
       await handler({}, cb)(event)
@@ -168,7 +168,7 @@ describe("handlers", () => {
     /* Test: should invoke callback with request body */
     it("should invoke callback with request body", async () => {
       const body = mockAuthenticateRequestWithCredentials()
-      const event = mockAPIGatewayEvent<Request>({ body })
+      const event = mockAPIGatewayProxyEvent<Request>({ body })
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
       await handler({}, cb)(event)
@@ -177,7 +177,7 @@ describe("handlers", () => {
 
     /* Test: should handle empty request body */
     it("should handle empty request body", async () => {
-      const event = mockAPIGatewayEvent({ method: "GET" })
+      const event = mockAPIGatewayProxyEvent({ method: "GET" })
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
       const { statusCode } = await handler({}, cb)(event)

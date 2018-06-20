@@ -37,7 +37,7 @@ import {
   mockAuthenticateRequestWithToken
 } from "_/mocks/common/events/authenticate"
 import { mockSession } from "_/mocks/common/session"
-import { mockAPIGatewayEvent } from "_/mocks/vendor/aws-lambda"
+import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -56,7 +56,7 @@ describe("handlers/authenticate", () => {
 
     /* Test: should resolve with session for valid credentials */
     it("should resolve with session for valid credentials", async () => {
-      const event = mockAPIGatewayEvent<RequestWithCredentials>({
+      const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
         body: { username, password }
       })
       const authenticateMock =
@@ -71,7 +71,7 @@ describe("handlers/authenticate", () => {
     /* Test: should resolve with session for valid refresh token (body) */
     it("should resolve with session for valid refresh token (body)",
       async () => {
-        const event = mockAPIGatewayEvent<RequestWithToken>({
+        const event = mockAPIGatewayProxyEvent<RequestWithToken>({
           body: { token }
         })
         const authenticateMock =
@@ -86,7 +86,7 @@ describe("handlers/authenticate", () => {
     /* Test: should resolve with session for valid refresh token (cookie) */
     it("should resolve with session for valid refresh token (cookie)",
       async () => {
-        const event = mockAPIGatewayEvent<RequestWithToken>({
+        const event = mockAPIGatewayProxyEvent<RequestWithToken>({
           headers: { Cookie: `__Secure-token=${token}` }
         })
         const authenticateMock =
@@ -103,7 +103,7 @@ describe("handlers/authenticate", () => {
       async () => {
         const sessionWithRefreshToken = mockSession(true)
         const path = chance.string()
-        const event = mockAPIGatewayEvent<RequestWithCredentials>({
+        const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
           path, body: { username, password }
         })
         mockAuthenticationClientAuthenticateWithResult(sessionWithRefreshToken)
@@ -123,7 +123,7 @@ describe("handlers/authenticate", () => {
     /* Test: should resolve with error for missing token (body, cookie) */
     it("should resolve with error for missing token (body, cookie)",
       async () => {
-        const event = mockAPIGatewayEvent<RequestWithToken>()
+        const event = mockAPIGatewayProxyEvent<RequestWithToken>()
         const authenticateMock =
           mockAuthenticationClientAuthenticateWithResult()
         const { statusCode, body } = await post(event)
@@ -137,7 +137,7 @@ describe("handlers/authenticate", () => {
 
     /* Test: should resolve with authentication client error */
     it("should resolve with authentication client error", async () => {
-      const event = mockAPIGatewayEvent<RequestWithCredentials>({
+      const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
         body: { username, password }
       })
       const authenticateMock =
