@@ -20,10 +20,20 @@
  * IN THE SOFTWARE.
  */
 
+declare module "*.json" {
+  const value: any
+  export = value
+}
+
+declare module "*.scss" {
+  const value: any
+  export = value
+}
+
 declare interface Window {
   __REDUX_DEVTOOLS_EXTENSION__?: any
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
   env: {
-    API_INVOKE_URL: string
+    API_BASE_PATH: string
   }
 }

@@ -22,8 +22,10 @@
 
 import * as autoprefixer from "autoprefixer"
 import * as dotenv from "dotenv"
+import { Application } from "express"
 import * as HtmlPlugin from "html-webpack-plugin"
-import * as MiniCssExtractPlugin from "mini-css-extract-plugin"
+import * as proxy from "http-proxy-middleware"
+// import * as MiniCssExtractPlugin from "mini-css-extract-plugin"
 import * as path from "path"
 import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin"
 import {
@@ -76,7 +78,7 @@ export default (_env: never, args: Configuration) => {
         {
           test: /\.scss$/,
           use: [
-            MiniCssExtractPlugin.loader,
+            // MiniCssExtractPlugin.loader,
             {
               loader: "css-loader",
               options: {
@@ -140,10 +142,10 @@ export default (_env: never, args: Configuration) => {
       /* Don't emit assets if there were errors */
       new NoEmitOnErrorsPlugin(),
 
-      /* Extract CSS */
-      new MiniCssExtractPlugin({
-        filename: "application.css"
-      }),
+      // /* Extract CSS */
+      // new MiniCssExtractPlugin({
+      //   filename: "application.css"
+      // }),
 
       /* HTML plugin */
       new HtmlPlugin({
@@ -158,7 +160,7 @@ export default (_env: never, args: Configuration) => {
         __dirname,
         "node_modules"
       ],
-      extensions: [".ts", ".tsx", ".js", ".json"],
+      extensions: [".ts", ".tsx", ".js", ".json", ".scss"],
       plugins: [
         new TsconfigPathsPlugin()
       ]
@@ -170,7 +172,13 @@ export default (_env: never, args: Configuration) => {
     /* Development server configuration */
     devServer: {
       contentBase: "/dist/",
-      historyApiFallback: true
+      historyApiFallback: true,
+
+      /* Proxy all /identity requests to the API Gateway development server */
+      before: (app: Application) => app.use("/identity", proxy({
+        target: "http://localhost:8081",
+        changeOrigin: true
+      }))
     },
 
     /* Configuration for watch mode */

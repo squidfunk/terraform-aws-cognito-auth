@@ -23,7 +23,7 @@
 /npm-debug.log*
 
 # Distribution files
-/dist
+/dist/*.map
 
 # Cross-referenced declarations in source directories
 /src/**/*.d.ts

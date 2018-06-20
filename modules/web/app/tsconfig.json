@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "alwaysStrict": true,
-    "baseUrl": ".",
+    "baseUrl": "src",
     "experimentalDecorators": true,
     "jsx": "react",
     "lib": [
@@ -19,14 +19,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "dist",
-    "paths": {
-      "actions/*": ["src/actions/*"],
-      "common/*": ["src/common/*"],
-      "components/*": ["src/components/*"],
-      "containers/*": ["src/containers/*"],
-      "middlewares/*": ["src/middlewares/*"],
-      "reducers": ["src/reducers"]
-    },
     "preserveConstEnums": true,
     "removeComments": true,
     "sourceMap": false,
