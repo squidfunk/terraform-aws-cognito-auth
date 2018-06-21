@@ -20,6 +20,8 @@
  * IN THE SOFTWARE.
  */
 
+import { AWSError } from "aws-sdk"
+
 import { AuthenticationClient } from "clients/authentication"
 
 import { chance } from "_/helpers"
@@ -267,6 +269,25 @@ describe("clients/authentication", () => {
           } catch (err) {
             expect(initiateAuthMock).toHaveBeenCalled()
             expect(err).toBe(errMock)
+            done()
+          }
+        })
+
+      /* Test: should obfuscate AWS Cognito error for non-existent user */
+      it("should obfuscate AWS Cognito error for non-existent user",
+        async done => {
+          const errMock = new Error() as AWSError
+          errMock.code = "UserNotFoundException"
+          const initiateAuthMock =
+            mockCognitoInitiateAuthWithError(errMock)
+          try {
+            const auth = new AuthenticationClient()
+            await auth.authenticate(username, password)
+            done.fail()
+          } catch (err) {
+            expect(initiateAuthMock).toHaveBeenCalled()
+            expect(err.code).toEqual("NotAuthorizedException")
+            expect(err.message).toEqual("Incorrect username or password")
             done()
           }
         })

@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { CognitoIdentityServiceProvider } from "aws-sdk"
+import { AWSError, CognitoIdentityServiceProvider } from "aws-sdk"
 import * as uuid from "uuid/v4"
 
 import { Client } from "clients"
@@ -44,6 +44,28 @@ import { Session } from "common/session"
  */
 export function expires(seconds: number): Date {
   return new Date(Date.now() + seconds * 1000)
+}
+
+/**
+ * Translate/map error code and message for some errors
+ *
+ * @param err - Error
+ *
+ * @return Mapped error
+ */
+export function translate(err: AWSError): AWSError {
+  switch (err.code) { // tslint:disable-line no-small-switch
+
+    /* Obfuscate non-existent user error for authentication */
+    case "UserNotFoundException":
+      err.code    = "NotAuthorizedException"
+      err.message = "Incorrect username or password"
+      return err
+
+    /* Pass-through all other errors */
+    default:
+      return err
+  }
 }
 
 /* ----------------------------------------------------------------------------
@@ -151,28 +173,34 @@ export class AuthenticationClient extends Client {
   protected async authenticateWithCredentials(
     username: string, password: string
   ): Promise<Session> {
-    const { AuthenticationResult, ChallengeName } =
-      await this.cognito.initiateAuth({
-        ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
-        AuthFlow: "USER_PASSWORD_AUTH",
-        AuthParameters: {
-          USERNAME: username,
-          PASSWORD: password
-        }
-      }).promise()
+    try {
+      const { AuthenticationResult, ChallengeName } =
+        await this.cognito.initiateAuth({
+          ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
+          AuthFlow: "USER_PASSWORD_AUTH",
+          AuthParameters: {
+            USERNAME: username,
+            PASSWORD: password
+          }
+        }).promise()
 
-    /* Return session if authenticated */
-    if (!AuthenticationResult)
-      throw new Error(`Invalid authentication: challenge "${ChallengeName}"`)
-    return {
-      access: {
-        token: AuthenticationResult.IdToken!,
-        expires: expires(60 * 60) /* 1 hour */
-      },
-      refresh: {
-        token: AuthenticationResult.RefreshToken!,
-        expires: expires(60 * 60 * 24 * 30) /* 30 days */
+      /* Return session if authenticated */
+      if (!AuthenticationResult)
+        throw new Error(`Invalid authentication: challenge "${ChallengeName}"`)
+      return {
+        access: {
+          token: AuthenticationResult.IdToken!,
+          expires: expires(60 * 60) /* 1 hour */
+        },
+        refresh: {
+          token: AuthenticationResult.RefreshToken!,
+          expires: expires(60 * 60 * 24 * 30) /* 30 days */
+        }
       }
+
+    /* Obfuscate errors */
+    } catch (err) {
+      throw translate(err)
     }
   }
 
