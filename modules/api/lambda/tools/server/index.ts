@@ -23,6 +23,7 @@
 import "dotenv/config"
 
 import * as express from "express"
+import * as morgan from "morgan"
 
 import { middleware } from "./middleware"
 
@@ -33,6 +34,7 @@ import { middleware } from "./middleware"
 /* Initialize and start Express server */
 (async () => {
   const app = express()
+  app.use(morgan("dev"))
   app.use(`/${process.env.API_BASE_PATH}`, await middleware())
   app.listen(8081, () => {
     console.log(`Running API server at localhost:8081`)

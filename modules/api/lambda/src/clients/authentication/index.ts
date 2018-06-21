@@ -82,27 +82,22 @@ export class AuthenticationClient extends Client {
     email: string, password: string
   ): Promise<VerificationCode> {
     const username = uuid()
-    const [, code] = await Promise.all([
 
-      /* Register user with Cognito */
-      this.cognito.signUp({
-        ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
-        Username: username,
-        Password: password,
-        UserAttributes: [
-          {
-            Name: "email",
-            Value: email
-          }
-        ]
-      }).promise(),
+    /* Register user with Cognito */
+    await this.cognito.signUp({
+      ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
+      Username: username,
+      Password: password,
+      UserAttributes: [
+        {
+          Name: "email",
+          Value: email
+        }
+      ]
+    }).promise()
 
-      /* Issue verification code */
-      this.verification.issue("register", username)
-    ])
-
-    /* Return verification code */
-    return code
+    /* Issue and return verification code */
+    return this.verification.issue("register", username)
   }
 
   /**
