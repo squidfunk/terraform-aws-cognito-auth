@@ -22,7 +22,7 @@
 
 import { AWSError } from "aws-sdk"
 
-import { AuthenticationClient } from "clients/authentication"
+import { AuthenticationClient, translate } from "clients/authentication"
 
 import { chance } from "_/helpers"
 import {
@@ -56,6 +56,29 @@ import {
 
 /* Authentication client */
 describe("clients/authentication", () => {
+
+  /* Error translation */
+  describe("translate", () => {
+
+    /* Test: should translate non-existent user errors */
+    it("should translate non-existent user errors", () => {
+      expect(translate({
+        code: "UserNotFoundException",
+        message: chance.string()
+      } as AWSError))
+        .toEqual({
+          code: "NotAuthorizedException",
+          message: "Incorrect username or password"
+        } as AWSError)
+    })
+
+    /* Test: should pass-through all other errors */
+    it("should pass-through all other errors", () => {
+      const message = chance.string()
+      const err = { code: chance.string(), message } as AWSError
+      expect(translate(err)).toBe(err)
+    })
+  })
 
   /* AuthenticationClient */
   describe("AuthenticationClient", () => {
@@ -269,25 +292,6 @@ describe("clients/authentication", () => {
           } catch (err) {
             expect(initiateAuthMock).toHaveBeenCalled()
             expect(err).toBe(errMock)
-            done()
-          }
-        })
-
-      /* Test: should obfuscate AWS Cognito error for non-existent user */
-      it("should obfuscate AWS Cognito error for non-existent user",
-        async done => {
-          const errMock = new Error() as AWSError
-          errMock.code = "UserNotFoundException"
-          const initiateAuthMock =
-            mockCognitoInitiateAuthWithError(errMock)
-          try {
-            const auth = new AuthenticationClient()
-            await auth.authenticate(username, password)
-            done.fail()
-          } catch (err) {
-            expect(initiateAuthMock).toHaveBeenCalled()
-            expect(err.code).toEqual("NotAuthorizedException")
-            expect(err.message).toEqual("Incorrect username or password")
             done()
           }
         })
