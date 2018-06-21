@@ -118,10 +118,7 @@ export class ManagementClient extends Client {
       }).promise()
 
     /* Delete user */
-    await this.cognito.adminDeleteUser({
-      UserPoolId: process.env.COGNITO_USER_POOL!,
-      Username: id
-    }).promise()
+    await this.deleteUser(id)
 
     /* Re-create user */
     await this.cognito.signUp({
