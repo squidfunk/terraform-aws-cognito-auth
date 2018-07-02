@@ -101,7 +101,7 @@ test: node_modules | dist-pre
 	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
 	@ NODE_ENV=test $(shell npm bin)/nyc \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \
-			--project tests/tsconfig.json tests \
+			--project tests/tsconfig.json --files tests \
 				"suites/unit/**/*.spec.ts"
 
 # Execute unit tests in watch mode
@@ -109,7 +109,7 @@ watch: node_modules
 	@ NODE_ENV=development $(shell npm bin)/nodemon --quiet \
 		--watch src --watch tests --ext json,ts --exec \
 		$(shell npm bin)/ts-node -r tsconfig-paths/register \
-			--project tests/tsconfig.json tests \
+			--project tests/tsconfig.json --files tests \
 				"suites/unit/**/*.spec.ts"
 
 # -----------------------------------------------------------------------------
