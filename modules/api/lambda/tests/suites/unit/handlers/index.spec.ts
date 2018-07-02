@@ -55,8 +55,8 @@ describe("handlers", () => {
   /* Error translation */
   describe("translate", () => {
 
-    /* Test: should translate lambda validation errors */
-    it("should translate lambda validation errors", () => {
+    /* Test: should translate user validation error */
+    it("should translate user validation error", () => {
       const message = chance.string()
       expect(translate({
         code: "UserLambdaValidationException",
@@ -68,8 +68,8 @@ describe("handlers", () => {
         } as AWSError)
     })
 
-    /* Test: should translate request parsing errors */
-    it("should translate request parsing errors", () => {
+    /* Test: should translate request parsing error */
+    it("should translate request parsing error", () => {
       expect(translate({
         code: "SyntaxError",
         message: chance.string()

@@ -100,7 +100,7 @@ export function mockCognitoListUsersWithoutResult() {
  * @return Jasmine spy
  */
 export function mockCognitoListUsersWithError(
-  err: Error = new Error("mockCognitoListUsersWithError")
+  err: Error = new Error("listUsers")
 ): jasmine.Spy {
   return mockCognitoListUsers(
     jasmine.createSpy("listUsers")

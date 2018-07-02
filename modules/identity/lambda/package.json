@@ -1,7 +1,7 @@
 {
   "name": "terraform-aws-cognito-auth.identity-lambda",
   "version": "0.0.0",
-  "description": "Serverless authentication as a service using AWS Cognito",
+  "description": "Serverless AaaS provider built on top of AWS Cognito",
   "homepage": "https://github.com/squidfunk/terraform-aws-cognito-auth",
   "bugs": {
     "url": "https://github.com/squidfunk/terraform-aws-cognito-auth/",
@@ -38,7 +38,7 @@
     "jasmine-spec-reporter": "^4.2.1",
     "nodemon": "^1.17.3",
     "nyc": "^11.6.0",
-    "ts-node": "^5.0.1",
+    "ts-node": "^6.2.0",
     "tsconfig-paths": "^3.2.0",
     "tslint": "^5.9.1",
     "tslint-sonarts": "^1.6.0",

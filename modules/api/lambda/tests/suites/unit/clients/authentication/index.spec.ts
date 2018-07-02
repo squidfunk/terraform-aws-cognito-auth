@@ -60,8 +60,20 @@ describe("clients/authentication", () => {
   /* Error translation */
   describe("translate", () => {
 
-    /* Test: should translate non-existent user errors */
-    it("should translate non-existent user errors", () => {
+    /* Test: should translate empty username and password error */
+    it("should translate empty username and password error", () => {
+      expect(translate({
+        code: "InvalidParameterException",
+        message: chance.string()
+      } as AWSError))
+        .toEqual({
+          code: "TypeError",
+          message: "Invalid request"
+        } as AWSError)
+    })
+
+    /* Test: should translate invalid username error */
+    it("should translate invalid username error", () => {
       expect(translate({
         code: "UserNotFoundException",
         message: chance.string()

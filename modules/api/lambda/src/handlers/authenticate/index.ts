@@ -77,7 +77,9 @@ function parseCookie(value: string) {
  *
  * @return Serialized cookie
  */
-function generateSetCookie({ token, expires }: SessionToken, path: string) {
+function generateSetCookie(
+  { token, expires }: SessionToken, path: string
+) {
   return cookie.serialize("__Secure-token", token, {
     expires,
     domain: process.env.COGNITO_IDENTITY_DOMAIN!,

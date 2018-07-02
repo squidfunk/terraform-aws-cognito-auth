@@ -54,7 +54,13 @@ export function expires(seconds: number): Date {
  * @return Mapped error
  */
 export function translate(err: AWSError): AWSError {
-  switch (err.code) { // tslint:disable-line no-small-switch
+  switch (err.code) {
+
+    /* Empty username and password */
+    case "InvalidParameterException":
+      err.code    = "TypeError"
+      err.message = "Invalid request"
+      return err
 
     /* Obfuscate non-existent user error for authentication */
     case "UserNotFoundException":
@@ -214,23 +220,29 @@ export class AuthenticationClient extends Client {
   protected async authenticateWithToken(
     token: string
   ): Promise<Session> {
-    const { AuthenticationResult, ChallengeName } =
-      await this.cognito.initiateAuth({
-        ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
-        AuthFlow: "REFRESH_TOKEN",
-        AuthParameters: {
-          REFRESH_TOKEN: token
-        }
-      }).promise()
+    try {
+      const { AuthenticationResult, ChallengeName } =
+        await this.cognito.initiateAuth({
+          ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
+          AuthFlow: "REFRESH_TOKEN",
+          AuthParameters: {
+            REFRESH_TOKEN: token
+          }
+        }).promise()
 
-    /* Return renewed session if authenticated */
-    if (!AuthenticationResult)
-      throw new Error(`Invalid authentication: challenge "${ChallengeName}"`)
-    return {
-      access: {
-        token: AuthenticationResult.IdToken!,
-        expires: expires(60 * 60) /* 1 hour */
+      /* Return renewed session if authenticated */
+      if (!AuthenticationResult)
+        throw new Error(`Invalid authentication: challenge "${ChallengeName}"`)
+      return {
+        access: {
+          token: AuthenticationResult.IdToken!,
+          expires: expires(60 * 60) /* 1 hour */
+        }
       }
+
+    /* Obfuscate errors */
+    } catch (err) {
+      throw translate(err)
     }
   }
 }

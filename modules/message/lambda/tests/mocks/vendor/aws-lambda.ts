@@ -22,7 +22,7 @@
 
 import { SNSEvent } from "aws-lambda"
 
-import { VerificationCode } from "~/verification"
+import { VerificationCode } from "verification"
 
 import { chance } from "_/helpers"
 import { mockVerificationCode } from "_/mocks/verification"

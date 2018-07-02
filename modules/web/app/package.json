@@ -1,7 +1,7 @@
 {
   "name": "terraform-aws-cognito-auth.web-app",
   "version": "0.0.0",
-  "description": "Serverless authentication as a service using AWS Cognito",
+  "description": "Serverless AaaS provider built on top of AWS Cognito",
   "homepage": "https://github.com/squidfunk/terraform-aws-cognito-auth",
   "bugs": {
     "url": "https://github.com/squidfunk/terraform-aws-cognito-auth/",
@@ -76,7 +76,7 @@
     "string-replace-loader": "^2.1.1",
     "ts-jest": "^22.4.6",
     "ts-loader": "^4.4.1",
-    "ts-node": "^6.1.0",
+    "ts-node": "^6.2.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslint": "^5.10.0",
     "tslint-sonarts": "^1.7.0",

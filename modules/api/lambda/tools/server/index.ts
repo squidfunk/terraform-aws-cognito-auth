@@ -33,10 +33,14 @@ import { middleware } from "./middleware"
 
 /* Initialize and start Express server */
 (async () => {
-  const app = express()
-  app.use(morgan("dev"))
-  app.use(`/${process.env.API_BASE_PATH}`, await middleware())
-  app.listen(8081, () => {
-    console.log(`Running API server at localhost:8081`)
-  })
+  try {
+    const app = express()
+    app.use(morgan("dev"))
+    app.use(`/${process.env.API_BASE_PATH}`, await middleware())
+    app.listen(8081, () => {
+      console.log(`API server listening on http://localhost:8081`)
+    })
+  } catch (err) {
+    console.log(err)
+  }
 })()

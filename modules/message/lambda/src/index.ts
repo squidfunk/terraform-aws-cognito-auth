@@ -77,8 +77,8 @@ function template(code: VerificationCode) {
  *
  * @return Promise resolving with no result
  */
-export async function handler(event: SNSEvent): Promise<void> {
-  return event.Records.reduce(async (promise, record) =>
+export function handler(event: SNSEvent): Promise<void> {
+  return event.Records.reduce((promise, record) =>
     promise.then(async () => {
       const code: VerificationCode = JSON.parse(record.Sns.Message)
       const [{ UserAttributes }, message] = await Promise.all([
