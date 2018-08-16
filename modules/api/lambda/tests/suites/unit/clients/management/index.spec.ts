@@ -23,9 +23,7 @@
 import { ManagementClient } from "clients/management"
 
 import { chance } from "_/helpers"
-import {
-  mockResetVerifyRequest
-} from "_/mocks/common/events/reset/verify"
+import { mockResetVerifyRequest } from "_/mocks/common"
 import {
   mockCognitoAdminConfirmSignUpWithError,
   mockCognitoAdminConfirmSignUpWithSuccess,
@@ -42,7 +40,7 @@ import {
   restoreCognitoAdminGetUser,
   restoreCognitoAdminUpdateUserAttributes,
   restoreCognitoSignUp
-} from "_/mocks/vendor/aws-sdk/cognito"
+} from "_/mocks/vendor/aws-sdk"
 
 /* ----------------------------------------------------------------------------
  * Tests

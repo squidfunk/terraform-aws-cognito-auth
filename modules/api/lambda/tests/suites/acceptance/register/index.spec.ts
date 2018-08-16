@@ -27,7 +27,7 @@ import { chance, request } from "_/helpers"
 import {
   mockRegisterRequest,
   mockRegisterRequestWithInvalidEmail
-} from "_/mocks/common/events/register"
+} from "_/mocks/common"
 
 /* ----------------------------------------------------------------------------
  * Tests

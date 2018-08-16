@@ -20,16 +20,13 @@
  * IN THE SOFTWARE.
  */
 
+import { RegisterRequest as Request } from "common"
 import { post } from "handlers/register"
-
-import {
-  RegisterRequest as Request
-} from "common/events/register"
 
 import {
   mockAuthenticationClientRegisterWithError,
   mockAuthenticationClientRegisterWithSuccess
-} from "_/mocks/clients/authentication"
+} from "_/mocks/clients"
 import { mockRegisterRequest } from "_/mocks/common/events/register"
 import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 

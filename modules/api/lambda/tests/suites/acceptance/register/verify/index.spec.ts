@@ -23,7 +23,7 @@
 import { AuthenticationClient } from "clients/authentication"
 
 import { chance, request } from "_/helpers"
-import { mockRegisterRequest } from "_/mocks/common/events/register"
+import { mockRegisterRequest } from "_/mocks/common"
 import { mockVerificationCode } from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------

@@ -29,14 +29,12 @@ import {
   mockDynamoDBDocumentClientDeleteWithResult,
   mockDynamoDBDocumentClientPutWithError,
   mockDynamoDBDocumentClientPutWithSuccess,
-  restoreDynamoDBDocumentClientDelete,
-  restoreDynamoDBDocumentClientPut
-} from "_/mocks/vendor/aws-sdk/dynamodb"
-import {
   mockSNSPublishWithError,
   mockSNSPublishWithSuccess,
+  restoreDynamoDBDocumentClientDelete,
+  restoreDynamoDBDocumentClientPut,
   restoreSNSPublish
-} from "_/mocks/vendor/aws-sdk/sns"
+} from "_/mocks/vendor/aws-sdk"
 import {
   mockVerificationCode,
   mockVerificationContext

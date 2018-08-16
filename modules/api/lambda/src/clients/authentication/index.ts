@@ -20,16 +20,15 @@
  * IN THE SOFTWARE.
  */
 
-import { AWSError, CognitoIdentityServiceProvider } from "aws-sdk"
+import { AWSError } from "aws-sdk"
 import * as uuid from "uuid/v4"
 
 import { Client } from "clients"
+import { Session } from "common"
 import {
   Verification,
   VerificationCode
 } from "verification"
-
-import { Session } from "common/session"
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -84,18 +83,14 @@ export function translate(err: AWSError): AWSError {
 export class AuthenticationClient extends Client {
 
   /**
-   * Initialize verification and identity provider
+   * Initialize verification provider
    *
    * @param verification - Verification provider
-   * @param cognito - Cognito client
    */
   public constructor(
-    protected verification = new Verification(),
-    cognito = new CognitoIdentityServiceProvider({
-      apiVersion: "2016-04-18"
-    })
+    protected verification = new Verification()
   ) {
-    super(cognito)
+    super()
   }
 
   /**

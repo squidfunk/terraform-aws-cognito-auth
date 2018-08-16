@@ -22,15 +22,18 @@
 
 import { AWSError } from "aws-sdk"
 
-import { AuthenticationClient, translate } from "clients/authentication"
+import {
+  AuthenticationClient,
+  translate
+} from "clients/authentication"
 
 import { chance } from "_/helpers"
 import {
   mockAuthenticateRequestWithCredentials,
-  mockAuthenticateRequestWithToken
-} from "_/mocks/common/events/authenticate"
-import { mockRegisterRequest } from "_/mocks/common/events/register"
-import { mockResetRequest } from "_/mocks/common/events/reset"
+  mockAuthenticateRequestWithToken,
+  mockRegisterRequest,
+  mockResetRequest
+} from "_/mocks/common"
 import {
   mockCognitoAdminGetUserWithError,
   mockCognitoAdminGetUserWithResult,
@@ -43,7 +46,7 @@ import {
   restoreCognitoAdminGetUser,
   restoreCognitoInitiateAuth,
   restoreCognitoSignUp
-} from "_/mocks/vendor/aws-sdk/cognito"
+} from "_/mocks/vendor/aws-sdk"
 import {
   mockVerificationCode,
   mockVerificationIssueWithError,

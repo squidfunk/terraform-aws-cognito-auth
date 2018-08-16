@@ -20,25 +20,57 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "clients/authentication"
-import { RegisterRequest as Request } from "common"
-import { handler } from "handlers"
-
-import schema = require("common/events/register/index.json")
+import { Callback } from "aws-lambda"
+import { mock, restore } from "aws-sdk-mock"
 
 /* ----------------------------------------------------------------------------
- * Handler
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Register user with email address and password
+ * Mock DynamoDB.DocumentClient.put
  *
- * @param event - API Gateway event
+ * @param spy - Spy/fake to mock DynamoDB
  *
- * @return Promise resolving with no result
+ * @return Jasmine spy
  */
-export const post = handler<{}, Request>(schema,
-  async ({ body: { email, password } }) => {
-    const auth = new AuthenticationClient()
-    await auth.register(email, password)
+function mockDynamoDBDocumentClientPut(
+  spy: jasmine.Spy
+): jasmine.Spy {
+  mock("DynamoDB.DocumentClient", "put", (data: any, cb: Callback) => {
+    cb(undefined, spy(data))
   })
+  return spy
+}
+
+/**
+ * Mock DynamoDB.DocumentClient.put returning with success
+ *
+ * @return Jasmine spy
+ */
+export function mockDynamoDBDocumentClientPutWithSuccess(): jasmine.Spy {
+  return mockDynamoDBDocumentClientPut(
+    jasmine.createSpy("put"))
+}
+
+/**
+ * Mock DynamoDB.DocumentClient.put throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockDynamoDBDocumentClientPutWithError(
+  err: Error = new Error("put")
+): jasmine.Spy {
+  return mockDynamoDBDocumentClientPut(
+    jasmine.createSpy("put")
+      .and.callFake(() => { throw err }))
+}
+
+/**
+ * Restore DynamoDB.DocumentClient.put
+ */
+export function restoreDynamoDBDocumentClientPut() {
+  restore("DynamoDB.DocumentClient", "put")
+}

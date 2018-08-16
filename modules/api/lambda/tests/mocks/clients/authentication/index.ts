@@ -21,10 +21,9 @@
  */
 
 import { AuthenticationClient } from "clients/authentication"
+import { Session } from "common"
 
-import { Session } from "common/session"
-
-import { mockSession } from "_/mocks/common/session"
+import { mockSession } from "_/mocks/common"
 
 /* ----------------------------------------------------------------------------
  * Functions

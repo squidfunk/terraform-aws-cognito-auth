@@ -23,7 +23,8 @@
 import { AuthenticationClient } from "clients/authentication"
 import { handler } from "handlers"
 
-import { ResetRequest as Request } from "common/events/reset"
+import { ResetRequest as Request } from "common"
+
 import schema = require("common/events/reset/index.json")
 
 /* ----------------------------------------------------------------------------

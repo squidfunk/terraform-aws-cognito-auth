@@ -20,25 +20,58 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "clients/authentication"
-import { RegisterRequest as Request } from "common"
-import { handler } from "handlers"
-
-import schema = require("common/events/register/index.json")
+import { Callback } from "aws-lambda"
+import { mock, restore } from "aws-sdk-mock"
 
 /* ----------------------------------------------------------------------------
- * Handler
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Register user with email address and password
+ * Mock CognitoIdentityServiceProvider.signUp
  *
- * @param event - API Gateway event
+ * @param spy - Spy/fake to mock Cognito
  *
- * @return Promise resolving with no result
+ * @return Jasmine spy
  */
-export const post = handler<{}, Request>(schema,
-  async ({ body: { email, password } }) => {
-    const auth = new AuthenticationClient()
-    await auth.register(email, password)
-  })
+function mockCognitoSignUp(
+  spy: jasmine.Spy
+): jasmine.Spy {
+  mock("CognitoIdentityServiceProvider", "signUp",
+    (data: any, cb: Callback) => {
+      cb(undefined, spy(data))
+    })
+  return spy
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.signUp returning with success
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoSignUpWithSuccess(): jasmine.Spy {
+  return mockCognitoSignUp(
+    jasmine.createSpy("signUp"))
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.signUp throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoSignUpWithError(
+  err: Error = new Error("signUp")
+): jasmine.Spy {
+  return mockCognitoSignUp(
+    jasmine.createSpy("signUp")
+      .and.callFake(() => { throw err }))
+}
+
+/**
+ * Restore CognitoIdentityServiceProvider.signUp
+ */
+export function restoreCognitoSignUp() {
+  restore("CognitoIdentityServiceProvider", "signUp")
+}

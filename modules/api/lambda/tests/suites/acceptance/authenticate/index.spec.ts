@@ -26,11 +26,9 @@ import { ManagementClient } from "clients/management"
 import { chance, request } from "_/helpers"
 import {
   mockAuthenticateRequestWithCredentials,
-  mockAuthenticateRequestWithToken
-} from "_/mocks/common/events/authenticate"
-import {
+  mockAuthenticateRequestWithToken,
   mockRegisterRequest
-} from "_/mocks/common/events/register"
+} from "_/mocks/common"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -143,7 +141,7 @@ describe("POST /authenticate", () => {
 
     /* Delete user */
     afterAll(async () => {
-      await mgmt.deleteUser(email)
+      // await mgmt.deleteUser(email)
     })
 
     /* Test: should return access token for valid credentials */

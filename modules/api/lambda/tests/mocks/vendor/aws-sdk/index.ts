@@ -20,25 +20,16 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "clients/authentication"
-import { RegisterRequest as Request } from "common"
-import { handler } from "handlers"
-
-import schema = require("common/events/register/index.json")
-
 /* ----------------------------------------------------------------------------
- * Handler
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Register user with email address and password
- *
- * @param event - API Gateway event
- *
- * @return Promise resolving with no result
- */
-export const post = handler<{}, Request>(schema,
-  async ({ body: { email, password } }) => {
-    const auth = new AuthenticationClient()
-    await auth.register(email, password)
-  })
+export * from "./cognito/admin-confirm-sign-up"
+export * from "./cognito/admin-delete-user"
+export * from "./cognito/admin-get-user"
+export * from "./cognito/admin-update-user-attributes"
+export * from "./cognito/initiate-auth"
+export * from "./cognito/sign-up"
+export * from "./dynamodb/document-client/delete"
+export * from "./dynamodb/document-client/put"
+export * from "./sns/publish"

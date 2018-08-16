@@ -37,6 +37,8 @@ export abstract class Client {
    * @param cognito - Cognito client
    */
   public constructor(
-    protected cognito: CognitoIdentityServiceProvider
+    protected cognito = new CognitoIdentityServiceProvider({
+      apiVersion: "2016-04-18"
+    })
   ) {}
 }

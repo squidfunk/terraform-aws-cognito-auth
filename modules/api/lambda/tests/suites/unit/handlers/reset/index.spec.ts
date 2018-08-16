@@ -20,17 +20,14 @@
  * IN THE SOFTWARE.
  */
 
+import { ResetRequest as Request } from "common"
 import { post } from "handlers/reset"
-
-import {
-  ResetRequest as Request
-} from "common/events/reset"
 
 import {
   mockAuthenticationClientForgotPasswordWithError,
   mockAuthenticationClientForgotPasswordWithSuccess
-} from "_/mocks/clients/authentication"
-import { mockResetRequest } from "_/mocks/common/events/reset"
+} from "_/mocks/clients"
+import { mockResetRequest } from "_/mocks/common"
 import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 
 /* ----------------------------------------------------------------------------

@@ -21,13 +21,13 @@
  */
 
 import { ManagementClient } from "clients/management"
-import { handler } from "handlers"
-import { Verification } from "verification"
-
 import {
   RegisterVerificationParameters as Parameters,
   RegisterVerificationRequest as Request
-} from "common/events"
+} from "common"
+import { handler } from "handlers"
+import { Verification } from "verification"
+
 import schema = require("common/events/register/verify/index.json")
 
 /* ----------------------------------------------------------------------------

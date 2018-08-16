@@ -20,8 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-import { CognitoIdentityServiceProvider } from "aws-sdk"
-
 import { Client } from "clients"
 
 /* ----------------------------------------------------------------------------
@@ -32,21 +30,6 @@ import { Client } from "clients"
  * Management client
  */
 export class ManagementClient extends Client {
-
-  /**
-   * Factory method, necessary for mocking
-   *
-   * @param cognito - Cognito client
-   *
-   * @return Management client
-   */
-  public constructor(
-    cognito = new CognitoIdentityServiceProvider({
-      apiVersion: "2016-04-18"
-    })
-  ) {
-    super(cognito)
-  }
 
   /**
    * Complete user registration by verification

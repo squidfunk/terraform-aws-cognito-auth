@@ -20,25 +20,58 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "clients/authentication"
-import { RegisterRequest as Request } from "common"
-import { handler } from "handlers"
-
-import schema = require("common/events/register/index.json")
+import { Callback } from "aws-lambda"
+import { mock, restore } from "aws-sdk-mock"
 
 /* ----------------------------------------------------------------------------
- * Handler
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Register user with email address and password
+ * Mock CognitoIdentityServiceProvider.adminConfirmSignUp
  *
- * @param event - API Gateway event
+ * @param spy - Spy/fake to mock Cognito
  *
- * @return Promise resolving with no result
+ * @return Jasmine spy
  */
-export const post = handler<{}, Request>(schema,
-  async ({ body: { email, password } }) => {
-    const auth = new AuthenticationClient()
-    await auth.register(email, password)
-  })
+function mockCognitoAdminConfirmSignUp(
+  spy: jasmine.Spy
+): jasmine.Spy {
+  mock("CognitoIdentityServiceProvider", "adminConfirmSignUp",
+    (data: any, cb: Callback) => {
+      cb(undefined, spy(data))
+    })
+  return spy
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.adminConfirmSignUp returning with success
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoAdminConfirmSignUpWithSuccess(): jasmine.Spy {
+  return mockCognitoAdminConfirmSignUp(
+    jasmine.createSpy("adminConfirmSignUp"))
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.adminConfirmSignUp throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoAdminConfirmSignUpWithError(
+  err: Error = new Error("adminConfirmSignUp")
+): jasmine.Spy {
+  return mockCognitoAdminConfirmSignUp(
+    jasmine.createSpy("adminConfirmSignUp")
+      .and.callFake(() => { throw err }))
+}
+
+/**
+ * Restore CognitoIdentityServiceProvider.adminConfirmSignUp
+ */
+export function restoreCognitoAdminConfirmSignUp() {
+  restore("CognitoIdentityServiceProvider", "adminConfirmSignUp")
+}

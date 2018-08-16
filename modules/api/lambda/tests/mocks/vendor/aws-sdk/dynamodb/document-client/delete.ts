@@ -32,56 +32,6 @@ import { mockVerificationCode } from "_/mocks/verification"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock DynamoDB.DocumentClient.put
- *
- * @param spy - Spy/fake to mock DynamoDB
- *
- * @return Jasmine spy
- */
-function mockDynamoDBDocumentClientPut(
-  spy: jasmine.Spy
-): jasmine.Spy {
-  mock("DynamoDB.DocumentClient", "put", (data: any, cb: Callback) => {
-    cb(undefined, spy(data))
-  })
-  return spy
-}
-
-/**
- * Mock DynamoDB.DocumentClient.put returning with success
- *
- * @return Jasmine spy
- */
-export function mockDynamoDBDocumentClientPutWithSuccess(): jasmine.Spy {
-  return mockDynamoDBDocumentClientPut(
-    jasmine.createSpy("put"))
-}
-
-/**
- * Mock DynamoDB.DocumentClient.put throwing an error
- *
- * @param err - Error to be thrown
- *
- * @return Jasmine spy
- */
-export function mockDynamoDBDocumentClientPutWithError(
-  err: Error = new Error("put")
-): jasmine.Spy {
-  return mockDynamoDBDocumentClientPut(
-    jasmine.createSpy("put")
-      .and.callFake(() => { throw err }))
-}
-
-/**
- * Restore DynamoDB.DocumentClient.put
- */
-export function restoreDynamoDBDocumentClientPut() {
-  restore("DynamoDB.DocumentClient", "put")
-}
-
-/* ------------------------------------------------------------------------- */
-
-/**
  * Mock DynamoDB.DocumentClient.delete
  *
  * @param spy - Spy/fake to mock DynamoDB

@@ -20,17 +20,16 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "handlers/register/verify"
-
 import {
   RegisterVerificationParameters as Parameters,
   RegisterVerificationRequest as Request
-} from "common/events/register/verify"
+} from "common"
+import { post } from "handlers/register/verify"
 
 import {
   mockManagementClientVerifyUserWithError,
   mockManagementClientVerifyUserWithSuccess
-} from "_/mocks/clients/management"
+} from "_/mocks/clients"
 import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 import {
   mockVerificationClaimWithError,

@@ -20,20 +20,17 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "handlers/reset/verify"
-
 import {
   ResetVerificationParameters as Parameters,
   ResetVerificationRequest as Request
-} from "common/events/reset/verify"
+} from "common"
+import { post } from "handlers/reset/verify"
 
 import {
   mockManagementClientChangePasswordWithError,
   mockManagementClientChangePasswordWithSuccess
-} from "_/mocks/clients/management"
-import {
-  mockResetVerifyRequest
-} from "_/mocks/common/events/reset/verify"
+} from "_/mocks/clients"
+import { mockResetVerifyRequest } from "_/mocks/common"
 import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 import {
   mockVerificationClaimWithError,

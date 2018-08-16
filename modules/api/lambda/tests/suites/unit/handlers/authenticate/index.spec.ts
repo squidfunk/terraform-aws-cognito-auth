@@ -20,23 +20,22 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "handlers/authenticate"
-
 import {
   AuthenticateRequestWithCredentials as RequestWithCredentials,
   AuthenticateRequestWithToken as RequestWithToken
-} from "common/events/authenticate"
+} from "common"
+import { post } from "handlers/authenticate"
 
 import { chance } from "_/helpers"
 import {
   mockAuthenticationClientAuthenticateWithError,
   mockAuthenticationClientAuthenticateWithResult
-} from "_/mocks/clients/authentication"
+} from "_/mocks/clients"
 import {
   mockAuthenticateRequestWithCredentials,
-  mockAuthenticateRequestWithToken
-} from "_/mocks/common/events/authenticate"
-import { mockSession } from "_/mocks/common/session"
+  mockAuthenticateRequestWithToken,
+  mockSession
+} from "_/mocks/common"
 import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 
 /* ----------------------------------------------------------------------------

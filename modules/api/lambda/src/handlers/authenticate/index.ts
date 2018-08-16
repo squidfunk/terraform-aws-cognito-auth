@@ -23,14 +23,15 @@
 import * as cookie from "cookie"
 
 import { AuthenticationClient } from "clients/authentication"
-import { handler } from "handlers"
-
 import {
   AuthenticateRequestWithCredentials,
-  AuthenticateRequestWithToken
-} from "common/events"
+  AuthenticateRequestWithToken,
+  Session,
+  SessionToken
+} from "common"
+import { handler } from "handlers"
+
 import schema = require("common/events/authenticate/index.json")
-import { Session, SessionToken } from "common/session"
 
 /* ----------------------------------------------------------------------------
  * Types

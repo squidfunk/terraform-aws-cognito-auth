@@ -22,16 +22,11 @@
 
 import { AWSError } from "aws-sdk"
 
+import { AuthenticateRequestWithCredentials as Request } from "common"
 import { handler, translate } from "handlers"
 
-import {
-  AuthenticateRequestWithCredentials as Request
-} from "common/events/authenticate"
-
 import { chance } from "_/helpers"
-import {
-  mockAuthenticateRequestWithCredentials
-} from "_/mocks/common/events/authenticate"
+import { mockAuthenticateRequestWithCredentials } from "_/mocks/common"
 import {
   mockHandlerCallbackWithError,
   mockHandlerCallbackWithSuccess

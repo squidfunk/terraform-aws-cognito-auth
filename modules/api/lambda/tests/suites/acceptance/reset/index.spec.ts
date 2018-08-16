@@ -24,8 +24,10 @@ import { AuthenticationClient } from "clients/authentication"
 import { ManagementClient } from "clients/management"
 
 import { chance, request } from "_/helpers"
-import { mockRegisterRequest } from "_/mocks/common/events/register"
-import { mockResetRequest } from "_/mocks/common/events/reset"
+import {
+  mockRegisterRequest,
+  mockResetRequest
+} from "_/mocks/common"
 
 /* ----------------------------------------------------------------------------
  * Tests
