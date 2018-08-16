@@ -24,18 +24,5 @@
  * Re-exports
  * ------------------------------------------------------------------------- */
 
-export {
-  AuthenticateRequest,
-  AuthenticateRequestWithCredentials,
-  AuthenticateRequestWithToken
-} from "./authenticate"
-export { RegisterRequest } from "./register"
-export {
-  RegisterVerificationParameters,
-  RegisterVerificationRequest
-} from "./register/verify"
-export { ResetRequest } from "./reset"
-export {
-  ResetVerificationParameters,
-  ResetVerificationRequest
-} from "./reset/verify"
+export * from "./events"
+export * from "./session"
