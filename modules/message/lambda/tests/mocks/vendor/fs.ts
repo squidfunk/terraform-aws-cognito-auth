@@ -65,7 +65,7 @@ export function mockFsReadFileWithResult(
  * @return Jasmine spy
  */
 export function mockFsReadFileWithError(
-  err: Error = new Error("mockFsReadFileWithError")
+  err: Error = new Error("readFile")
 ): jasmine.Spy {
   return mockFsReadFile((_path, encodingOrCb, cb) => {
     (cb || encodingOrCb)(err)
@@ -109,7 +109,7 @@ export function mockFsReaddirWithResult(
  * @return Jasmine spy
  */
 export function mockFsReaddirWithError(
-  err: Error = new Error("mockFsReaddirWithError")
+  err: Error = new Error("readdir")
 ): jasmine.Spy {
   return mockFsReaddir((_path, cb) => cb(err))
 }

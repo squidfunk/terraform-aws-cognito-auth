@@ -59,7 +59,7 @@ export function mockQuotedPrintableEncodeWithSuccess(): jasmine.Spy {
  * @return Jasmine spy
  */
 export function mockQuotedPrintableEncodeWithError(
-  err: Error = new Error("mockQuotedPrintableEncodeWithError")
+  err: Error = new Error("encode")
 ): jasmine.Spy {
   return mockQuotedPrintableEncode(() => { throw err })
 }

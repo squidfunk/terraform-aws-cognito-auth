@@ -71,7 +71,8 @@ resource "aws_lambda_function" "_" {
   runtime       = "nodejs8.10"
   filename      = "${var.lambda_filename}"
   handler       = "handlers/authenticate/index.post"
-  timeout       = 10
+  timeout       = 30
+  memory_size   = 512
 
   source_code_hash = "${
     base64sha256(file("${var.lambda_filename}"))

@@ -20,48 +20,9 @@
  * IN THE SOFTWARE.
  */
 
-import * as _ from "mime"
-
 /* ----------------------------------------------------------------------------
- * Functions
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Mock Mime.getType
- *
- * @param cb - Fake callback
- *
- * @return Jasmine spy
- */
-function mockMimeGetType(
-  cb: () => void
-): jasmine.Spy {
-  return spyOn(_, "getType")
-    .and.callFake(cb)
-}
-
-/**
- * Mock Mime.getType returning with result
- *
- * @param type - Returned type
- *
- * @return Jasmine spy
- */
-export function mockMimeGetTypeWithResult(
-  type: string = "image/png"
-): jasmine.Spy {
-  return mockMimeGetType(() => type)
-}
-
-/**
- * Mock Mime.getType throwing an error
- *
- * @param err - Error to be thrown
- *
- * @return Jasmine spy
- */
-export function mockMimeGetTypeWithError(
-  err: Error = new Error("getType")
-): jasmine.Spy {
-  return mockMimeGetType(() => { throw err })
-}
+export * from "./cognito/admin-get-user"
+export * from "./ses/send-raw-email"

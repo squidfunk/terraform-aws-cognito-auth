@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,17 +20,19 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-# macOS internals
-.DS_Store
+# Exit if any of the intermediate steps fails
+set -e
 
-# Terraform runtime
-.terraform
-.terraform.tfstate.lock.info
+# Sync assets
+aws s3 sync ${DIRECTORY} \
+  s3://${BUCKET}/ \
+    --delete --no-progress \
+    --exclude "*.html" \
+    --cache-control "public, max-age=31536000"
 
-# Terraform state
-*.tfstate
-*.tfstate.backup
-
-# Development-related
-/env
-.env
+# Sync HTML files
+aws s3 sync ${DIRECTORY} \
+  s3://${BUCKET}/ \
+    --delete --no-progress \
+    --include "*.html" \
+    --cache-control "public, max-age=0, must-revalidate"

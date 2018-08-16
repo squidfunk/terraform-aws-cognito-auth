@@ -18,62 +18,28 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-include ../../../share/env/Makefile
-
+# -----------------------------------------------------------------------------
+# Constants
 # -----------------------------------------------------------------------------
 
-all: lint clean | build test
-
-# -----------------------------------------------------------------------------
-# Prerequisites
-# -----------------------------------------------------------------------------
-
-# Install dependencies
-node_modules:
-	npm install
+# Project root
+ROOT = $(shell git rev-parse --show-toplevel)
 
 # -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------
 
-# Distribution files
-dist: $(shell find src) webpack.config.ts .env
-	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
-	$(shell npm bin)/webpack --mode production
+# Auto-filled environment variables
+.env: ${ROOT}/terraform.tfstate
+	@ (pushd ${ROOT} > /dev/null \
+		&& terraform output \
+			| awk -F" = " '{ print toupper($$1) "=" $$2 }' \
+			> ${PWD}/$@ \
+		&& popd > /dev/null)
 
 # -----------------------------------------------------------------------------
 # Rules
 # -----------------------------------------------------------------------------
 
-# Build distribution files
-build: node_modules | dist
-
-# Clean distribution files
-clean:
-	rm -rf dist
-
-# Lint source files
-lint: node_modules
-	$(shell npm bin)/tslint -p tsconfig.json "src/**/*.ts"
-	$(shell npm bin)/tslint -p tests/tsconfig.json "tests/**/*.ts"
-
-# Start API server and webpack development server
-start: node_modules
-	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
-	make -C ../../api/lambda start &
-	$(shell npm bin)/webpack-dev-server --mode development --hot --open
-
-# Execute unit tests
-test: node_modules
-	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
-	@ echo "TBD"
-
-# Execute unit tests in watch mode
-watch: node_modules
-	@ echo "TBD"
-
-# -----------------------------------------------------------------------------
-
-# Special targets
-.PHONY: .FORCE build clean lint start test watch
-.FORCE:
+# Don't delete .env
+.PRECIOUS: .env

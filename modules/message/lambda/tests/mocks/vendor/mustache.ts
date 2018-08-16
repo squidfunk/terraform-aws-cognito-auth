@@ -63,7 +63,7 @@ export function mockMustacheRenderWithResult(
  * @return Jasmine spy
  */
 export function mockMustacheRenderWithError(
-  err: Error = new Error("mockMustacheRenderWithError")
+  err: Error = new Error("render")
 ): jasmine.Spy {
   return mockMustacheRender(() => { throw err })
 }

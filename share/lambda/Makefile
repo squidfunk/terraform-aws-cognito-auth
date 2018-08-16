@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 Martin Donath <martin.donath@squidfunk.com>
+# Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -19,13 +19,6 @@
 # IN THE SOFTWARE.
 
 all: lint clean | build test
-
-# -----------------------------------------------------------------------------
-# Constants
-# -----------------------------------------------------------------------------
-
-# Project root
-ROOT = $(shell git rev-parse --show-toplevel)
 
 # -----------------------------------------------------------------------------
 # Prerequisites
@@ -50,14 +43,6 @@ clean-post_:
 # -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------
-
-# Auto-filled environment variables
-.env: ${ROOT}/terraform.tfstate
-	@ (pushd $(shell git rev-parse --show-toplevel) > /dev/null \
-		&& terraform output \
-			| awk -F" = " '{ print toupper($$1) "=" $$2 }' \
-			> ${PWD}/$@ \
-		&& popd > /dev/null)
 
 # Distribution files
 dist: $(shell find src) tsconfig.json

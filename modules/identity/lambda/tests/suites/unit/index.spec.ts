@@ -30,7 +30,7 @@ import {
   mockCognitoListUsersWithoutResult,
   mockCognitoListUsersWithResult,
   restoreCognitoListUsers
-} from "_/mocks/vendor/aws-sdk/cognito"
+} from "_/mocks/vendor/aws-sdk"
 
 /* ----------------------------------------------------------------------------
  * Tests

@@ -169,9 +169,8 @@ module "authenticate" {
   cognito_user_pool        = "${var.cognito_user_pool}"
   cognito_user_pool_client = "${var.cognito_user_pool_client}"
   cognito_identity_domain  = "${var.cognito_identity_domain}"
-
-  dynamodb_table = "${aws_dynamodb_table._.name}"
-  sns_topic_arn  = "${aws_sns_topic._.arn}"
+  dynamodb_table           = "${aws_dynamodb_table._.name}"
+  sns_topic_arn            = "${aws_sns_topic._.arn}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
@@ -205,9 +204,8 @@ module "register" {
 
   cognito_user_pool        = "${var.cognito_user_pool}"
   cognito_user_pool_client = "${var.cognito_user_pool_client}"
-
-  dynamodb_table = "${aws_dynamodb_table._.name}"
-  sns_topic_arn  = "${aws_sns_topic._.arn}"
+  dynamodb_table           = "${aws_dynamodb_table._.name}"
+  sns_topic_arn            = "${aws_sns_topic._.arn}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
@@ -227,9 +225,8 @@ module "reset" {
 
   cognito_user_pool        = "${var.cognito_user_pool}"
   cognito_user_pool_client = "${var.cognito_user_pool_client}"
-
-  dynamodb_table = "${aws_dynamodb_table._.name}"
-  sns_topic_arn  = "${aws_sns_topic._.arn}"
+  dynamodb_table           = "${aws_dynamodb_table._.name}"
+  sns_topic_arn            = "${aws_sns_topic._.arn}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"

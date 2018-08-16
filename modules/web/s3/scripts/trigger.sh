@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,17 +20,17 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-# macOS internals
-.DS_Store
+# Exit if any of the intermediate steps fails
+set -e
 
-# Terraform runtime
-.terraform
-.terraform.tfstate.lock.info
+# Extract "DIRECTORY" argument from the input into DIRECTORY shell variables.
+# jq will ensure that the values are properly quoted and escaped for
+# consumption by the shell.
+eval "$(jq -r '@sh "DIRECTORY=\(.directory)"')"
 
-# Terraform state
-*.tfstate
-*.tfstate.backup
+# Placeholder for whatever data-fetching logic
+CHECKSUM=`shasum -a 256 ${DIRECTORY}/* | shasum -a 256 | awk '{ print $1 }'`
 
-# Development-related
-/env
-.env
+# Safely produce a JSON object containing the result value. jq will ensure that
+# the value is properly quoted and escaped to produce a valid JSON string.
+jq -n --arg checksum "$CHECKSUM" '{"checksum":$checksum}'

@@ -64,7 +64,7 @@ export function mockMimeMessageFactoryWithResult(
  * @return Jasmine spy
  */
 export function mockMimeMessageFactoryWithError(
-  err: Error = new Error("mockMimeMessageFactoryWithError")
+  err: Error = new Error("factory")
 ): jasmine.Spy {
   return spyOn(_, "factory")
     .and.callFake(() => { throw err })

@@ -50,35 +50,37 @@ function mockCognitoAdminGetUser(
  * Mock CognitoIdentityServiceProvider.adminGetUser returning with result
  *
  * @param username - Username
+ * @param email - Email address
  *
  * @return Jasmine spy
  */
 export function mockCognitoAdminGetUserWithResult(
-  username: string = chance.guid()
+  username: string = chance.guid(),
+  email: string = chance.email()
 ): jasmine.Spy {
   return mockCognitoAdminGetUser(
     jasmine.createSpy("adminGetUser")
-      .and.returnValue({
-        Username: username,
-        UserAttributes: [
-          {
-            Name: "sub",
-            Value: chance.guid()
-          },
-          {
-            Name: "email_verified",
-            Value: chance.bool()
-          },
-          {
-            Name: "email",
-            Value: chance.email()
-          }
-        ],
-        UserCreateDate: chance.date().getTime(),
-        UserLastModifiedDate: chance.date().getTime(),
-        Enabled: chance.bool(),
-        UserStatus: "CONFIRMED"
-      }))
+    .and.returnValue({
+      Username: username,
+      UserAttributes: [
+        {
+          Name: "sub",
+          Value: chance.guid()
+        },
+        {
+          Name: "email_verified",
+          Value: chance.bool()
+        },
+        {
+          Name: "email",
+          Value: email
+        }
+      ],
+      UserCreateDate: chance.date().getTime(),
+      UserLastModifiedDate: chance.date().getTime(),
+      Enabled: chance.bool(),
+      UserStatus: "CONFIRMED"
+    }))
 }
 
 /**

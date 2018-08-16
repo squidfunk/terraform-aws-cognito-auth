@@ -176,7 +176,8 @@ resource "aws_lambda_function" "_" {
   runtime       = "nodejs8.10"
   filename      = "${path.module}/lambda/dist.zip"
   handler       = "index.handler"
-  timeout       = 10
+  timeout       = 30
+  memory_size   = 512
 
   source_code_hash = "${
     base64sha256(file("${path.module}/lambda/dist.zip"))

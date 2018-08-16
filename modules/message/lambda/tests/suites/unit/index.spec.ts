@@ -32,13 +32,11 @@ import { mockSNSEvent } from "_/mocks/vendor/aws-lambda"
 import {
   mockCognitoAdminGetUserWithError,
   mockCognitoAdminGetUserWithResult,
-  restoreCognitoAdminGetUser
-} from "_/mocks/vendor/aws-sdk/cognito"
-import {
   mockSESSendRawEmailWithError,
   mockSESSendRawEmailWithSuccess,
+  restoreCognitoAdminGetUser,
   restoreSESSendRawEmail
-} from "_/mocks/vendor/aws-sdk/ses"
+} from "_/mocks/vendor/aws-sdk"
 import { mockVerificationCode } from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------

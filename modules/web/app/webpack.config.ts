@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018 Martin Donath <martin.donath@squidfunk.com>
+ * Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -65,8 +65,12 @@ export default (_env: never, args: Configuration) => {
             {
               loader: "ts-loader",
               options: {
+                transpileOnly: true,
+                experimentalWatchApi: true,
                 compilerOptions: {
-                  module: "es2015"     /* Use ES modules for tree-shaking */
+                  noUnusedLocals: args.mode === "production",
+                  noUnusedParameters: args.mode === "production",
+                  module: "es2015"
                 }
               }
             }
@@ -130,10 +134,13 @@ export default (_env: never, args: Configuration) => {
       ]
     },
 
-    /* Export class constructor as entrypoint */
+    /* Output configuration */
     output: {
       path: path.resolve(__dirname, "dist"),
-      filename: "application.js"
+      pathinfo: false,
+      filename: "[name]" + (
+        args.mode === "production" ? ".[chunkhash]" : ""
+      ) + ".bundle.js"
     },
 
     /* Plugins */
@@ -141,11 +148,6 @@ export default (_env: never, args: Configuration) => {
 
       /* Don't emit assets if there were errors */
       new NoEmitOnErrorsPlugin(),
-
-      // /* Extract CSS */
-      // new MiniCssExtractPlugin({
-      //   filename: "application.css"
-      // }),
 
       /* HTML plugin */
       new HtmlPlugin({
@@ -173,12 +175,42 @@ export default (_env: never, args: Configuration) => {
     devServer: {
       contentBase: "/dist/",
       historyApiFallback: true,
+      hot: true,
+      stats: {
+        warningsFilter: /export .* was not found in/
+      } as any,
 
       /* Proxy all /identity requests to the API Gateway development server */
       before: (app: Application) => app.use("/identity", proxy({
         target: "http://localhost:8081",
         changeOrigin: true
       }))
+    },
+
+    /* Optimizations */
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          commons: {
+            chunks: "initial",
+            minChunks: 2,
+            maxInitialRequests: 5,
+            minSize: 0
+          },
+          vendor: {
+            test: /node_modules/,
+            chunks: "initial",
+            name: "vendor",
+            priority: 10,
+            enforce: true
+          }
+        }
+      }
+    },
+
+    /* Filter out irrelevant warnings */
+    stats: {
+      warningsFilter: /export .* was not found in/
     },
 
     /* Configuration for watch mode */

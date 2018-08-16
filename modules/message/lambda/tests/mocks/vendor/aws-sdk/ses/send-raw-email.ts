@@ -30,16 +30,14 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock CognitoIdentityServiceProvider.adminGetUser
+ * Mock SES.sendRawEmail
  *
- * @param spy - Spy/fake to mock Cognito
+ * @param spy - Spy/fake to mock SNS
  *
  * @return Jasmine spy
  */
-function mockCognitoAdminGetUser(
-  spy: jasmine.Spy
-): jasmine.Spy {
-  mock("CognitoIdentityServiceProvider", "adminGetUser",
+function mockSESSendRawEmail(spy: jasmine.Spy): jasmine.Spy {
+  mock("SES", "sendRawEmail",
     (data: any, cb: Callback) => {
       cb(undefined, spy(data))
     })
@@ -47,60 +45,36 @@ function mockCognitoAdminGetUser(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminGetUser returning with result
- *
- * @param username - Username
- * @param email - Email address
+ * Mock SES.sendRawEmail returning with success
  *
  * @return Jasmine spy
  */
-export function mockCognitoAdminGetUserWithResult(
-  username: string = chance.guid(),
-  email: string = chance.email()
-): jasmine.Spy {
-  return mockCognitoAdminGetUser(
-    jasmine.createSpy("adminGetUser")
-    .and.returnValue({
-      Username: username,
-      UserAttributes: [
-        {
-          Name: "sub",
-          Value: chance.guid()
-        },
-        {
-          Name: "email_verified",
-          Value: chance.bool()
-        },
-        {
-          Name: "email",
-          Value: email
-        }
-      ],
-      UserCreateDate: chance.date().getTime(),
-      UserLastModifiedDate: chance.date().getTime(),
-      Enabled: chance.bool(),
-      UserStatus: "CONFIRMED"
-    }))
+export function mockSESSendRawEmailWithSuccess(): jasmine.Spy {
+  return mockSESSendRawEmail(
+    jasmine.createSpy("sendRawEmail")
+      .and.returnValue({
+        MessageId: chance.guid()
+      }))
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminGetUser throwing an error
+ * Mock SES.sendRawEmail throwing an error
  *
  * @param err - Error to be thrown
  *
  * @return Jasmine spy
  */
-export function mockCognitoAdminGetUserWithError(
-  err: Error = new Error("mockCognitoAdminGetUserWithError")
+export function mockSESSendRawEmailWithError(
+  err: Error = new Error("sendRawEmail")
 ): jasmine.Spy {
-  return mockCognitoAdminGetUser(
-    jasmine.createSpy("adminGetUser")
+  return mockSESSendRawEmail(
+    jasmine.createSpy("sendRawEmail")
       .and.callFake(() => { throw err }))
 }
 
 /**
- * Restore CognitoIdentityServiceProvider.adminGetUser
+ * Restore SES.sendRawEmail
  */
-export function restoreCognitoAdminGetUser() {
-  restore("CognitoIdentityServiceProvider", "adminGetUser")
+export function restoreSESSendRawEmail() {
+  restore("SES", "sendRawEmail")
 }

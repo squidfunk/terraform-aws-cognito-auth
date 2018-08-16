@@ -63,7 +63,7 @@ export function mockMessageComposeWithResult(
  * @return Jasmine spy
  */
 export function mockMessageComposeWithError(
-  err: Error = new Error("mockMessageComposeWithError")
+  err: Error = new Error("compose")
 ): jasmine.Spy {
   return mockMessageCompose(() => Promise.reject(err))
 }

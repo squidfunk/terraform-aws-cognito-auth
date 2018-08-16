@@ -41,12 +41,46 @@ data "aws_acm_certificate" "_" {
 }
 
 # -----------------------------------------------------------------------------
+# Data: Distribution files
+# -----------------------------------------------------------------------------
+
+# data.external.dist
+data "external" "dist" {
+  program = ["${path.module}/s3/scripts/trigger.sh"]
+
+  query {
+    directory = "${path.module}/app/dist"
+  }
+}
+
+# -----------------------------------------------------------------------------
+# Resources: Distribution files
+# -----------------------------------------------------------------------------
+
+# null_resource.dist
+resource "null_resource" "dist" {
+  triggers {
+    md5 = "${data.external.dist.result["checksum"]}"
+  }
+
+  # Sync whole directory to S3
+  provisioner "local-exec" {
+    command = "${path.module}/s3/scripts/sync.sh"
+
+    environment {
+      DIRECTORY = "${path.module}/app/dist"
+      BUCKET    = "${aws_s3_bucket._.bucket}"
+    }
+  }
+}
+
+# -----------------------------------------------------------------------------
 # Data: S3
 # -----------------------------------------------------------------------------
 
 # data.template_file.s3_bucket_policy.rendered
 data "template_file" "s3_bucket_policy" {
-  template = "${file("${path.module}/iam/policies/s3.json")}"
+  template = "${file("${path.module}/s3/bucket/policy.json")}"
 
   vars {
     bucket = "${var.cognito_identity_domain}"
