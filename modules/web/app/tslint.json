@@ -1,8 +1,7 @@
 {
   "extends": [
     "tslint:latest",
-    "tslint-sonarts",
-    "rxjs-tslint"
+    "tslint-sonarts"
   ],
   "linterOptions": {
     "exclude": [
@@ -37,6 +36,7 @@
     ],
     "interface-name": false,
     "jsdoc-format": true,
+    "no-empty-interface": false,
     "no-implicit-dependencies": false,
     "no-internal-module": true,
     "no-null-keyword": true,
@@ -60,10 +60,6 @@
       "double",
       "avoid-escape"
     ],
-    "rxjs-collapse-imports": true,
-    "rxjs-pipeable-operators-only": true,
-    "rxjs-no-static-observable-methods": true,
-    "rxjs-proper-imports": true,
     "semicolon": [
       true,
       "never"

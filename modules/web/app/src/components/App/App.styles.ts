@@ -20,8 +20,47 @@
  * IN THE SOFTWARE.
  */
 
-declare interface Window {
-  env: {
-    API_BASE_PATH: string
-  }
-}
+import { createStyles, Theme } from "@material-ui/core"
+
+/* ----------------------------------------------------------------------------
+ * Types
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Application styles
+ */
+export type AppStyles = typeof styles
+
+/* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Application styles
+ *
+ * @param theme - Material theme
+ *
+ * @return CSS styles
+ */
+export const styles = ({ palette, spacing }: Theme) =>
+  createStyles({
+
+    /* Enclosing container */
+    root: {
+      display: "flex",
+      height: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: palette.background.default
+    },
+
+    /* Paper element */
+    paper: {
+      width: 300
+    },
+
+    /* Element containing content */
+    content: {
+      padding: spacing.unit * 4
+    }
+  })

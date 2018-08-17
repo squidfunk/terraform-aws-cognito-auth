@@ -20,8 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-declare interface Window {
-  env: {
-    API_BASE_PATH: string
-  }
-}
+/* ----------------------------------------------------------------------------
+ * Re-exports
+ * ------------------------------------------------------------------------- */
+
+export { RegisterVerification } from "./RegisterVerification"

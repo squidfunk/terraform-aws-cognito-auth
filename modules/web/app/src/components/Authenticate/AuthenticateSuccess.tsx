@@ -20,26 +20,48 @@
  * IN THE SOFTWARE.
  */
 
+import * as React from "react"
+import {
+  compose,
+  pure
+} from "recompose"
+
+import { AuthenticateRenderProps } from "./Authenticate"
+
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Session tokens
- *
- * @template T - Session token expiry type (JSON = string, JS = Date)
+ * Authentication success render properties
  */
-export interface SessionToken<T = Date> {
-  token: string                      /* Token encoded as JWT */
-  expires: T                         /* Token expiry date */
-}
+export type AuthenticateSuccessRenderProps =
+  & AuthenticateRenderProps
+
+/* ----------------------------------------------------------------------------
+ * Presentational component
+ * ------------------------------------------------------------------------- */
 
 /**
- * Session
+ * Authentication success render component
  *
- * @template T - Session token expiry type (JSON = string, JS = Date)
+ * @param props - Properties
+ *
+ * @return JSX element
  */
-export interface Session<T = Date> {
-  access: SessionToken<T>            /* Access token */
-  refresh?: SessionToken<T>          /* Refresh token */
-}
+export const AuthenticateSuccessRender:
+  React.SFC<AuthenticateSuccessRenderProps> =
+    () =>
+      <div>TODO</div>
+
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Authentication success component
+ */
+export const AuthenticateSuccess =
+  compose<AuthenticateSuccessRenderProps, {}>(
+    pure
+  )(AuthenticateSuccessRender)

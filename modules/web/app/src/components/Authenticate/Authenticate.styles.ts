@@ -20,8 +20,27 @@
  * IN THE SOFTWARE.
  */
 
-declare interface Window {
-  env: {
-    API_BASE_PATH: string
-  }
-}
+import { createStyles, Theme } from "@material-ui/core"
+
+/* ----------------------------------------------------------------------------
+ * Types
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Authentication styles
+ */
+export type Styles = typeof styles
+
+/* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Authentication styles
+ *
+ * @param theme - Material theme
+ *
+ * @return CSS styles
+ */
+export const styles = (_theme: Theme) =>
+  createStyles({})

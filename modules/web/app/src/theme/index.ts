@@ -20,8 +20,17 @@
  * IN THE SOFTWARE.
  */
 
-declare interface Window {
-  env: {
-    API_BASE_PATH: string
+import { colors, createMuiTheme } from "@material-ui/core"
+
+/* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Material UI theme
+ */
+export const theme = createMuiTheme({
+  palette: {
+    primary: colors.indigo
   }
-}
+})

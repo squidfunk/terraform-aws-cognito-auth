@@ -20,7 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-import * as autoprefixer from "autoprefixer"
 import * as dotenv from "dotenv"
 import { Application } from "express"
 import * as HtmlPlugin from "html-webpack-plugin"
@@ -78,36 +77,6 @@ export default (_env: never, args: Configuration) => {
           exclude: /\/node_modules\//
         },
 
-        /* SCSS */
-        {
-          test: /\.scss$/,
-          use: [
-            // MiniCssExtractPlugin.loader,
-            {
-              loader: "css-loader",
-              options: {
-                minimize: args.mode === "production",
-                sourceMap: args.mode === "development"
-              }
-            },
-            {
-              loader: "postcss-loader",
-              options: {
-                ident: "postcss",
-                plugins: () => [autoprefixer()],
-                sourceMap: args.mode === "development"
-              }
-            },
-            {
-              loader: "sass-loader",
-              options: {
-                sourceMap: args.mode === "development",
-                sourceMapContents: true
-              }
-            }
-          ]
-        },
-
         /* HTML with environment variables */
         {
           test: /\.html$/,
@@ -162,7 +131,7 @@ export default (_env: never, args: Configuration) => {
         __dirname,
         "node_modules"
       ],
-      extensions: [".ts", ".tsx", ".js", ".json", ".scss"],
+      extensions: [".ts", ".tsx", ".js", ".json"],
       plugins: [
         new TsconfigPathsPlugin()
       ]

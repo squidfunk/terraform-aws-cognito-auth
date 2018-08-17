@@ -20,26 +20,48 @@
  * IN THE SOFTWARE.
  */
 
+import * as React from "react"
+import {
+  compose,
+  pure
+} from "recompose"
+
+import { RegisterRenderProps } from "./Register"
+
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Session tokens
- *
- * @template T - Session token expiry type (JSON = string, JS = Date)
+ * Registration success render properties
  */
-export interface SessionToken<T = Date> {
-  token: string                      /* Token encoded as JWT */
-  expires: T                         /* Token expiry date */
-}
+export type RegisterSuccessRenderProps =
+  & RegisterRenderProps
+
+/* ----------------------------------------------------------------------------
+ * Presentational component
+ * ------------------------------------------------------------------------- */
 
 /**
- * Session
+ * Registration success render component
  *
- * @template T - Session token expiry type (JSON = string, JS = Date)
+ * @param props - Properties
+ *
+ * @return JSX element
  */
-export interface Session<T = Date> {
-  access: SessionToken<T>            /* Access token */
-  refresh?: SessionToken<T>          /* Refresh token */
-}
+export const RegisterSuccessRender:
+  React.SFC<RegisterSuccessRenderProps> =
+    () =>
+      <div>TODO</div>
+
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Registration success component
+ */
+export const RegisterSuccess =
+  compose<RegisterSuccessRenderProps, {}>(
+    pure
+  )(RegisterSuccessRender)
