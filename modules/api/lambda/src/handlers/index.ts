@@ -34,40 +34,43 @@ import { validate } from "jsonschema"
 /**
  * Handler callback event
  *
- * @template P - Callback event path parameter type
- * @template B - Callback event body type
+ * @template TParameters - Callback event path parameter type
+ * @template TEvent - Callback event body type
  */
-export interface HandlerCallbackEvent<P extends {}, B extends {}> {
+export interface HandlerCallbackEvent<
+  TParameters extends {}, TEvent extends {}
+> {
   path: string                         /* Event path */
-  pathParameters: P                    /* Event path parameters */
+  pathParameters: TParameters          /* Event path parameters */
   headers: {                           /* Event headers */
     [name: string]: string
   }
-  body: B                              /* Event body */
+  body: TEvent                         /* Event body */
 }
 
 /**
  * Handler callback response
  *
- * @template T - Callback response body type
+ * @template TResponse - Callback response body type
  */
-export interface HandlerCallbackResponse<T> {
+export interface HandlerCallbackResponse<TResponse> {
   headers?: {                          /* Response headers */
     [name: string]: string
   }
-  body?: T                             /* Response body */
+  body?: TResponse                     /* Response body */
 }
 
 /**
  * Handler callback
  *
- * @template P - Callback event path parameter type
- * @template B - Callback event body type
- * @template T - Callback response body type
+ * @template TParameters - Callback event path parameter type
+ * @template TEvent - Callback event body type
+ * @template TResponse - Callback response body type
  */
-export type HandlerCallback<P extends {}, B extends {}, T = void> =
-  (event: HandlerCallbackEvent<P, B>) =>
-    Promise<HandlerCallbackResponse<T> | void>
+export type HandlerCallback<
+  TParameters extends {}, TEvent extends {}, TResponse = void
+> = (event: HandlerCallbackEvent<TParameters, TEvent>) =>
+  Promise<HandlerCallbackResponse<TResponse> | void>
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -104,22 +107,22 @@ export function translate(err: AWSError): AWSError {
 /**
  * Handler factory function
  *
- * @template P - Callback event path parameter type
- * @template B - Callback event body type
- * @template T - Callback response body type
+ * @template TParameters - Callback event path parameter type
+ * @template TEvent - Callback event body type
+ * @template TResponse - Callback response body type
  *
  * @param schema - Request schema
  * @param cb - Handler callback
  *
  * @return Promise resolving with HTTP response
  */
-export function handler<P extends {}, B extends {}, T = void>(
-  schema: object, cb: HandlerCallback<P, B, T>
-) {
+export function handler<
+  TParameters extends {}, TEvent extends {}, TResponse = void
+>(schema: object, cb: HandlerCallback<TParameters, TEvent, TResponse>) {
   return async (event: APIGatewayProxyEvent):
       Promise<APIGatewayProxyResult> => {
     try {
-      const data: B = event.httpMethod === "POST"
+      const data: TEvent = event.httpMethod === "POST"
         ? JSON.parse(event.body || "{}")
         : {}
 
@@ -134,7 +137,7 @@ export function handler<P extends {}, B extends {}, T = void>(
         headers: {},
         ...(await cb({
           path: event.path,
-          pathParameters: event.pathParameters as P,
+          pathParameters: event.pathParameters as TParameters,
           headers: event.headers,
           body: data
         }))

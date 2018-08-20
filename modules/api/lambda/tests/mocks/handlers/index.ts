@@ -29,14 +29,14 @@ import { HandlerCallbackResponse } from "handlers"
 /**
  * Mock handler callback
  *
- * @template T - Callback response body type
+ * @template TResponse - Callback response body type
  *
  * @param promise - Promise returned by handler callback
  *
  * @return Jasmine spy
  */
-function mockHandlerCallback<T extends {}>(
-  promise: () => Promise<HandlerCallbackResponse<T>>
+function mockHandlerCallback<TResponse extends {}>(
+  promise: () => Promise<HandlerCallbackResponse<TResponse>>
 ): jasmine.Spy {
   return jasmine.createSpy("callback")
     .and.callFake(promise)

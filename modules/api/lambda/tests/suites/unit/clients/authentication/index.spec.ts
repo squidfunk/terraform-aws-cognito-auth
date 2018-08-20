@@ -207,6 +207,17 @@ describe("clients/authentication", () => {
         restoreCognitoInitiateAuth()
       })
 
+      /* Test: should resolve with ID token for valid credentials */
+      it("should resolve with ID token for valid credentials",
+        async () => {
+          mockCognitoInitiateAuthWithCredentials()
+          const auth = new AuthenticationClient()
+          const { id } = await auth.authenticate(username, password)
+          expect(id.token).toEqual(jasmine.any(String))
+          expect(id.expires)
+            .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
+        })
+
       /* Test: should resolve with access token for valid credentials */
       it("should resolve with access token for valid credentials",
         async () => {
@@ -227,6 +238,18 @@ describe("clients/authentication", () => {
           expect(refresh!.token).toEqual(jasmine.any(String))
           expect(refresh!.expires)
             .toBeGreaterThan(Date.now() + 1000 * 59 * 60 * 24 * 30)
+        })
+
+      /* Test: should resolve with ID token for valid refresh token */
+      it("should resolve with ID token for valid refresh token",
+        async () => {
+          mockCognitoInitiateAuthWithToken()
+          const auth = new AuthenticationClient()
+          const { id, refresh } = await auth.authenticate(token)
+          expect(id.token).toEqual(jasmine.any(String))
+          expect(id.expires)
+            .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
+          expect(refresh).toBeUndefined()
         })
 
       /* Test: should resolve with access token for valid refresh token */

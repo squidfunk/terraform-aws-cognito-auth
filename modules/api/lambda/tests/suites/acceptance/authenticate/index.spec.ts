@@ -141,7 +141,19 @@ describe("POST /authenticate", () => {
 
     /* Delete user */
     afterAll(async () => {
-      // await mgmt.deleteUser(email)
+      await mgmt.deleteUser(email)
+    })
+
+    /* Test: should return ID token for valid credentials */
+    it("should return ID token for valid credentials", async () => {
+      const { body } = await request.post("/authenticate")
+        .set("Content-Type", "application/json")
+        .send({ username: email, password })
+        .expect(200)
+      expect(body.id.token)
+        .toMatch(/^([a-zA-Z0-9\-_]+\.){2}[a-zA-Z0-9\-_]+$/)
+      expect(Date.parse(body.id.expires))
+        .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
     })
 
     /* Test: should return access token for valid credentials */
@@ -187,6 +199,21 @@ describe("POST /authenticate", () => {
             new Date(Date.parse(body.refresh.expires)).toUTCString()
           }; HttpOnly; Secure; SameSite=Strict`)
       })
+
+    /* Test: should return ID token for valid refresh token */
+    it("should return ID token for valid refresh token", async () => {
+      const { body: { refresh } } = await request.post("/authenticate")
+        .set("Content-Type", "application/json")
+        .send({ username: email, password })
+        .expect(200)
+      const { body } = await request.post("/authenticate")
+        .send({ token: refresh.token })
+        .expect(200)
+      expect(body.id.token)
+        .toMatch(/^([a-zA-Z0-9\-_]+\.){2}[a-zA-Z0-9\-_]+$/)
+      expect(Date.parse(body.id.expires))
+        .toBeGreaterThanOrEqual(Date.now() + 1000 * 59 * 60)
+    })
 
     /* Test: should return access token for valid refresh token */
     it("should return access token for valid refresh token", async () => {

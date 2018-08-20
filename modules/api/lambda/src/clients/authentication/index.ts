@@ -126,13 +126,6 @@ export class AuthenticationClient extends Client {
   /**
    * Authenticate using credentials or refresh token
    *
-   * Both authentication flows will return an identity token (and not access
-   * token) because we're currently not defining any OAuth scopes and API
-   * Gateway demands OAuth scopes in order to accept an access token. For now,
-   * the identity token is automatically  checked against the user pool.
-   *
-   * For more information, see https://amzn.to/2tcKVR2. Also, feel free to PR.
-   *
    * @param usernameOrToken - Username, email address or refresh token
    * @param password - Password if username is supplied
    *
@@ -189,8 +182,12 @@ export class AuthenticationClient extends Client {
       if (!AuthenticationResult)
         throw new Error(`Invalid authentication: challenge "${ChallengeName}"`)
       return {
-        access: {
+        id: {
           token: AuthenticationResult.IdToken!,
+          expires: expires(60 * 60) /* 1 hour */
+        },
+        access: {
+          token: AuthenticationResult.AccessToken!,
           expires: expires(60 * 60) /* 1 hour */
         },
         refresh: {
@@ -229,8 +226,12 @@ export class AuthenticationClient extends Client {
       if (!AuthenticationResult)
         throw new Error(`Invalid authentication: challenge "${ChallengeName}"`)
       return {
-        access: {
+        id: {
           token: AuthenticationResult.IdToken!,
+          expires: expires(60 * 60) /* 1 hour */
+        },
+        access: {
+          token: AuthenticationResult.AccessToken!,
           expires: expires(60 * 60) /* 1 hour */
         }
       }
