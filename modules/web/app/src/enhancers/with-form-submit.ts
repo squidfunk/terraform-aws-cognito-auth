@@ -37,47 +37,47 @@ import {
 /**
  * Form submission state
  *
- * @template T - Form response type
+ * @template TResponse - Form response type
  */
-interface State<T> {
+interface State<TResponse> {
   pending: boolean                     /* Form submission activity */
   success: boolean                     /* Form submission success */
-  response?: T                         /* Form submission result */
+  response?: TResponse                 /* Form submission result */
   err?: AxiosError                     /* Form submission error */
 }
 
 /**
  * Form submission state properties
  *
- * @template T - Form response type
+ * @template TResponse - Form response type
  */
-interface StateProps<T> {
-  form: Readonly<State<T>>,            /* Form submission state */
+interface StateProps<TResponse> {
+  form: Readonly<State<TResponse>>,    /* Form submission state */
   setForm: (
-    form: Readonly<State<T>>
-  ) => Readonly<State<T>>              /* Form submission state reducer */
+    form: Readonly<State<TResponse>>
+  ) => Readonly<State<TResponse>>      /* Form submission state reducer */
 }
 
 /**
  * Form submission handler properties
  *
- * @template T - Form request type
+ * @template TRequest - Form request type
  */
-interface HandlerProps<T extends {}> {
+interface HandlerProps<TRequest extends {}> {
   submit: (
-    request?: T
+    request?: TRequest
   ) => Promise<void>                   /* Submit form */
 }
 
 /**
  * Form submission enhancer
  *
- * @template S - Form request type
- * @template T - Form response type
+ * @template TRequest - Form request type
+ * @template TResponse - Form response type
  */
-export type WithFormSubmit<S extends {} = {}, T = void> =
-  & StateProps<T>
-  & HandlerProps<S>
+export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
+  & HandlerProps<TRequest>
+  & StateProps<TResponse>
 
 /* ----------------------------------------------------------------------------
  * Enhancer
@@ -89,18 +89,18 @@ export type WithFormSubmit<S extends {} = {}, T = void> =
  * Credentials need to be enabled for the refresh token to be sent with the
  * authentication request, so it can be stored in a secure HTTP-only cookie.
  *
- * @template S - Form request type
- * @template T - Form response type
+ * @template TRequest - Form request type
+ * @template TResponse - Form response type
  *
  * @return Component enhancer
  */
-export const withFormSubmit = <S extends {}, T = void>() =>
-  compose<WithFormSubmit<S, T>, {}>(
-    withState("form", "setForm", (): State<T> => ({
+export const withFormSubmit = <TRequest extends {}, TResponse = void>() =>
+  compose<WithFormSubmit<TRequest, TResponse>, {}>(
+    withState("form", "setForm", (): State<TResponse> => ({
       pending: false,
       success: false
     })),
-    withHandlers<WithFormSubmit<S, T>, HandlerProps<S>>({
+    withHandlers<WithFormSubmit<TRequest, TResponse>, HandlerProps<TRequest>>({
       submit: ({ setForm }) => async req => {
         const url = `/${window.env.API_BASE_PATH}/${
           location.pathname.replace(/^\//, "") || "authenticate"

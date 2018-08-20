@@ -39,13 +39,13 @@ import {
 /**
  * Form state properties
  *
- * @template T - Form request type
+ * @template TRequest - Form request type
  */
-interface StateProps<T extends {}> {
-  request: Readonly<T>,                /* Form state */
+interface StateProps<TRequest extends {}> {
+  request: Readonly<TRequest>,         /* Form state */
   setRequest: (
-    request: Readonly<T>
-  ) => Readonly<T>                     /* Form state reducer */
+    request: Readonly<TRequest>
+  ) => Readonly<TRequest>              /* Form state reducer */
 }
 
 /**
@@ -63,12 +63,12 @@ interface HandlerProps {
 /**
  * Form submission enhancer
  *
- * @template S - Form request type
- * @template T - Form response type
+ * @template TRequest - Form request type
+ * @template TResponse - Form response type
  */
-export type WithForm<S extends {}, T = void> =
-  & WithFormSubmit<S, T>
-  & StateProps<S>
+export type WithForm<TRequest extends {}, TResponse = void> =
+  & WithFormSubmit<TRequest, TResponse>
+  & StateProps<TRequest>
   & HandlerProps
 
 /* ----------------------------------------------------------------------------
@@ -81,18 +81,20 @@ export type WithForm<S extends {}, T = void> =
  * Credentials need to be enabled for the refresh token to be sent with the
  * authentication request, so it can be stored in a secure HTTP-only cookie.
  *
- * @template S - Form request type
- * @template T - Form response type
+ * @template TRequest - Form request type
+ * @template TResponse - Form response type
  *
  * @param initial - Initial form request
  *
  * @return Component enhancer
  */
-export const withForm = <S extends {}, T = void>(initial: S) =>
-  compose<WithForm<S, T>, {}>(
-    withFormSubmit<S, T>(),
-    withState("request", "setRequest", (): S => initial),
-    withHandlers<WithForm<S, T>, HandlerProps>({
+export const withForm = <TRequest extends {}, TResponse = void>(
+  initial: TRequest
+) =>
+  compose<WithForm<TRequest, TResponse>, {}>(
+    withFormSubmit<TRequest, TResponse>(),
+    withState("request", "setRequest", (): TRequest => initial),
+    withHandlers<WithForm<TRequest, TResponse>, HandlerProps>({
 
       /* Update form data */
       handleChange: ({ request, setRequest }) => ev => {

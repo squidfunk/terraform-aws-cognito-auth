@@ -57,9 +57,9 @@ export interface MessageAttachment {
 /**
  * Abstract message base class
  *
- * @template T - Message data type
+ * @template TData - Message data type
  */
-export abstract class Message<T> {
+export abstract class Message<TData> {
 
   /**
    * Base directory
@@ -74,7 +74,7 @@ export abstract class Message<T> {
    */
   public constructor(
     protected template: string,
-    protected data: T
+    protected data: TData
   ) {
     this.base = path.join(__dirname, template)
   }

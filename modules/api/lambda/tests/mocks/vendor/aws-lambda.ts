@@ -31,17 +31,19 @@ import { chance } from "_/helpers"
 /**
  * API Gateway event mock options
  *
- * @template P - Event path parameter type
- * @template B - Event body type
+ * @template TParameters - Event path parameter type
+ * @template TEvent - Event body type
  */
-interface APIGatewayProxyEventOptions<P extends {}, B extends {}> {
+interface APIGatewayProxyEventOptions<
+  TParameters extends {}, TEvent extends {}
+> {
   path: string                         /* Event path */
-  pathParameters: P                    /* Event path parameters */
+  pathParameters: TParameters          /* Event path parameters */
   method: "GET" | "POST"               /* Event HTTP method */
   headers: {                           /* Event headers */
     [name: string]: string
   }
-  body: B | string                     /* Event body */
+  body: TEvent | string                /* Event body */
 }
 
 /* ----------------------------------------------------------------------------
@@ -66,16 +68,18 @@ export function mockAPIGatewayProxyEventPathParameters(
 /**
  * Mock API Gateway event options
  *
- * @template P - Event path parameter type
- * @template B - Event body type
+ * @template TParameters - Event path parameter type
+ * @template TEvent - Event body type
  *
  * @param options - Event option overrides
  *
  * @return API Gateway event options
  */
-export function mockAPIGatewayProxyEventOptions<P extends {}, B extends {}>(
-  override?: Partial<APIGatewayProxyEventOptions<P, B>>
-): APIGatewayProxyEventOptions<P, B> {
+export function mockAPIGatewayProxyEventOptions<
+  TParameters extends {}, TEvent extends {}
+>(
+  override?: Partial<APIGatewayProxyEventOptions<TParameters, TEvent>>
+): APIGatewayProxyEventOptions<TParameters, TEvent> {
   return {
     path: "/",
     pathParameters: mockAPIGatewayProxyEventPathParameters(),
@@ -94,23 +98,27 @@ export function mockAPIGatewayProxyEventOptions<P extends {}, B extends {}>(
 /**
  * Mock API Gateway event
  *
- * @template P - Event path parameter type
- * @template B - Event body type
+ * @template TParameters - Event path parameter type
+ * @template TEvent - Event body type
  *
  * @param options - Event option overrides
  *
  * @return API Gateway event
  */
-export function mockAPIGatewayProxyEvent<B extends {}>(
-  override?: Partial<APIGatewayProxyEventOptions<{}, B>>
+export function mockAPIGatewayProxyEvent<TEvent extends {}>(
+  override?: Partial<APIGatewayProxyEventOptions<{}, TEvent>>
 ): APIGatewayProxyEvent
-export function mockAPIGatewayProxyEvent<P extends {}, B extends {}>(
-  override?: Partial<APIGatewayProxyEventOptions<P, B>>
+export function mockAPIGatewayProxyEvent<
+  TParameters extends {}, TEvent extends {}
+>(
+  override?: Partial<APIGatewayProxyEventOptions<TParameters, TEvent>>
 ): APIGatewayProxyEvent
-export function mockAPIGatewayProxyEvent<P extends {}, B extends {}>(
-  override?: Partial<APIGatewayProxyEventOptions<P, B>>
+export function mockAPIGatewayProxyEvent<
+  TParameters extends {}, TEvent extends {}
+>(
+  override?: Partial<APIGatewayProxyEventOptions<TParameters, TEvent>>
 ): APIGatewayProxyEvent {
-  const options = mockAPIGatewayProxyEventOptions<P, B>(override)
+  const options = mockAPIGatewayProxyEventOptions<TParameters, TEvent>(override)
   const body = typeof options.body !== "string"
     ? JSON.stringify(options.body)
     : options.body
