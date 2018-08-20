@@ -145,13 +145,14 @@ export default (_env: never, args: Configuration) => {
       contentBase: "/dist/",
       historyApiFallback: true,
       hot: true,
+      port: 9090,
       stats: {
         warningsFilter: /export .* was not found in/
       } as any,
 
       /* Proxy all /identity requests to the API Gateway development server */
       before: (app: Application) => app.use("/identity", proxy({
-        target: "http://localhost:8081",
+        target: "http://localhost:9091",
         changeOrigin: true
       }))
     },

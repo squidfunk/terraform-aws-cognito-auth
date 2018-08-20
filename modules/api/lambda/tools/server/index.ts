@@ -37,8 +37,8 @@ import { middleware } from "./middleware"
     const app = express()
     app.use(morgan("dev"))
     app.use(`/${process.env.API_BASE_PATH}`, await middleware())
-    app.listen(8081, () => {
-      console.log(`API server listening on http://localhost:8081`)
+    app.listen(9091, () => {
+      console.log(`API server listening on http://localhost:9091`)
     })
   } catch (err) {
     console.log(err)
