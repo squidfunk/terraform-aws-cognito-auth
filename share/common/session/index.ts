@@ -27,19 +27,20 @@
 /**
  * Session tokens
  *
- * @template T - Session token expiry type (JSON = string, JS = Date)
+ * @template TExpires - Session token expiry type (JSON = string, JS = Date)
  */
-export interface SessionToken<T = Date> {
-  token: string                      /* Token encoded as JWT */
-  expires: T                         /* Token expiry date */
+export interface SessionToken<TExpires = Date> {
+  token: string                        /* Token encoded as JWT */
+  expires: TExpires                    /* Token expiry date */
 }
 
 /**
  * Session
  *
- * @template T - Session token expiry type (JSON = string, JS = Date)
+ * @template TExpires - Session token expiry type (JSON = string, JS = Date)
  */
-export interface Session<T = Date> {
-  access: SessionToken<T>            /* Access token */
-  refresh?: SessionToken<T>          /* Refresh token */
+export interface Session<TExpires = Date> {
+  id: SessionToken<TExpires>           /* ID token */
+  access: SessionToken<TExpires>       /* Access token */
+  refresh?: SessionToken<TExpires>     /* Refresh token */
 }
