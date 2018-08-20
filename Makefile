@@ -56,7 +56,7 @@ lint:
 	make -C modules/api/lambda lint
 	make -C modules/identity/lambda lint
 	make -C modules/message/lambda lint
-	make -C modules/web/app lint
+	#make -C modules/web/app lint
 
 # Execute unit tests
 test:
