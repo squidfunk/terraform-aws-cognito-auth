@@ -88,8 +88,9 @@ export default (_env: never, args: Configuration) => {
                   .reduce((variables: any[], key: string) => ([
                     ...variables,
                     {
-                      search: `\${${key.toLowerCase()}}`,
-                      replace: env![key]
+                      search: `\\\${${key.toLowerCase()}}`,
+                      replace: env![key],
+                      flags: "g"
                     }
                   ]), [])
               }
