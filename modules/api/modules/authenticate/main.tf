@@ -80,11 +80,11 @@ resource "aws_lambda_function" "_" {
 
   environment {
     variables = {
-      COGNITO_USER_POOL        = "${var.cognito_user_pool}"
-      COGNITO_USER_POOL_CLIENT = "${var.cognito_user_pool_client}"
-      COGNITO_IDENTITY_DOMAIN  = "${var.cognito_identity_domain}"
-      DYNAMODB_TABLE           = "${var.dynamodb_table}"
-      SNS_TOPIC_ARN            = "${var.sns_topic_arn}"
+      COGNITO_USER_POOL_ID           = "${var.cognito_user_pool_id}"
+      COGNITO_USER_POOL_CLIENT_ID    = "${var.cognito_user_pool_client_id}"
+      COGNITO_IDENTITY_POOL_PROVIDER = "${var.cognito_identity_pool_provider}"
+      DYNAMODB_TABLE                 = "${var.dynamodb_table}"
+      SNS_TOPIC_ARN                  = "${var.sns_topic_arn}"
     }
   }
 }

@@ -139,8 +139,8 @@ resource "aws_cognito_user_pool_client" "_" {
 
 # aws_cognito_identity_pool._
 resource "aws_cognito_identity_pool" "_" {
-  identity_pool_name      = "${var.cognito_identity_name}"
-  developer_provider_name = "${var.cognito_identity_domain}"
+  identity_pool_name      = "${var.cognito_identity_pool_name}"
+  developer_provider_name = "${var.cognito_identity_pool_provider}"
 
   allow_unauthenticated_identities = false
 

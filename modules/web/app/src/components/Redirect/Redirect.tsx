@@ -20,74 +20,57 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
 import * as React from "react"
 import {
-  branch,
   compose,
   lifecycle,
-  pure,
-  renderComponent
+  pure
 } from "recompose"
-
-import {
-  RegisterVerificationParameters,
-  RegisterVerificationRequest
- } from "common"
-import {
-  withFormSubmit,
-  WithFormSubmit
-} from "enhancers"
-
-import { Styles, styles } from "./RegisterVerification.styles"
-import { RegisterVerificationSuccess } from "./RegisterVerificationSuccess"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification render properties
+ * Redirect properties
  */
-export type RegisterVerificationRenderProps =
-  & WithStyles<Styles>
-  & WithFormSubmit<RegisterVerificationRequest>
-  & RegisterVerificationParameters
+export interface RedirectProps {
+  href: string                         /* Target URL */
+}
+
+/**
+ * Redirect render properties
+ */
+export type RedirectRenderProps =
+  & RedirectProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification render component
+ * Redirect render component
+ *
+ * @param props - Properties
+ *
+ * @return JSX element
  */
-export const RegisterVerificationRender:
-  React.SFC<RegisterVerificationRenderProps> =
-    () =>
-      <div>Verifying...</div>
+export const RedirectRender: React.SFC<RedirectRenderProps> =
+  () => null // tslint:disable-line no-null-keyword
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification component
+ * Redirect component
  */
-export const RegisterVerification =
-  compose<RegisterVerificationRenderProps, RegisterVerificationParameters>(
-    withStyles(styles),
-    withFormSubmit<RegisterVerificationRequest>(),
-    lifecycle<RegisterVerificationRenderProps, {}>({
-      componentDidMount() {
-        return this.props.submit()
+export const Redirect =
+  compose<RedirectRenderProps, RedirectProps>(
+    lifecycle<RedirectRenderProps, RedirectProps>({
+      componentWillMount() {
+        window.location.href = this.props.href
       }
     }),
-    branch<RegisterVerificationRenderProps>(
-      ({ form }) => form.success,
-      renderComponent(RegisterVerificationSuccess)
-    ),
     pure
-  )(RegisterVerificationRender)
+  )(RedirectRender)

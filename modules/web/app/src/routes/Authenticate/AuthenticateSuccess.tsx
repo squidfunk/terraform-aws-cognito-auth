@@ -20,44 +20,59 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
+import * as React from "react"
+import {
+  compose,
+  pure,
+  withProps
+} from "recompose"
+
+import { Redirect, RedirectProps } from "components"
+
+import { AuthenticateRenderProps } from "./Authenticate"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application styles
+ * Authentication success render properties
  */
-export type AppStyles = typeof styles
+export type AuthenticateSuccessRenderProps =
+  & AuthenticateRenderProps
+  & RedirectProps
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application styles
+ * Authentication success render component
  *
- * @param theme - Material theme
+ * @param props - Properties
  *
- * @return CSS styles
+ * @return JSX element
  */
-export const styles = ({ palette }: Theme) =>
-  createStyles({
+export const AuthenticateSuccessRender:
+  React.SFC<AuthenticateSuccessRenderProps> =
+    ({ href }) =>
+      <Redirect href={href} />
 
-    /* Enclosing container */
-    root: {
-      display: "flex",
-      height: "100%",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: palette.background.default
-    },
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
 
-    /* Paper element */
-    paper: {
-      width: 300,
-      borderRadius: 2,
-      overflow: "hidden"
-    }
-  })
+/**
+ * Authentication success component
+ */
+export const AuthenticateSuccess =
+  compose<AuthenticateSuccessRenderProps, AuthenticateRenderProps>(
+    withProps<RedirectProps, AuthenticateRenderProps>(({ form }) => ({
+      href: `//${
+        window.env.APP_ORIGIN
+      }#${
+        form.response!.id.token
+      }`
+    })),
+    pure
+  )(AuthenticateSuccessRender)

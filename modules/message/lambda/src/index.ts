@@ -44,16 +44,16 @@ function template(code: VerificationCode) {
     /* Registration verification message */
     case "register":
       return new RegisterMessage({
-        name: process.env.COGNITO_IDENTITY_NAME!,
-        domain: process.env.COGNITO_IDENTITY_DOMAIN!,
+        name: process.env.COGNITO_IDENTITY_POOL_NAME!,
+        domain: process.env.COGNITO_IDENTITY_POOL_PROVIDER!,
         code: code.id
       })
 
     /* Reset verification message */
     case "reset":
       return new ResetMessage({
-        name: process.env.COGNITO_IDENTITY_NAME!,
-        domain: process.env.COGNITO_IDENTITY_DOMAIN!,
+        name: process.env.COGNITO_IDENTITY_POOL_NAME!,
+        domain: process.env.COGNITO_IDENTITY_POOL_PROVIDER!,
         code: code.id
       })
 
@@ -86,7 +86,7 @@ export function handler(event: SNSEvent): Promise<void> {
         /* Retrieve user */
         new CognitoIdentityServiceProvider({ apiVersion: "2016-04-18" })
           .adminGetUser({
-            UserPoolId: process.env.COGNITO_USER_POOL!,
+            UserPoolId: process.env.COGNITO_USER_POOL_ID!,
             Username: code.subject
           }).promise(),
 

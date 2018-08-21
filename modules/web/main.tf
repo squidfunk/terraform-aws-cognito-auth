@@ -22,22 +22,10 @@
 # Providers
 # -----------------------------------------------------------------------------
 
-# provider.aws
 provider "aws" {
   version = ">= 1.20.0, <= 2.0.0"
   alias   = "acm"
   region  = "us-east-1"
-}
-
-# -----------------------------------------------------------------------------
-# Data: Certificate Manager
-# -----------------------------------------------------------------------------
-
-# data.aws_acm_certificate._
-data "aws_acm_certificate" "_" {
-  provider = "aws.acm"
-  domain   = "${replace(var.cognito_identity_domain, "/^[^.]+./", "")}"
-  statuses = ["ISSUED"]
 }
 
 # -----------------------------------------------------------------------------
@@ -83,11 +71,24 @@ data "template_file" "s3_bucket_policy" {
   template = "${file("${path.module}/s3/bucket/policy.json")}"
 
   vars {
-    bucket = "${var.cognito_identity_domain}"
+    bucket = "${var.namespace}"
 
     cloudfront_origin_access_identity_iam_arn = "${
       aws_cloudfront_origin_access_identity._.iam_arn
     }"
+  }
+}
+
+# -----------------------------------------------------------------------------
+
+# data.template_file.index.rendered
+data "template_file" "index" {
+  template = "${file("${path.module}/app/dist/index.html")}"
+
+  vars {
+    api_base_path              = "${var.api_base_path}"
+    app_origin                 = "${var.app_origin}"
+    cognito_identity_pool_name = "${var.cognito_identity_pool_name}"
   }
 }
 
@@ -97,9 +98,19 @@ data "template_file" "s3_bucket_policy" {
 
 # aws_s3_bucket._
 resource "aws_s3_bucket" "_" {
-  bucket = "${var.cognito_identity_domain}"
+  bucket = "${var.namespace}"
   acl    = "private"
   policy = "${data.template_file.s3_bucket_policy.rendered}"
+}
+
+# aws_s3_bucket_object.index
+resource "aws_s3_bucket_object" "index" {
+  bucket        = "${aws_s3_bucket._.bucket}"
+  key           = "index.html"
+  content       = "${data.template_file.index.rendered}"
+  acl           = "private"
+  cache_control = "public, max-age=0, must-revalidate"
+  content_type  = "text/html"
 }
 
 # -----------------------------------------------------------------------------
@@ -111,7 +122,7 @@ resource "aws_cloudfront_origin_access_identity" "_" {}
 
 # aws_cloudfront_distribution._
 resource "aws_cloudfront_distribution" "_" {
-  aliases         = ["${var.cognito_identity_domain}"]
+  aliases         = ["${var.app_domain}"]
   enabled         = true
   is_ipv6_enabled = true
   price_class     = "PriceClass_All"
@@ -248,6 +259,6 @@ resource "aws_cloudfront_distribution" "_" {
 
     minimum_protocol_version = "TLSv1.1_2016"
     ssl_support_method       = "sni-only"
-    acm_certificate_arn      = "${data.aws_acm_certificate._.arn}"
+    acm_certificate_arn      = "${var.app_certificate_arn}"
   }
 }

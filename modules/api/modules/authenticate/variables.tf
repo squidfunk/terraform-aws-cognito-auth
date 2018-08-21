@@ -50,19 +50,19 @@ variable "api_resource_id" {
 # Variables: Cognito
 # -----------------------------------------------------------------------------
 
-# var.cognito_user_pool
-variable "cognito_user_pool" {
-  description = "Cognito user pool"
+# var.cognito_user_pool_id
+variable "cognito_user_pool_id" {
+  description = "Cognito user pool identifier"
 }
 
-# var.cognito_user_pool_client
-variable "cognito_user_pool_client" {
-  description = "Cognito user pool client"
+# var.cognito_user_pool_client_id
+variable "cognito_user_pool_client_id" {
+  description = "Cognito user pool client identifier"
 }
 
-# var.cognito_identity_domain
-variable "cognito_identity_domain" {
-  description = "Cognito identity provider domain"
+# var.cognito_identity_pool_provider
+variable "cognito_identity_pool_provider" {
+  description = "Cognito identity pool provider"
 }
 
 # -----------------------------------------------------------------------------

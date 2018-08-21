@@ -38,10 +38,11 @@ module "api" {
 
   api_stage = "${var.api_stage}"
 
-  cognito_user_pool        = "${module.identity.cognito_user_pool}"
-  cognito_user_pool_arn    = "${module.identity.cognito_user_pool_arn}"
-  cognito_user_pool_client = "${module.identity.cognito_user_pool_client}"
-  cognito_identity_domain  = "${var.cognito_identity_domain}"
+  cognito_user_pool_id        = "${module.identity.cognito_user_pool_id}"
+  cognito_user_pool_arn       = "${module.identity.cognito_user_pool_arn}"
+  cognito_user_pool_client_id = "${module.identity.cognito_user_pool_client_id}"
+
+  cognito_identity_pool_provider = "${var.cognito_identity_pool_provider}"
 }
 
 # module.identity
@@ -51,8 +52,8 @@ module "identity" {
   namespace = "${var.namespace}"
   region    = "${var.region}"
 
-  cognito_identity_name   = "${var.cognito_identity_name}"
-  cognito_identity_domain = "${var.cognito_identity_domain}"
+  cognito_identity_pool_name     = "${var.cognito_identity_pool_name}"
+  cognito_identity_pool_provider = "${var.cognito_identity_pool_provider}"
 }
 
 # module.message
@@ -62,10 +63,11 @@ module "message" {
   namespace = "${var.namespace}"
   region    = "${var.region}"
 
-  cognito_user_pool       = "${module.identity.cognito_user_pool}"
-  cognito_user_pool_arn   = "${module.identity.cognito_user_pool_arn}"
-  cognito_identity_name   = "${var.cognito_identity_name}"
-  cognito_identity_domain = "${var.cognito_identity_domain}"
+  cognito_user_pool_id  = "${module.identity.cognito_user_pool_id}"
+  cognito_user_pool_arn = "${module.identity.cognito_user_pool_arn}"
+
+  cognito_identity_pool_name     = "${var.cognito_identity_pool_name}"
+  cognito_identity_pool_provider = "${var.cognito_identity_pool_provider}"
 
   sns_topic_arn = "${module.api.sns_topic_arn}"
 
@@ -79,7 +81,8 @@ module "route" {
   namespace = "${var.namespace}"
   region    = "${var.region}"
 
-  cognito_identity_domain = "${var.cognito_identity_domain}"
+  app_hosted_zone_id = "${var.app_hosted_zone_id}"
+  app_domain         = "${var.app_domain}"
 
   cloudfront_distribution_domain_name = "${
     module.web.cloudfront_distribution_domain_name
@@ -101,5 +104,10 @@ module "web" {
   api_stage     = "${module.api.api_stage}"
   api_base_path = "${module.api.api_base_path}"
 
-  cognito_identity_domain = "${var.cognito_identity_domain}"
+  app_hosted_zone_id  = "${var.app_hosted_zone_id}"
+  app_certificate_arn = "${var.app_certificate_arn}"
+  app_domain          = "${var.app_domain}"
+  app_origin          = "${var.app_origin}"
+
+  cognito_identity_pool_name = "${var.cognito_identity_pool_name}"
 }

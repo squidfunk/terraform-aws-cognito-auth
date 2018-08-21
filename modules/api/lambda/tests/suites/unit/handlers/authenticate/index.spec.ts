@@ -112,7 +112,7 @@ describe("handlers/authenticate", () => {
           "Set-Cookie": `__Secure-token=${
             encodeURIComponent(sessionWithRefreshToken.refresh!.token)
           }; Domain=${
-            process.env.COGNITO_IDENTITY_DOMAIN!
+            process.env.COGNITO_IDENTITY_POOL_PROVIDER!
           }; Path=${path}; Expires=${
             sessionWithRefreshToken.refresh!.expires.toUTCString()
           }; HttpOnly; Secure; SameSite=Strict`

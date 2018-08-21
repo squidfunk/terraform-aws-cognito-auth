@@ -23,16 +23,16 @@
 # Exit if any of the intermediate steps fails
 set -e
 
-# Sync assets
+# Sync new assets
+aws s3 sync ${DIRECTORY} \
+  s3://${BUCKET}/ \
+    --no-progress \
+    --exclude "*.html" \
+    --cache-control "public, max-age=31536000"
+
+# Delete old assets
 aws s3 sync ${DIRECTORY} \
   s3://${BUCKET}/ \
     --delete --no-progress \
     --exclude "*.html" \
     --cache-control "public, max-age=31536000"
-
-# Sync HTML files
-aws s3 sync ${DIRECTORY} \
-  s3://${BUCKET}/ \
-    --delete --no-progress \
-    --include "*.html" \
-    --cache-control "public, max-age=0, must-revalidate"

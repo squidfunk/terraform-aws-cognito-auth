@@ -43,13 +43,13 @@ export class ManagementClient extends Client {
 
       /* Confirm user registration */
       this.cognito.adminConfirmSignUp({
-        UserPoolId: process.env.COGNITO_USER_POOL!,
+        UserPoolId: process.env.COGNITO_USER_POOL_ID!,
         Username: username
       }).promise(),
 
       /* Verify email address */
       this.cognito.adminUpdateUserAttributes({
-        UserPoolId: process.env.COGNITO_USER_POOL!,
+        UserPoolId: process.env.COGNITO_USER_POOL_ID!,
         Username: username,
         UserAttributes: [
           {
@@ -70,7 +70,7 @@ export class ManagementClient extends Client {
    */
   public async deleteUser(username: string): Promise<void> {
     await this.cognito.adminDeleteUser({
-      UserPoolId: process.env.COGNITO_USER_POOL!,
+      UserPoolId: process.env.COGNITO_USER_POOL_ID!,
       Username: username
     }).promise()
   }
@@ -96,7 +96,7 @@ export class ManagementClient extends Client {
   ): Promise<void> {
     const { Username: id, UserAttributes } =
       await this.cognito.adminGetUser({
-        UserPoolId: process.env.COGNITO_USER_POOL!,
+        UserPoolId: process.env.COGNITO_USER_POOL_ID!,
         Username: username
       }).promise()
 
@@ -105,7 +105,7 @@ export class ManagementClient extends Client {
 
     /* Re-create user */
     await this.cognito.signUp({
-      ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
+      ClientId: process.env.COGNITO_USER_POOL_CLIENT_ID!,
       Username: id,
       Password: password,
       UserAttributes: UserAttributes!.filter(attr => {

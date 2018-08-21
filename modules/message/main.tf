@@ -19,7 +19,7 @@
 # IN THE SOFTWARE.
 
 # -----------------------------------------------------------------------------
-# Locals
+# Local variables
 # -----------------------------------------------------------------------------
 
 # local.*
@@ -47,8 +47,7 @@ data "template_file" "lambda_iam_policy" {
 # aws_iam_role.lambda
 resource "aws_iam_role" "lambda" {
   count = "${local.enabled}"
-
-  name = "${var.namespace}-message-lambda"
+  name  = "${var.namespace}-message-lambda"
 
   assume_role_policy = "${
     file("${path.module}/iam/policies/assume-role/lambda.json")
@@ -58,8 +57,7 @@ resource "aws_iam_role" "lambda" {
 # aws_iam_policy.lambda
 resource "aws_iam_policy" "lambda" {
   count = "${local.enabled}"
-
-  name = "${var.namespace}-message-lambda"
+  name  = "${var.namespace}-message-lambda"
 
   policy = "${data.template_file.lambda_iam_policy.rendered}"
 }
@@ -67,8 +65,7 @@ resource "aws_iam_policy" "lambda" {
 # aws_iam_policy_attachment.lambda
 resource "aws_iam_policy_attachment" "lambda" {
   count = "${local.enabled}"
-
-  name = "${var.namespace}-message-lambda"
+  name  = "${var.namespace}-message-lambda"
 
   policy_arn = "${aws_iam_policy.lambda.arn}"
   roles      = ["${aws_iam_role.lambda.name}"]
@@ -80,8 +77,7 @@ resource "aws_iam_policy_attachment" "lambda" {
 
 # aws_sns_topic_subscription._
 resource "aws_sns_topic_subscription" "_" {
-  count = "${local.enabled}"
-
+  count     = "${local.enabled}"
   topic_arn = "${var.sns_topic_arn}"
   protocol  = "lambda"
   endpoint  = "${aws_lambda_function._.arn}"
@@ -93,8 +89,7 @@ resource "aws_sns_topic_subscription" "_" {
 
 # aws_lambda_function._
 resource "aws_lambda_function" "_" {
-  count = "${local.enabled}"
-
+  count         = "${local.enabled}"
   function_name = "${var.namespace}-message"
   role          = "${aws_iam_role.lambda.arn}"
   runtime       = "nodejs8.10"
@@ -108,18 +103,17 @@ resource "aws_lambda_function" "_" {
 
   environment {
     variables = {
-      COGNITO_USER_POOL       = "${var.cognito_user_pool}"
-      COGNITO_IDENTITY_NAME   = "${var.cognito_identity_name}"
-      COGNITO_IDENTITY_DOMAIN = "${var.cognito_identity_domain}"
-      SES_SENDER_ADDRESS      = "${var.ses_sender_address}"
+      COGNITO_USER_POOL_ID           = "${var.cognito_user_pool_id}"
+      COGNITO_IDENTITY_POOL_NAME     = "${var.cognito_identity_pool_name}"
+      COGNITO_IDENTITY_POOL_PROVIDER = "${var.cognito_identity_pool_provider}"
+      SES_SENDER_ADDRESS             = "${var.ses_sender_address}"
     }
   }
 }
 
 # aws_lambda_permission._
 resource "aws_lambda_permission" "_" {
-  count = "${local.enabled}"
-
+  count         = "${local.enabled}"
   principal     = "sns.amazonaws.com"
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function._.arn}"

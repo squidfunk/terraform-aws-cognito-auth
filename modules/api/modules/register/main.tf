@@ -115,10 +115,10 @@ resource "aws_lambda_function" "_" {
 
   environment {
     variables = {
-      COGNITO_USER_POOL        = "${var.cognito_user_pool}"
-      COGNITO_USER_POOL_CLIENT = "${var.cognito_user_pool_client}"
-      DYNAMODB_TABLE           = "${var.dynamodb_table}"
-      SNS_TOPIC_ARN            = "${var.sns_topic_arn}"
+      COGNITO_USER_POOL_ID        = "${var.cognito_user_pool_id}"
+      COGNITO_USER_POOL_CLIENT_ID = "${var.cognito_user_pool_client_id}"
+      DYNAMODB_TABLE              = "${var.dynamodb_table}"
+      SNS_TOPIC_ARN               = "${var.sns_topic_arn}"
     }
   }
 }
@@ -160,10 +160,10 @@ resource "aws_lambda_function" "verify" {
 
   environment {
     variables = {
-      COGNITO_USER_POOL        = "${var.cognito_user_pool}"
-      COGNITO_USER_POOL_CLIENT = "${var.cognito_user_pool_client}"
-      DYNAMODB_TABLE           = "${var.dynamodb_table}"
-      SNS_TOPIC_ARN            = "${var.sns_topic_arn}"
+      COGNITO_USER_POOL_ID        = "${var.cognito_user_pool_id}"
+      COGNITO_USER_POOL_CLIENT_ID = "${var.cognito_user_pool_client_id}"
+      DYNAMODB_TABLE              = "${var.dynamodb_table}"
+      SNS_TOPIC_ARN               = "${var.sns_topic_arn}"
     }
   }
 }

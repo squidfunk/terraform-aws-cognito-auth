@@ -109,12 +109,13 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>() =>
         /* Submit form request */
         setForm({ pending: true, success: false })
         try {
-          const { data: response } = await axios.post<T>(url, req || {}, {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json"
-            }
-          })
+          const { data: response } =
+            await axios.post<TResponse>(url, req || {}, {
+              withCredentials: true,
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
 
           /* Update form submission state with response */
           setForm({ pending: false, success: true, response })

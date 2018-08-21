@@ -25,6 +25,5 @@
  * ------------------------------------------------------------------------- */
 
 export * from "./App"
-export * from "./Authenticate"
-export * from "./Register"
-export * from "./RegisterVerification"
+export * from "./FormButton"
+export * from "./Redirect"

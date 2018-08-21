@@ -25,7 +25,7 @@
   <head>
     <meta charset="utf-8" />
     <base href="/" />
-    <title>Terraform AWS Cognito Auth</title>
+    <title>${cognito_identity_pool_name}</title>
     <style>
       html, body, #root {
         height: 100%;
@@ -37,7 +37,9 @@
     <div id="root"></div>
     <script type="text/javascript">
       window.env = {
-        API_BASE_PATH: "${api_base_path}"
+        API_BASE_PATH: "${api_base_path}",
+        APP_ORIGIN: "${app_origin}",
+        COGNITO_IDENTITY_POOL_NAME: "${cognito_identity_pool_name}"
       }
     </script>
   </body>

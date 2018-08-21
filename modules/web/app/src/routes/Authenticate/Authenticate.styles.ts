@@ -20,44 +20,49 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
+import {
+  colors,
+  createStyles,
+  Theme
+} from "@material-ui/core"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application styles
+ * Authentication styles
  */
-export type AppStyles = typeof styles
+export type Styles = typeof styles
 
 /* ----------------------------------------------------------------------------
  * Values
  * ------------------------------------------------------------------------- */
 
 /**
- * Application styles
+ * Authentication styles
  *
  * @param theme - Material theme
  *
  * @return CSS styles
  */
-export const styles = ({ palette }: Theme) =>
+export const styles = ({ palette, spacing }: Theme) =>
   createStyles({
 
-    /* Enclosing container */
-    root: {
-      display: "flex",
-      height: "100%",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: palette.background.default
+    /* Form header element */
+    header: {
+      background: colors.blueGrey[900],
+      padding: spacing.unit * 4
     },
 
-    /* Paper element */
-    paper: {
-      width: 300,
-      borderRadius: 2,
-      overflow: "hidden"
+    /* Form header text */
+    text: {
+      color: palette.common.white,
+      fontSmoothing: "antialiased"
+    },
+
+    /* Form element */
+    form: {
+      padding: spacing.unit * 4
     }
   })

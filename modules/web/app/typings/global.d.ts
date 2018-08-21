@@ -23,5 +23,7 @@
 declare interface Window {
   env: {
     API_BASE_PATH: string
+    APP_ORIGIN: string
+    COGNITO_IDENTITY_POOL_NAME: string
   }
 }

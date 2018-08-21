@@ -21,8 +21,6 @@
  */
 
 import {
-  Button,
-  TextField,
   withStyles,
   WithStyles
 } from "@material-ui/core"
@@ -30,72 +28,62 @@ import * as React from "react"
 import {
   branch,
   compose,
+  lifecycle,
   pure,
   renderComponent
 } from "recompose"
 
-import { RegisterRequest } from "common"
+import { RegisterVerificationRequest } from "common"
 import {
-  withForm,
-  WithForm
+  withFormSubmit,
+  WithFormSubmit
 } from "enhancers"
 
-import { Styles, styles } from "./Register.styles"
-import { RegisterSuccess } from "./RegisterSuccess"
+import { Styles, styles } from "./RegisterVerification.styles"
+import { RegisterVerificationSuccess } from "./RegisterVerificationSuccess"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration render properties
+ * Registration verification render properties
  */
-export type RegisterRenderProps =
+export type RegisterVerificationRenderProps =
   & WithStyles<Styles>
-  & WithForm<RegisterRequest>
+  & WithFormSubmit<RegisterVerificationRequest>
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration render component
+ * Registration verification render component
  */
-export const RegisterRender: React.SFC<RegisterRenderProps> =
-  ({ classes, form, request, handleChange, handleSubmit }) =>
-    <form method="post" onSubmit={handleSubmit}>
-      <TextField name="email" type="email" disabled={form.pending}
-        label="Email" value={request.email} onChange={handleChange}
-        autoComplete="email" fullWidth={true} margin="dense"
-      />
-      <TextField name="password" type="password" disabled={form.pending}
-        label="Password" value={request.password} onChange={handleChange}
-        autoComplete="new-password" fullWidth={true} margin="dense"
-      />
-      <Button type="submit" variant="contained" disabled={form.pending}
-        color="primary" fullWidth={true}
-      >
-        Sign up
-      </Button>
-    </form>
+export const RegisterVerificationRender:
+  React.SFC<RegisterVerificationRenderProps> =
+    () =>
+      <div>Verifying...</div>
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration component
+ * Registration verification component
  */
-export const Register =
-  compose<RegisterRenderProps, {}>(
+export const RegisterVerification =
+  compose<RegisterVerificationRenderProps, {}>(
     withStyles(styles),
-    withForm<RegisterRequest>({
-      email: "",
-      password: ""
+    withFormSubmit<RegisterVerificationRequest>(),
+    lifecycle<RegisterVerificationRenderProps, {}>({
+      componentDidMount() {
+        return this.props.submit()
+      }
     }),
-    branch<RegisterRenderProps>(
+    branch<RegisterVerificationRenderProps>(
       ({ form }) => form.success,
-      renderComponent(RegisterSuccess)
+      renderComponent(RegisterVerificationSuccess)
     ),
     pure
-  )(RegisterRender)
+  )(RegisterVerificationRender)

@@ -83,7 +83,7 @@ function generateSetCookie(
 ) {
   return cookie.serialize("__Secure-token", token, {
     expires,
-    domain: process.env.COGNITO_IDENTITY_DOMAIN!,
+    domain: process.env.COGNITO_IDENTITY_POOL_PROVIDER!,
     path,
     secure: true,
     httpOnly: true,

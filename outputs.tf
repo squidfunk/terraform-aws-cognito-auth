@@ -56,18 +56,37 @@ output "api_base_path" {
   value = "${module.api.api_base_path}"
 }
 
-# output.api_authorizer
-output "api_authorizer" {
-  value = "${module.api.api_authorizer}"
+# -----------------------------------------------------------------------------
+# Variables: Application
+# -----------------------------------------------------------------------------
+
+# output.app_hosted_zone_id
+output "app_hosted_zone_id" {
+  value = "${var.app_hosted_zone_id}"
+}
+
+# output.app_certificate_arn
+output "app_certificate_arn" {
+  value = "${var.app_certificate_arn}"
+}
+
+# output.app_domain
+output "app_domain" {
+  value = "${var.app_domain}"
+}
+
+# output.app_origin
+output "app_origin" {
+  value = "${var.app_origin}"
 }
 
 # -----------------------------------------------------------------------------
 # Outputs: Cognito
 # -----------------------------------------------------------------------------
 
-# output.cognito_user_pool
-output "cognito_user_pool" {
-  value = "${module.identity.cognito_user_pool}"
+# output.cognito_user_pool_id
+output "cognito_user_pool_id" {
+  value = "${module.identity.cognito_user_pool_id}"
 }
 
 # output.cognito_user_pool_arn
@@ -75,24 +94,24 @@ output "cognito_user_pool_arn" {
   value = "${module.identity.cognito_user_pool_arn}"
 }
 
-# output.cognito_user_pool_client
-output "cognito_user_pool_client" {
-  value = "${module.identity.cognito_user_pool_client}"
+# output.cognito_user_pool_client_id
+output "cognito_user_pool_client_id" {
+  value = "${module.identity.cognito_user_pool_client_id}"
 }
 
-# output.cognito_identity_pool
-output "cognito_identity_pool" {
-  value = "${module.identity.cognito_identity_pool}"
+# output.cognito_identity_pool_id
+output "cognito_identity_pool_id" {
+  value = "${module.identity.cognito_identity_pool_id}"
 }
 
-# output.cognito_identity_name
-output "cognito_identity_name" {
-  value = "${var.cognito_identity_name}"
+# output.cognito_identity_pool_name
+output "cognito_identity_pool_name" {
+  value = "${var.cognito_identity_pool_name}"
 }
 
-# output.cognito_identity_domain
-output "cognito_identity_domain" {
-  value = "${var.cognito_identity_domain}"
+# output.cognito_identity_pool_provider
+output "cognito_identity_pool_provider" {
+  value = "${var.cognito_identity_pool_provider}"
 }
 
 # -----------------------------------------------------------------------------

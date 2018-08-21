@@ -33,12 +33,17 @@ variable "region" {
 }
 
 # -----------------------------------------------------------------------------
-# Variables: Cognito
+# Variables: Application
 # -----------------------------------------------------------------------------
 
-# var.cognito_identity_domain
-variable "cognito_identity_domain" {
-  description = "Cognito identity provider domain"
+# var.app_hosted_zone_id
+variable "app_hosted_zone_id" {
+  description = "Application hosted zone identifier"
+}
+
+# var.app_domain
+variable "app_domain" {
+  description = "Application domain"
 }
 
 # -----------------------------------------------------------------------------

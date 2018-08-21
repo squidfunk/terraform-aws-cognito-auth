@@ -33,20 +33,6 @@ variable "region" {
 }
 
 # -----------------------------------------------------------------------------
-# Variables: Cognito
-# -----------------------------------------------------------------------------
-
-# var.cognito_identity_name
-variable "cognito_identity_name" {
-  description = "Cognito identity provider name"
-}
-
-# var.cognito_identity_domain
-variable "cognito_identity_domain" {
-  description = "Cognito identity provider domain"
-}
-
-# -----------------------------------------------------------------------------
 # Variables: API Gateway
 # -----------------------------------------------------------------------------
 
@@ -54,6 +40,48 @@ variable "cognito_identity_domain" {
 variable "api_stage" {
   description = "API deployment stage"
   default     = "production"
+}
+
+# -----------------------------------------------------------------------------
+# Variables: Application
+# -----------------------------------------------------------------------------
+
+# var.app_hosted_zone_id
+variable "app_hosted_zone_id" {
+  description = "Application hosted zone identifier"
+  default     = ""
+}
+
+# var.app_certificate_arn
+variable "app_certificate_arn" {
+  description = "Application domain certificate ARN"
+  default     = ""
+}
+
+# var.app_domain
+variable "app_domain" {
+  description = "Application domain"
+  default     = ""
+}
+
+# var.app_origin
+variable "app_origin" {
+  description = "Application origin"
+  default     = ""
+}
+
+# -----------------------------------------------------------------------------
+# Variables: Cognito
+# -----------------------------------------------------------------------------
+
+# var.cognito_identity_pool_name
+variable "cognito_identity_pool_name" {
+  description = "Cognito identity pool name"
+}
+
+# var.cognito_identity_pool_provider
+variable "cognito_identity_pool_provider" {
+  description = "Cognito identity pool provider"
 }
 
 # -----------------------------------------------------------------------------

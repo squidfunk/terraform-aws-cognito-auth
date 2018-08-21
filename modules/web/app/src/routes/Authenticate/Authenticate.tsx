@@ -21,8 +21,8 @@
  */
 
 import {
-  Button,
   TextField,
+  Typography,
   withStyles,
   WithStyles
 } from "@material-ui/core"
@@ -38,6 +38,7 @@ import {
   AuthenticateRequestWithCredentials as AuthenticateRequest,
   Session
 } from "common"
+import { FormButton } from "components"
 import {
   WithForm,
   withForm,
@@ -70,21 +71,34 @@ export type AuthenticateRenderProps =
  */
 export const AuthenticateRender: React.SFC<AuthenticateRenderProps> =
   ({ classes, form, request, handleChange, handleSubmit }) =>
-    <form method="post" onSubmit={handleSubmit}>
-      <TextField name="username" type="text" disabled={form.pending}
-        label="Email" value={request.username} onChange={handleChange}
-        autoComplete="username" fullWidth={true} margin="dense"
-      />
-      <TextField name="password" type="password" disabled={form.pending}
-        label="Password" value={request.password} onChange={handleChange}
-        autoComplete="new-password" fullWidth={true} margin="dense"
-      />
-      <Button type="submit" variant="contained" disabled={form.pending}
-        color="primary" fullWidth={true}
-      >
-        Sign in
-      </Button>
-    </form>
+    <div>
+      <div className={classes.header}>
+        <Typography variant="headline" className={classes.text}>
+          {window.env.COGNITO_IDENTITY_POOL_NAME}
+        </Typography>
+        <Typography className={classes.text}>
+          Sign in to your account
+        </Typography>
+      </div>
+      <form method="post" className={classes.form} onSubmit={handleSubmit}>
+        <TextField
+          name="username" type="text" label="Email address"  margin="dense"
+          value={request.username} InputProps={{ readOnly: form.pending }}
+          onChange={handleChange} autoComplete="username" fullWidth={true}
+        />
+        <TextField
+          name="password" type="password" label="Password" margin="dense"
+          value={request.password} InputProps={{ readOnly: form.pending }}
+          onChange={handleChange} autoComplete="new-password" fullWidth={true}
+        />
+        <br />
+        <br />
+        <br />
+        <FormButton disabled={form.pending}>
+          Sign in
+        </FormButton>
+      </form>
+    </div>
 
 /* ----------------------------------------------------------------------------
  * Enhanced component

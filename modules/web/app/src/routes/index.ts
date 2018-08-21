@@ -20,48 +20,10 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import {
-  compose,
-  pure
-} from "recompose"
-
-import { AuthenticateRenderProps } from "./Authenticate"
-
 /* ----------------------------------------------------------------------------
- * Types
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Authentication success render properties
- */
-export type AuthenticateSuccessRenderProps =
-  & AuthenticateRenderProps
-
-/* ----------------------------------------------------------------------------
- * Presentational component
- * ------------------------------------------------------------------------- */
-
-/**
- * Authentication success render component
- *
- * @param props - Properties
- *
- * @return JSX element
- */
-export const AuthenticateSuccessRender:
-  React.SFC<AuthenticateSuccessRenderProps> =
-    () =>
-      <div>TODO</div>
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Authentication success component
- */
-export const AuthenticateSuccess =
-  compose<AuthenticateSuccessRenderProps, {}>(
-    pure
-  )(AuthenticateSuccessRender)
+export * from "./Authenticate"
+export * from "./Register"
+export * from "./RegisterVerification"

@@ -166,11 +166,12 @@ module "authenticate" {
   api_id          = "${aws_api_gateway_rest_api._.id}"
   api_resource_id = "${aws_api_gateway_resource._.id}"
 
-  cognito_user_pool        = "${var.cognito_user_pool}"
-  cognito_user_pool_client = "${var.cognito_user_pool_client}"
-  cognito_identity_domain  = "${var.cognito_identity_domain}"
-  dynamodb_table           = "${aws_dynamodb_table._.name}"
-  sns_topic_arn            = "${aws_sns_topic._.arn}"
+  cognito_user_pool_id           = "${var.cognito_user_pool_id}"
+  cognito_user_pool_client_id    = "${var.cognito_user_pool_client_id}"
+  cognito_identity_pool_provider = "${var.cognito_identity_pool_provider}"
+
+  dynamodb_table = "${aws_dynamodb_table._.name}"
+  sns_topic_arn  = "${aws_sns_topic._.arn}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
@@ -202,10 +203,11 @@ module "register" {
   api_id          = "${aws_api_gateway_rest_api._.id}"
   api_resource_id = "${aws_api_gateway_resource._.id}"
 
-  cognito_user_pool        = "${var.cognito_user_pool}"
-  cognito_user_pool_client = "${var.cognito_user_pool_client}"
-  dynamodb_table           = "${aws_dynamodb_table._.name}"
-  sns_topic_arn            = "${aws_sns_topic._.arn}"
+  cognito_user_pool_id        = "${var.cognito_user_pool_id}"
+  cognito_user_pool_client_id = "${var.cognito_user_pool_client_id}"
+
+  dynamodb_table = "${aws_dynamodb_table._.name}"
+  sns_topic_arn  = "${aws_sns_topic._.arn}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
@@ -223,10 +225,11 @@ module "reset" {
   api_id          = "${aws_api_gateway_rest_api._.id}"
   api_resource_id = "${aws_api_gateway_resource._.id}"
 
-  cognito_user_pool        = "${var.cognito_user_pool}"
-  cognito_user_pool_client = "${var.cognito_user_pool_client}"
-  dynamodb_table           = "${aws_dynamodb_table._.name}"
-  sns_topic_arn            = "${aws_sns_topic._.arn}"
+  cognito_user_pool_id        = "${var.cognito_user_pool_id}"
+  cognito_user_pool_client_id = "${var.cognito_user_pool_client_id}"
+
+  dynamodb_table = "${aws_dynamodb_table._.name}"
+  sns_topic_arn  = "${aws_sns_topic._.arn}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"

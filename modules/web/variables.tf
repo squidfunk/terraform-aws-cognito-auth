@@ -52,10 +52,34 @@ variable "api_base_path" {
 }
 
 # -----------------------------------------------------------------------------
+# Variables: Application
+# -----------------------------------------------------------------------------
+
+# var.app_hosted_zone_id
+variable "app_hosted_zone_id" {
+  description = "Application hosted zone identifier"
+}
+
+# var.app_certificate_arn
+variable "app_certificate_arn" {
+  description = "Application domain certificate ARN"
+}
+
+# var.app_domain
+variable "app_domain" {
+  description = "Application domain"
+}
+
+# var.app_origin
+variable "app_origin" {
+  description = "Application origin"
+}
+
+# -----------------------------------------------------------------------------
 # Variables: Cognito
 # -----------------------------------------------------------------------------
 
-# var.cognito_identity_domain
-variable "cognito_identity_domain" {
-  description = "Cognito identity provider domain"
+# var.cognito_identity_pool_name
+variable "cognito_identity_pool_name" {
+  description = "Cognito identity pool name"
 }

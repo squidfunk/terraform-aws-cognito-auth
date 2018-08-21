@@ -21,68 +21,81 @@
  */
 
 import {
-  Paper,
+  Button,
+  TextField,
   withStyles,
   WithStyles
 } from "@material-ui/core"
 import * as React from "react"
-import { Route } from "react-router-dom"
 import {
+  branch,
   compose,
-  pure
+  pure,
+  renderComponent
 } from "recompose"
 
+import { RegisterRequest } from "common"
 import {
-  Authenticate,
-  Register,
-  RegisterVerification
-} from "routes"
+  withForm,
+  WithForm
+} from "enhancers"
 
-import {
-  AppStyles,
-  styles
-} from "./App.styles"
+import { Styles, styles } from "./Register.styles"
+import { RegisterSuccess } from "./RegisterSuccess"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render properties
+ * Registration render properties
  */
-export type AppRenderProps =
-  & WithStyles<AppStyles>
+export type RegisterRenderProps =
+  & WithStyles<Styles>
+  & WithForm<RegisterRequest>
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
- *
- * @param props - Properties
- *
- * @return JSX element
+ * Registration render component
  */
-export const AppRender: React.SFC<AppRenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Paper elevation={1} className={classes.paper}>
-        <Route exact path="/" component={Authenticate} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/register/:code+" component={RegisterVerification} />
-      </Paper>
-    </div>
+export const RegisterRender: React.SFC<RegisterRenderProps> =
+  ({ classes, form, request, handleChange, handleSubmit }) =>
+    <form method="post" onSubmit={handleSubmit}>
+      <TextField name="email" type="email" disabled={form.pending}
+        label="Email address" value={request.email} onChange={handleChange}
+        autoComplete="email" fullWidth={true} margin="dense"
+      />
+      <TextField name="password" type="password" disabled={form.pending}
+        label="Password" value={request.password} onChange={handleChange}
+        autoComplete="new-password" fullWidth={true} margin="dense"
+      />
+      <Button type="submit" variant="contained" disabled={form.pending}
+        color="primary" fullWidth={true}
+      >
+        Sign up
+      </Button>
+    </form>
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application
+ * Registration component
  */
-export const App =
-  compose<AppRenderProps, {}>(
+export const Register =
+  compose<RegisterRenderProps, {}>(
     withStyles(styles),
+    withForm<RegisterRequest>({
+      email: "",
+      password: ""
+    }),
+    branch<RegisterRenderProps>(
+      ({ form }) => form.success,
+      renderComponent(RegisterSuccess)
+    ),
     pure
-  )(AppRender)
+  )(RegisterRender)

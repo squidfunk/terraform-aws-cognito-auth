@@ -27,37 +27,27 @@ import { createStyles, Theme } from "@material-ui/core"
  * ------------------------------------------------------------------------- */
 
 /**
- * Application styles
+ * Form button styles
  */
-export type AppStyles = typeof styles
+export type Styles = typeof styles
 
 /* ----------------------------------------------------------------------------
  * Values
  * ------------------------------------------------------------------------- */
 
 /**
- * Application styles
+ * Form button styles
  *
  * @param theme - Material theme
  *
  * @return CSS styles
  */
-export const styles = ({ palette }: Theme) =>
+export const styles = (_theme: Theme) =>
   createStyles({
 
-    /* Enclosing container */
+    /* Button element */
     root: {
-      display: "flex",
-      height: "100%",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: palette.background.default
-    },
-
-    /* Paper element */
-    paper: {
-      width: 300,
       borderRadius: 2,
-      overflow: "hidden"
+      fontSmoothing: "antialiased"
     }
   })

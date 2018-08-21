@@ -192,7 +192,7 @@ describe("POST /authenticate", () => {
           `__Secure-token=${
             encodeURIComponent(body.refresh.token)
           }; Domain=${
-            process.env.COGNITO_IDENTITY_DOMAIN!
+            process.env.COGNITO_IDENTITY_POOL_PROVIDER!
           }; Path=/${
             process.env.API_BASE_PATH
           }/authenticate; Expires=${

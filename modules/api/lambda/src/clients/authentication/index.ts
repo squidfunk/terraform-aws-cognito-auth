@@ -108,7 +108,7 @@ export class AuthenticationClient extends Client {
 
     /* Register user with Cognito */
     await this.cognito.signUp({
-      ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
+      ClientId: process.env.COGNITO_USER_POOL_CLIENT_ID!,
       Username: username,
       Password: password,
       UserAttributes: [
@@ -148,7 +148,7 @@ export class AuthenticationClient extends Client {
    */
   public async forgotPassword(username: string): Promise<VerificationCode> {
     const { Username: id } = await this.cognito.adminGetUser({
-      UserPoolId: process.env.COGNITO_USER_POOL!,
+      UserPoolId: process.env.COGNITO_USER_POOL_ID!,
       Username: username
     }).promise()
 
@@ -170,7 +170,7 @@ export class AuthenticationClient extends Client {
     try {
       const { AuthenticationResult, ChallengeName } =
         await this.cognito.initiateAuth({
-          ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
+          ClientId: process.env.COGNITO_USER_POOL_CLIENT_ID!,
           AuthFlow: "USER_PASSWORD_AUTH",
           AuthParameters: {
             USERNAME: username,
@@ -215,7 +215,7 @@ export class AuthenticationClient extends Client {
     try {
       const { AuthenticationResult, ChallengeName } =
         await this.cognito.initiateAuth({
-          ClientId: process.env.COGNITO_USER_POOL_CLIENT!,
+          ClientId: process.env.COGNITO_USER_POOL_CLIENT_ID!,
           AuthFlow: "REFRESH_TOKEN",
           AuthParameters: {
             REFRESH_TOKEN: token

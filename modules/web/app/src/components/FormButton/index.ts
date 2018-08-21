@@ -20,27 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
-
 /* ----------------------------------------------------------------------------
- * Types
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Authentication styles
- */
-export type Styles = typeof styles
-
-/* ----------------------------------------------------------------------------
- * Values
- * ------------------------------------------------------------------------- */
-
-/**
- * Authentication styles
- *
- * @param theme - Material theme
- *
- * @return CSS styles
- */
-export const styles = (_theme: Theme) =>
-  createStyles({})
+export { FormButton } from "./FormButton"

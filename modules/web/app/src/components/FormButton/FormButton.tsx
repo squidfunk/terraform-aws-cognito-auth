@@ -20,44 +20,63 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
+import {
+  Button,
+  withStyles,
+  WithStyles
+} from "@material-ui/core"
+import { ButtonProps } from "@material-ui/core/Button"
+import * as React from "react"
+import {
+  compose,
+  pure
+} from "recompose"
+
+import { Styles, styles } from "./FormButton.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application styles
+ * Form button properties
  */
-export type AppStyles = typeof styles
+export type FormButtonProps = ButtonProps
+
+/**
+ * Form button render properties
+ */
+export type FormButtonRenderProps =
+  & WithStyles<Styles>
+  & FormButtonProps
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application styles
+ * Form button render component
  *
- * @param theme - Material theme
+ * @param props - Properties
  *
- * @return CSS styles
+ * @return JSX element
  */
-export const styles = ({ palette }: Theme) =>
-  createStyles({
+export const FormButtonRender: React.SFC<FormButtonRenderProps> =
+  ({ classes, ...props }) =>
+    <Button
+      type="submit" variant="contained" color="primary"
+      fullWidth={true} className={classes.root} {...props}
+    />
 
-    /* Enclosing container */
-    root: {
-      display: "flex",
-      height: "100%",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: palette.background.default
-    },
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
 
-    /* Paper element */
-    paper: {
-      width: 300,
-      borderRadius: 2,
-      overflow: "hidden"
-    }
-  })
+/**
+ * Form button component
+ */
+export const FormButton =
+  compose<FormButtonRenderProps, FormButtonProps>(
+    withStyles(styles),
+    pure
+  )(FormButtonRender)

@@ -71,7 +71,7 @@ describe("handler", () => {
     mockSESSendRawEmailWithSuccess()
     await handler(event)
     expect(adminGetUserMock).toHaveBeenCalledWith({
-      UserPoolId: process.env.COGNITO_USER_POOL!,
+      UserPoolId: process.env.COGNITO_USER_POOL_ID!,
       Username: code.subject
     })
   })
