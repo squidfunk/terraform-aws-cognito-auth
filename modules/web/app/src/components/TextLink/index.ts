@@ -21,35 +21,7 @@
  */
 
 /* ----------------------------------------------------------------------------
- * Types
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Authentication request with credentials
- */
-export interface AuthenticateRequestWithCredentials {
-  username: string                     /* Username or email address */
-  password: string                     /* Password */
-  remember?: boolean                   /* Whether to return a refresh token */
-}
-
-/**
- * Authentication request with refresh token
- */
-export interface AuthenticateRequestWithToken {
-  token?: string                       /* Refresh token */
-}
-
-/**
- * Authentication request
- */
-export type AuthenticateRequest =
-  | AuthenticateRequestWithCredentials
-  | AuthenticateRequestWithToken
-
-/* ------------------------------------------------------------------------- */
-
-/**
- * Type used for JSON schema
- */
-export type __JSON__ = AuthenticateRequest
+export { TextLink } from "./TextLink"

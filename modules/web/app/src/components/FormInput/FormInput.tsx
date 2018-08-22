@@ -20,48 +20,48 @@
  * IN THE SOFTWARE.
  */
 
+import { TextField } from "@material-ui/core"
+import { TextFieldProps } from "@material-ui/core/TextField"
 import * as React from "react"
-import {
-  compose,
-  pure
-} from "recompose"
-
-import { RegisterRenderProps } from "./Register"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration success render properties
+ * Form input properties
  */
-export type RegisterSuccessRenderProps =
-  & RegisterRenderProps
+export type FormInputProps = TextFieldProps
+
+/**
+ * Form input render properties
+ */
+export type FormInputRenderProps =
+  & FormInputProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration success render component
+ * Form input render component
  *
  * @param props - Properties
  *
  * @return JSX element
  */
-export const RegisterSuccessRender:
-  React.SFC<RegisterSuccessRenderProps> =
-    () =>
-      <div>TODO</div>
+export const FormInputRender: React.SFC<FormInputRenderProps> =
+  props =>
+    <TextField
+      type="text" margin="dense" fullWidth={true}
+      InputLabelProps={{ required: false }} {...props}
+    />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration success component
+ * Form input component
  */
-export const RegisterSuccess =
-  compose<RegisterSuccessRenderProps, {}>(
-    pure
-  )(RegisterSuccessRender)
+export const FormInput = FormInputRender

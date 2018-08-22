@@ -21,27 +21,34 @@
  */
 
 import {
-  Button,
-  TextField,
+  Typography,
   withStyles,
   WithStyles
 } from "@material-ui/core"
 import * as React from "react"
 import {
-  branch,
   compose,
   pure,
-  renderComponent
+  withProps
 } from "recompose"
 
 import { RegisterRequest } from "common"
 import {
+  Alert,
+  Form,
+  FormButton,
+  FormInput,
+  FormPassword,
+  Header,
+  TextLink
+} from "components"
+import {
+  WithForm,
   withForm,
-  WithForm
+  WithFormProps
 } from "enhancers"
 
 import { Styles, styles } from "./Register.styles"
-import { RegisterSuccess } from "./RegisterSuccess"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -60,24 +67,46 @@ export type RegisterRenderProps =
 
 /**
  * Registration render component
+ *
+ * @param props - Properties
+ *
+ * @return JSX element
  */
 export const RegisterRender: React.SFC<RegisterRenderProps> =
   ({ classes, form, request, handleChange, handleSubmit }) =>
-    <form method="post" onSubmit={handleSubmit}>
-      <TextField name="email" type="email" disabled={form.pending}
-        label="Email address" value={request.email} onChange={handleChange}
-        autoComplete="email" fullWidth={true} margin="dense"
+    <div>
+      <Header
+        primary={window.env.COGNITO_IDENTITY_POOL_NAME}
+        secondary="Register for a new account"
       />
-      <TextField name="password" type="password" disabled={form.pending}
-        label="Password" value={request.password} onChange={handleChange}
-        autoComplete="new-password" fullWidth={true} margin="dense"
-      />
-      <Button type="submit" variant="contained" disabled={form.pending}
-        color="primary" fullWidth={true}
+      <Alert
+        display={!!form.err || form.success} success={form.success}
+        err={form.err}
       >
-        Sign up
-      </Button>
-    </form>
+        We just sent a verification link to your email address. Please
+        click on the link to complete your registration.
+      </Alert>
+      <Form onSubmit={handleSubmit}>
+        <FormInput
+          name="email" label="Email address" required disabled={form.success}
+          value={request.email} InputProps={{ readOnly: form.pending }}
+          onChange={handleChange} autoComplete="email"
+        />
+        <FormPassword
+          name="password" label="Password" required disabled={form.success}
+          value={request.password} InputProps={{ readOnly: form.pending }}
+          onChange={handleChange} autoComplete="new-password"
+        />
+        <FormButton
+          className={classes.button} disabled={form.pending || form.success}
+        >
+          Register
+        </FormButton>
+        <Typography className={classes.authenticate}>
+          Already have an account? <TextLink to="/">Sign in</TextLink>
+        </Typography>
+      </Form>
+    </div>
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -89,13 +118,12 @@ export const RegisterRender: React.SFC<RegisterRenderProps> =
 export const Register =
   compose<RegisterRenderProps, {}>(
     withStyles(styles),
-    withForm<RegisterRequest>({
-      email: "",
-      password: ""
-    }),
-    branch<RegisterRenderProps>(
-      ({ form }) => form.success,
-      renderComponent(RegisterSuccess)
-    ),
+    withProps<WithFormProps<RegisterRequest>, {}>(() => ({
+      initial: {
+        email: "",
+        password: ""
+      }
+    })),
+    withForm<RegisterRequest>(),
     pure
   )(RegisterRender)

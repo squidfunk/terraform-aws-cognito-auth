@@ -20,59 +20,65 @@
  * IN THE SOFTWARE.
  */
 
+import {
+  withStyles,
+  WithStyles
+} from "@material-ui/core"
 import * as React from "react"
 import {
   compose,
-  pure,
-  withProps
+  pure
 } from "recompose"
 
-import { Redirect, RedirectProps } from "components"
-
-import { AuthenticateRenderProps } from "./Authenticate"
+import { Styles, styles } from "./Form.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication success render properties
+ * Form properties
  */
-export type AuthenticateSuccessRenderProps =
-  & AuthenticateRenderProps
-  & RedirectProps
+export interface FormProps {
+  onSubmit(
+    ev: React.ChangeEvent<HTMLFormElement>
+  ): Promise<void>                     /* Form submit handler */
+}
+
+/**
+ * Form render properties
+ */
+export type FormRenderProps =
+  & WithStyles<Styles>
+  & FormProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication success render component
+ * Form render component
+ *
  *
  * @param props - Properties
  *
  * @return JSX element
  */
-export const AuthenticateSuccessRender:
-  React.SFC<AuthenticateSuccessRenderProps> =
-    ({ href }) =>
-      <Redirect href={href} />
+export const FormRender: React.SFC<FormRenderProps> =
+  ({ classes, children, ...props }) =>
+    <form method="post" className={classes.root} {...props}>
+      {children}
+    </form>
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication success component
+ * Form component
  */
-export const AuthenticateSuccess =
-  compose<AuthenticateSuccessRenderProps, AuthenticateRenderProps>(
-    withProps<RedirectProps, AuthenticateRenderProps>(({ form }) => ({
-      href: `//${
-        window.env.APP_ORIGIN
-      }#${
-        form.response!.id.token
-      }`
-    })),
+export const Form =
+  compose<FormRenderProps, FormProps>(
+    withStyles(styles),
     pure
-  )(AuthenticateSuccessRender)
+  )(FormRender)

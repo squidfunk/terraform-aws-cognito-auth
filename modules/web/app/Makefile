@@ -37,7 +37,7 @@ node_modules:
 # -----------------------------------------------------------------------------
 
 # Distribution files
-dist: $(shell find src) webpack.config.ts .env
+dist: $(shell find src) webpack.config.ts
 	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
 	$(shell npm bin)/webpack --mode production
 

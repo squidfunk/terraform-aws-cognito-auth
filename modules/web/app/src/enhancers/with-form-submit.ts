@@ -54,7 +54,7 @@ interface State<TResponse> {
 interface StateProps<TResponse> {
   form: Readonly<State<TResponse>>,    /* Form submission state */
   setForm: (
-    form: Readonly<State<TResponse>>
+    form: State<TResponse>
   ) => Readonly<State<TResponse>>      /* Form submission state reducer */
 }
 
@@ -69,6 +69,15 @@ interface HandlerProps<TRequest extends {}> {
   ) => Promise<void>                   /* Submit form */
 }
 
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Form submission properties
+ */
+export interface WithFormSubmitProps {
+  target?: string                      /* Form submission target URL */
+}
+
 /**
  * Form submission enhancer
  *
@@ -76,6 +85,7 @@ interface HandlerProps<TRequest extends {}> {
  * @template TResponse - Form response type
  */
 export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
+  & WithFormSubmitProps
   & HandlerProps<TRequest>
   & StateProps<TResponse>
 
@@ -95,15 +105,15 @@ export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
  * @return Component enhancer
  */
 export const withFormSubmit = <TRequest extends {}, TResponse = void>() =>
-  compose<WithFormSubmit<TRequest, TResponse>, {}>(
+  compose<WithFormSubmit<TRequest, TResponse>, WithFormSubmitProps>(
     withState("form", "setForm", (): State<TResponse> => ({
       pending: false,
       success: false
     })),
     withHandlers<WithFormSubmit<TRequest, TResponse>, HandlerProps<TRequest>>({
-      submit: ({ setForm }) => async req => {
+      submit: ({ setForm, target }) => async req => {
         const url = `/${window.env.API_BASE_PATH}/${
-          location.pathname.replace(/^\//, "") || "authenticate"
+          (target || location.pathname).replace(/^\//, "")
         }`
 
         /* Submit form request */

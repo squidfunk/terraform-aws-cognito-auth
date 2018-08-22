@@ -20,36 +20,44 @@
  * IN THE SOFTWARE.
  */
 
+import {
+  colors,
+  createStyles,
+  Theme
+} from "@material-ui/core"
+
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request with credentials
+ * Header styles
  */
-export interface AuthenticateRequestWithCredentials {
-  username: string                     /* Username or email address */
-  password: string                     /* Password */
-  remember?: boolean                   /* Whether to return a refresh token */
-}
+export type Styles = typeof styles
+
+/* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request with refresh token
+ * Header styles
+ *
+ * @param theme - Material theme
+ *
+ * @return CSS styles
  */
-export interface AuthenticateRequestWithToken {
-  token?: string                       /* Refresh token */
-}
+export const styles = ({ palette, spacing }: Theme) =>
+  createStyles({
 
-/**
- * Authentication request
- */
-export type AuthenticateRequest =
-  | AuthenticateRequestWithCredentials
-  | AuthenticateRequestWithToken
+    /* Header */
+    root: {
+      background: colors.blueGrey[900],
+      padding: spacing.unit * 4
+    },
 
-/* ------------------------------------------------------------------------- */
-
-/**
- * Type used for JSON schema
- */
-export type __JSON__ = AuthenticateRequest
+    /* Header text */
+    text: {
+      color: palette.common.white,
+      fontSmoothing: "antialiased"
+    }
+  })

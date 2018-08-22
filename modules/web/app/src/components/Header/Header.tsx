@@ -20,33 +20,69 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
+import {
+  Typography,
+  withStyles,
+  WithStyles
+} from "@material-ui/core"
+import * as React from "react"
+import {
+  compose,
+  pure
+} from "recompose"
+
+import { Styles, styles } from "./Header.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Form button styles
+ * Header properties
  */
-export type Styles = typeof styles
+export interface HeaderProps {
+  primary: string                      /* Primary text */
+  secondary: string                    /* Secondary text */
+}
+
+/**
+ * Header render properties
+ */
+export type HeaderRenderProps =
+  & WithStyles<Styles>
+  & HeaderProps
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Form button styles
+ * Header render component
  *
- * @param theme - Material theme
+ * @param props - Properties
  *
- * @return CSS styles
+ * @return JSX element
  */
-export const styles = ({ spacing }: Theme) =>
-  createStyles({
-    root: {
-      borderRadius: 2,
-      fontSmoothing: "antialiased",
-      marginTop: spacing.unit * 2
-    }
-  })
+export const HeaderRender: React.SFC<HeaderRenderProps> =
+  ({ classes, primary, secondary }) =>
+    <div className={classes.root}>
+      <Typography variant="headline" className={classes.text}>
+        {primary}
+      </Typography>
+      <Typography className={classes.text}>
+        {secondary}
+      </Typography>
+    </div>
+
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Header component
+ */
+export const Header =
+  compose<HeaderRenderProps, HeaderProps>(
+    withStyles(styles),
+    pure
+  )(HeaderRender)

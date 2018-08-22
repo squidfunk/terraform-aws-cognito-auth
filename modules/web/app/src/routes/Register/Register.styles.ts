@@ -42,5 +42,20 @@ export type Styles = typeof styles
  *
  * @return CSS styles
  */
-export const styles = (_theme: Theme) =>
-  createStyles({})
+export const styles = ({ palette, spacing }: Theme) =>
+  createStyles({
+
+    /* Authenticate link container */
+    authenticate: {
+      color: palette.text.hint,
+      marginTop: spacing.unit * 2,
+      textAlign: "center"
+    },
+
+    /* Override for button component */
+    button: {
+      borderRadius: 2,
+      fontSmoothing: "antialiased",
+      marginTop: spacing.unit * 4
+    }
+  })

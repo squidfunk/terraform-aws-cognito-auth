@@ -29,7 +29,8 @@ import {
 
 import {
   withFormSubmit,
-  WithFormSubmit
+  WithFormSubmit,
+  WithFormSubmitProps
 } from "enhancers"
 
 /* ----------------------------------------------------------------------------
@@ -44,7 +45,7 @@ import {
 interface StateProps<TRequest extends {}> {
   request: Readonly<TRequest>,         /* Form state */
   setRequest: (
-    request: Readonly<TRequest>
+    request: TRequest
   ) => Readonly<TRequest>              /* Form state reducer */
 }
 
@@ -60,14 +61,28 @@ interface HandlerProps {
   ): Promise<void>                     /* Form submit handler */
 }
 
+/* ------------------------------------------------------------------------- */
+
 /**
- * Form submission enhancer
+ * Form properties
+ *
+ * @template TRequest - Form request type
+ */
+export interface WithFormProps<
+  TRequest extends {}
+> extends WithFormSubmitProps {
+  initial: Readonly<TRequest>          /* Initial form request */
+}
+
+/**
+ * Form enhancer
  *
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  */
 export type WithForm<TRequest extends {}, TResponse = void> =
   & WithFormSubmit<TRequest, TResponse>
+  & WithFormProps<TRequest>
   & StateProps<TRequest>
   & HandlerProps
 
@@ -76,30 +91,27 @@ export type WithForm<TRequest extends {}, TResponse = void> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Enhance component with form submission state and handlers
- *
- * Credentials need to be enabled for the refresh token to be sent with the
- * authentication request, so it can be stored in a secure HTTP-only cookie.
+ * Enhance component with form change and submit handlers
  *
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  *
- * @param initial - Initial form request
- *
  * @return Component enhancer
  */
-export const withForm = <TRequest extends {}, TResponse = void>(
-  initial: TRequest
-) =>
-  compose<WithForm<TRequest, TResponse>, {}>(
+export const withForm = <TRequest extends {}, TResponse = void>() =>
+  compose<WithForm<TRequest, TResponse>, WithFormProps<TRequest>>(
     withFormSubmit<TRequest, TResponse>(),
-    withState("request", "setRequest", (): TRequest => initial),
+    withState("request", "setRequest", (
+      { initial }: WithFormProps<TRequest>
+    ): TRequest => initial),
     withHandlers<WithForm<TRequest, TResponse>, HandlerProps>({
 
       /* Update form data */
       handleChange: ({ request, setRequest }) => ev => {
-        const { name, value } = ev.currentTarget
-        setRequest(set(lensProp(name), value, request))
+        const { type, checked, name, value } = ev.currentTarget
+        type === "checkbox"
+          ? setRequest(set(lensProp(name), checked, request))
+          : setRequest(set(lensProp(name), value, request))
       },
 
       /* Submit form data */

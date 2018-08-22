@@ -103,16 +103,19 @@ function generateSetCookie(
  * @return Promise resolving with session
  */
 export const post = handler<{}, Request, Session>(schema,
-  async ({ path, headers, body: { username, password, token } }) => {
+  async ({ path, headers, body: { username, password, remember, token } }) => {
     const auth = new AuthenticationClient()
-    const session = await auth.authenticate(username || token ||
-      parseCookie(headers.Cookie), password)
+    const session = await auth.authenticate(
+      username || token || parseCookie(headers.Cookie),
+      password
+    )
+    const { refresh, ...body } = session
     return {
-      body: session,
-      ...(session.refresh
+      body: remember ? { ...body, refresh } : body,
+      ...(remember && refresh
         ? {
           headers: {
-            "Set-Cookie": generateSetCookie(session.refresh, path)
+            "Set-Cookie": generateSetCookie(refresh, path)
           }
         }
         : {})

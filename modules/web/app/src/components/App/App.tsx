@@ -26,7 +26,7 @@ import {
   WithStyles
 } from "@material-ui/core"
 import * as React from "react"
-import { Route } from "react-router-dom"
+import { Link, Route } from "react-router-dom"
 import {
   compose,
   pure
@@ -38,10 +38,7 @@ import {
   RegisterVerification
 } from "routes"
 
-import {
-  AppStyles,
-  styles
-} from "./App.styles"
+import { Styles, styles } from "./App.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -51,7 +48,7 @@ import {
  * Application render properties
  */
 export type AppRenderProps =
-  & WithStyles<AppStyles>
+  & WithStyles<Styles>
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -70,7 +67,7 @@ export const AppRender: React.SFC<AppRenderProps> =
       <Paper elevation={1} className={classes.paper}>
         <Route exact path="/" component={Authenticate} />
         <Route exact path="/register" component={Register} />
-        <Route exact path="/register/:code+" component={RegisterVerification} />
+        <Route path="/register/:code+" component={RegisterVerification} />
       </Paper>
     </div>
 
@@ -83,6 +80,5 @@ export const AppRender: React.SFC<AppRenderProps> =
  */
 export const App =
   compose<AppRenderProps, {}>(
-    withStyles(styles),
-    pure
+    withStyles(styles)
   )(AppRender)

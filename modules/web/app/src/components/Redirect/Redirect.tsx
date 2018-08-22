@@ -67,7 +67,7 @@ export const RedirectRender: React.SFC<RedirectRenderProps> =
  */
 export const Redirect =
   compose<RedirectRenderProps, RedirectProps>(
-    lifecycle<RedirectRenderProps, RedirectProps>({
+    lifecycle<RedirectProps, {}>({
       componentWillMount() {
         window.location.href = this.props.href
       }

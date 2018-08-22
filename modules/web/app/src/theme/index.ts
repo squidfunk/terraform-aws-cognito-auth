@@ -31,6 +31,10 @@ import { colors, createMuiTheme } from "@material-ui/core"
  */
 export const theme = createMuiTheme({
   palette: {
-    primary: colors.indigo
+    primary: colors.indigo,
+    secondary: colors.lightBlue,
+    error: {
+      main: colors.red.A200
+    }
   }
 })

@@ -20,36 +20,59 @@
  * IN THE SOFTWARE.
  */
 
+import * as React from "react"
+import {
+  compose,
+  pure,
+  withProps
+} from "recompose"
+
+import { Redirect, RedirectProps } from "components"
+
+import { AuthenticateRenderProps } from "./Authenticate"
+
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request with credentials
+ * Authentication redirect render properties
  */
-export interface AuthenticateRequestWithCredentials {
-  username: string                     /* Username or email address */
-  password: string                     /* Password */
-  remember?: boolean                   /* Whether to return a refresh token */
-}
+export type AuthenticateRedirectRenderProps =
+  & AuthenticateRenderProps
+  & RedirectProps
+
+/* ----------------------------------------------------------------------------
+ * Presentational component
+ * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request with refresh token
+ * Authentication redirect render component
+ *
+ * @param props - Properties
+ *
+ * @return JSX element
  */
-export interface AuthenticateRequestWithToken {
-  token?: string                       /* Refresh token */
-}
+export const AuthenticateRedirectRender:
+  React.SFC<AuthenticateRedirectRenderProps> =
+    ({ href }) =>
+      <Redirect href={href} />
+
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request
+ * Authentication redirect component
  */
-export type AuthenticateRequest =
-  | AuthenticateRequestWithCredentials
-  | AuthenticateRequestWithToken
-
-/* ------------------------------------------------------------------------- */
-
-/**
- * Type used for JSON schema
- */
-export type __JSON__ = AuthenticateRequest
+export const AuthenticateRedirect =
+  compose<AuthenticateRedirectRenderProps, AuthenticateRenderProps>(
+    withProps<RedirectProps, AuthenticateRenderProps>(({ form }) => ({
+      href: `//${
+        window.env.APP_ORIGIN
+      }#${
+        form.response!.id.token
+      }`
+    })),
+    pure
+  )(AuthenticateRedirectRender)

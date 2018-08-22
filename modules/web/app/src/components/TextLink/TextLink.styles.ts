@@ -20,36 +20,39 @@
  * IN THE SOFTWARE.
  */
 
+import { createStyles, Theme } from "@material-ui/core"
+
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request with credentials
+ * Text link styles
  */
-export interface AuthenticateRequestWithCredentials {
-  username: string                     /* Username or email address */
-  password: string                     /* Password */
-  remember?: boolean                   /* Whether to return a refresh token */
-}
+export type Styles = typeof styles
+
+/* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request with refresh token
+ * Text link styles
+ *
+ * @param theme - Material theme
+ *
+ * @return CSS styles
  */
-export interface AuthenticateRequestWithToken {
-  token?: string                       /* Refresh token */
-}
+export const styles = ({ palette }: Theme) =>
+  createStyles({
+    root: {
+      "color": palette.primary.main,
+      "outline": 0,
+      "textDecoration": "none",
+      "transition": "color .125s",
 
-/**
- * Authentication request
- */
-export type AuthenticateRequest =
-  | AuthenticateRequestWithCredentials
-  | AuthenticateRequestWithToken
-
-/* ------------------------------------------------------------------------- */
-
-/**
- * Type used for JSON schema
- */
-export type __JSON__ = AuthenticateRequest
+      /* Hovered or focused link */
+      "&:hover": {
+        color: palette.secondary.main
+      }
+    }
+  })

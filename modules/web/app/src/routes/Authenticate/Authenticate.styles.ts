@@ -20,11 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  colors,
-  createStyles,
-  Theme
-} from "@material-ui/core"
+import { createStyles, Theme } from "@material-ui/core"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -49,20 +45,22 @@ export type Styles = typeof styles
 export const styles = ({ palette, spacing }: Theme) =>
   createStyles({
 
-    /* Form header element */
-    header: {
-      background: colors.blueGrey[900],
-      padding: spacing.unit * 4
+    /* Container for remember me checkbox and forgot password link */
+    controls: {
+      display: "flex",
+      alignItems: "center"
     },
 
-    /* Form header text */
-    text: {
-      color: palette.common.white,
-      fontSmoothing: "antialiased"
+    /* Forgot password link container */
+    forgotPassword: {
+      flex: 1,
+      textAlign: "right"
     },
 
-    /* Form element */
-    form: {
-      padding: spacing.unit * 4
+    /* Register link container */
+    register: {
+      color: palette.text.hint,
+      marginTop: spacing.unit * 2,
+      textAlign: "center"
     }
   })

@@ -20,36 +20,61 @@
  * IN THE SOFTWARE.
  */
 
+import {
+  withStyles,
+  WithStyles
+} from "@material-ui/core"
+import * as React from "react"
+import { Link, LinkProps } from "react-router-dom"
+import {
+  compose,
+  pure
+} from "recompose"
+
+import { styles, Styles } from "./TextLink.styles"
+
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request with credentials
+ * Text link properties
  */
-export interface AuthenticateRequestWithCredentials {
-  username: string                     /* Username or email address */
-  password: string                     /* Password */
-  remember?: boolean                   /* Whether to return a refresh token */
-}
+export type TextLinkProps = LinkProps
 
 /**
- * Authentication request with refresh token
+ * Text link render properties
  */
-export interface AuthenticateRequestWithToken {
-  token?: string                       /* Refresh token */
-}
+export type TextLinkRenderProps =
+  & WithStyles<Styles>
+  & TextLinkProps
+
+/* ----------------------------------------------------------------------------
+ * Presentational component
+ * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request
+ * Text link render component
+ *
+ * @param props - Properties
+ *
+ * @return JSX element
  */
-export type AuthenticateRequest =
-  | AuthenticateRequestWithCredentials
-  | AuthenticateRequestWithToken
+export const LinkRender: React.SFC<TextLinkRenderProps> =
+  ({ classes, children, ...props }) =>
+    <Link className={classes.root} {...props}>
+      {children}
+    </Link>
 
-/* ------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
 
 /**
- * Type used for JSON schema
+ * Text link component
  */
-export type __JSON__ = AuthenticateRequest
+export const TextLink =
+  compose<TextLinkRenderProps, TextLinkProps>(
+    withStyles(styles),
+    pure
+  )(LinkRender)

@@ -20,36 +20,31 @@
  * IN THE SOFTWARE.
  */
 
+import { createStyles, Theme } from "@material-ui/core"
+
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request with credentials
+ * Form styles
  */
-export interface AuthenticateRequestWithCredentials {
-  username: string                     /* Username or email address */
-  password: string                     /* Password */
-  remember?: boolean                   /* Whether to return a refresh token */
-}
+export type Styles = typeof styles
+
+/* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
 
 /**
- * Authentication request with refresh token
+ * Form styles
+ *
+ * @param theme - Material theme
+ *
+ * @return CSS styles
  */
-export interface AuthenticateRequestWithToken {
-  token?: string                       /* Refresh token */
-}
-
-/**
- * Authentication request
- */
-export type AuthenticateRequest =
-  | AuthenticateRequestWithCredentials
-  | AuthenticateRequestWithToken
-
-/* ------------------------------------------------------------------------- */
-
-/**
- * Type used for JSON schema
- */
-export type __JSON__ = AuthenticateRequest
+export const styles = ({ spacing }: Theme) =>
+  createStyles({
+    root: {
+      padding: spacing.unit * 4
+    }
+  })

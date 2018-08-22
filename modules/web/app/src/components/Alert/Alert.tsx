@@ -20,33 +20,72 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
+import {
+  Collapse,
+  Typography,
+  withStyles,
+  WithStyles
+} from "@material-ui/core"
+import { AxiosError } from "axios"
+import * as React from "react"
+import {
+  compose,
+  pure
+} from "recompose"
+
+import { Styles, styles } from "./Alert.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Form button styles
+ * Alert properties
  */
-export type Styles = typeof styles
+export interface AlertProps {
+  display: boolean                     /* Whether to display the alert */
+  success: boolean                     /* Render as error or success */
+  err?: AxiosError                     /* Error */
+}
+
+/**
+ * Alert render properties
+ */
+export type AlertRenderProps =
+  & WithStyles<Styles>
+  & AlertProps
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Form button styles
+ * Alert render component
  *
- * @param theme - Material theme
+ * @param props - Properties
  *
- * @return CSS styles
+ * @return JSX element
  */
-export const styles = ({ spacing }: Theme) =>
-  createStyles({
-    root: {
-      borderRadius: 2,
-      fontSmoothing: "antialiased",
-      marginTop: spacing.unit * 2
-    }
-  })
+export const AlertRender: React.SFC<AlertRenderProps> =
+  ({ classes, children, display, success, err }) =>
+    <Collapse in={display}>
+      <Typography className={
+        `${classes.root} ${success ? classes.success : classes.error}`
+      } >
+        {err && err.response && err.response.data.message}
+        {success && children}
+      </Typography>
+    </Collapse>
+
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Alert component
+ */
+export const Alert =
+  compose<AlertRenderProps, AlertProps>(
+    withStyles(styles),
+    pure
+  )(AlertRender)

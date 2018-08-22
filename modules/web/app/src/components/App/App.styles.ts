@@ -29,7 +29,7 @@ import { createStyles, Theme } from "@material-ui/core"
 /**
  * Application styles
  */
-export type AppStyles = typeof styles
+export type Styles = typeof styles
 
 /* ----------------------------------------------------------------------------
  * Values
@@ -42,7 +42,7 @@ export type AppStyles = typeof styles
  *
  * @return CSS styles
  */
-export const styles = ({ palette }: Theme) =>
+export const styles = ({ palette, breakpoints }: Theme) =>
   createStyles({
 
     /* Enclosing container */
@@ -51,13 +51,25 @@ export const styles = ({ palette }: Theme) =>
       height: "100%",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: palette.background.default
+      backgroundColor: palette.background.default,
+
+      /* Remove shadow and border for smaller screens */
+      [breakpoints.down("xs")]: {
+        alignItems: "initial",
+        backgroundColor: palette.common.white
+      }
     },
 
     /* Paper element */
     paper: {
-      width: 300,
+      width: 340,
       borderRadius: 2,
-      overflow: "hidden"
+      overflow: "hidden",
+
+      /* Remove shadow and border for smaller screens */
+      [breakpoints.down("xs")]: {
+        width: "100%",
+        borderRadius: 0
+      }
     }
   })

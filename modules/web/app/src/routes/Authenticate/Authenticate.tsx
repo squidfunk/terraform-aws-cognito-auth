@@ -21,7 +21,9 @@
  */
 
 import {
-  TextField,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
   Typography,
   withStyles,
   WithStyles
@@ -31,21 +33,31 @@ import {
   branch,
   compose,
   pure,
-  renderComponent
+  renderComponent,
+  withProps
 } from "recompose"
 
 import {
   AuthenticateRequestWithCredentials as AuthenticateRequest,
   Session
 } from "common"
-import { FormButton } from "components"
+import {
+  Alert,
+  Form,
+  FormButton,
+  FormInput,
+  FormPassword,
+  Header,
+  TextLink
+} from "components"
 import {
   WithForm,
   withForm,
+  WithFormProps
 } from "enhancers"
 
 import { Styles, styles } from "./Authenticate.styles"
-import { AuthenticateSuccess } from "./AuthenticateSuccess"
+import { AuthenticateRedirect } from "./AuthenticateRedirect"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -72,32 +84,44 @@ export type AuthenticateRenderProps =
 export const AuthenticateRender: React.SFC<AuthenticateRenderProps> =
   ({ classes, form, request, handleChange, handleSubmit }) =>
     <div>
-      <div className={classes.header}>
-        <Typography variant="headline" className={classes.text}>
-          {window.env.COGNITO_IDENTITY_POOL_NAME}
-        </Typography>
-        <Typography className={classes.text}>
-          Sign in to your account
-        </Typography>
-      </div>
-      <form method="post" className={classes.form} onSubmit={handleSubmit}>
-        <TextField
-          name="username" type="text" label="Email address"  margin="dense"
+      <Header
+        primary={window.env.COGNITO_IDENTITY_POOL_NAME}
+        secondary="Sign in to your account"
+      />
+      <Alert display={!!form.err} success={form.success} err={form.err} />
+      <Form onSubmit={handleSubmit}>
+        <FormInput
+          name="username" label="Email address" required
           value={request.username} InputProps={{ readOnly: form.pending }}
-          onChange={handleChange} autoComplete="username" fullWidth={true}
+          onChange={handleChange} autoComplete="username"
         />
-        <TextField
-          name="password" type="password" label="Password" margin="dense"
+        <FormPassword
+          name="password" label="Password" required
           value={request.password} InputProps={{ readOnly: form.pending }}
-          onChange={handleChange} autoComplete="new-password" fullWidth={true}
+          onChange={handleChange} autoComplete="new-password"
         />
-        <br />
-        <br />
-        <br />
+        <FormGroup row className={classes.controls}>
+          <FormControlLabel label="Remember me" control={
+            <Checkbox
+              name="remember" checked={request.remember}
+              onChange={handleChange}
+            />
+          } />
+          <Typography className={classes.forgotPassword}>
+            <TextLink to="/reset" tabIndex={-1}>
+              Forgot password?
+            </TextLink>
+          </Typography>
+        </FormGroup>
         <FormButton disabled={form.pending}>
           Sign in
         </FormButton>
-      </form>
+        <Typography className={classes.register}>
+          Don't have an account? <TextLink to="/register">
+            Register
+          </TextLink>
+        </Typography>
+      </Form>
     </div>
 
 /* ----------------------------------------------------------------------------
@@ -110,13 +134,18 @@ export const AuthenticateRender: React.SFC<AuthenticateRenderProps> =
 export const Authenticate =
   compose<AuthenticateRenderProps, {}>(
     withStyles(styles),
-    withForm<AuthenticateRequest, Session<string>>({
-      username: "",
-      password: ""
-    }),
+    withProps<WithFormProps<AuthenticateRequest>, {}>(() => ({
+      target: "/authenticate",
+      initial: {
+        username: "",
+        password: "",
+        remember: false
+      }
+    })),
+    withForm<AuthenticateRequest, Session<string>>(),
     branch<AuthenticateRenderProps>(
       ({ form }) => form.success,
-      renderComponent(AuthenticateSuccess)
+      renderComponent(AuthenticateRedirect)
     ),
     pure
   )(AuthenticateRender)

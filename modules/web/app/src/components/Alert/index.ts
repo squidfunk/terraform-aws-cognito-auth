@@ -20,13 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-declare module "react-feather/dist/icons/*" {
-  import { ComponentType, SVGAttributes } from "react"
-  interface Props extends SVGAttributes<SVGElement> {
-    color?: string
-    size?: number
-  }
-  type Icon = ComponentType<Props>
-  const icon: Icon
-  export default icon
-}
+/* ----------------------------------------------------------------------------
+ * Re-exports
+ * ------------------------------------------------------------------------- */
+
+export { Alert } from "./Alert"
