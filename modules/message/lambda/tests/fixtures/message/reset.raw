@@ -85,24 +85,24 @@ le align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
 =3D"presentation" style=3D"border-collapse:separate;line-height:100%;"><tr>=
 <td align=3D"center" bgcolor=3D"#4CAF50" role=3D"presentation" style=3D"bor=
 der:none;border-bottom:1px solid #43A047;border-radius:2px;cursor:auto;padd=
-ing:7px 15px;" valign=3D"middle"><a href=3D"example.com/register/1234567890=
-ABCDEF" style=3D"background:#4CAF50;color:#FFFFFF;font-family:Helvetica Neu=
-e;font-size:16px;font-weight:normal;line-height:1.75;Margin:0;text-decorati=
-on:none;text-transform:none;" target=3D"_blank">Reset my password</a></td><=
-/tr></table></td></tr><!-- Divider --><tr><td align=3D"center" style=3D"fon=
-t-size:0px;padding:15px 0;word-break:break-word;"><p style=3D"border-top:so=
-lid 1px #ECEFF1;font-size:1;margin:0px auto;width:40px;"></p><!--[if mso | =
-IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
-" style=3D"border-top:solid 1px #ECEFF1;font-size:1;margin:0px auto;width:4=
-0px;" role=3D"presentation" width=3D"40px"><tr><td style=3D"height:0;line-h=
-eight:0;">&nbsp;</td></tr></table><![endif]--></td></tr><!-- Abuse notice -=
--><tr><td align=3D"center" style=3D"font-size:0px;padding:10px 10%;word-bre=
-ak:break-word;"><div style=3D"font-family:Helvetica Neue;font-size:13px;lin=
-e-height:1.75;text-align:center;color:#B0BEC5;">If you did not request a pa=
-ssword reset, please ignore this email or reply to let us know. The link is=
- valid for 24 hours.</div></td></tr></table></div><!--[if mso | IE]><![endi=
-f]--></td></tr></tbody></table></div><!--[if mso | IE]><![endif]--></div></=
-body></html>
+ing:7px 15px;" valign=3D"middle"><a href=3D"example.com/reset/1234567890ABC=
+DEF" style=3D"background:#4CAF50;color:#FFFFFF;font-family:Helvetica Neue;f=
+ont-size:16px;font-weight:normal;line-height:1.75;Margin:0;text-decoration:=
+none;text-transform:none;" target=3D"_blank">Reset my password</a></td></tr=
+></table></td></tr><!-- Divider --><tr><td align=3D"center" style=3D"font-s=
+ize:0px;padding:15px 0;word-break:break-word;"><p style=3D"border-top:solid=
+ 1px #ECEFF1;font-size:1;margin:0px auto;width:40px;"></p><!--[if mso | IE]=
+><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" s=
+tyle=3D"border-top:solid 1px #ECEFF1;font-size:1;margin:0px auto;width:40px=
+;" role=3D"presentation" width=3D"40px"><tr><td style=3D"height:0;line-heig=
+ht:0;">&nbsp;</td></tr></table><![endif]--></td></tr><!-- Abuse notice --><=
+tr><td align=3D"center" style=3D"font-size:0px;padding:10px 10%;word-break:=
+break-word;"><div style=3D"font-family:Helvetica Neue;font-size:13px;line-h=
+eight:1.75;text-align:center;color:#B0BEC5;">If you did not request a passw=
+ord reset, please ignore this email or reply to let us know. The link is va=
+lid for 24 hours.</div></td></tr></table></div><!--[if mso | IE]><![endif]-=
+-></td></tr></tbody></table></div><!--[if mso | IE]><![endif]--></div></bod=
+y></html>
 --${boundary-1}--
 --${boundary-0}
 Content-Type: image/png
