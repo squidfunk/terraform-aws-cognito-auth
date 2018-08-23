@@ -24,4 +24,4 @@
  * Re-exports
  * ------------------------------------------------------------------------- */
 
-export { Alert } from "./Alert"
+export { Notification } from "./Notification"

@@ -20,48 +20,39 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import {
-  compose,
-  pure
-} from "recompose"
-
-import { RegisterVerificationRenderProps } from "./RegisterVerification"
+import { createStyles, Theme } from "@material-ui/core"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification success render properties
+ * Dialog styles
  */
-export type RegisterVerificationSuccessRenderProps =
-  & RegisterVerificationRenderProps
+export type Styles = typeof styles
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Values
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification success render component
+ * Dialog styles
  *
- * @param props - Properties
+ * @param theme - Material theme
  *
- * @return JSX element
+ * @return CSS styles
  */
-export const RegisterVerificationSuccessRender:
-  React.SFC<RegisterVerificationSuccessRenderProps> =
-    () =>
-      <div>TODO</div>
+export const styles = ({ palette, breakpoints }: Theme) =>
+  createStyles({
+    root: {
+      width: 340,
+      borderRadius: 2,
+      overflow: "hidden",
 
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Registration verification success component
- */
-export const RegisterVerificationSuccess =
-  compose<RegisterVerificationSuccessRenderProps, {}>(
-    pure
-  )(RegisterVerificationSuccessRender)
+      /* Remove shadow and border for smaller screens */
+      [breakpoints.down("xs")]: {
+        width: "100%",
+        borderRadius: 0
+      }
+    }
+  })

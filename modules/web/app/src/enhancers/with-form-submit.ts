@@ -30,6 +30,14 @@ import {
   withState
 } from "recompose"
 
+import {
+  withNotification,
+  WithNotificationDispatch
+} from "enhancers"
+import {
+  NotificationType
+} from "providers/store/notification"
+
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
@@ -76,6 +84,7 @@ interface HandlerProps<TRequest extends {}> {
  */
 export interface WithFormSubmitProps {
   target?: string                      /* Form submission target URL */
+  message?: string                     /* Form submission success message */
 }
 
 /**
@@ -86,6 +95,7 @@ export interface WithFormSubmitProps {
  */
 export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
   & WithFormSubmitProps
+  & WithNotificationDispatch
   & HandlerProps<TRequest>
   & StateProps<TResponse>
 
@@ -106,12 +116,15 @@ export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
  */
 export const withFormSubmit = <TRequest extends {}, TResponse = void>() =>
   compose<WithFormSubmit<TRequest, TResponse>, WithFormSubmitProps>(
+    withNotification(),
     withState("form", "setForm", (): State<TResponse> => ({
       pending: false,
       success: false
     })),
     withHandlers<WithFormSubmit<TRequest, TResponse>, HandlerProps<TRequest>>({
-      submit: ({ setForm, target }) => async req => {
+      submit: ({
+        setForm, target, message, displayNotification, dismissNotification
+      }) => async req => {
         const url = `/${window.env.API_BASE_PATH}/${
           (target || location.pathname).replace(/^\//, "")
         }`
@@ -119,6 +132,7 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>() =>
         /* Submit form request */
         setForm({ pending: true, success: false })
         try {
+          dismissNotification()
           const { data: response } =
             await axios.post<TResponse>(url, req || {}, {
               withCredentials: true,
@@ -130,9 +144,26 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>() =>
           /* Update form submission state with response */
           setForm({ pending: false, success: true, response })
 
+          /* Display success message as notification, if given */
+          if (message) {
+            displayNotification({
+              type: NotificationType.SUCCESS,
+              message: message!
+            })
+          }
+
         /* Update form submission state with error */
         } catch (err) {
           setForm({ pending: false, success: false, err })
+
+          /* Display error message as notification */
+          const { response }: AxiosError = err
+          if (response) {
+            displayNotification({
+              type: NotificationType.ERROR,
+              message: response.data.message
+            })
+          }
         }
       }
     })

@@ -21,71 +21,53 @@
  */
 
 import {
-  Collapse,
-  Typography,
-  withStyles,
-  WithStyles
+  colors,
+  createStyles,
+  Theme
 } from "@material-ui/core"
-import { AxiosError } from "axios"
-import * as React from "react"
-import {
-  compose,
-  pure
-} from "recompose"
-
-import { Styles, styles } from "./Alert.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Alert properties
+ * Notification styles
  */
-export interface AlertProps {
-  display: boolean                     /* Whether to display the alert */
-  success: boolean                     /* Render as error or success */
-  err?: AxiosError                     /* Error */
-}
-
-/**
- * Alert render properties
- */
-export type AlertRenderProps =
-  & WithStyles<Styles>
-  & AlertProps
+export type Styles = typeof styles
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Values
  * ------------------------------------------------------------------------- */
 
 /**
- * Alert render component
+ * Notification styles
  *
- * @param props - Properties
+ * @param theme - Material theme
  *
- * @return JSX element
+ * @return CSS styles
  */
-export const AlertRender: React.SFC<AlertRenderProps> =
-  ({ classes, children, display, success, err }) =>
-    <Collapse in={display}>
-      <Typography className={
-        `${classes.root} ${success ? classes.success : classes.error}`
-      } >
-        {err && err.response && err.response.data.message}
-        {success && children}
-      </Typography>
-    </Collapse>
+export const styles = ({ palette, spacing }: Theme) =>
+  createStyles({
 
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
+    /* Base styles */
+    root: {
+      color: palette.common.white,
+      fontSmoothing: "antialiased",
+      fontWeight: 700,
+      paddingTop: spacing.unit * 2,
+      paddingRight: spacing.unit * 4,
+      paddingBottom: spacing.unit * 2,
+      paddingLeft: spacing.unit * 4,
+      transition: "background-color .25s"
+    },
 
-/**
- * Alert component
- */
-export const Alert =
-  compose<AlertRenderProps, AlertProps>(
-    withStyles(styles),
-    pure
-  )(AlertRender)
+    /* Success message */
+    success: {
+      backgroundColor: colors.green.A700
+    },
+
+    /* Error message */
+    error: {
+      backgroundColor: palette.error.main
+    }
+  })

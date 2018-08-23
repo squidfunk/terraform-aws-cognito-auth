@@ -20,27 +20,56 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
+import { connect } from "react-redux"
+import { Dispatch } from "redux"
+
+import { State } from "providers/store"
+import {
+  dismissNotificationAction,
+  displayNotificationAction,
+  NotificationActions,
+  NotificationData,
+  NotificationState
+} from "providers/store/notification"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification styles
+ * Notification state properties
  */
-export type Styles = typeof styles
+export type WithNotificationState = NotificationState
+
+/**
+ * Notification dispatcher properties
+ */
+export interface WithNotificationDispatch {
+  displayNotification(data: NotificationData): void
+  dismissNotification(): void
+}
+
+/**
+ * Notification properties
+ */
+export type WithNotification =
+  & WithNotificationState
+  & WithNotificationDispatch
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Enhancer
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification styles
+ * Enhance component with notification state and dispatch
  *
- * @param theme - Material theme
- *
- * @return CSS styles
+ * @return Component enhancer
  */
-export const styles = (_theme: Theme) =>
-  createStyles({})
+export const withNotification = () =>
+  connect<WithNotificationState, WithNotificationDispatch, {}, State>(
+    (state: State) => state.notification,
+    (dispatch: Dispatch<NotificationActions>) => ({
+      displayNotification: data => dispatch(displayNotificationAction(data)),
+      dismissNotification: () => dispatch(dismissNotificationAction())
+    })
+  )

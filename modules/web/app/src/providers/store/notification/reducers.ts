@@ -21,58 +21,58 @@
  */
 
 import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
-import * as React from "react"
-import { Route } from "react-router-dom"
-import { compose } from "recompose"
-
-import {
-  Authenticate,
-  Register,
-  RegisterVerification
-} from "routes"
-
-import { Styles, styles } from "./App.styles"
+  NotificationActions,
+  NotificationActionTypes
+} from "./actions"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render properties
+ * Notification type
  */
-export type AppRenderProps =
-  & WithStyles<Styles>
+export enum NotificationType {
+  SUCCESS = "SUCCESS",                 /* Operation successful */
+  ERROR = "ERROR"                      /* Operation errored */
+}
+
+/**
+ * Notification data
+ */
+export interface NotificationData {
+  type: NotificationType               /* Notification type */
+  message: string                      /* Notification message */
+}
+
+/**
+ * Notification state
+ */
+export interface NotificationState {
+  data?: NotificationData              /* Notification data */
+  show: boolean                        /* Notification visibility */
+}
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Reducer
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
+ * Notification reducer
  *
- * @param props - Properties
- *
- * @return JSX element
+ * @param state - Notification state
+ * @param action - Notification action
  */
-export const AppRender: React.SFC<AppRenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Route exact path="/" component={Authenticate} />
-      <Route exact path="/register" component={Register} />
-      <Route path="/register/:code+" component={RegisterVerification} />
-    </div>
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Application
- */
-export const App =
-  compose<AppRenderProps, {}>(
-    withStyles(styles)
-  )(AppRender)
+export function notification(
+  state: NotificationState = { show: false },
+  action: NotificationActions
+): NotificationState {
+  switch (action.type) {
+    case NotificationActionTypes.DISPLAY:
+      return { data: action.data, show: true }
+    case NotificationActionTypes.DISMISS:
+      return { ...state, show: false }
+    default:
+      return state
+  }
+}

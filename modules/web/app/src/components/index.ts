@@ -24,12 +24,13 @@
  * Re-exports
  * ------------------------------------------------------------------------- */
 
-export * from "./Alert"
 export * from "./App"
+export * from "./Dialog"
 export * from "./Form"
 export * from "./FormButton"
 export * from "./FormInput"
 export * from "./FormPassword"
 export * from "./Header"
+export * from "./Notification"
 export * from "./Redirect"
 export * from "./TextLink"

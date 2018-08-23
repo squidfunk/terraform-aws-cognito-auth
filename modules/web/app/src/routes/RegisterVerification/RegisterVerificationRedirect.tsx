@@ -20,59 +20,42 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
 import * as React from "react"
-import { Route } from "react-router-dom"
-import { compose } from "recompose"
+import { Redirect } from "react-router-dom"
 
-import {
-  Authenticate,
-  Register,
-  RegisterVerification
-} from "routes"
-
-import { Styles, styles } from "./App.styles"
+import { RegisterVerificationRenderProps } from "./RegisterVerification"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render properties
+ * Registration verification redirect render properties
  */
-export type AppRenderProps =
-  & WithStyles<Styles>
+export type RegisterVerificationRedirectRenderProps =
+  & RegisterVerificationRenderProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
+ * Registration verification redirect render component
  *
  * @param props - Properties
  *
  * @return JSX element
  */
-export const AppRender: React.SFC<AppRenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Route exact path="/" component={Authenticate} />
-      <Route exact path="/register" component={Register} />
-      <Route path="/register/:code+" component={RegisterVerification} />
-    </div>
+export const RegisterVerificationRedirectRender:
+  React.SFC<RegisterVerificationRedirectRenderProps> =
+    () =>
+      <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application
+ * Registration verification redirect component
  */
-export const App =
-  compose<AppRenderProps, {}>(
-    withStyles(styles)
-  )(AppRender)
+export const RegisterVerificationRedirect = RegisterVerificationRedirectRender

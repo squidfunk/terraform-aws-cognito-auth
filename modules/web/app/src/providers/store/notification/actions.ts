@@ -20,59 +20,70 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
-import * as React from "react"
-import { Route } from "react-router-dom"
-import { compose } from "recompose"
+import { Action } from "redux"
 
-import {
-  Authenticate,
-  Register,
-  RegisterVerification
-} from "routes"
-
-import { Styles, styles } from "./App.styles"
+import { NotificationData } from "./reducers"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render properties
+ * Notification action types
  */
-export type AppRenderProps =
-  & WithStyles<Styles>
+export enum NotificationActionTypes {
+  DISPLAY = "NOTIFICATION_DISPLAY",
+  DISMISS = "NOTIFICATION_DISMISS"
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Notification display action
+ */
+interface NotificationDisplayAction extends Action {
+  type: NotificationActionTypes.DISPLAY
+  data: NotificationData
+}
+
+/**
+ * Notification dismiss action
+ */
+interface NotificationDismissAction extends Action {
+  type: NotificationActionTypes.DISMISS
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Notification actions
+ */
+export type NotificationActions =
+  | NotificationDisplayAction
+  | NotificationDismissAction
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Actions
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
+ * Notification display action
  *
- * @param props - Properties
+ * @param data - Notification data
  *
- * @return JSX element
+ * @return Action
  */
-export const AppRender: React.SFC<AppRenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Route exact path="/" component={Authenticate} />
-      <Route exact path="/register" component={Register} />
-      <Route path="/register/:code+" component={RegisterVerification} />
-    </div>
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
+export const displayNotificationAction =
+  (data: NotificationData): NotificationDisplayAction => ({
+    type: NotificationActionTypes.DISPLAY, data
+  })
 
 /**
- * Application
+ * Notification dismiss action
+ *
+ * @return Action
  */
-export const App =
-  compose<AppRenderProps, {}>(
-    withStyles(styles)
-  )(AppRender)
+export const dismissNotificationAction =
+  (): NotificationDismissAction => ({
+    type: NotificationActionTypes.DISMISS
+  })

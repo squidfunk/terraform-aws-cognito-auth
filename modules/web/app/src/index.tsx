@@ -23,20 +23,23 @@
 import { MuiThemeProvider } from "@material-ui/core"
 import * as React from "react"
 import { render } from "react-dom"
+import { Provider as StateProvider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 
 import { App } from "components"
-import { theme } from "theme"
+import { store, theme } from "providers"
 
 /* ----------------------------------------------------------------------------
  * Application
  * ------------------------------------------------------------------------- */
 
 render(
-  <BrowserRouter>
+  <StateProvider store={store}>
     <MuiThemeProvider theme={theme}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </MuiThemeProvider>
-  </BrowserRouter>,
+  </StateProvider>,
   document.getElementById("root")
 )

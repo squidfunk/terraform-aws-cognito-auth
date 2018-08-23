@@ -26,3 +26,4 @@
 
 export * from "./with-form-submit"
 export * from "./with-form"
+export * from "./with-notification"

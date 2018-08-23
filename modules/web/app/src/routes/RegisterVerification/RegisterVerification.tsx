@@ -20,27 +20,25 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
+import { CircularProgress } from "@material-ui/core"
 import * as React from "react"
 import {
   branch,
   compose,
   lifecycle,
   pure,
-  renderComponent
+  renderComponent,
+  withProps
 } from "recompose"
 
 import { RegisterVerificationRequest } from "common"
 import {
   withFormSubmit,
-  WithFormSubmit
+  WithFormSubmit,
+  WithFormSubmitProps
 } from "enhancers"
 
-import { Styles, styles } from "./RegisterVerification.styles"
-import { RegisterVerificationSuccess } from "./RegisterVerificationSuccess"
+import { RegisterVerificationRedirect } from "./RegisterVerificationRedirect"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -50,7 +48,6 @@ import { RegisterVerificationSuccess } from "./RegisterVerificationSuccess"
  * Registration verification render properties
  */
 export type RegisterVerificationRenderProps =
-  & WithStyles<Styles>
   & WithFormSubmit<RegisterVerificationRequest>
 
 /* ----------------------------------------------------------------------------
@@ -63,7 +60,7 @@ export type RegisterVerificationRenderProps =
 export const RegisterVerificationRender:
   React.SFC<RegisterVerificationRenderProps> =
     () =>
-      <div>Verifying...</div>
+      <CircularProgress />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -74,7 +71,10 @@ export const RegisterVerificationRender:
  */
 export const RegisterVerification =
   compose<RegisterVerificationRenderProps, {}>(
-    withStyles(styles),
+    withProps<WithFormSubmitProps, {}>(() => ({
+      message: "You have successfully verified your email address." +
+               "Use your email address and password to sign in to your account."
+    })),
     withFormSubmit<RegisterVerificationRequest>(),
     lifecycle<RegisterVerificationRenderProps, {}>({
       componentDidMount() {
@@ -82,8 +82,8 @@ export const RegisterVerification =
       }
     }),
     branch<RegisterVerificationRenderProps>(
-      ({ form }) => form.success,
-      renderComponent(RegisterVerificationSuccess)
+      ({ form }) => form.success || !!form.err,
+      renderComponent(RegisterVerificationRedirect)
     ),
     pure
   )(RegisterVerificationRender)

@@ -20,59 +20,17 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
-import * as React from "react"
-import { Route } from "react-router-dom"
-import { compose } from "recompose"
-
-import {
-  Authenticate,
-  Register,
-  RegisterVerification
-} from "routes"
-
-import { Styles, styles } from "./App.styles"
-
 /* ----------------------------------------------------------------------------
- * Types
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Application render properties
- */
-export type AppRenderProps =
-  & WithStyles<Styles>
-
-/* ----------------------------------------------------------------------------
- * Presentational component
- * ------------------------------------------------------------------------- */
-
-/**
- * Application render component
- *
- * @param props - Properties
- *
- * @return JSX element
- */
-export const AppRender: React.SFC<AppRenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Route exact path="/" component={Authenticate} />
-      <Route exact path="/register" component={Register} />
-      <Route path="/register/:code+" component={RegisterVerification} />
-    </div>
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Application
- */
-export const App =
-  compose<AppRenderProps, {}>(
-    withStyles(styles)
-  )(AppRender)
+export {
+  NotificationActions,
+  dismissNotificationAction,
+  displayNotificationAction
+} from "./actions"
+export {
+  NotificationData,
+  NotificationState,
+  NotificationType
+} from "./reducers"

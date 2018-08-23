@@ -42,12 +42,13 @@ import {
   Session
 } from "common"
 import {
-  Alert,
+  Dialog,
   Form,
   FormButton,
   FormInput,
   FormPassword,
   Header,
+  Notification,
   TextLink
 } from "components"
 import {
@@ -83,12 +84,12 @@ export type AuthenticateRenderProps =
  */
 export const AuthenticateRender: React.SFC<AuthenticateRenderProps> =
   ({ classes, form, request, handleChange, handleSubmit }) =>
-    <div>
+    <Dialog>
       <Header
         primary={window.env.COGNITO_IDENTITY_POOL_NAME}
         secondary="Sign in to your account"
       />
-      <Alert display={!!form.err} success={form.success} err={form.err} />
+      <Notification />
       <Form onSubmit={handleSubmit}>
         <FormInput
           name="username" label="Email address" required
@@ -122,7 +123,7 @@ export const AuthenticateRender: React.SFC<AuthenticateRenderProps> =
           </TextLink>
         </Typography>
       </Form>
-    </div>
+    </Dialog>
 
 /* ----------------------------------------------------------------------------
  * Enhanced component

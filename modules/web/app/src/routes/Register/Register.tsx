@@ -34,12 +34,13 @@ import {
 
 import { RegisterRequest } from "common"
 import {
-  Alert,
+  Dialog,
   Form,
   FormButton,
   FormInput,
   FormPassword,
   Header,
+  Notification,
   TextLink
 } from "components"
 import {
@@ -74,18 +75,12 @@ export type RegisterRenderProps =
  */
 export const RegisterRender: React.SFC<RegisterRenderProps> =
   ({ classes, form, request, handleChange, handleSubmit }) =>
-    <div>
+    <Dialog>
       <Header
         primary={window.env.COGNITO_IDENTITY_POOL_NAME}
         secondary="Register for a new account"
       />
-      <Alert
-        display={!!form.err || form.success} success={form.success}
-        err={form.err}
-      >
-        We just sent a verification link to your email address. Please
-        click on the link to complete your registration.
-      </Alert>
+      <Notification />
       <Form onSubmit={handleSubmit}>
         <FormInput
           name="email" label="Email address" required disabled={form.success}
@@ -106,7 +101,7 @@ export const RegisterRender: React.SFC<RegisterRenderProps> =
           Already have an account? <TextLink to="/">Sign in</TextLink>
         </Typography>
       </Form>
-    </div>
+    </Dialog>
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -119,6 +114,8 @@ export const Register =
   compose<RegisterRenderProps, {}>(
     withStyles(styles),
     withProps<WithFormProps<RegisterRequest>, {}>(() => ({
+      message: "We just sent a verification link to your email address." +
+               "Please click on the link to complete your registration.",
       initial: {
         email: "",
         password: ""

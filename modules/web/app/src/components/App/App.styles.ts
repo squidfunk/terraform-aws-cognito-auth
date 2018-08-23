@@ -44,8 +44,6 @@ export type Styles = typeof styles
  */
 export const styles = ({ palette, breakpoints }: Theme) =>
   createStyles({
-
-    /* Enclosing container */
     root: {
       display: "flex",
       height: "100%",
@@ -57,19 +55,6 @@ export const styles = ({ palette, breakpoints }: Theme) =>
       [breakpoints.down("xs")]: {
         alignItems: "initial",
         backgroundColor: palette.common.white
-      }
-    },
-
-    /* Paper element */
-    paper: {
-      width: 340,
-      borderRadius: 2,
-      overflow: "hidden",
-
-      /* Remove shadow and border for smaller screens */
-      [breakpoints.down("xs")]: {
-        width: "100%",
-        borderRadius: 0
       }
     }
   })

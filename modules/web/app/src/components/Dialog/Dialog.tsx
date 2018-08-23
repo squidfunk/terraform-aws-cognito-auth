@@ -21,29 +21,23 @@
  */
 
 import {
+  Paper,
   withStyles,
   WithStyles
 } from "@material-ui/core"
 import * as React from "react"
-import { Route } from "react-router-dom"
 import { compose } from "recompose"
 
-import {
-  Authenticate,
-  Register,
-  RegisterVerification
-} from "routes"
-
-import { Styles, styles } from "./App.styles"
+import { Styles, styles } from "./Dialog.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render properties
+ * Dialog render properties
  */
-export type AppRenderProps =
+export type DialogRenderProps =
   & WithStyles<Styles>
 
 /* ----------------------------------------------------------------------------
@@ -51,28 +45,26 @@ export type AppRenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
+ * Dialog render component
  *
  * @param props - Properties
  *
  * @return JSX element
  */
-export const AppRender: React.SFC<AppRenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Route exact path="/" component={Authenticate} />
-      <Route exact path="/register" component={Register} />
-      <Route path="/register/:code+" component={RegisterVerification} />
-    </div>
+export const DialogRender: React.SFC<DialogRenderProps> =
+  ({ classes, children }) =>
+    <Paper elevation={1} className={classes.root}>
+      {children}
+    </Paper>
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application
+ * Dialog
  */
-export const App =
-  compose<AppRenderProps, {}>(
+export const Dialog =
+  compose<DialogRenderProps, {}>(
     withStyles(styles)
-  )(AppRender)
+  )(DialogRender)

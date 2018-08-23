@@ -20,59 +20,31 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
-import * as React from "react"
-import { Route } from "react-router-dom"
-import { compose } from "recompose"
+import { combineReducers, createStore } from "redux"
 
 import {
-  Authenticate,
-  Register,
-  RegisterVerification
-} from "routes"
-
-import { Styles, styles } from "./App.styles"
+  notification,
+  NotificationState
+} from "./notification/reducers"
 
 /* ----------------------------------------------------------------------------
- * Types
+ * Values
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render properties
+ * Redux store state state
  */
-export type AppRenderProps =
-  & WithStyles<Styles>
+export interface State {
+  notification: NotificationState
+}
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Values
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
- *
- * @param props - Properties
- *
- * @return JSX element
+ * Redux store
  */
-export const AppRender: React.SFC<AppRenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Route exact path="/" component={Authenticate} />
-      <Route exact path="/register" component={Register} />
-      <Route path="/register/:code+" component={RegisterVerification} />
-    </div>
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Application
- */
-export const App =
-  compose<AppRenderProps, {}>(
-    withStyles(styles)
-  )(AppRender)
+export const store = createStore(combineReducers({
+  notification
+}))

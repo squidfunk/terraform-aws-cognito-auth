@@ -21,53 +21,68 @@
  */
 
 import {
-  colors,
-  createStyles,
-  Theme
+  Collapse,
+  Typography,
+  withStyles,
+  WithStyles
 } from "@material-ui/core"
+import * as React from "react"
+import {
+  compose,
+  pure
+} from "recompose"
+
+import {
+  withNotification,
+  WithNotificationState
+} from "enhancers"
+
+import { Styles, styles } from "./Notification.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Alert styles
+ * Notification render properties
  */
-export type Styles = typeof styles
+export type NotificationRenderProps =
+  & WithStyles<Styles>
+  & WithNotificationState
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Alert styles
+ * Notification render component
  *
- * @param theme - Material theme
+ * @param props - Properties
  *
- * @return CSS styles
+ * @return JSX element
  */
-export const styles = ({ palette, spacing }: Theme) =>
-  createStyles({
+export const NotificationRender: React.SFC<NotificationRenderProps> =
+  ({ classes, data, show }) =>
+    <Collapse in={show}>
+      {data &&
+        <Typography className={`${classes.root} ${classes[
+          data.type.toLowerCase() as "success" | "error"
+        ]}`}>
+          {data.message}
+        </Typography>
+      }
+    </Collapse>
 
-    /* Base styles */
-    root: {
-      color: palette.common.white,
-      fontSmoothing: "antialiased",
-      fontWeight: 700,
-      paddingTop: spacing.unit * 2,
-      paddingRight: spacing.unit * 4,
-      paddingBottom: spacing.unit * 2,
-      paddingLeft: spacing.unit * 4,
-      transition: "background-color .25s"
-    },
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
 
-    /* Error message */
-    error: {
-      backgroundColor: palette.error.main
-    },
-
-    /* Success message */
-    success: {
-      backgroundColor: colors.green.A700
-    }
-  })
+/**
+ * Notification component
+ */
+export const Notification =
+  compose<NotificationRenderProps, {}>(
+    withStyles(styles),
+    withNotification(),
+    pure
+  )(NotificationRender)
