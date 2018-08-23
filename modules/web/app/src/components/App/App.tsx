@@ -31,7 +31,9 @@ import { compose } from "recompose"
 import {
   Authenticate,
   Register,
-  RegisterVerification
+  RegisterVerification,
+  Reset,
+  ResetVerification
 } from "routes"
 
 import { Styles, styles } from "./App.styles"
@@ -63,6 +65,8 @@ export const AppRender: React.SFC<AppRenderProps> =
       <Route exact path="/" component={Authenticate} />
       <Route exact path="/register" component={Register} />
       <Route path="/register/:code+" component={RegisterVerification} />
+      <Route exact path="/reset" component={Reset} />
+      <Route path="/reset/:code+" component={ResetVerification} />
     </div>
 
 /* ----------------------------------------------------------------------------

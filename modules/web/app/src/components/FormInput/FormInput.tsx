@@ -53,8 +53,8 @@ export type FormInputRenderProps =
 export const FormInputRender: React.SFC<FormInputRenderProps> =
   props =>
     <TextField
-      type="text" margin="dense" fullWidth={true}
-      InputLabelProps={{ required: false }} {...props}
+      type="text" margin="dense" fullWidth={true} autoCapitalize="false"
+      autoCorrect="false" InputLabelProps={{ required: false }} {...props}
     />
 
 /* ----------------------------------------------------------------------------

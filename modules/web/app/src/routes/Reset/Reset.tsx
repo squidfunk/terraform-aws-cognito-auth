@@ -32,13 +32,12 @@ import {
   withProps
 } from "recompose"
 
-import { RegisterRequest } from "common"
+import { ResetRequest } from "common"
 import {
   Dialog,
   Form,
   FormButton,
   FormInput,
-  FormPassword,
   Header,
   Notification,
   TextLink
@@ -49,56 +48,55 @@ import {
   WithFormProps
 } from "enhancers"
 
-import { Styles, styles } from "./Register.styles"
+import { Styles, styles } from "./Reset.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration render properties
+ * Password reset render properties
  */
-export type RegisterRenderProps =
+export type ResetRenderProps =
   & WithStyles<Styles>
-  & WithForm<RegisterRequest>
+  & WithForm<ResetRequest>
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration render component
+ * Password reset render component
  *
  * @param props - Properties
  *
  * @return JSX element
  */
-export const RegisterRender: React.SFC<RegisterRenderProps> =
+export const ResetRender: React.SFC<ResetRenderProps> =
   ({ classes, form, request, handleChange, handleSubmit }) =>
     <Dialog>
       <Header
         primary={window.env.COGNITO_IDENTITY_POOL_NAME}
-        secondary="Register for a new account"
+        secondary="Unlock your account"
       />
       <Notification />
       <Form onSubmit={handleSubmit}>
+        <Typography>
+          Enter your email address in the field below to reset your password.
+          We will send you a verification link to complete the process.
+        </Typography>
         <FormInput
-          name="email" label="Email address" required disabled={form.success}
-          value={request.email} InputProps={{ readOnly: form.pending }}
+          name="username" label="Email address" required disabled={form.success}
+          value={request.username} InputProps={{ readOnly: form.pending }}
           onChange={handleChange} autoComplete="email"
-        />
-        <FormPassword
-          name="password" label="Password" required disabled={form.success}
-          value={request.password} InputProps={{ readOnly: form.pending }}
-          onChange={handleChange} autoComplete="new-password"
         />
         <FormButton
           className={classes.button} disabled={form.pending || form.success}
         >
-          Register
+          Reset password
         </FormButton>
         <Typography className={classes.authenticate}>
-          Already have an account? <TextLink to="/">Sign in</TextLink>
+          Remembered your password? <TextLink to="/">Sign in</TextLink>
         </Typography>
       </Form>
     </Dialog>
@@ -108,19 +106,18 @@ export const RegisterRender: React.SFC<RegisterRenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration component
+ * Password reset component
  */
-export const Register =
-  compose<RegisterRenderProps, {}>(
+export const Reset =
+  compose<ResetRenderProps, {}>(
     withStyles(styles),
-    withProps<WithFormProps<RegisterRequest>, {}>(() => ({
+    withProps<WithFormProps<ResetRequest>, {}>(() => ({
       message: "We just sent a verification link to your email address. " +
-               "Please click on the link to complete your registration.",
+               "Please click on the link to reset your password.",
       initial: {
-        email: "",
-        password: ""
+        username: ""
       }
     })),
-    withForm<RegisterRequest>(),
+    withForm<ResetRequest>(),
     pure
-  )(RegisterRender)
+  )(ResetRender)

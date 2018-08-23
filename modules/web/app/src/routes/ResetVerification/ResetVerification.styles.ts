@@ -20,12 +20,42 @@
  * IN THE SOFTWARE.
  */
 
+import { createStyles, Theme } from "@material-ui/core"
+
 /* ----------------------------------------------------------------------------
- * Re-exports
+ * Types
  * ------------------------------------------------------------------------- */
 
-export * from "./Authenticate"
-export * from "./Register"
-export * from "./RegisterVerification"
-export * from "./Reset"
-export * from "./ResetVerification"
+/**
+ * Registration styles
+ */
+export type Styles = typeof styles
+
+/* ----------------------------------------------------------------------------
+ * Values
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Registration styles
+ *
+ * @param theme - Material theme
+ *
+ * @return CSS styles
+ */
+export const styles = ({ palette, spacing }: Theme) =>
+  createStyles({
+
+    /* Authenticate link container */
+    authenticate: {
+      color: palette.text.hint,
+      marginTop: spacing.unit * 2,
+      textAlign: "center"
+    },
+
+    /* Override for button component */
+    button: {
+      borderRadius: 2,
+      fontSmoothing: "antialiased",
+      marginTop: spacing.unit * 4
+    }
+  })

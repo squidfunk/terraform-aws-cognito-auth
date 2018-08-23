@@ -27,12 +27,14 @@ import {
 } from "@material-ui/core"
 import * as React from "react"
 import {
+  branch,
   compose,
   pure,
+  renderComponent,
   withProps
 } from "recompose"
 
-import { RegisterRequest } from "common"
+import { ResetVerificationRequest } from "common"
 import {
   Dialog,
   Form,
@@ -49,56 +51,52 @@ import {
   WithFormProps
 } from "enhancers"
 
-import { Styles, styles } from "./Register.styles"
+import { Styles, styles } from "./ResetVerification.styles"
+import { ResetVerificationRedirect } from "./ResetVerificationRedirect"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration render properties
+ * Password reset verification render properties
  */
-export type RegisterRenderProps =
+export type ResetVerificationRenderProps =
   & WithStyles<Styles>
-  & WithForm<RegisterRequest>
+  & WithForm<ResetVerificationRequest>
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration render component
+ * Password reset verification render component
  *
  * @param props - Properties
  *
  * @return JSX element
  */
-export const RegisterRender: React.SFC<RegisterRenderProps> =
+export const ResetVerificationRender: React.SFC<ResetVerificationRenderProps> =
   ({ classes, form, request, handleChange, handleSubmit }) =>
     <Dialog>
       <Header
         primary={window.env.COGNITO_IDENTITY_POOL_NAME}
-        secondary="Register for a new account"
+        secondary="Unlock your account"
       />
       <Notification />
       <Form onSubmit={handleSubmit}>
-        <FormInput
-          name="email" label="Email address" required disabled={form.success}
-          value={request.email} InputProps={{ readOnly: form.pending }}
-          onChange={handleChange} autoComplete="email"
-        />
         <FormPassword
-          name="password" label="Password" required disabled={form.success}
+          name="password" label="New password" required disabled={form.success}
           value={request.password} InputProps={{ readOnly: form.pending }}
           onChange={handleChange} autoComplete="new-password"
         />
         <FormButton
           className={classes.button} disabled={form.pending || form.success}
         >
-          Register
+          Reset password
         </FormButton>
         <Typography className={classes.authenticate}>
-          Already have an account? <TextLink to="/">Sign in</TextLink>
+          Remembered your password? <TextLink to="/">Sign in</TextLink>
         </Typography>
       </Form>
     </Dialog>
@@ -108,19 +106,22 @@ export const RegisterRender: React.SFC<RegisterRenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration component
+ * Password reset verification component
  */
-export const Register =
-  compose<RegisterRenderProps, {}>(
+export const ResetVerification =
+  compose<ResetVerificationRenderProps, {}>(
     withStyles(styles),
-    withProps<WithFormProps<RegisterRequest>, {}>(() => ({
-      message: "We just sent a verification link to your email address. " +
-               "Please click on the link to complete your registration.",
+    withProps<WithFormProps<ResetVerificationRequest>, {}>(() => ({
+      message: "You have successfully changed your password. Use your " +
+               "email address and new password to sign in to your account.",
       initial: {
-        email: "",
         password: ""
       }
     })),
-    withForm<RegisterRequest>(),
+    withForm<ResetVerificationRequest>(),
+    branch<ResetVerificationRenderProps>(
+      ({ form }) => form.success,
+      renderComponent(ResetVerificationRedirect)
+    ),
     pure
-  )(RegisterRender)
+  )(ResetVerificationRender)

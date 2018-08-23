@@ -20,70 +20,41 @@
  * IN THE SOFTWARE.
  */
 
-import { CircularProgress } from "@material-ui/core"
 import * as React from "react"
-import {
-  branch,
-  compose,
-  lifecycle,
-  pure,
-  renderComponent,
-  withProps
-} from "recompose"
+import { Redirect } from "react-router-dom"
 
-import { RegisterVerificationRequest } from "common"
-import {
-  withFormSubmit,
-  WithFormSubmit,
-  WithFormSubmitProps
-} from "enhancers"
-
-import { RegisterVerificationRedirect } from "./RegisterVerificationRedirect"
+import { ResetVerificationRenderProps } from "./ResetVerification"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification render properties
+ * Password reset verification redirect render properties
  */
-export type RegisterVerificationRenderProps =
-  & WithFormSubmit<RegisterVerificationRequest>
+export type ResetVerificationRedirectRenderProps =
+  & ResetVerificationRenderProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification render component
+ * Password reset verification redirect render component
+ *
+ * @param props - Properties
+ *
+ * @return JSX element
  */
-export const RegisterVerificationRender:
-  React.SFC<RegisterVerificationRenderProps> =
-    () =>
-      <CircularProgress />
+export const ResetVerificationRedirectRender:
+  React.SFC<ResetVerificationRedirectRenderProps> =
+    () => <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification component
+ * Password reset verification redirect component
  */
-export const RegisterVerification =
-  compose<RegisterVerificationRenderProps, {}>(
-    withProps<WithFormSubmitProps, {}>(() => ({
-      message: "You have successfully verified your email address. " +
-               "Use your email address and password to sign in to your account."
-    })),
-    withFormSubmit<RegisterVerificationRequest>(),
-    lifecycle<RegisterVerificationRenderProps, {}>({
-      componentDidMount() {
-        return this.props.submit()
-      }
-    }),
-    branch<RegisterVerificationRenderProps>(
-      ({ form }) => form.success || !!form.err,
-      renderComponent(RegisterVerificationRedirect)
-    ),
-    pure
-  )(RegisterVerificationRender)
+export const ResetVerificationRedirect = ResetVerificationRedirectRender

@@ -48,8 +48,7 @@ export type RegisterVerificationRedirectRenderProps =
  */
 export const RegisterVerificationRedirectRender:
   React.SFC<RegisterVerificationRedirectRenderProps> =
-    () =>
-      <Redirect to="/" />
+    () => <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
