@@ -59,8 +59,7 @@ export type RegisterVerificationRenderProps =
  */
 export const RegisterVerificationRender:
   React.SFC<RegisterVerificationRenderProps> =
-    () =>
-      <CircularProgress />
+    () => <CircularProgress />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component

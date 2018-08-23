@@ -28,14 +28,27 @@ import * as React from "react"
 import { Link, LinkProps } from "react-router-dom"
 import {
   compose,
-  pure
+  pure,
+  withHandlers
 } from "recompose"
+
+import {
+  withNotification,
+  WithNotificationDispatch
+} from "enhancers"
 
 import { styles, Styles } from "./TextLink.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
+
+/**
+ * Text link handler properties
+ */
+interface HandlerProps {
+  handleClick(): void                  /* Link click handler */
+}
 
 /**
  * Text link properties
@@ -47,7 +60,9 @@ export type TextLinkProps = LinkProps
  */
 export type TextLinkRenderProps =
   & WithStyles<Styles>
+  & WithNotificationDispatch
   & TextLinkProps
+  & HandlerProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -61,8 +76,11 @@ export type TextLinkRenderProps =
  * @return JSX element
  */
 export const LinkRender: React.SFC<TextLinkRenderProps> =
-  ({ classes, children, ...props }) =>
-    <Link className={classes.root} {...props}>
+  ({ classes, children, handleClick, to, tabIndex }) =>
+    <Link
+      className={classes.root} onClickCapture={handleClick}
+      to={to} tabIndex={tabIndex}
+    >
       {children}
     </Link>
 
@@ -76,5 +94,9 @@ export const LinkRender: React.SFC<TextLinkRenderProps> =
 export const TextLink =
   compose<TextLinkRenderProps, TextLinkProps>(
     withStyles(styles),
+    withNotification(),
+    withHandlers<WithNotificationDispatch, HandlerProps>({
+      handleClick: ({ dismissNotification }) => dismissNotification
+    }),
     pure
   )(LinkRender)

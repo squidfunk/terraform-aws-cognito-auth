@@ -37,39 +37,17 @@ import { CognitoIdentityServiceProvider } from "aws-sdk"
 export async function handler(
   event: CognitoUserPoolTriggerEvent
 ): Promise<CognitoUserPoolTriggerEvent> {
-  try {
-    const { Users } = await new CognitoIdentityServiceProvider({
-      apiVersion: "2016-04-18"
-    }).listUsers({
-      UserPoolId: event.userPoolId,
-      Filter: `email="${event.request.userAttributes.email}"`
-    }).promise()
+  const { Users } = await new CognitoIdentityServiceProvider({
+    apiVersion: "2016-04-18"
+  }).listUsers({
+    UserPoolId: event.userPoolId,
+    Filter: `email="${event.request.userAttributes.email}"`
+  }).promise()
 
-    /* If email address is already registered, throw error */
-    if (Users!.length)
-      throw new Error("Email address already registered")
+  /* If email address is already registered, throw error */
+  if (Users!.length)
+    throw new Error("Email address already registered")
 
-    /* Otherwise just return event */
-    return event
-
-  /* Catch and re-throw errors */
-  } catch (err) {
-    throw err
-  }
+  /* Otherwise just return event */
+  return event
 }
-
-/* ----------------------------------------------------------------------------
- * Listeners
- * ------------------------------------------------------------------------- */
-
-/**
- * Top-level Promise rejection handler
- *
- * The Lambda Node 8.10 runtime is great, but it doesn't handle rejections
- * appropriately. Hopefully this will be resolved in the future, but until then
- * we will just swallow the error. This issue was posted in the AWS forums in
- * the following thread: https://amzn.to/2JpoHEY
- */
-process.on("unhandledRejection", /* istanbul ignore next */ () => {
-  /* Nothing to be done */
-})
