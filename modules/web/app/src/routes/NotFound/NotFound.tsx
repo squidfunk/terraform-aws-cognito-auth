@@ -20,67 +20,26 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
 import * as React from "react"
-import { Route, Switch } from "react-router-dom"
-import { compose } from "recompose"
-
-import {
-  Authenticate,
-  NotFound,
-  Register,
-  RegisterVerification,
-  Reset,
-  ResetVerification
-} from "routes"
-
-import { Styles, styles } from "./App.styles"
-
-/* ----------------------------------------------------------------------------
- * Types
- * ------------------------------------------------------------------------- */
-
-/**
- * Application render properties
- */
-export type RenderProps =
-  & WithStyles<Styles>
+import { Redirect } from "react-router-dom"
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
- *
- * @param props - Properties
+ * "Page not found" render component
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Switch>
-        <Route exact path="/" component={Authenticate} />
-        <Route exact path="/register" component={Register} />
-        <Route path="/register/:code+" component={RegisterVerification} />
-        <Route exact path="/reset" component={Reset} />
-        <Route path="/reset/:code+" component={ResetVerification} />
-        <Route component={NotFound} />
-      </Switch>
-    </div>
+export const Render: React.SFC<{}> =
+  () => <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application
+ * "Page not found" component
  */
-export const App =
-  compose<RenderProps, {}>(
-    withStyles(styles)
-  )(Render)
+export const NotFound = Render

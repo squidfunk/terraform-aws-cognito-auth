@@ -107,7 +107,7 @@ export const withForm = <TRequest extends {}, TResponse = void>(
 ) =>
   compose<WithForm<TRequest, TResponse>, {}>(
     withFormSubmit<TRequest, TResponse>(options),
-    withState("request", "setRequest", { initial }),
+    withState("request", "setRequest", initial),
     withHandlers<WithForm<TRequest, TResponse>, HandlerProps>({
 
       /* Update form data */
