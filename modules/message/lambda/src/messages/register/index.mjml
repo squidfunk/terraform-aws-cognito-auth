@@ -39,11 +39,12 @@
     <!-- Global component attributes -->
     <mj-attributes>
       <mj-all
-          align="center"
-          font-family="Helvetica Neue"
-          font-size="13px"
-          line-height="1.75"
-          color="#455A64" />
+        align="center"
+        font-family="Helvetica Neue"
+        font-size="13px"
+        line-height="1.75"
+        color="#455A64"
+      />
     </mj-attributes>
   </mj-head>
   <mj-body>
@@ -60,9 +61,10 @@
 
         <!-- Divider -->
         <mj-divider
-            padding="15px 0"
-            border-color="#ECEFF1"
-            border-width="1px" />
+          padding="15px 0"
+          border-color="#ECEFF1"
+          border-width="1px"
+        />
 
         <!-- Teaser -->
         <mj-text padding="10px 10%">
@@ -71,23 +73,26 @@
         </mj-text>
 
         <!-- Verification button -->
-        <mj-button href="https://{{domain}}/register/{{code}}"
-            padding="15px 0"
-            inner-padding="7px 15px"
-            font-size="16px"
-            background-color="#4CAF50"
-            color="#FFFFFF"
-            border-bottom="1px solid #43A047"
-            border-radius="2px">
-          Confirm my email address
+        <mj-button
+          href="https://{{domain}}/register/{{code}}"
+          padding="15px 0"
+          inner-padding="6px 25px"
+          font-size="14px"
+          background-color="#3F51B5"
+          color="#FFFFFF"
+          border-bottom="1px solid #303F9F"
+          border-radius="2px"
+        >
+          CONFIRM MY EMAIL ADDRESS
         </mj-button>
 
         <!-- Divider -->
         <mj-divider
-            width="40px"
-            padding="15px 0"
-            border-color="#ECEFF1"
-            border-width="1px" />
+          width="40px"
+          padding="15px 0"
+          border-color="#ECEFF1"
+          border-width="1px"
+        />
 
         <!-- Abuse notice -->
         <mj-text padding="10px 10%" color="#B0BEC5">
