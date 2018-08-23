@@ -33,10 +33,12 @@ import * as React from "react"
  */
 export type FormInputProps = TextFieldProps
 
+/* ------------------------------------------------------------------------- */
+
 /**
  * Form input render properties
  */
-export type FormInputRenderProps =
+export type RenderProps =
   & FormInputProps
 
 /* ----------------------------------------------------------------------------
@@ -50,7 +52,7 @@ export type FormInputRenderProps =
  *
  * @return JSX element
  */
-export const FormInputRender: React.SFC<FormInputRenderProps> =
+export const Render: React.SFC<RenderProps> =
   props =>
     <TextField
       type="text" margin="dense" fullWidth={true} autoCapitalize="false"
@@ -64,4 +66,4 @@ export const FormInputRender: React.SFC<FormInputRenderProps> =
 /**
  * Form input component
  */
-export const FormInput = FormInputRender
+export const FormInput = Render

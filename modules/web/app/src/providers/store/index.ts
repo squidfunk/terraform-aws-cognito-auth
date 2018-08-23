@@ -26,6 +26,10 @@ import {
   notification,
   NotificationState
 } from "./notification/reducers"
+import {
+  remember,
+  RememberMeState
+} from "./remember-me/reducers"
 
 /* ----------------------------------------------------------------------------
  * Values
@@ -36,6 +40,7 @@ import {
  */
 export interface State {
   notification: NotificationState
+  remember: RememberMeState
 }
 
 /* ----------------------------------------------------------------------------
@@ -46,5 +51,6 @@ export interface State {
  * Redux store
  */
 export const store = createStore(combineReducers({
-  notification
+  notification,
+  remember
 }))

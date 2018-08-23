@@ -43,10 +43,12 @@ import { Styles, styles } from "./FormButton.styles"
  */
 export type FormButtonProps = ButtonProps
 
+/* ------------------------------------------------------------------------- */
+
 /**
  * Form button render properties
  */
-export type FormButtonRenderProps =
+export type RenderProps =
   & WithStyles<Styles>
   & FormButtonProps
 
@@ -61,7 +63,7 @@ export type FormButtonRenderProps =
  *
  * @return JSX element
  */
-export const FormButtonRender: React.SFC<FormButtonRenderProps> =
+export const Render: React.SFC<RenderProps> =
   ({ classes, ...props }) =>
     <Button
       type="submit" variant="contained" color="primary"
@@ -76,7 +78,7 @@ export const FormButtonRender: React.SFC<FormButtonRenderProps> =
  * Form button component
  */
 export const FormButton =
-  compose<FormButtonRenderProps, FormButtonProps>(
+  compose<RenderProps, FormButtonProps>(
     withStyles(styles),
     pure
-  )(FormButtonRender)
+  )(Render)

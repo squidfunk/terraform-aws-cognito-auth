@@ -46,7 +46,7 @@ import { Styles, styles } from "./Notification.styles"
 /**
  * Notification render properties
  */
-export type NotificationRenderProps =
+export type RenderProps =
   & WithStyles<Styles>
   & WithNotificationState
 
@@ -61,7 +61,7 @@ export type NotificationRenderProps =
  *
  * @return JSX element
  */
-export const NotificationRender: React.SFC<NotificationRenderProps> =
+export const Render: React.SFC<RenderProps> =
   ({ classes, data, show }) =>
     <Collapse in={show}>
       {data &&
@@ -81,8 +81,8 @@ export const NotificationRender: React.SFC<NotificationRenderProps> =
  * Notification component
  */
 export const Notification =
-  compose<NotificationRenderProps, {}>(
+  compose<RenderProps, {}>(
     withStyles(styles),
     withNotification(),
     pure
-  )(NotificationRender)
+  )(Render)

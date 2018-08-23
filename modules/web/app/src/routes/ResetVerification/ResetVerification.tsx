@@ -30,8 +30,7 @@ import {
   branch,
   compose,
   pure,
-  renderComponent,
-  withProps
+  renderComponent
 } from "recompose"
 
 import { ResetVerificationRequest } from "common"
@@ -39,7 +38,6 @@ import {
   Dialog,
   Form,
   FormButton,
-  FormInput,
   FormPassword,
   Header,
   Notification,
@@ -47,8 +45,7 @@ import {
 } from "components"
 import {
   WithForm,
-  withForm,
-  WithFormProps
+  withForm
 } from "enhancers"
 
 import { Styles, styles } from "./ResetVerification.styles"
@@ -61,7 +58,7 @@ import { ResetVerificationRedirect } from "./ResetVerificationRedirect"
 /**
  * Password reset verification render properties
  */
-export type ResetVerificationRenderProps =
+export type RenderProps =
   & WithStyles<Styles>
   & WithForm<ResetVerificationRequest>
 
@@ -76,7 +73,7 @@ export type ResetVerificationRenderProps =
  *
  * @return JSX element
  */
-export const ResetVerificationRender: React.SFC<ResetVerificationRenderProps> =
+export const Render: React.SFC<RenderProps> =
   ({ classes, form, request, handleChange, handleSubmit }) =>
     <Dialog>
       <Header
@@ -109,19 +106,18 @@ export const ResetVerificationRender: React.SFC<ResetVerificationRenderProps> =
  * Password reset verification component
  */
 export const ResetVerification =
-  compose<ResetVerificationRenderProps, {}>(
+  compose<RenderProps, {}>(
     withStyles(styles),
-    withProps<WithFormProps<ResetVerificationRequest>, {}>(() => ({
+    withForm<ResetVerificationRequest>({
       message: "You have successfully changed your password. Use your " +
-               "email address and new password to sign in to your account.",
+               "email address and new password to sign in to your account",
       initial: {
         password: ""
       }
-    })),
-    withForm<ResetVerificationRequest>(),
-    branch<ResetVerificationRenderProps>(
+    }),
+    branch<WithForm<ResetVerificationRequest>>(
       ({ form }) => form.success,
       renderComponent(ResetVerificationRedirect)
     ),
     pure
-  )(ResetVerificationRender)
+  )(Render)

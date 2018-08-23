@@ -28,8 +28,7 @@ import {
 import * as React from "react"
 import {
   compose,
-  pure,
-  withProps
+  pure
 } from "recompose"
 
 import { ResetRequest } from "common"
@@ -44,8 +43,7 @@ import {
 } from "components"
 import {
   WithForm,
-  withForm,
-  WithFormProps
+  withForm
 } from "enhancers"
 
 import { Styles, styles } from "./Reset.styles"
@@ -57,7 +55,7 @@ import { Styles, styles } from "./Reset.styles"
 /**
  * Password reset render properties
  */
-export type ResetRenderProps =
+export type RenderProps =
   & WithStyles<Styles>
   & WithForm<ResetRequest>
 
@@ -72,7 +70,7 @@ export type ResetRenderProps =
  *
  * @return JSX element
  */
-export const ResetRender: React.SFC<ResetRenderProps> =
+export const Render: React.SFC<RenderProps> =
   ({ classes, form, request, handleChange, handleSubmit }) =>
     <Dialog>
       <Header
@@ -109,15 +107,14 @@ export const ResetRender: React.SFC<ResetRenderProps> =
  * Password reset component
  */
 export const Reset =
-  compose<ResetRenderProps, {}>(
+  compose<RenderProps, {}>(
     withStyles(styles),
-    withProps<WithFormProps<ResetRequest>, {}>(() => ({
+    withForm<ResetRequest>({
       message: "We just sent a verification link to your email address. " +
-               "Please click on the link to reset your password.",
+               "Please click on the link to reset your password",
       initial: {
         username: ""
       }
-    })),
-    withForm<ResetRequest>(),
+    }),
     pure
-  )(ResetRender)
+  )(Render)

@@ -20,63 +20,68 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
-import * as React from "react"
-import { Route } from "react-router-dom"
-import { compose } from "recompose"
-
-import {
-  Authenticate,
-  Register,
-  RegisterVerification,
-  Reset,
-  ResetVerification
-} from "routes"
-
-import { Styles, styles } from "./App.styles"
+import { Action } from "redux"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render properties
+ * Remember me action types
  */
-export type RenderProps =
-  & WithStyles<Styles>
+export enum RememberMeActionTypes {
+  SET = "REMEMBER_ME_SET",
+  FAILED = "REMEMBER_ME_FAILED"
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Remember me set action
+ */
+interface RememberMeSetAction extends Action {
+  type: RememberMeActionTypes.SET
+  active: boolean
+}
+
+/**
+ * Remember me failed action
+ */
+interface RememberMeFailedAction extends Action {
+  type: RememberMeActionTypes.FAILED
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Remember me actions
+ */
+export type RememberMeActions =
+  | RememberMeSetAction
+  | RememberMeFailedAction
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Actions
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
+ * Remember me set action
  *
- * @param props - Properties
+ * @param active - Whether to remember the user
  *
- * @return JSX element
+ * @return Action
  */
-export const Render: React.SFC<RenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Route exact path="/" component={Authenticate} />
-      <Route exact path="/register" component={Register} />
-      <Route path="/register/:code+" component={RegisterVerification} />
-      <Route exact path="/reset" component={Reset} />
-      <Route path="/reset/:code+" component={ResetVerification} />
-    </div>
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
+export const setRememberMeAction =
+  (active: boolean): RememberMeSetAction => ({
+    type: RememberMeActionTypes.SET, active
+  })
 
 /**
- * Application
+ * Remember me failed action
+ *
+ * @return Action
  */
-export const App =
-  compose<RenderProps, {}>(
-    withStyles(styles)
-  )(Render)
+export const failedRememberMeAction =
+  (): RememberMeFailedAction => ({
+    type: RememberMeActionTypes.FAILED
+  })

@@ -21,62 +21,42 @@
  */
 
 import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
-import * as React from "react"
-import { Route } from "react-router-dom"
-import { compose } from "recompose"
-
-import {
-  Authenticate,
-  Register,
-  RegisterVerification,
-  Reset,
-  ResetVerification
-} from "routes"
-
-import { Styles, styles } from "./App.styles"
+  RememberMeActions,
+  RememberMeActionTypes
+} from "./actions"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render properties
+ * Remember me state
  */
-export type RenderProps =
-  & WithStyles<Styles>
+export interface RememberMeState {
+  active: boolean                      /* Whether to remember the user */
+  failed: boolean                      /* Whether remembering failed */
+}
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Reducer
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
+ * Remember me reducer
  *
- * @param props - Properties
- *
- * @return JSX element
+ * @param state - Remember me state
+ * @param action - Remember me action
  */
-export const Render: React.SFC<RenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Route exact path="/" component={Authenticate} />
-      <Route exact path="/register" component={Register} />
-      <Route path="/register/:code+" component={RegisterVerification} />
-      <Route exact path="/reset" component={Reset} />
-      <Route path="/reset/:code+" component={ResetVerification} />
-    </div>
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Application
- */
-export const App =
-  compose<RenderProps, {}>(
-    withStyles(styles)
-  )(Render)
+export function remember(
+  state: RememberMeState = { active: false, failed: false },
+  action: RememberMeActions
+): RememberMeState {
+  switch (action.type) {
+    case RememberMeActionTypes.SET:
+      return { ...state, active: action.active }
+    case RememberMeActionTypes.FAILED:
+      return { ...state, failed: true }
+    default:
+      return state
+  }
+}

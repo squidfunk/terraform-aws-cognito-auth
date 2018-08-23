@@ -23,7 +23,9 @@
 import * as React from "react"
 import { Redirect } from "react-router-dom"
 
-import { ResetVerificationRenderProps } from "./ResetVerification"
+import {
+  RenderProps as ResetVerificationRenderProps
+} from "./ResetVerification"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -32,7 +34,7 @@ import { ResetVerificationRenderProps } from "./ResetVerification"
 /**
  * Password reset verification redirect render properties
  */
-export type ResetVerificationRedirectRenderProps =
+export type RenderProps =
   & ResetVerificationRenderProps
 
 /* ----------------------------------------------------------------------------
@@ -46,9 +48,8 @@ export type ResetVerificationRedirectRenderProps =
  *
  * @return JSX element
  */
-export const ResetVerificationRedirectRender:
-  React.SFC<ResetVerificationRedirectRenderProps> =
-    () => <Redirect to="/" />
+export const Render: React.SFC<RenderProps> =
+  () => <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -57,4 +58,4 @@ export const ResetVerificationRedirectRender:
 /**
  * Password reset verification redirect component
  */
-export const ResetVerificationRedirect = ResetVerificationRedirectRender
+export const ResetVerificationRedirect = Render

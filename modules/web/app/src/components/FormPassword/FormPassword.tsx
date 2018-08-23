@@ -48,6 +48,13 @@ import { styles, Styles } from "./FormPassword.styles"
  * ------------------------------------------------------------------------- */
 
 /**
+ * Form password properties
+ */
+export type FormPasswordProps = TextFieldProps
+
+/* ------------------------------------------------------------------------- */
+
+/**
  * Form password state properties
  */
 interface StateProps {
@@ -72,14 +79,9 @@ interface HandlerProps {
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form password properties
- */
-export type FormPasswordProps = TextFieldProps
-
-/**
  * Form password render properties
  */
-export type FormPasswordRenderProps =
+export type RenderProps =
   & WithStyles<Styles>
   & FormPasswordProps
   & StateProps
@@ -96,7 +98,7 @@ export type FormPasswordRenderProps =
  *
  * @return JSX element
  */
-export const FormPasswordRender: React.SFC<FormPasswordRenderProps> =
+export const Render: React.SFC<RenderProps> =
   ({
     classes, name, label, required, InputProps, value, onChange, autoComplete,
     disabled, error, helperText, visibility, handleClick, handleMouseDown
@@ -137,10 +139,10 @@ export const FormPasswordRender: React.SFC<FormPasswordRenderProps> =
  * Form password component
  */
 export const FormPassword =
-  compose<FormPasswordRenderProps, FormPasswordProps>(
+  compose<RenderProps, FormPasswordProps>(
     withStyles(styles),
     withState("visibility", "setVisibility", (): boolean => false),
-    withHandlers<FormPasswordRenderProps, HandlerProps>({
+    withHandlers<RenderProps, HandlerProps>({
 
       /* Toggle visibility */
       handleClick: ({ visibility, setVisibility }) => () => {
@@ -153,4 +155,4 @@ export const FormPassword =
       }
     }),
     pure
-  )(FormPasswordRender)
+  )(Render)

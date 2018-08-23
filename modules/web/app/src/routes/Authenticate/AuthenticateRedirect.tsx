@@ -27,19 +27,30 @@ import {
   withProps
 } from "recompose"
 
+import {
+  AuthenticateRequest,
+  Session
+} from "common"
 import { Redirect, RedirectProps } from "components"
-
-import { AuthenticateRenderProps } from "./Authenticate"
+import { WithFormSubmit } from "enhancers"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
+ * Authentication redirect properties
+ */
+export type AuthenticateRedirectProps =
+  & WithFormSubmit<AuthenticateRequest, Session<string>>
+
+/* ------------------------------------------------------------------------- */
+
+/**
  * Authentication redirect render properties
  */
-export type AuthenticateRedirectRenderProps =
-  & AuthenticateRenderProps
+export type RenderProps =
+  & AuthenticateRedirectProps
   & RedirectProps
 
 /* ----------------------------------------------------------------------------
@@ -53,10 +64,8 @@ export type AuthenticateRedirectRenderProps =
  *
  * @return JSX element
  */
-export const AuthenticateRedirectRender:
-  React.SFC<AuthenticateRedirectRenderProps> =
-    ({ href }) =>
-      <Redirect href={href} />
+export const Render: React.SFC<RenderProps> =
+  ({ href }) => <Redirect href={href} />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -66,8 +75,8 @@ export const AuthenticateRedirectRender:
  * Authentication redirect component
  */
 export const AuthenticateRedirect =
-  compose<AuthenticateRedirectRenderProps, AuthenticateRenderProps>(
-    withProps<RedirectProps, AuthenticateRenderProps>(({ form }) => ({
+  compose<RenderProps, AuthenticateRedirectProps>(
+    withProps<RedirectProps, AuthenticateRedirectProps>(({ form }) => ({
       href: `//${
         window.env.APP_ORIGIN
       }#${
@@ -75,4 +84,4 @@ export const AuthenticateRedirect =
       }`
     })),
     pure
-  )(AuthenticateRedirectRender)
+  )(Render)

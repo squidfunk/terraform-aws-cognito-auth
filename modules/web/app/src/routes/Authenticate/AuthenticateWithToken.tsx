@@ -20,63 +20,83 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
+import { CircularProgress } from "@material-ui/core"
 import * as React from "react"
-import { Route } from "react-router-dom"
-import { compose } from "recompose"
+import {
+  branch,
+  compose,
+  lifecycle,
+  pure,
+  renderComponent
+} from "recompose"
 
 import {
-  Authenticate,
-  Register,
-  RegisterVerification,
-  Reset,
-  ResetVerification
-} from "routes"
+  AuthenticateRequestWithToken as AuthenticateRequest,
+  Session
+} from "common"
+import {
+  withFormSubmit,
+  WithFormSubmit,
+  WithRememberMe
+} from "enhancers"
 
-import { Styles, styles } from "./App.styles"
+import { AuthenticateRedirect } from "./AuthenticateRedirect"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render properties
+ * Authentication with refresh token properties
+ */
+export type AuthenticateWithTokenProps =
+  & WithRememberMe
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Authentication with refresh token render properties
  */
 export type RenderProps =
-  & WithStyles<Styles>
+  & WithFormSubmit<AuthenticateRequest, Session<string>>
+  & AuthenticateWithTokenProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
+ * Authentication with refresh token render component
  *
  * @param props - Properties
  *
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  ({ classes }) =>
-    <div className={classes.root}>
-      <Route exact path="/" component={Authenticate} />
-      <Route exact path="/register" component={Register} />
-      <Route path="/register/:code+" component={RegisterVerification} />
-      <Route exact path="/reset" component={Reset} />
-      <Route path="/reset/:code+" component={ResetVerification} />
-    </div>
+  () => <CircularProgress />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Application
+ * Authentication with refresh token
  */
-export const App =
-  compose<RenderProps, {}>(
-    withStyles(styles)
+export const AuthenticateWithToken =
+  compose<RenderProps, AuthenticateWithTokenProps>(
+    withFormSubmit<AuthenticateRequest>({
+      target: "/authenticate"
+    }),
+    lifecycle<RenderProps, {}>({
+      async componentDidMount() {
+        await this.props.submit()
+        this.props.dismissNotification()
+        this.props.failedRememberMe()
+      }
+    }),
+    branch<WithFormSubmit<AuthenticateRequest>>(
+      ({ form }) => form.success,
+      renderComponent(AuthenticateRedirect)
+    ),
+    pure
   )(Render)

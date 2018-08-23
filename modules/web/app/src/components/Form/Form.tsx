@@ -45,10 +45,12 @@ export interface FormProps {
   ): Promise<void>                     /* Form submit handler */
 }
 
+/* ------------------------------------------------------------------------- */
+
 /**
  * Form render properties
  */
-export type FormRenderProps =
+export type RenderProps =
   & WithStyles<Styles>
   & FormProps
 
@@ -64,7 +66,7 @@ export type FormRenderProps =
  *
  * @return JSX element
  */
-export const FormRender: React.SFC<FormRenderProps> =
+export const Render: React.SFC<RenderProps> =
   ({ classes, children, ...props }) =>
     <form method="post" className={classes.root} {...props}>
       {children}
@@ -78,7 +80,7 @@ export const FormRender: React.SFC<FormRenderProps> =
  * Form component
  */
 export const Form =
-  compose<FormRenderProps, FormProps>(
+  compose<RenderProps, FormProps>(
     withStyles(styles),
     pure
-  )(FormRender)
+  )(Render)

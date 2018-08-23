@@ -41,6 +41,7 @@
     "no-internal-module": true,
     "no-null-keyword": true,
     "no-reference": false,
+    "no-small-switch": false,
     "no-submodule-imports": false,
     "no-trailing-whitespace": true,
     "no-var-keyword": true,

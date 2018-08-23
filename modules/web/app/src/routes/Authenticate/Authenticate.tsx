@@ -21,55 +21,29 @@
  */
 
 import {
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Typography,
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
-import * as React from "react"
-import {
   branch,
   compose,
   pure,
-  renderComponent,
-  withProps
+  renderComponent
 } from "recompose"
 
 import {
-  AuthenticateRequestWithCredentials as AuthenticateRequest,
-  Session
-} from "common"
-import {
-  Dialog,
-  Form,
-  FormButton,
-  FormInput,
-  FormPassword,
-  Header,
-  Notification,
-  TextLink
-} from "components"
-import {
-  WithForm,
-  withForm,
-  WithFormProps
+  withRememberMe,
+  WithRememberMe
 } from "enhancers"
 
-import { Styles, styles } from "./Authenticate.styles"
-import { AuthenticateRedirect } from "./AuthenticateRedirect"
+import { AuthenticateWithCredentials } from "./AuthenticateWithCredentials"
+import { AuthenticateWithToken } from "./AuthenticateWithToken"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication render properties
+ * Authentication with credentials render properties
  */
-export type AuthenticateRenderProps =
-  & WithStyles<Styles>
-  & WithForm<AuthenticateRequest, Session<string>>
+export type RenderProps =
+  & WithRememberMe
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -82,71 +56,21 @@ export type AuthenticateRenderProps =
  *
  * @return JSX element
  */
-export const AuthenticateRender: React.SFC<AuthenticateRenderProps> =
-  ({ classes, form, request, handleChange, handleSubmit }) =>
-    <Dialog>
-      <Header
-        primary={window.env.COGNITO_IDENTITY_POOL_NAME}
-        secondary="Sign in to your account"
-      />
-      <Notification />
-      <Form onSubmit={handleSubmit}>
-        <FormInput
-          name="username" label="Email address" required
-          value={request.username} InputProps={{ readOnly: form.pending }}
-          onChange={handleChange} autoComplete="username"
-        />
-        <FormPassword
-          name="password" label="Password" required
-          value={request.password} InputProps={{ readOnly: form.pending }}
-          onChange={handleChange} autoComplete="new-password"
-        />
-        <FormGroup row className={classes.controls}>
-          <FormControlLabel label="Remember me" control={
-            <Checkbox
-              name="remember" checked={request.remember}
-              onChange={handleChange}
-            />
-          } />
-          <Typography className={classes.forgotPassword}>
-            <TextLink to="/reset" tabIndex={-1}>
-              Forgot password?
-            </TextLink>
-          </Typography>
-        </FormGroup>
-        <FormButton disabled={form.pending}>
-          Sign in
-        </FormButton>
-        <Typography className={classes.register}>
-          Don't have an account? <TextLink to="/register">
-            Register
-          </TextLink>
-        </Typography>
-      </Form>
-    </Dialog>
+export const Render = AuthenticateWithCredentials
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication component
+ * Authentication
  */
 export const Authenticate =
-  compose<AuthenticateRenderProps, {}>(
-    withStyles(styles),
-    withProps<WithFormProps<AuthenticateRequest>, {}>(() => ({
-      target: "/authenticate",
-      initial: {
-        username: "",
-        password: "",
-        remember: false
-      }
-    })),
-    withForm<AuthenticateRequest, Session<string>>(),
-    branch<AuthenticateRenderProps>(
-      ({ form }) => form.success,
-      renderComponent(AuthenticateRedirect)
+  compose<RenderProps, {}>(
+    withRememberMe(),
+    branch<WithRememberMe>(
+      ({ failed }) => !failed,
+      renderComponent(AuthenticateWithToken)
     ),
     pure
-  )(AuthenticateRender)
+  )(Render)

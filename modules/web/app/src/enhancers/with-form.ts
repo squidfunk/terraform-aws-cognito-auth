@@ -24,18 +24,32 @@ import { lensProp, set } from "ramda"
 import {
   compose,
   withHandlers,
+  withProps,
   withState
 } from "recompose"
 
 import {
   withFormSubmit,
   WithFormSubmit,
-  WithFormSubmitProps
+  WithFormSubmitOptions
 } from "enhancers"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
+
+/**
+ * Form properties
+ *
+ * @template TRequest - Form request type
+ */
+export interface WithFormOptions<
+  TRequest extends {}
+> extends WithFormSubmitOptions {
+  initial: Readonly<TRequest>          /* Initial form request */
+}
+
+/* ------------------------------------------------------------------------- */
 
 /**
  * Form state properties
@@ -64,17 +78,6 @@ interface HandlerProps {
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form properties
- *
- * @template TRequest - Form request type
- */
-export interface WithFormProps<
-  TRequest extends {}
-> extends WithFormSubmitProps {
-  initial: Readonly<TRequest>          /* Initial form request */
-}
-
-/**
  * Form enhancer
  *
  * @template TRequest - Form request type
@@ -82,7 +85,6 @@ export interface WithFormProps<
  */
 export type WithForm<TRequest extends {}, TResponse = void> =
   & WithFormSubmit<TRequest, TResponse>
-  & WithFormProps<TRequest>
   & StateProps<TRequest>
   & HandlerProps
 
@@ -96,14 +98,16 @@ export type WithForm<TRequest extends {}, TResponse = void> =
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  *
+ * @param options - Form submission options
+ *
  * @return Component enhancer
  */
-export const withForm = <TRequest extends {}, TResponse = void>() =>
-  compose<WithForm<TRequest, TResponse>, WithFormProps<TRequest>>(
-    withFormSubmit<TRequest, TResponse>(),
-    withState("request", "setRequest", (
-      { initial }: WithFormProps<TRequest>
-    ): TRequest => initial),
+export const withForm = <TRequest extends {}, TResponse = void>(
+  { initial, ...options }: WithFormOptions<TRequest>
+) =>
+  compose<WithForm<TRequest, TResponse>, {}>(
+    withFormSubmit<TRequest, TResponse>(options),
+    withState("request", "setRequest", { initial }),
     withHandlers<WithForm<TRequest, TResponse>, HandlerProps>({
 
       /* Update form data */

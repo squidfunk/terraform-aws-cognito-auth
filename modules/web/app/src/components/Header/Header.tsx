@@ -45,10 +45,12 @@ export interface HeaderProps {
   secondary: string                    /* Secondary text */
 }
 
+/* ------------------------------------------------------------------------- */
+
 /**
  * Header render properties
  */
-export type HeaderRenderProps =
+export type RenderProps =
   & WithStyles<Styles>
   & HeaderProps
 
@@ -63,7 +65,7 @@ export type HeaderRenderProps =
  *
  * @return JSX element
  */
-export const HeaderRender: React.SFC<HeaderRenderProps> =
+export const Render: React.SFC<RenderProps> =
   ({ classes, primary, secondary }) =>
     <div className={classes.root}>
       <Typography variant="headline" className={classes.text}>
@@ -82,7 +84,7 @@ export const HeaderRender: React.SFC<HeaderRenderProps> =
  * Header component
  */
 export const Header =
-  compose<HeaderRenderProps, HeaderProps>(
+  compose<RenderProps, HeaderProps>(
     withStyles(styles),
     pure
-  )(HeaderRender)
+  )(Render)

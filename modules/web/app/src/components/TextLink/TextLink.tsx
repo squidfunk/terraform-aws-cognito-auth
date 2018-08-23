@@ -44,21 +44,25 @@ import { styles, Styles } from "./TextLink.styles"
  * ------------------------------------------------------------------------- */
 
 /**
+ * Text link properties
+ */
+export type TextLinkProps = LinkProps
+
+/* ------------------------------------------------------------------------- */
+
+/**
  * Text link handler properties
  */
 interface HandlerProps {
   handleClick(): void                  /* Link click handler */
 }
 
-/**
- * Text link properties
- */
-export type TextLinkProps = LinkProps
+/* ------------------------------------------------------------------------- */
 
 /**
  * Text link render properties
  */
-export type TextLinkRenderProps =
+export type RenderProps =
   & WithStyles<Styles>
   & WithNotificationDispatch
   & TextLinkProps
@@ -75,7 +79,7 @@ export type TextLinkRenderProps =
  *
  * @return JSX element
  */
-export const LinkRender: React.SFC<TextLinkRenderProps> =
+export const Render: React.SFC<RenderProps> =
   ({ classes, children, handleClick, to, tabIndex }) =>
     <Link
       className={classes.root} onClickCapture={handleClick}
@@ -92,11 +96,11 @@ export const LinkRender: React.SFC<TextLinkRenderProps> =
  * Text link component
  */
 export const TextLink =
-  compose<TextLinkRenderProps, TextLinkProps>(
+  compose<RenderProps, TextLinkProps>(
     withStyles(styles),
     withNotification(),
     withHandlers<WithNotificationDispatch, HandlerProps>({
       handleClick: ({ dismissNotification }) => dismissNotification
     }),
     pure
-  )(LinkRender)
+  )(Render)

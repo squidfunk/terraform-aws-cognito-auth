@@ -21,17 +21,25 @@
  */
 
 import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
   Typography,
   withStyles,
   WithStyles
 } from "@material-ui/core"
 import * as React from "react"
 import {
+  branch,
   compose,
-  pure
+  pure,
+  renderComponent
 } from "recompose"
 
-import { RegisterRequest } from "common"
+import {
+  AuthenticateRequestWithCredentials as AuthenticateRequest,
+  Session
+} from "common"
 import {
   Dialog,
   Form,
@@ -44,28 +52,39 @@ import {
 } from "components"
 import {
   WithForm,
-  withForm
+  withForm,
+  WithRememberMe
 } from "enhancers"
 
-import { Styles, styles } from "./Register.styles"
+import { AuthenticateRedirect } from "./AuthenticateRedirect"
+import { Styles, styles } from "./AuthenticateWithCredentials.styles"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration render properties
+ * Authentication with credentials properties
+ */
+export type AuthenticateWithCredentialsProps =
+  & WithRememberMe
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Authentication with credentials render properties
  */
 export type RenderProps =
   & WithStyles<Styles>
-  & WithForm<RegisterRequest>
+  & WithForm<AuthenticateRequest, Session<string>>
+  & AuthenticateWithCredentialsProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration render component
+ * Authentication with credentials render component
  *
  * @param props - Properties
  *
@@ -76,27 +95,40 @@ export const Render: React.SFC<RenderProps> =
     <Dialog>
       <Header
         primary={window.env.COGNITO_IDENTITY_POOL_NAME}
-        secondary="Register for a new account"
+        secondary="Sign in to your account"
       />
       <Notification />
       <Form onSubmit={handleSubmit}>
         <FormInput
-          name="email" label="Email address" required disabled={form.success}
-          value={request.email} InputProps={{ readOnly: form.pending }}
-          onChange={handleChange} autoComplete="email"
+          name="username" label="Email address" required
+          value={request.username} InputProps={{ readOnly: form.pending }}
+          onChange={handleChange} autoComplete="username"
         />
         <FormPassword
-          name="password" label="Password" required disabled={form.success}
+          name="password" label="Password" required
           value={request.password} InputProps={{ readOnly: form.pending }}
           onChange={handleChange} autoComplete="new-password"
         />
-        <FormButton
-          className={classes.button} disabled={form.pending || form.success}
-        >
-          Register
+        <FormGroup row className={classes.controls}>
+          <FormControlLabel label="Remember me" control={
+            <Checkbox
+              name="remember" checked={request.remember}
+              onChange={handleChange}
+            />
+          } />
+          <Typography className={classes.forgotPassword}>
+            <TextLink to="/reset" tabIndex={-1}>
+              Forgot password?
+            </TextLink>
+          </Typography>
+        </FormGroup>
+        <FormButton disabled={form.pending}>
+          Sign in
         </FormButton>
-        <Typography className={classes.authenticate}>
-          Already have an account? <TextLink to="/">Sign in</TextLink>
+        <Typography className={classes.register}>
+          Don't have an account? <TextLink to="/register">
+            Register
+          </TextLink>
         </Typography>
       </Form>
     </Dialog>
@@ -106,18 +138,22 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration component
+ * Authentication with credentials component
  */
-export const Register =
-  compose<RenderProps, {}>(
+export const AuthenticateWithCredentials =
+  compose<RenderProps, AuthenticateWithCredentialsProps>(
     withStyles(styles),
-    withForm<RegisterRequest>({
-      message: "We just sent a verification link to your email address. " +
-               "Please click on the link to complete your registration",
+    withForm<AuthenticateRequest, Session<string>>({
+      target: "/authenticate",
       initial: {
-        email: "",
-        password: ""
+        username: "",
+        password: "",
+        remember: false
       }
     }),
+    branch<WithForm<AuthenticateRequest>>(
+      ({ form }) => form.success,
+      renderComponent(AuthenticateRedirect)
+    ),
     pure
   )(Render)

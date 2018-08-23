@@ -43,6 +43,16 @@ import {
  * ------------------------------------------------------------------------- */
 
 /**
+ * Form submission options
+ */
+export interface WithFormSubmitOptions {
+  target?: string                      /* Form submission target URL */
+  message?: string                     /* Form submission success message */
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
  * Form submission state
  *
  * @template TResponse - Form response type
@@ -80,24 +90,15 @@ interface HandlerProps<TRequest extends {}> {
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form submission properties
- */
-export interface WithFormSubmitProps {
-  target?: string                      /* Form submission target URL */
-  message?: string                     /* Form submission success message */
-}
-
-/**
  * Form submission enhancer
  *
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  */
 export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
-  & WithFormSubmitProps
   & WithNotificationDispatch
-  & HandlerProps<TRequest>
   & StateProps<TResponse>
+  & HandlerProps<TRequest>
 
 /* ----------------------------------------------------------------------------
  * Enhancer
@@ -112,10 +113,14 @@ export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  *
+ * @param options - Form submission options
+ *
  * @return Component enhancer
  */
-export const withFormSubmit = <TRequest extends {}, TResponse = void>() =>
-  compose<WithFormSubmit<TRequest, TResponse>, WithFormSubmitProps>(
+export const withFormSubmit = <TRequest extends {}, TResponse = void>(
+  { target, message }: WithFormSubmitOptions
+) =>
+  compose<WithFormSubmit<TRequest, TResponse>, {}>(
     withNotification(),
     withState("form", "setForm", (): State<TResponse> => ({
       pending: false,
@@ -123,7 +128,7 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>() =>
     })),
     withHandlers<WithFormSubmit<TRequest, TResponse>, HandlerProps<TRequest>>({
       submit: ({
-        setForm, target, message, displayNotification, dismissNotification
+        setForm, displayNotification, dismissNotification
       }) => async req => {
         const url = `/${window.env.API_BASE_PATH}/${
           (target || location.pathname).replace(/^\//, "")

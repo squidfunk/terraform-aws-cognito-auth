@@ -37,6 +37,8 @@ export enum NotificationType {
   ERROR = "ERROR"                      /* Operation errored */
 }
 
+/* ------------------------------------------------------------------------- */
+
 /**
  * Notification data
  */

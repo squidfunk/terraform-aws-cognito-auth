@@ -26,7 +26,7 @@ import {
   WithStyles
 } from "@material-ui/core"
 import * as React from "react"
-import { compose } from "recompose"
+import { compose, pure } from "recompose"
 
 import { Styles, styles } from "./Dialog.styles"
 
@@ -37,7 +37,7 @@ import { Styles, styles } from "./Dialog.styles"
 /**
  * Dialog render properties
  */
-export type DialogRenderProps =
+export type RenderProps =
   & WithStyles<Styles>
 
 /* ----------------------------------------------------------------------------
@@ -51,7 +51,7 @@ export type DialogRenderProps =
  *
  * @return JSX element
  */
-export const DialogRender: React.SFC<DialogRenderProps> =
+export const Render: React.SFC<RenderProps> =
   ({ classes, children }) =>
     <Paper elevation={1} className={classes.root}>
       {children}
@@ -65,6 +65,7 @@ export const DialogRender: React.SFC<DialogRenderProps> =
  * Dialog
  */
 export const Dialog =
-  compose<DialogRenderProps, {}>(
-    withStyles(styles)
-  )(DialogRender)
+  compose<RenderProps, {}>(
+    withStyles(styles),
+    pure
+  )(Render)

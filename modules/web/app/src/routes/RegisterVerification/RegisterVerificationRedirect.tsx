@@ -23,7 +23,9 @@
 import * as React from "react"
 import { Redirect } from "react-router-dom"
 
-import { RegisterVerificationRenderProps } from "./RegisterVerification"
+import {
+  RenderProps as RegisterVerificationRenderProps
+} from "./RegisterVerification"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -32,7 +34,7 @@ import { RegisterVerificationRenderProps } from "./RegisterVerification"
 /**
  * Registration verification redirect render properties
  */
-export type RegisterVerificationRedirectRenderProps =
+export type RenderProps =
   & RegisterVerificationRenderProps
 
 /* ----------------------------------------------------------------------------
@@ -46,9 +48,8 @@ export type RegisterVerificationRedirectRenderProps =
  *
  * @return JSX element
  */
-export const RegisterVerificationRedirectRender:
-  React.SFC<RegisterVerificationRedirectRenderProps> =
-    () => <Redirect to="/" />
+export const Render: React.SFC<RenderProps> =
+  () => <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -57,4 +58,4 @@ export const RegisterVerificationRedirectRender:
 /**
  * Registration verification redirect component
  */
-export const RegisterVerificationRedirect = RegisterVerificationRedirectRender
+export const RegisterVerificationRedirect = Render

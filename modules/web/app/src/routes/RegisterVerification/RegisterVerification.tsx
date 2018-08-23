@@ -27,15 +27,13 @@ import {
   compose,
   lifecycle,
   pure,
-  renderComponent,
-  withProps
+  renderComponent
 } from "recompose"
 
 import { RegisterVerificationRequest } from "common"
 import {
   withFormSubmit,
-  WithFormSubmit,
-  WithFormSubmitProps
+  WithFormSubmit
 } from "enhancers"
 
 import { RegisterVerificationRedirect } from "./RegisterVerificationRedirect"
@@ -47,7 +45,7 @@ import { RegisterVerificationRedirect } from "./RegisterVerificationRedirect"
 /**
  * Registration verification render properties
  */
-export type RegisterVerificationRenderProps =
+export type RenderProps =
   & WithFormSubmit<RegisterVerificationRequest>
 
 /* ----------------------------------------------------------------------------
@@ -57,9 +55,8 @@ export type RegisterVerificationRenderProps =
 /**
  * Registration verification render component
  */
-export const RegisterVerificationRender:
-  React.SFC<RegisterVerificationRenderProps> =
-    () => <CircularProgress />
+export const Render: React.SFC<RenderProps> =
+  () => <CircularProgress />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -69,20 +66,19 @@ export const RegisterVerificationRender:
  * Registration verification component
  */
 export const RegisterVerification =
-  compose<RegisterVerificationRenderProps, {}>(
-    withProps<WithFormSubmitProps, {}>(() => ({
+  compose<RenderProps, {}>(
+    withFormSubmit<RegisterVerificationRequest>({
       message: "You have successfully verified your email address. " +
-               "Use your email address and password to sign in to your account."
-    })),
-    withFormSubmit<RegisterVerificationRequest>(),
-    lifecycle<RegisterVerificationRenderProps, {}>({
+               "Use your email address and password to sign in to your account"
+    }),
+    lifecycle<RenderProps, {}>({
       componentDidMount() {
         return this.props.submit()
       }
     }),
-    branch<RegisterVerificationRenderProps>(
+    branch<WithFormSubmit<RegisterVerificationRequest>>(
       ({ form }) => form.success || !!form.err,
       renderComponent(RegisterVerificationRedirect)
     ),
     pure
-  )(RegisterVerificationRender)
+  )(Render)
