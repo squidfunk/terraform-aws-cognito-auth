@@ -39,3 +39,4 @@ export {
   ResetVerificationParameters,
   ResetVerificationRequest
 } from "./reset/verify"
+export { UserLeaveRequest } from "./user/leave"

@@ -48,7 +48,7 @@ export interface FormProps {
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form render properties
+ * Render properties
  */
 export type RenderProps =
   & FormProps
@@ -59,8 +59,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form render component
- *
+ * Render component
  *
  * @param props - Properties
  *

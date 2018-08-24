@@ -46,7 +46,7 @@ export type FormButtonProps = ButtonProps
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form button render properties
+ * Render properties
  */
 export type RenderProps =
   & FormButtonProps
@@ -57,7 +57,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form button render component
+ * Render component
  *
  * @param props - Properties
  *

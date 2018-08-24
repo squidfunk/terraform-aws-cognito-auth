@@ -27,7 +27,7 @@ import { createStyles, Theme } from "@material-ui/core"
  * ------------------------------------------------------------------------- */
 
 /**
- * Form styles
+ * Styles
  */
 export type Styles = typeof styles
 
@@ -36,7 +36,7 @@ export type Styles = typeof styles
  * ------------------------------------------------------------------------- */
 
 /**
- * Form styles
+ * Styles
  *
  * @param theme - Material theme
  *

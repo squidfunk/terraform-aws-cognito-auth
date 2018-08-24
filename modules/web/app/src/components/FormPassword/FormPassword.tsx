@@ -55,7 +55,7 @@ export type FormPasswordProps = TextFieldProps
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form password state properties
+ * State properties
  */
 interface StateProps {
   visibility: Readonly<boolean>        /* Visibility state */
@@ -65,7 +65,7 @@ interface StateProps {
 }
 
 /**
- * Form password handler properties
+ * Handler properties
  */
 interface HandlerProps {
   handleClick(
@@ -79,7 +79,7 @@ interface HandlerProps {
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form password render properties
+ * Render properties
  */
 export type RenderProps =
   & FormPasswordProps
@@ -92,7 +92,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form password render component
+ * Render component
  *
  * @param props - Properties
  *

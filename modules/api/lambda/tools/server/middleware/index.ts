@@ -56,7 +56,7 @@ export async function middleware() {
       /* Mount handlers for each method */
       Object.keys(handlers).forEach(method => {
         const handler = handlers[method]
-        router[method as "post"](`/${name}`, async (req, res) => {
+        router[method as "get" | "post"](`/${name}`, async (req, res) => {
 
           /* Normalize header case */
           const normalizedHeaders = Object.keys(req.headers)
@@ -70,13 +70,13 @@ export async function middleware() {
             path: req.url,
             pathParameters: req.params,
             headers: normalizedHeaders,
-            method: req.method as "POST",
+            method: req.method as "GET" | "POST",
             body: JSON.stringify(req.body)
           })
 
           /* Invoke handler and transform response */
           try {
-            const { body, statusCode, headers } = await handler(event)
+            const { statusCode, headers, body } = await handler(event)
             res.statusCode = statusCode
             res.set(headers || {})
             res.end(body)

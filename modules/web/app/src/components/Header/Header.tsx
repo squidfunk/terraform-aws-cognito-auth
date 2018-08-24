@@ -48,7 +48,7 @@ export interface HeaderProps {
 /* ------------------------------------------------------------------------- */
 
 /**
- * Header render properties
+ * Render properties
  */
 export type RenderProps =
   & HeaderProps
@@ -59,7 +59,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Header render component
+ * Render component
  *
  * @param props - Properties
  *

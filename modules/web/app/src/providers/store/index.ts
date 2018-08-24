@@ -30,6 +30,10 @@ import {
   remember,
   RememberMeState
 } from "./remember-me/reducers"
+import {
+  session,
+  SessionState
+} from "./session/reducers"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -41,6 +45,7 @@ import {
 export interface State {
   notification: NotificationState
   remember: RememberMeState
+  session: SessionState
 }
 
 /* ----------------------------------------------------------------------------
@@ -54,7 +59,8 @@ export interface State {
  */
 export function dehydrate(state: State) {
   localStorage.setItem("state", JSON.stringify({
-    remember: state.remember
+    remember: state.remember,
+    session: state.session
   }))
 }
 
@@ -76,7 +82,8 @@ export function rehydrate(): State {
  */
 export const reducers = combineReducers<State>({
   notification,
-  remember
+  remember,
+  session
 })
 
 /**

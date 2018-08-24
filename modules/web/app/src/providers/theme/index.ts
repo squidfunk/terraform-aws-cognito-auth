@@ -27,7 +27,7 @@ import { colors, createMuiTheme } from "@material-ui/core"
  * ------------------------------------------------------------------------- */
 
 /**
- * Material UI theme
+ * Material UI theme configuration
  */
 export const theme = createMuiTheme({
   palette: {

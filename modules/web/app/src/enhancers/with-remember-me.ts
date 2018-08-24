@@ -38,7 +38,9 @@ import {
 /**
  * Remember me state properties
  */
-export type WithRememberMeState = RememberMeState
+export interface WithRememberMeState {
+  remember: RememberMeState            /* Remember me state */
+}
 
 /**
  * Remember me dispatcher properties
@@ -68,7 +70,7 @@ export type WithRememberMe =
  */
 export const withRememberMe = () =>
   connect<WithRememberMeState, WithRememberMeDispatch, {}, State>(
-    (state: State) => state.remember,
+    ({ remember }: State) => ({ remember }),
     (dispatch: Dispatch<RememberMeActions>) => ({
       setRememberMe: active => dispatch(setRememberMeAction(active)),
       failedRememberMe: failed => dispatch(failedRememberMeAction(failed))

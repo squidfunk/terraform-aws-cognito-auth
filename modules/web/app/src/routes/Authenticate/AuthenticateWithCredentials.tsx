@@ -73,7 +73,7 @@ export type AuthenticateWithCredentialsProps =
 /* ------------------------------------------------------------------------- */
 
 /**
- * Authentication with credentials render properties
+ * Render properties
  */
 export type RenderProps =
   & AuthenticateWithCredentialsProps
@@ -85,7 +85,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication with credentials render component
+ * Render component
  *
  * @param props - Properties
  *
@@ -154,9 +154,10 @@ export const AuthenticateWithCredentials =
     }),
     lifecycle<RenderProps, {}>({
       async componentWillMount() {
-        this.props.setRequest({
-          ...this.props.request,
-          remember: this.props.active
+        const { remember, request, setRequest } = this.props
+        setRequest({
+          ...request,
+          remember: remember.active
         })
       }
     }),

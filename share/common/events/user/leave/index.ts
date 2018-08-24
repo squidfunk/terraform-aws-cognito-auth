@@ -20,59 +20,18 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import {
-  compose,
-  lifecycle,
-  pure
-} from "recompose"
-
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Redirect properties
+ * User leave request
  */
-export interface RedirectProps {
-  href: string                         /* Target URL */
-}
+export interface UserLeaveRequest {}
 
 /* ------------------------------------------------------------------------- */
 
 /**
- * Redirect render properties
+ * Type used for JSON schema
  */
-export type RenderProps =
-  & RedirectProps
-
-/* ----------------------------------------------------------------------------
- * Presentational component
- * ------------------------------------------------------------------------- */
-
-/**
- * Redirect render component
- *
- * @param props - Properties
- *
- * @return JSX element
- */
-export const Render: React.SFC<RenderProps> =
-  () => null // tslint:disable-line no-null-keyword
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Redirect component
- */
-export const Redirect =
-  compose<RenderProps, RedirectProps>(
-    lifecycle<RenderProps, {}>({
-      componentWillMount() {
-        window.location.href = this.props.href
-      }
-    }),
-    pure
-  )(Render)
+export type __JSON__ = UserLeaveRequest

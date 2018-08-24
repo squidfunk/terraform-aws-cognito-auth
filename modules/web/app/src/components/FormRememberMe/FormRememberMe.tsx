@@ -46,7 +46,7 @@ export type FormRememberMeProps = CheckboxProps
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form remember me handler properties
+ * Handler properties
  */
 interface HandlerProps {
   handleChange(
@@ -58,7 +58,7 @@ interface HandlerProps {
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form remember me render properties
+ * Render properties
  */
 export type RenderProps =
   & FormRememberMeProps
@@ -70,7 +70,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form remember me render component
+ * Render component
  *
  * @param props - Properties
  *

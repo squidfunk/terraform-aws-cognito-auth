@@ -26,6 +26,7 @@
 
 export * from "./App"
 export * from "./Dialog"
+export * from "./ExternalRedirect"
 export * from "./Form"
 export * from "./FormButton"
 export * from "./FormInput"
@@ -33,5 +34,4 @@ export * from "./FormPassword"
 export * from "./FormRememberMe"
 export * from "./Header"
 export * from "./Notification"
-export * from "./Redirect"
 export * from "./TextLink"

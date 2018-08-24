@@ -35,7 +35,7 @@ import { Styles, styles } from "./Dialog.styles"
  * ------------------------------------------------------------------------- */
 
 /**
- * Dialog render properties
+ * Render properties
  */
 export type RenderProps =
   & WithStyles<Styles>
@@ -45,7 +45,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Dialog render component
+ * Render component
  *
  * @param props - Properties
  *

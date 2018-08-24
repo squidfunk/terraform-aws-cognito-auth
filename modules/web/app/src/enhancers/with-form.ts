@@ -39,7 +39,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /**
- * Form properties
+ * Form enhancer options
  *
  * @template TRequest - Form request type
  */
@@ -52,7 +52,7 @@ export interface WithFormOptions<
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form state properties
+ * State properties
  *
  * @template TRequest - Form request type
  */
@@ -64,7 +64,7 @@ interface StateProps<TRequest extends {}> {
 }
 
 /**
- * Form handler properties
+ * Handler properties
  */
 interface HandlerProps {
   handleChange(
@@ -112,7 +112,7 @@ export const withForm = <TRequest extends {}, TResponse = void>(
 
       /* Update form data */
       handleChange: ({ request, setRequest }) => ev => {
-        const { type, checked, name, value } = ev.currentTarget
+        const { type, name, value, checked } = ev.currentTarget
         type === "checkbox"
           ? setRequest(set(lensProp(name), checked, request))
           : setRequest(set(lensProp(name), value, request))

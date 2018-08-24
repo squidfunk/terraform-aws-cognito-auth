@@ -51,7 +51,7 @@ export type TextLinkProps = LinkProps
 /* ------------------------------------------------------------------------- */
 
 /**
- * Text link handler properties
+ * Handler properties
  */
 interface HandlerProps {
   handleClick(): void                  /* Link click handler */
@@ -60,7 +60,7 @@ interface HandlerProps {
 /* ------------------------------------------------------------------------- */
 
 /**
- * Text link render properties
+ * Render properties
  */
 export type RenderProps =
   & TextLinkProps
@@ -73,7 +73,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Text link render component
+ * Render component
  *
  * @param props - Properties
  *

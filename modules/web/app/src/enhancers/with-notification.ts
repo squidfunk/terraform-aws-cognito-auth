@@ -39,7 +39,9 @@ import {
 /**
  * Notification state properties
  */
-export type WithNotificationState = NotificationState
+export interface WithNotificationState {
+  notification: NotificationState      /* Notification state */
+}
 
 /**
  * Notification dispatcher properties
@@ -67,7 +69,7 @@ export type WithNotification =
  */
 export const withNotification = () =>
   connect<WithNotificationState, WithNotificationDispatch, {}, State>(
-    (state: State) => state.notification,
+    ({ notification }: State) => ({ notification }),
     (dispatch: Dispatch<NotificationActions>) => ({
       displayNotification: data => dispatch(displayNotificationAction(data)),
       dismissNotification: () => dispatch(dismissNotificationAction())

@@ -28,7 +28,7 @@ import { Redirect } from "react-router-dom"
  * ------------------------------------------------------------------------- */
 
 /**
- * "Page not found" render component
+ * Render component
  *
  * @return JSX element
  */

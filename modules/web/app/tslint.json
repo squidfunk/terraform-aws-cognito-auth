@@ -39,7 +39,7 @@
     "no-empty-interface": false,
     "no-implicit-dependencies": false,
     "no-internal-module": true,
-    "no-null-keyword": true,
+    "no-null-keyword": false,
     "no-reference": false,
     "no-small-switch": false,
     "no-submodule-imports": false,

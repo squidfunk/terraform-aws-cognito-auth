@@ -66,7 +66,7 @@ export type RememberMeActions =
  * ------------------------------------------------------------------------- */
 
 /**
- * Remember me set action
+ * Set remember me state
  *
  * @param active - Whether to remember the user
  *
@@ -78,7 +78,7 @@ export const setRememberMeAction =
   })
 
 /**
- * Remember me failed action
+ * Mark token-based authentication as failed
  *
  * @return Action
  */

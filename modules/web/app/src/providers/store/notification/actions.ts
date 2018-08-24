@@ -67,7 +67,7 @@ export type NotificationActions =
  * ------------------------------------------------------------------------- */
 
 /**
- * Notification display action
+ * Display notification
  *
  * @param data - Notification data
  *
@@ -79,7 +79,7 @@ export const displayNotificationAction =
   })
 
 /**
- * Notification dismiss action
+ * Dismiss notification
  *
  * @return Action
  */

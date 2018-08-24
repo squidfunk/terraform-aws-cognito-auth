@@ -45,6 +45,15 @@ type Request =
   & AuthenticateRequestWithToken
 
 /* ----------------------------------------------------------------------------
+ * Constants
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Refresh token cookie name
+ */
+const TOKEN_COOKIE_NAME = "__Secure-token"
+
+/* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
@@ -58,7 +67,7 @@ type Request =
 function parseToken(value: string) {
   if (!(value && value.length))
     throw new TypeError("Invalid request")
-  const { "__Secure-token": token } = cookie.parse(value)
+  const { [TOKEN_COOKIE_NAME]: token } = cookie.parse(value)
   return token
 }
 
@@ -81,7 +90,7 @@ function parseToken(value: string) {
 function issueToken(
   { token, expires }: SessionToken, path: string
 ) {
-  return cookie.serialize("__Secure-token", token, {
+  return cookie.serialize(TOKEN_COOKIE_NAME, token, {
     expires,
     domain: process.env.COGNITO_IDENTITY_POOL_PROVIDER!,
     path,
@@ -98,8 +107,8 @@ function issueToken(
  *
  * @return Serialized cookie
  */
-function claimToken(path: string) {
-  return cookie.serialize("__Secure-token", "", {
+function resetToken(path: string) {
+  return cookie.serialize(TOKEN_COOKIE_NAME, "", {
     expires: new Date(0),
     domain: process.env.COGNITO_IDENTITY_POOL_PROVIDER!,
     path,
@@ -153,7 +162,7 @@ export const post = handler<{}, Request, Session | string>(schema,
             message: err.message.replace(/\.$/, "")
           }),
           headers: {
-            "Set-Cookie": claimToken(path)
+            "Set-Cookie": resetToken(path)
           }
         }
       } else {

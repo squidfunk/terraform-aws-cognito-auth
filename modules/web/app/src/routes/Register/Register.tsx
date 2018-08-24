@@ -54,7 +54,7 @@ import { Styles, styles } from "./Register.styles"
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration render properties
+ * Render properties
  */
 export type RenderProps =
   & WithStyles<Styles>
@@ -65,7 +65,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration render component
+ * Render component
  *
  * @param props - Properties
  *

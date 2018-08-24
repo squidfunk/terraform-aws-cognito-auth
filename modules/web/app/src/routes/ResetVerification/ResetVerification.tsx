@@ -56,7 +56,7 @@ import { ResetVerificationRedirect } from "./ResetVerificationRedirect"
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset verification render properties
+ * Render properties
  */
 export type RenderProps =
   & WithStyles<Styles>
@@ -67,7 +67,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset verification render component
+ * Render component
  *
  * @param props - Properties
  *

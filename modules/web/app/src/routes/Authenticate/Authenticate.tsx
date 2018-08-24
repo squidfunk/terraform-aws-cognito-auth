@@ -40,7 +40,7 @@ import { AuthenticateWithToken } from "./AuthenticateWithToken"
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication with credentials render properties
+ * Render properties
  */
 export type RenderProps =
   & WithRememberMe
@@ -50,7 +50,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication render component
+ * Render component
  *
  * @param props - Properties
  *
@@ -69,7 +69,7 @@ export const Authenticate =
   compose<RenderProps, {}>(
     withRememberMe(),
     branch<WithRememberMe>(
-      ({ active, failed }) => active && !failed,
+      ({ remember: { active, failed } }) => active && !failed,
       renderComponent(AuthenticateWithToken)
     ),
     pure

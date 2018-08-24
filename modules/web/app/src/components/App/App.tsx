@@ -30,12 +30,12 @@ import { compose } from "recompose"
 
 import {
   Authenticate,
-  Leave,
   NotFound,
   Register,
   RegisterVerification,
   Reset,
-  ResetVerification
+  ResetVerification,
+  UserLeave
 } from "routes"
 
 import { Styles, styles } from "./App.styles"
@@ -45,7 +45,7 @@ import { Styles, styles } from "./App.styles"
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render properties
+ * Render properties
  */
 export type RenderProps =
   & WithStyles<Styles>
@@ -55,7 +55,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Application render component
+ * Render component
  *
  * @param props - Properties
  *
@@ -70,7 +70,7 @@ export const Render: React.SFC<RenderProps> =
         <Route path="/register/:code+" component={RegisterVerification} />
         <Route exact path="/reset" component={Reset} />
         <Route path="/reset/:code+" component={ResetVerification} />
-        <Route path="/leave" component={Leave} />
+        <Route path="/user/leave" component={UserLeave} />
         <Route component={NotFound} />
       </Switch>
     </div>

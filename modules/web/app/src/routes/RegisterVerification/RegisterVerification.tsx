@@ -43,7 +43,7 @@ import { RegisterVerificationRedirect } from "./RegisterVerificationRedirect"
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification render properties
+ * Render properties
  */
 export type RenderProps =
   & WithFormSubmit<RegisterVerificationRequest>
@@ -53,7 +53,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification render component
+ * Render component
  */
 export const Render: React.SFC<RenderProps> =
   () => <CircularProgress />
@@ -73,7 +73,8 @@ export const RegisterVerification =
     }),
     lifecycle<RenderProps, {}>({
       componentDidMount() {
-        return this.props.submit()
+        const { submit } = this.props
+        return submit()
       }
     }),
     branch<WithFormSubmit<RegisterVerificationRequest>>(

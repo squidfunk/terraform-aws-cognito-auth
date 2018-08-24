@@ -177,7 +177,19 @@ module "authenticate" {
   lambda_filename = "${path.module}/lambda/dist.zip"
 }
 
-# -----------------------------------------------------------------------------
+# # module.leave
+# module "leave" {
+#   source = "./modules/leave"
+
+#   namespace = "${var.namespace}"
+#   region    = "${var.region}"
+
+#   api_id          = "${aws_api_gateway_rest_api._.id}"
+#   api_resource_id = "${aws_api_gateway_resource._.id}"
+
+#   lambda_role_arn = "${aws_iam_role.lambda.arn}"
+#   lambda_filename = "${path.module}/lambda/dist.zip"
+# }
 
 # module.check
 module "check" {
@@ -190,8 +202,6 @@ module "check" {
   api_resource_id   = "${aws_api_gateway_resource._.id}"
   api_authorizer_id = "${aws_api_gateway_authorizer._.id}"
 }
-
-# -----------------------------------------------------------------------------
 
 # module.register
 module "register" {
@@ -212,8 +222,6 @@ module "register" {
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
 }
-
-# -----------------------------------------------------------------------------
 
 # module.reset
 module "reset" {

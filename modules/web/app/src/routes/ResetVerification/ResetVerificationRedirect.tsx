@@ -32,7 +32,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset verification redirect render properties
+ * Render properties
  */
 export type RenderProps =
   & ResetVerificationRenderProps
@@ -42,7 +42,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset verification redirect render component
+ * Render component
  *
  * @param props - Properties
  *

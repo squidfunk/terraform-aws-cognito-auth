@@ -32,7 +32,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification redirect render properties
+ * Render properties
  */
 export type RenderProps =
   & RegisterVerificationRenderProps
@@ -42,7 +42,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification redirect render component
+ * Render component
  *
  * @param props - Properties
  *

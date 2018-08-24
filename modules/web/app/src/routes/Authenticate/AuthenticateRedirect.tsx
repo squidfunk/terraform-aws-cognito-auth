@@ -24,8 +24,7 @@ import * as React from "react"
 import {
   compose,
   lifecycle,
-  pure,
-  withProps
+  pure
 } from "recompose"
 
 import {
@@ -33,12 +32,13 @@ import {
   Session
 } from "common"
 import {
-  Redirect,
-  RedirectProps
+  ExternalRedirect
 } from "components"
 import {
   WithFormSubmit,
-  WithRememberMe
+  WithRememberMe,
+  withSession,
+  WithSession
 } from "enhancers"
 
 /* ----------------------------------------------------------------------------
@@ -55,25 +55,28 @@ export type AuthenticateRedirectProps =
 /* ------------------------------------------------------------------------- */
 
 /**
- * Authentication redirect render properties
+ * Render properties
  */
 export type RenderProps =
   & AuthenticateRedirectProps
-  & RedirectProps
+  & WithSession
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication redirect render component
+ * Render component
  *
  * @param props - Properties
  *
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  ({ href }) => <Redirect href={href} />
+  ({ session }) =>
+    <ExternalRedirect href={
+      `//${window.env.APP_ORIGIN}#${session!.id.token}`
+    } />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -84,17 +87,13 @@ export const Render: React.SFC<RenderProps> =
  */
 export const AuthenticateRedirect =
   compose<RenderProps, AuthenticateRedirectProps>(
-    withProps<RedirectProps, AuthenticateRedirectProps>(({ form }) => ({
-      href: `//${
-        window.env.APP_ORIGIN
-      }#${
-        form.response!.id.token
-      }`
-    })),
+    withSession(),
     lifecycle<RenderProps, {}>({
       async componentWillMount() {
-        if (this.props.active)
-          this.props.failedRememberMe(false)
+        const { form, remember, initSession, failedRememberMe } = this.props
+        initSession(form.response!)
+        if (remember.active)
+          failedRememberMe(false)
       }
     }),
     pure

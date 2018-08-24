@@ -20,8 +20,43 @@
  * IN THE SOFTWARE.
  */
 
+import { Session } from "common"
+
+import {
+  SessionActions,
+  SessionActionTypes
+} from "./actions"
+
 /* ----------------------------------------------------------------------------
- * Re-exports
+ * Types
  * ------------------------------------------------------------------------- */
 
-export { Leave } from "./Leave"
+/**
+ * Session state
+ */
+export type SessionState = Session<string> | null
+
+/* ----------------------------------------------------------------------------
+ * Reducer
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Session reducer
+ *
+ * @param state - Session state
+ * @param action - Session action
+ */
+export function session(
+  state: SessionState = null,
+  action: SessionActions
+): SessionState {
+  switch (action.type) {
+    case SessionActionTypes.INIT:
+      const { id, access } = action.session
+      return { id, access }
+    case SessionActionTypes.TERMINATE:
+      return null
+    default:
+      return state
+  }
+}

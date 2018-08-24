@@ -20,26 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import { Redirect } from "react-router-dom"
-
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Leave render component
- *
- * @return JSX element
- */
-export const Render: React.SFC<{}> =
-  () => <Redirect to="/" />
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Leave component
- */
-export const Leave = Render
+export { UserLeave } from "./UserLeave"

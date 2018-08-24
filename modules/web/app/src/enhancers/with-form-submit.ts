@@ -32,7 +32,9 @@ import {
 
 import {
   withNotification,
-  WithNotificationDispatch
+  WithNotificationDispatch,
+  withSession,
+  WithSessionState
 } from "enhancers"
 import {
   NotificationType
@@ -43,17 +45,18 @@ import {
  * ------------------------------------------------------------------------- */
 
 /**
- * Form submission options
+ * Form submission enhancer options
  */
 export interface WithFormSubmitOptions {
-  target?: string                      /* Form submission target URL */
-  message?: string                     /* Form submission success message */
+  target?: string                      /* Target URL */
+  message?: string                     /* Message rendered on success */
+  secured?: boolean                    /* Authorization header necessary */
 }
 
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form submission state
+ * State
  *
  * @template TResponse - Form response type
  */
@@ -65,7 +68,7 @@ interface State<TResponse> {
 }
 
 /**
- * Form submission state properties
+ * State properties
  *
  * @template TResponse - Form response type
  */
@@ -77,7 +80,7 @@ interface StateProps<TResponse> {
 }
 
 /**
- * Form submission handler properties
+ * Handler properties
  *
  * @template TRequest - Form request type
  */
@@ -97,6 +100,7 @@ interface HandlerProps<TRequest extends {}> {
  */
 export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
   & WithNotificationDispatch
+  & WithSessionState
   & StateProps<TResponse>
   & HandlerProps<TRequest>
 
@@ -118,18 +122,19 @@ export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
  * @return Component enhancer
  */
 export const withFormSubmit = <TRequest extends {}, TResponse = void>(
-  { target, message }: WithFormSubmitOptions
+  { target, message, secured }: WithFormSubmitOptions
 ) =>
   compose<WithFormSubmit<TRequest, TResponse>, {}>(
     withNotification(),
+    withSession(),
     withState("form", "setForm", (): State<TResponse> => ({
       pending: false,
       success: false
     })),
     withHandlers<WithFormSubmit<TRequest, TResponse>, HandlerProps<TRequest>>({
       submit: ({
-        setForm, displayNotification, dismissNotification
-      }) => async req => {
+        setForm, displayNotification, dismissNotification, session
+      }) => async data => {
         const url = `/${window.env.API_BASE_PATH}/${
           (target || location.pathname).replace(/^\//, "")
         }`
@@ -139,10 +144,13 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>(
         try {
           dismissNotification()
           const { data: response } =
-            await axios.post<TResponse>(url, req || {}, {
+            await axios.post<TResponse>(url, data || {}, {
               withCredentials: true,
               headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                ...(secured && session
+                  ? { Authorization: `Bearer ${session.access.token}` }
+                  : {})
               }
             })
 
@@ -157,11 +165,8 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>(
             })
           }
 
-        /* Update form submission state with error */
+        /* Display error message as notification */
         } catch (err) {
-          setForm({ pending: false, success: false, err })
-
-          /* Display error message as notification */
           const { response }: AxiosError = err
           if (response) {
             displayNotification({
@@ -169,6 +174,9 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>(
               message: response.data.message
             })
           }
+
+          /* Update form submission state with error */
+          setForm({ pending: false, success: false, err })
         }
       }
     })

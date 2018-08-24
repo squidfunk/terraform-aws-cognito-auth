@@ -31,7 +31,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /**
- * Notification styles
+ * Styles
  */
 export type Styles = typeof styles
 
@@ -40,7 +40,7 @@ export type Styles = typeof styles
  * ------------------------------------------------------------------------- */
 
 /**
- * Notification styles
+ * Styles
  *
  * @param theme - Material theme
  *

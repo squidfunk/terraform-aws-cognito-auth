@@ -27,7 +27,7 @@ import { createStyles, Theme } from "@material-ui/core"
  * ------------------------------------------------------------------------- */
 
 /**
- * Dialog styles
+ * Styles
  */
 export type Styles = typeof styles
 
@@ -36,13 +36,13 @@ export type Styles = typeof styles
  * ------------------------------------------------------------------------- */
 
 /**
- * Dialog styles
+ * Styles
  *
  * @param theme - Material theme
  *
  * @return CSS styles
  */
-export const styles = ({ palette, breakpoints }: Theme) =>
+export const styles = ({ breakpoints }: Theme) =>
   createStyles({
     root: {
       width: 340,

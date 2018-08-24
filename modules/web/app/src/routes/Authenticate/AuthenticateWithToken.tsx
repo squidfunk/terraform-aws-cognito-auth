@@ -55,7 +55,7 @@ export type AuthenticateWithTokenProps =
 /* ------------------------------------------------------------------------- */
 
 /**
- * Authentication with refresh token render properties
+ * Render properties
  */
 export type RenderProps =
   & AuthenticateWithTokenProps
@@ -66,7 +66,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication with refresh token render component
+ * Render component
  *
  * @param props - Properties
  *
@@ -89,10 +89,13 @@ export const AuthenticateWithToken =
     }),
     lifecycle<RenderProps, {}>({
       async componentDidMount() {
-        await this.props.submit()
-        this.props.dismissNotification()
-        if (!this.props.form.success)
-          this.props.failedRememberMe(true)
+        const {
+          form, submit, dismissNotification, failedRememberMe
+        } = this.props
+        await submit()
+        dismissNotification()
+        if (!form.success)
+          failedRememberMe(true)
       }
     }),
     branch<WithFormSubmit<AuthenticateRequest>>(

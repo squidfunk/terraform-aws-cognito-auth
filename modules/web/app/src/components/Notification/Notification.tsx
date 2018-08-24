@@ -45,7 +45,7 @@ import { Styles, styles } from "./Notification.styles"
  * ------------------------------------------------------------------------- */
 
 /**
- * Notification render properties
+ * Render properties
  */
 export type RenderProps =
   & WithStyles<Styles>
@@ -56,14 +56,14 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Notification render component
+ * Render component
  *
  * @param props - Properties
  *
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  ({ classes, data, show }) =>
+  ({ classes, notification: { data, show } }) =>
     <Collapse in={show}>
       {data &&
         <Fade in={show}>

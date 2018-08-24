@@ -36,7 +36,7 @@ export type FormInputProps = TextFieldProps
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form input render properties
+ * Render properties
  */
 export type RenderProps =
   & FormInputProps
@@ -46,7 +46,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form input render component
+ * Render component
  *
  * @param props - Properties
  *

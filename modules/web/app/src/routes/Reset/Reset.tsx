@@ -53,7 +53,7 @@ import { Styles, styles } from "./Reset.styles"
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset render properties
+ * Render properties
  */
 export type RenderProps =
   & WithStyles<Styles>
@@ -64,7 +64,7 @@ export type RenderProps =
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset render component
+ * Render component
  *
  * @param props - Properties
  *
