@@ -21,7 +21,6 @@
  */
 
 import {
-  Checkbox,
   FormControlLabel,
   FormGroup,
   Typography,
@@ -32,6 +31,7 @@ import * as React from "react"
 import {
   branch,
   compose,
+  lifecycle,
   pure,
   renderComponent
 } from "recompose"
@@ -46,6 +46,7 @@ import {
   FormButton,
   FormInput,
   FormPassword,
+  FormRememberMe,
   Header,
   Notification,
   TextLink
@@ -75,9 +76,9 @@ export type AuthenticateWithCredentialsProps =
  * Authentication with credentials render properties
  */
 export type RenderProps =
+  & AuthenticateWithCredentialsProps
   & WithStyles<Styles>
   & WithForm<AuthenticateRequest, Session<string>>
-  & AuthenticateWithCredentialsProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -107,11 +108,11 @@ export const Render: React.SFC<RenderProps> =
         <FormPassword
           name="password" label="Password" required
           value={request.password} InputProps={{ readOnly: form.pending }}
-          onChange={handleChange} autoComplete="new-password"
+          onChange={handleChange} autoComplete="password"
         />
         <FormGroup row className={classes.controls}>
           <FormControlLabel label="Remember me" control={
-            <Checkbox
+            <FormRememberMe
               name="remember" checked={request.remember}
               onChange={handleChange}
             />
@@ -149,6 +150,14 @@ export const AuthenticateWithCredentials =
         username: "",
         password: "",
         remember: false
+      }
+    }),
+    lifecycle<RenderProps, {}>({
+      async componentWillMount() {
+        this.props.setRequest({
+          ...this.props.request,
+          remember: this.props.active
+        })
       }
     }),
     branch<WithForm<AuthenticateRequest>>(

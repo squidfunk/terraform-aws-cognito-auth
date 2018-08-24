@@ -45,7 +45,9 @@ export type WithRememberMeState = RememberMeState
  */
 export interface WithRememberMeDispatch {
   setRememberMe(active: boolean): void /* Set whether to remember the user */
-  failedRememberMe(): void             /* Remembering failed */
+  failedRememberMe(
+    failed: boolean
+  ): void                              /* Token-based authentication failed */
 }
 
 /**
@@ -69,6 +71,6 @@ export const withRememberMe = () =>
     (state: State) => state.remember,
     (dispatch: Dispatch<RememberMeActions>) => ({
       setRememberMe: active => dispatch(setRememberMeAction(active)),
-      failedRememberMe: () => dispatch(failedRememberMeAction())
+      failedRememberMe: failed => dispatch(failedRememberMeAction(failed))
     })
   )

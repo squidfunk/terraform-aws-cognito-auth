@@ -55,7 +55,7 @@ type Request =
  *
  * @return Refresh token
  */
-function parseCookie(value: string) {
+function parseToken(value: string) {
   if (!(value && value.length))
     throw new TypeError("Invalid request")
   const { "__Secure-token": token } = cookie.parse(value)
@@ -78,11 +78,29 @@ function parseCookie(value: string) {
  *
  * @return Serialized cookie
  */
-function generateSetCookie(
+function issueToken(
   { token, expires }: SessionToken, path: string
 ) {
   return cookie.serialize("__Secure-token", token, {
     expires,
+    domain: process.env.COGNITO_IDENTITY_POOL_PROVIDER!,
+    path,
+    secure: true,
+    httpOnly: true,
+    sameSite: true
+  })
+}
+
+/**
+ * Invalidate refresh token on client
+ *
+ * @param path - Cookie path
+ *
+ * @return Serialized cookie
+ */
+function claimToken(path: string) {
+  return cookie.serialize("__Secure-token", "", {
+    expires: new Date(0),
     domain: process.env.COGNITO_IDENTITY_POOL_PROVIDER!,
     path,
     secure: true,
@@ -102,22 +120,45 @@ function generateSetCookie(
  *
  * @return Promise resolving with session
  */
-export const post = handler<{}, Request, Session>(schema,
+export const post = handler<{}, Request, Session | string>(schema,
   async ({ path, headers, body: { username, password, remember, token } }) => {
     const auth = new AuthenticationClient()
-    const session = await auth.authenticate(
-      username || token || parseCookie(headers.Cookie),
-      password
-    )
-    const { refresh, ...body } = session
-    return {
-      body: remember ? { ...body, refresh } : body,
-      ...(remember && refresh
-        ? {
+    try {
+      const session = await auth.authenticate(
+        username || token || parseToken(headers.Cookie),
+        password
+      )
+
+      /* Return a refresh token if the user requested it */
+      const { refresh, ...body } = session
+      return {
+        body: remember ? { ...body, refresh } : body,
+        ...(remember && refresh
+          ? {
+            headers: {
+              "Set-Cookie": issueToken(refresh, path)
+            }
+          }
+          : {})
+      }
+
+    /* If token-based authentication failed, invalidate cookie */
+    } catch (err) {
+      if (token) {
+        err.code = err.code || err.name
+        return {
+          statusCode: 403,
+          body: JSON.stringify({
+            type: err.code,
+            message: err.message.replace(/\.$/, "")
+          }),
           headers: {
-            "Set-Cookie": generateSetCookie(refresh, path)
+            "Set-Cookie": claimToken(path)
           }
         }
-        : {})
+      } else {
+        err.statusCode = 403
+        throw err
+      }
     }
   })

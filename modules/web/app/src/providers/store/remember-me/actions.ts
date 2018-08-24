@@ -49,6 +49,7 @@ interface RememberMeSetAction extends Action {
  */
 interface RememberMeFailedAction extends Action {
   type: RememberMeActionTypes.FAILED
+  failed: boolean
 }
 
 /* ------------------------------------------------------------------------- */
@@ -82,6 +83,6 @@ export const setRememberMeAction =
  * @return Action
  */
 export const failedRememberMeAction =
-  (): RememberMeFailedAction => ({
-    type: RememberMeActionTypes.FAILED
+  (failed: boolean): RememberMeFailedAction => ({
+    type: RememberMeActionTypes.FAILED, failed
   })

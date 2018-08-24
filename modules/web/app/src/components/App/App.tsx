@@ -30,6 +30,7 @@ import { compose } from "recompose"
 
 import {
   Authenticate,
+  Leave,
   NotFound,
   Register,
   RegisterVerification,
@@ -69,6 +70,7 @@ export const Render: React.SFC<RenderProps> =
         <Route path="/register/:code+" component={RegisterVerification} />
         <Route exact path="/reset" component={Reset} />
         <Route path="/reset/:code+" component={ResetVerification} />
+        <Route path="/leave" component={Leave} />
         <Route component={NotFound} />
       </Switch>
     </div>

@@ -82,8 +82,8 @@ interface HandlerProps {
  * Form password render properties
  */
 export type RenderProps =
-  & WithStyles<Styles>
   & FormPasswordProps
+  & WithStyles<Styles>
   & StateProps
   & HandlerProps
 

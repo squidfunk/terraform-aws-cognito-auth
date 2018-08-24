@@ -54,6 +54,7 @@ export interface HandlerCallbackEvent<
  * @template TResponse - Callback response body type
  */
 export interface HandlerCallbackResponse<TResponse> {
+  statusCode?: number                  /* Response status code */
   headers?: {                          /* Response headers */
     [name: string]: string
   }
@@ -132,9 +133,10 @@ export function handler<
         throw new TypeError("Invalid request")
 
       /* Execute handler and return response */
-      const { body, headers } = {
-        body: undefined,
+      const { statusCode, headers, body } = {
+        statusCode: 200,
         headers: {},
+        body: undefined,
         ...(await cb({
           path: event.path,
           pathParameters: event.pathParameters as TParameters,
@@ -143,7 +145,7 @@ export function handler<
         }))
       }
       return {
-        statusCode: 200,
+        statusCode,
         headers,
         body: body ? JSON.stringify(body) : "{}"
       }

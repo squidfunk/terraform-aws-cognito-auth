@@ -51,8 +51,8 @@ export interface HeaderProps {
  * Header render properties
  */
 export type RenderProps =
-  & WithStyles<Styles>
   & HeaderProps
+  & WithStyles<Styles>
 
 /* ----------------------------------------------------------------------------
  * Presentational component

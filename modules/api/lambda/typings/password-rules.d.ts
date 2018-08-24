@@ -20,38 +20,22 @@
  * IN THE SOFTWARE.
  */
 
-import { ManagementClient } from "clients/management"
-import {
-  ResetVerificationParameters as Parameters,
-  ResetVerificationRequest as Request
-} from "common"
-import { handler } from "handlers"
-import { validate } from "utilities/password"
-import { Verification } from "verification"
-
-import schema = require("common/events/reset/verify/index.json")
-
-/* ----------------------------------------------------------------------------
- * Handler
- * ------------------------------------------------------------------------- */
-
-/**
- * Reset password for user
- *
- * @param event - API Gateway event
- *
- * @return Promise resolving with no result
- */
-export const post = handler<Parameters, Request>(schema,
-  async ({ pathParameters: { code }, body: { password } }) => {
-    validate(password)
-    try {
-      const verification = new Verification()
-      const mgmt = new ManagementClient()
-      const { subject } = await verification.claim("reset", code)
-      await mgmt.changePassword(subject, password)
-    } catch (err) {
-      err.statusCode = 403
-      throw err
-    }
-  })
+declare module "password-rules" {
+  interface Options {
+    minimumLength?: number
+    requireCapital?: boolean
+    requireLower?: boolean
+    requireNumber?: boolean
+    requireSpecial?: boolean
+  }
+  interface Result {
+    sentence: string,
+    issues: Array<{
+      reason: string,
+      message: string
+      part: string
+    }>
+  }
+  function rules(password: string, options: Options): Result | false
+  export = rules
+}

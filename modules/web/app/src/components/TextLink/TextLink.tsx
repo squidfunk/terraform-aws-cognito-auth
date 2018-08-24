@@ -63,9 +63,9 @@ interface HandlerProps {
  * Text link render properties
  */
 export type RenderProps =
+  & TextLinkProps
   & WithStyles<Styles>
   & WithNotificationDispatch
-  & TextLinkProps
   & HandlerProps
 
 /* ----------------------------------------------------------------------------

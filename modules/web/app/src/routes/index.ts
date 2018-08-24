@@ -25,6 +25,7 @@
  * ------------------------------------------------------------------------- */
 
 export * from "./Authenticate"
+export * from "./Leave"
 export * from "./NotFound"
 export * from "./Register"
 export * from "./RegisterVerification"

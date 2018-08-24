@@ -69,7 +69,7 @@ export const Authenticate =
   compose<RenderProps, {}>(
     withRememberMe(),
     branch<WithRememberMe>(
-      ({ failed }) => !failed,
+      ({ active, failed }) => active && !failed,
       renderComponent(AuthenticateWithToken)
     ),
     pure

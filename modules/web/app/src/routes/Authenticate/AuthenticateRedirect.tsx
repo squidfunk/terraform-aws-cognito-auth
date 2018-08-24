@@ -23,6 +23,7 @@
 import * as React from "react"
 import {
   compose,
+  lifecycle,
   pure,
   withProps
 } from "recompose"
@@ -31,8 +32,14 @@ import {
   AuthenticateRequest,
   Session
 } from "common"
-import { Redirect, RedirectProps } from "components"
-import { WithFormSubmit } from "enhancers"
+import {
+  Redirect,
+  RedirectProps
+} from "components"
+import {
+  WithFormSubmit,
+  WithRememberMe
+} from "enhancers"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -42,6 +49,7 @@ import { WithFormSubmit } from "enhancers"
  * Authentication redirect properties
  */
 export type AuthenticateRedirectProps =
+  & WithRememberMe
   & WithFormSubmit<AuthenticateRequest, Session<string>>
 
 /* ------------------------------------------------------------------------- */
@@ -83,5 +91,11 @@ export const AuthenticateRedirect =
         form.response!.id.token
       }`
     })),
+    lifecycle<RenderProps, {}>({
+      async componentWillMount() {
+        if (this.props.active)
+          this.props.failedRememberMe(false)
+      }
+    }),
     pure
   )(Render)

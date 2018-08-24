@@ -58,8 +58,8 @@ export type AuthenticateWithTokenProps =
  * Authentication with refresh token render properties
  */
 export type RenderProps =
-  & WithFormSubmit<AuthenticateRequest, Session<string>>
   & AuthenticateWithTokenProps
+  & WithFormSubmit<AuthenticateRequest, Session<string>>
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -91,7 +91,8 @@ export const AuthenticateWithToken =
       async componentDidMount() {
         await this.props.submit()
         this.props.dismissNotification()
-        this.props.failedRememberMe()
+        if (!this.props.form.success)
+          this.props.failedRememberMe(true)
       }
     }),
     branch<WithFormSubmit<AuthenticateRequest>>(

@@ -51,8 +51,8 @@ export interface FormProps {
  * Form render properties
  */
 export type RenderProps =
-  & WithStyles<Styles>
   & FormProps
+  & WithStyles<Styles>
 
 /* ----------------------------------------------------------------------------
  * Presentational component

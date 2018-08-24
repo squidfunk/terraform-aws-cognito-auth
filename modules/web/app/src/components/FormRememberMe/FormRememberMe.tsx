@@ -20,65 +20,85 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  Button,
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
-import { ButtonProps } from "@material-ui/core/Button"
+import { Checkbox } from "@material-ui/core"
+import { CheckboxProps } from "@material-ui/core/Checkbox"
 import * as React from "react"
 import {
   compose,
-  pure
+  pure,
+  withHandlers
 } from "recompose"
 
-import { Styles, styles } from "./FormButton.styles"
+import {
+  withRememberMe,
+  WithRememberMe
+} from "enhancers"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Form button properties
+ * Form remember me properties
  */
-export type FormButtonProps = ButtonProps
+export type FormRememberMeProps = CheckboxProps
 
 /* ------------------------------------------------------------------------- */
 
 /**
- * Form button render properties
+ * Form remember me handler properties
+ */
+interface HandlerProps {
+  handleChange(
+    ev: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ): void                              /* Form change handler */
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Form remember me render properties
  */
 export type RenderProps =
-  & FormButtonProps
-  & WithStyles<Styles>
+  & FormRememberMeProps
+  & WithRememberMe
+  & HandlerProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Form button render component
+ * Form remember me render component
  *
  * @param props - Properties
  *
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  ({ classes, ...props }) =>
-    <Button
-      type="submit" variant="contained" color="primary"
-      fullWidth={true} className={classes.root} {...props}
-    />
+  ({ name, checked, handleChange }) =>
+    <Checkbox name={name} checked={checked} onChange={handleChange} />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Form button component
+ * Form remember me component
  */
-export const FormButton =
-  compose<RenderProps, FormButtonProps>(
-    withStyles(styles),
+export const FormRememberMe =
+  compose<RenderProps, FormRememberMeProps>(
+    withRememberMe(),
+    withHandlers<RenderProps, HandlerProps>({
+
+      /* Toggle visibility */
+      handleChange: ({ onChange, setRememberMe }) => (ev, checked) => {
+        if (onChange) {
+          onChange(ev, checked)
+          setRememberMe(checked)
+        }
+      }
+    }),
     pure
   )(Render)

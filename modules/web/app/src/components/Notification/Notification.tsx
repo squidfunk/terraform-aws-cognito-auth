@@ -22,6 +22,7 @@
 
 import {
   Collapse,
+  Fade,
   Typography,
   withStyles,
   WithStyles
@@ -65,11 +66,13 @@ export const Render: React.SFC<RenderProps> =
   ({ classes, data, show }) =>
     <Collapse in={show}>
       {data &&
-        <Typography className={`${classes.root} ${classes[
-          data.type.toLowerCase() as "success" | "error"
-        ]}`}>
-          {data.message}
-        </Typography>
+        <Fade in={show}>
+          <Typography className={`${classes.root} ${classes[
+            data.type.toLowerCase() as "success" | "error"
+          ]}`}>
+            {data.message}
+          </Typography>
+        </Fade>
       }
     </Collapse>
 

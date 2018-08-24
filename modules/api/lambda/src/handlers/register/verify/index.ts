@@ -43,8 +43,13 @@ import schema = require("common/events/register/verify/index.json")
  */
 export const post = handler<Parameters, Request>(schema,
   async ({ pathParameters: { code } }) => {
-    const verification = new Verification()
-    const mgmt = new ManagementClient()
-    const { subject } = await verification.claim("register", code)
-    await mgmt.verifyUser(subject)
+    try {
+      const verification = new Verification()
+      const mgmt = new ManagementClient()
+      const { subject } = await verification.claim("register", code)
+      await mgmt.verifyUser(subject)
+    } catch (err) {
+      err.statusCode = 403
+      throw err
+    }
   })

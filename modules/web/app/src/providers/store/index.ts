@@ -32,11 +32,11 @@ import {
 } from "./remember-me/reducers"
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Redux store state state
+ * Redux store state
  */
 export interface State {
   notification: NotificationState
@@ -44,13 +44,43 @@ export interface State {
 }
 
 /* ----------------------------------------------------------------------------
+ * Functions
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Persist the store state in local storage
+ *
+ * @param state - Redux store state
+ */
+export function dehydrate(state: State) {
+  localStorage.setItem("state", JSON.stringify({
+    remember: state.remember
+  }))
+}
+
+/**
+ * Retrieve the store state from local storage
+ *
+ * @return Redux store state
+ */
+export function rehydrate(): State {
+  return JSON.parse(localStorage.getItem("state") || "{}")
+}
+
+/* ----------------------------------------------------------------------------
  * Values
  * ------------------------------------------------------------------------- */
 
 /**
- * Redux store
+ * Redux store reducers
  */
-export const store = createStore(combineReducers({
+export const reducers = combineReducers<State>({
   notification,
   remember
-}))
+})
+
+/**
+ * Redux store
+ */
+export const store = createStore(reducers, rehydrate())
+store.subscribe(() => dehydrate(store.getState()))

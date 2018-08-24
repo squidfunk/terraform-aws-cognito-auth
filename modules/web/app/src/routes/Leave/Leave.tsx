@@ -20,38 +20,26 @@
  * IN THE SOFTWARE.
  */
 
-import { ManagementClient } from "clients/management"
-import {
-  ResetVerificationParameters as Parameters,
-  ResetVerificationRequest as Request
-} from "common"
-import { handler } from "handlers"
-import { validate } from "utilities/password"
-import { Verification } from "verification"
-
-import schema = require("common/events/reset/verify/index.json")
+import * as React from "react"
+import { Redirect } from "react-router-dom"
 
 /* ----------------------------------------------------------------------------
- * Handler
+ * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Reset password for user
+ * Leave render component
  *
- * @param event - API Gateway event
- *
- * @return Promise resolving with no result
+ * @return JSX element
  */
-export const post = handler<Parameters, Request>(schema,
-  async ({ pathParameters: { code }, body: { password } }) => {
-    validate(password)
-    try {
-      const verification = new Verification()
-      const mgmt = new ManagementClient()
-      const { subject } = await verification.claim("reset", code)
-      await mgmt.changePassword(subject, password)
-    } catch (err) {
-      err.statusCode = 403
-      throw err
-    }
-  })
+export const Render: React.SFC<{}> =
+  () => <Redirect to="/" />
+
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Leave component
+ */
+export const Leave = Render
