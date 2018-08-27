@@ -67,7 +67,8 @@ export type RenderProps =
  */
 export const Render: React.SFC<RenderProps> =
   ({ classes, children, ...props }) =>
-    <form method="post" className={classes.root} {...props}>
+    <form method="post" className={classes.root} autoComplete="off" {...props}>
+      <input type="hidden" />
       {children}
     </form>
 

@@ -36,11 +36,11 @@ import {
  * token-based authentication as the refresh token is persisted as a secure
  * HTTP-only cookie, and thus cannot be read from the application.
  *
- * - The `active` value determines the checked state of the remember me
- *   checkbox, so the user doesn't have to re-check it everytime the refresh
- *   token expires and he has to authenticate again.
+ * - The `active` flag determines the checked state of the remember me checkbox
+ *   so the user doesn't have to re-check it everytime the refresh token expires
+ *   and he has to authenticate again.
  *
- * - The `result` value denotes whether authentication was tried, so it is not
+ * - The `result` flag denotes whether authentication was tried, so it is not
  *   retried when the route is re-rendered.
  */
 export interface RememberMeState {

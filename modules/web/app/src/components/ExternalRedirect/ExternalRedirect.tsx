@@ -27,6 +27,8 @@ import {
   pure
 } from "recompose"
 
+import { Loading } from "components"
+
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
@@ -58,7 +60,7 @@ export type RenderProps =
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  () => null // tslint:disable-line no-null-keyword
+  () => <Loading />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -70,9 +72,9 @@ export const Render: React.SFC<RenderProps> =
 export const ExternalRedirect =
   compose<RenderProps, ExternalRedirectProps>(
     lifecycle<RenderProps, {}>({
-      componentWillMount() {
+      componentDidMount() {
         const { href } = this.props
-        window.location.href = href
+        location.href = href
       }
     }),
     pure

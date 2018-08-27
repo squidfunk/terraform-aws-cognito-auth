@@ -20,7 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-import { CircularProgress } from "@material-ui/core"
 import * as React from "react"
 import {
   branch,
@@ -31,6 +30,7 @@ import {
 } from "recompose"
 
 import { RegisterVerificationRequest } from "common"
+import { Loading } from "components"
 import {
   withFormSubmit,
   WithFormSubmit
@@ -56,7 +56,7 @@ export type RenderProps =
  * Render component
  */
 export const Render: React.SFC<RenderProps> =
-  () => <CircularProgress />
+  () => <Loading />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component

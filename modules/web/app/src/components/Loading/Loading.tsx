@@ -20,77 +20,28 @@
  * IN THE SOFTWARE.
  */
 
-import { defaultTo, pick } from "ramda"
-import { combineReducers, createStore } from "redux"
-
-import {
-  notification,
-  NotificationState
-} from "./notification/reducers"
-import {
-  remember,
-  RememberMeState
-} from "./remember-me/reducers"
-import {
-  session,
-  SessionState
-} from "./session/reducers"
+import { CircularProgress } from "@material-ui/core"
+import * as React from "react"
 
 /* ----------------------------------------------------------------------------
- * Types
+ * Presentational component
  * ------------------------------------------------------------------------- */
 
 /**
- * Redux store state
- */
-export interface State {
-  notification: NotificationState
-  remember: RememberMeState
-  session: SessionState
-}
-
-/* ----------------------------------------------------------------------------
- * Functions
- * ------------------------------------------------------------------------- */
-
-/**
- * Persist the store state in local storage
+ * Render component
  *
- * @param state - Redux store state
- */
-export function dehydrate(state: State) {
-  localStorage.setItem("state", JSON.stringify({
-    remember: pick(["active"], state.remember),
-    session: state.session
-      ? pick(["id", "access"], state.session)
-      : null
-  }))
-}
-
-/**
- * Retrieve the store state from local storage
+ * @param props - Properties
  *
- * @return Redux store state
+ * @return JSX element
  */
-export function rehydrate(): State {
-  return JSON.parse(localStorage.getItem("state") || "{}")
-}
+export const Render: React.SFC<{}> =
+  () => <CircularProgress />
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Redux store reducers
+ * Loading indicator
  */
-export const reducers = combineReducers<State>({
-  notification,
-  remember,
-  session
-})
-
-/**
- * Redux store
- */
-export const store = createStore(reducers, rehydrate())
-store.subscribe(() => dehydrate(store.getState()))
+export const Loading = Render

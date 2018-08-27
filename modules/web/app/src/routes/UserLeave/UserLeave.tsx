@@ -20,7 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-import { CircularProgress } from "@material-ui/core"
 import * as React from "react"
 import {
   branch,
@@ -31,6 +30,7 @@ import {
 } from "recompose"
 
 import { UserLeaveRequest } from "common"
+import { Loading } from "components"
 import {
   WithFormSubmit,
   withFormSubmit
@@ -58,7 +58,7 @@ export type RenderProps =
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  () => <CircularProgress />
+  () => <Loading />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -71,7 +71,7 @@ export const UserLeave =
   compose<RenderProps, {}>(
     withFormSubmit<UserLeaveRequest>({
       message: "You signed out of your account",
-      secured: true
+      authorize: true
     }),
     lifecycle<RenderProps, {}>({
       async componentDidMount() {

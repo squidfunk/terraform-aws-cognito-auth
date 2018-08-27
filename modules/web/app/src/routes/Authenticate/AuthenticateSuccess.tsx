@@ -20,11 +20,15 @@
  * IN THE SOFTWARE.
  */
 
+import { parse } from "query-string"
 import * as React from "react"
 import {
+  branch,
   compose,
   lifecycle,
-  pure
+  pure,
+  renderComponent,
+  withProps
 } from "recompose"
 
 import {
@@ -32,7 +36,8 @@ import {
   Session
 } from "common"
 import {
-  ExternalRedirect
+  ExternalRedirect,
+  Loading
 } from "components"
 import {
   WithFormSubmit,
@@ -55,11 +60,21 @@ export type AuthenticateSuccessProps =
 /* ------------------------------------------------------------------------- */
 
 /**
+ * Redirect properties
+ */
+interface RedirectProps {
+  path: string                         /* Redirect path */
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
  * Render properties
  */
 export type RenderProps =
   & AuthenticateSuccessProps
   & WithSession
+  & RedirectProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -73,9 +88,9 @@ export type RenderProps =
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  ({ session }) =>
+  ({ path, session }) =>
     <ExternalRedirect href={
-      `//${window.env.APP_ORIGIN}#${session!.id.token}`
+      `//${window.env.APP_ORIGIN}/${path}#${session!.id.token}`
     } />
 
 /* ----------------------------------------------------------------------------
@@ -88,13 +103,25 @@ export const Render: React.SFC<RenderProps> =
 export const AuthenticateSuccess =
   compose<RenderProps, AuthenticateSuccessProps>(
     withSession(),
-    lifecycle<RenderProps, {}>({
-      async componentWillMount() {
-        const { form, initSession, setRememberMeResult } = this.props
-        initSession(form.response!)
-        if (form.response!.refresh)
-          setRememberMeResult(true)
+    withProps<RedirectProps, RenderProps>(() => {
+      const { redirect } = parse(location.search)
+      return {
+        path: redirect || ""
       }
     }),
+    lifecycle<RenderProps, {}>({
+      componentDidMount() {
+        const { form, initSession, setRememberMeResult } = this.props
+        if (form.response) {
+          initSession(form.response)
+          if (form.response.refresh)
+            setRememberMeResult(true)
+        }
+      }
+    }),
+    branch<WithSession>(
+      ({ session }) => !(session && session.renewed),
+      renderComponent(() => <Loading />)
+    ),
     pure
   )(Render)

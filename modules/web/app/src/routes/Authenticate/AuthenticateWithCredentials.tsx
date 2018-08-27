@@ -101,12 +101,12 @@ export const Render: React.SFC<RenderProps> =
       <Notification />
       <Form onSubmit={handleSubmit}>
         <FormInput
-          name="username" label="Email address" required
+          name="username" label="Email address" required disabled={form.success}
           value={request.username} InputProps={{ readOnly: form.pending }}
           onChange={handleChange} autoComplete="username"
         />
         <FormPassword
-          name="password" label="Password" required
+          name="password" label="Password" required disabled={form.success}
           value={request.password} InputProps={{ readOnly: form.pending }}
           onChange={handleChange} autoComplete="password"
         />
@@ -163,7 +163,7 @@ export const AuthenticateWithCredentials =
         setRememberMeResult(false)
       }
     }),
-    branch<WithForm<AuthenticateRequest, Session<string>>>(
+    branch<WithForm<AuthenticateRequest>>(
       ({ form }) => form.success && Boolean(form.response),
       renderComponent(AuthenticateSuccess)
     ),

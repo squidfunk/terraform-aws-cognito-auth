@@ -20,7 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-import { CircularProgress } from "@material-ui/core"
 import * as React from "react"
 import {
   branch,
@@ -34,6 +33,7 @@ import {
   AuthenticateRequestWithToken as AuthenticateRequest,
   Session
 } from "common"
+import { Loading } from "components"
 import {
   withFormSubmit,
   WithFormSubmit,
@@ -73,7 +73,7 @@ export type RenderProps =
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  () => <CircularProgress />
+  () => <Loading />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -89,9 +89,8 @@ export const AuthenticateWithToken =
     }),
     lifecycle<RenderProps, {}>({
       async componentDidMount() {
-        const {
-          form, submit, dismissNotification, setRememberMeResult
-        } = this.props
+        const { submit, dismissNotification } = this.props
+        const { form, setRememberMeResult } = this.props
         await submit()
         dismissNotification()
         if (!form.success)
@@ -99,7 +98,7 @@ export const AuthenticateWithToken =
       }
     }),
     branch<WithFormSubmit<AuthenticateRequest>>(
-      ({ form }) => form.success,
+      ({ form }) => form.success && Boolean(form.response),
       renderComponent(AuthenticateSuccess)
     ),
     pure

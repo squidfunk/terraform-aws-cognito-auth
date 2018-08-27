@@ -20,54 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-import { Session } from "common"
-
-import {
-  SessionActions,
-  SessionActionTypes
-} from "./actions"
-
 /* ----------------------------------------------------------------------------
- * Types
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Session data
- *
- * The `renewed` flag describes whether the session successfully renewd after
- * a successful login attempt. This is necessary, so we know when the session
- * was actually persisted to local storage.
- */
-export interface SessionData extends Session<string> {
-  renewed?: boolean                    /* Whether the session was renewed */
-}
-
-/**
- * Session state
- */
-export type SessionState = SessionData | null
-
-/* ----------------------------------------------------------------------------
- * Reducer
- * ------------------------------------------------------------------------- */
-
-/**
- * Session reducer
- *
- * @param state - Session state
- * @param action - Session action
- */
-export function session(
-  state: SessionState = null,
-  action: SessionActions
-): SessionState {
-  switch (action.type) {
-    case SessionActionTypes.INIT:
-      const { id, access } = action.session
-      return { id, access, renewed: true }
-    case SessionActionTypes.TERMINATE:
-      return null
-    default:
-      return state
-  }
-}
+export { Loading } from "./Loading"

@@ -50,7 +50,7 @@ import {
 export interface WithFormSubmitOptions {
   target?: string                      /* Target URL */
   message?: string                     /* Message rendered on success */
-  secured?: boolean                    /* Authorization header necessary */
+  authorize?: boolean                  /* Authorization header necessary */
 }
 
 /* ------------------------------------------------------------------------- */
@@ -122,7 +122,7 @@ export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
  * @return Component enhancer
  */
 export const withFormSubmit = <TRequest extends {}, TResponse = void>(
-  { target, message, secured }: WithFormSubmitOptions
+  { target, message, authorize }: WithFormSubmitOptions
 ) =>
   compose<WithFormSubmit<TRequest, TResponse>, {}>(
     withNotification(),
@@ -148,7 +148,7 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>(
               withCredentials: true,
               headers: {
                 "Content-Type": "application/json",
-                ...(secured && session
+                ...(authorize && session
                   ? { Authorization: `Bearer ${session.access.token}` }
                   : {})
               }
