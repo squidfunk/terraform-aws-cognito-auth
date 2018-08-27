@@ -24,9 +24,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${cognito_identity_pool_name}</title>
+    <base href="/" />
+    <meta name="config:api_base_path" content="${api_base_path}" />
+    <meta name="config:app_origin" content="${app_origin}" />
+    <meta name="config:cognito_identity_pool_name"
+      content="${cognito_identity_pool_name}"
+    />
     <style>
       html, body, #root {
         height: 100%;
@@ -36,12 +41,5 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="text/javascript">
-      window.env = {
-        API_BASE_PATH: "${api_base_path}",
-        APP_ORIGIN: "${app_origin}",
-        COGNITO_IDENTITY_POOL_NAME: "${cognito_identity_pool_name}"
-      }
-    </script>
   </body>
 </html>

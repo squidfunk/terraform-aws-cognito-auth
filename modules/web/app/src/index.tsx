@@ -30,6 +30,20 @@ import { App } from "components"
 import { store, theme } from "providers"
 
 /* ----------------------------------------------------------------------------
+ * Configuration
+ * ------------------------------------------------------------------------- */
+
+/* Load configuration from meta tags to omit inline JavaScript for CSP */
+const config = document.querySelectorAll<HTMLMetaElement>("meta[name^=config]")
+window.env = Array.from(config).reduce((env, meta) => {
+  const key = meta.name.replace(/^config\:/, "")
+  return {
+    ...env,
+    [key.toUpperCase() as keyof typeof window.env]: meta.content
+  }
+}, {} as any)
+
+/* ----------------------------------------------------------------------------
  * Application
  * ------------------------------------------------------------------------- */
 

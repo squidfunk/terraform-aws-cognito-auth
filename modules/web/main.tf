@@ -24,7 +24,7 @@
 
 provider "aws" {
   version = ">= 1.20.0, <= 2.0.0"
-  alias   = "acm"
+  alias   = "lambda"
   region  = "us-east-1"
 }
 
@@ -39,6 +39,34 @@ data "external" "dist" {
   query {
     directory = "${path.module}/app/dist"
   }
+}
+
+# -----------------------------------------------------------------------------
+# Resources: IAM
+# -----------------------------------------------------------------------------
+
+# aws_iam_role.lambda
+resource "aws_iam_role" "lambda" {
+  name = "${var.namespace}-web-lambda"
+
+  assume_role_policy = "${
+    file("${path.module}/iam/policies/assume-role/lambda.json")
+  }"
+}
+
+# aws_iam_policy.lambda
+resource "aws_iam_policy" "lambda" {
+  name = "${var.namespace}-web-lambda"
+
+  policy = "${file("${path.module}/iam/policies/lambda.json")}"
+}
+
+# aws_iam_policy_attachment.lambda
+resource "aws_iam_policy_attachment" "lambda" {
+  name = "${var.namespace}-web-lambda"
+
+  policy_arn = "${aws_iam_policy.lambda.arn}"
+  roles      = ["${aws_iam_role.lambda.name}"]
 }
 
 # -----------------------------------------------------------------------------
@@ -181,6 +209,11 @@ resource "aws_cloudfront_distribution" "_" {
       }
     }
 
+    lambda_function_association {
+      event_type = "origin-response"
+      lambda_arn = "${aws_lambda_function._.qualified_arn}"
+    }
+
     viewer_protocol_policy = "redirect-to-https"
 
     compress    = true
@@ -261,4 +294,38 @@ resource "aws_cloudfront_distribution" "_" {
     ssl_support_method       = "sni-only"
     acm_certificate_arn      = "${var.app_certificate_arn}"
   }
+}
+
+# -----------------------------------------------------------------------------
+# Resources: Lambda
+# -----------------------------------------------------------------------------
+
+# aws_lambda_function._
+resource "aws_lambda_function" "_" {
+  function_name = "${var.namespace}-web-security"
+  role          = "${aws_iam_role.lambda.arn}"
+  runtime       = "nodejs8.10"
+  filename      = "${path.module}/lambda/dist.zip"
+  handler       = "index.handler"
+  timeout       = 30
+  memory_size   = 512
+
+  source_code_hash = "${
+    base64sha256(file("${path.module}/lambda/dist.zip"))
+  }"
+
+  # Lambda@Edge function must be located in us-east-1
+  provider = "aws.lambda"
+  publish  = true
+}
+
+# aws_lambda_permission._
+resource "aws_lambda_permission" "_" {
+  principal     = "cloudfront.amazonaws.com"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function._.arn}"
+  source_arn    = "${aws_cloudfront_distribution._.arn}"
+
+  # Lambda@Edge function must be located in us-east-1
+  provider = "aws.lambda"
 }

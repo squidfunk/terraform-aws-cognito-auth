@@ -24,7 +24,6 @@ import * as dotenv from "dotenv"
 import { Application } from "express"
 import * as HtmlPlugin from "html-webpack-plugin"
 import * as proxy from "http-proxy-middleware"
-// import * as MiniCssExtractPlugin from "mini-css-extract-plugin"
 import * as path from "path"
 import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin"
 import {
@@ -97,7 +96,10 @@ export default (_env: never, args: Configuration) => {
             },
             {
               loader: "html-loader",
-              options: { minimize: true }
+              options: {
+                minimize: true,
+                removeAttributeQuotes: false
+              }
             }
           ]
         }
