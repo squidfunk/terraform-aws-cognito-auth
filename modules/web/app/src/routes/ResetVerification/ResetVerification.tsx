@@ -49,7 +49,7 @@ import {
 } from "enhancers"
 
 import { Styles, styles } from "./ResetVerification.styles"
-import { ResetVerificationRedirect } from "./ResetVerificationRedirect"
+import { ResetVerificationSuccess } from "./ResetVerificationSuccess"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -117,7 +117,7 @@ export const ResetVerification =
     }),
     branch<WithForm<ResetVerificationRequest>>(
       ({ form }) => form.success,
-      renderComponent(ResetVerificationRedirect)
+      renderComponent(ResetVerificationSuccess)
     ),
     pure
   )(Render)

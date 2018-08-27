@@ -74,6 +74,9 @@ export async function middleware() {
             body: JSON.stringify(req.body)
           })
 
+          /* Artificial delay to simulate network behavior */
+          await new Promise(resolve => setTimeout(resolve, 100))
+
           /* Invoke handler and transform response */
           try {
             const { statusCode, headers, body } = await handler(event)

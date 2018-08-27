@@ -56,6 +56,6 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset verification redirect component
+ * Password reset verification success component
  */
-export const ResetVerificationRedirect = Render
+export const ResetVerificationSuccess = Render

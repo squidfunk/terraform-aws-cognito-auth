@@ -36,19 +36,16 @@ import {
  * token-based authentication as the refresh token is persisted as a secure
  * HTTP-only cookie, and thus cannot be read from the application.
  *
- * If `failed` is set to `false`, the application will authenticate during the
- * initial load in the background in order to refresh the session without
- * prompting for credentials again. If this fails, the application will set the
- * value to `true`, effectively disabling token-based authentication until the
- * next credential-based authentication.
+ * - The `active` value determines the checked state of the remember me
+ *   checkbox, so the user doesn't have to re-check it everytime the refresh
+ *   token expires and he has to authenticate again.
  *
- * The `active` value determines the checked state of the remember me checkbox,
- * so the user doesn't have to re-check it everytime the refresh token expires
- * and he has to authenticate again.
+ * - The `result` value denotes whether authentication was tried, so it is not
+ *   retried when the route is re-rendered.
  */
 export interface RememberMeState {
   active: boolean                      /* Whether to remember the user */
-  failed: boolean                      /* Whether token-based */
+  result?: boolean                     /* Authentication result */
 }
 
 /* ----------------------------------------------------------------------------
@@ -62,14 +59,14 @@ export interface RememberMeState {
  * @param action - Remember me action
  */
 export function remember(
-  state: RememberMeState = { active: false, failed: true },
+  state: RememberMeState = { active: false },
   action: RememberMeActions
 ): RememberMeState {
   switch (action.type) {
     case RememberMeActionTypes.SET:
       return { ...state, active: action.active }
-    case RememberMeActionTypes.FAILED:
-      return { ...state, failed: action.failed }
+    case RememberMeActionTypes.SET_RESULT:
+      return { ...state, result: action.result }
     default:
       return state
   }

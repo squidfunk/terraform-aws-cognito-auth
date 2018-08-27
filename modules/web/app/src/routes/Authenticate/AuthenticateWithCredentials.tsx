@@ -57,7 +57,7 @@ import {
   WithRememberMe
 } from "enhancers"
 
-import { AuthenticateRedirect } from "./AuthenticateRedirect"
+import { AuthenticateSuccess } from "./AuthenticateSuccess"
 import { Styles, styles } from "./AuthenticateWithCredentials.styles"
 
 /* ----------------------------------------------------------------------------
@@ -154,16 +154,18 @@ export const AuthenticateWithCredentials =
     }),
     lifecycle<RenderProps, {}>({
       async componentWillMount() {
-        const { remember, request, setRequest } = this.props
+        const { remember, setRememberMeResult } = this.props
+        const { request, setRequest } = this.props
         setRequest({
           ...request,
           remember: remember.active
         })
+        setRememberMeResult(false)
       }
     }),
-    branch<WithForm<AuthenticateRequest>>(
-      ({ form }) => form.success,
-      renderComponent(AuthenticateRedirect)
+    branch<WithForm<AuthenticateRequest, Session<string>>>(
+      ({ form }) => form.success && Boolean(form.response),
+      renderComponent(AuthenticateSuccess)
     ),
     pure
   )(Render)

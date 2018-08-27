@@ -25,10 +25,10 @@ import { Dispatch } from "redux"
 
 import { State } from "providers/store"
 import {
-  failedRememberMeAction,
   RememberMeActions,
   RememberMeState,
-  setRememberMeAction
+  setRememberMeAction,
+  setRememberMeResultAction
 } from "providers/store/remember-me"
 
 /* ----------------------------------------------------------------------------
@@ -47,9 +47,9 @@ export interface WithRememberMeState {
  */
 export interface WithRememberMeDispatch {
   setRememberMe(active: boolean): void /* Set whether to remember the user */
-  failedRememberMe(
-    failed: boolean
-  ): void                              /* Token-based authentication failed */
+  setRememberMeResult(
+    result: boolean
+  ): void                              /* Set authentication result */
 }
 
 /**
@@ -73,6 +73,6 @@ export const withRememberMe = () =>
     ({ remember }: State) => ({ remember }),
     (dispatch: Dispatch<RememberMeActions>) => ({
       setRememberMe: active => dispatch(setRememberMeAction(active)),
-      failedRememberMe: failed => dispatch(failedRememberMeAction(failed))
+      setRememberMeResult: result => dispatch(setRememberMeResultAction(result))
     })
   )

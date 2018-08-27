@@ -21,7 +21,6 @@
  */
 
 import * as React from "react"
-import { Redirect } from "react-router-dom"
 import {
   compose,
   lifecycle,
@@ -29,18 +28,38 @@ import {
 } from "recompose"
 
 import {
-  RenderProps as UserLeaveRenderProps
-} from "./UserLeave"
+  AuthenticateRequest,
+  Session
+} from "common"
+import {
+  ExternalRedirect
+} from "components"
+import {
+  WithFormSubmit,
+  WithRememberMe,
+  withSession,
+  WithSession
+} from "enhancers"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
+ * Authentication success properties
+ */
+export type AuthenticateSuccessProps =
+  & WithRememberMe
+  & WithFormSubmit<AuthenticateRequest, Session<string>>
+
+/* ------------------------------------------------------------------------- */
+
+/**
  * Render properties
  */
 export type RenderProps =
-  & UserLeaveRenderProps
+  & AuthenticateSuccessProps
+  & WithSession
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -54,22 +73,27 @@ export type RenderProps =
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  () => <Redirect to="/" />
+  ({ session }) =>
+    <ExternalRedirect href={
+      `//${window.env.APP_ORIGIN}#${session!.id.token}`
+    } />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * User sign out redirect component
+ * Authentication success component
  */
-export const UserLeaveRedirect =
-  compose<RenderProps, {}>(
+export const AuthenticateSuccess =
+  compose<RenderProps, AuthenticateSuccessProps>(
+    withSession(),
     lifecycle<RenderProps, {}>({
       async componentWillMount() {
-        const { form, dismissNotification } = this.props
-        if (form.err)
-          dismissNotification()
+        const { form, initSession, setRememberMeResult } = this.props
+        initSession(form.response!)
+        if (form.response!.refresh)
+          setRememberMeResult(true)
       }
     }),
     pure

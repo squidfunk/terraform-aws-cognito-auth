@@ -59,7 +59,9 @@ export interface State {
  */
 export function dehydrate(state: State) {
   localStorage.setItem("state", JSON.stringify({
-    remember: state.remember,
+    remember: {
+      active: state.remember.active
+    },
     session: state.session
   }))
 }

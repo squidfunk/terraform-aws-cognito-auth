@@ -31,7 +31,7 @@ import { Action } from "redux"
  */
 export enum RememberMeActionTypes {
   SET = "REMEMBER_ME_SET",
-  FAILED = "REMEMBER_ME_FAILED"
+  SET_RESULT = "REMEMBER_ME_SET_RESULT"
 }
 
 /* ------------------------------------------------------------------------- */
@@ -45,11 +45,11 @@ interface RememberMeSetAction extends Action {
 }
 
 /**
- * Remember me failed action
+ * Remember me set result action
  */
-interface RememberMeFailedAction extends Action {
-  type: RememberMeActionTypes.FAILED
-  failed: boolean
+interface RememberMeSetResultAction extends Action {
+  type: RememberMeActionTypes.SET_RESULT
+  result: boolean
 }
 
 /* ------------------------------------------------------------------------- */
@@ -59,14 +59,14 @@ interface RememberMeFailedAction extends Action {
  */
 export type RememberMeActions =
   | RememberMeSetAction
-  | RememberMeFailedAction
+  | RememberMeSetResultAction
 
 /* ----------------------------------------------------------------------------
  * Actions
  * ------------------------------------------------------------------------- */
 
 /**
- * Set remember me state
+ * Set remember me flag
  *
  * @param active - Whether to remember the user
  *
@@ -78,11 +78,13 @@ export const setRememberMeAction =
   })
 
 /**
- * Mark token-based authentication as failed
+ * Set authentication result
+ *
+ * @param result - Authentication result
  *
  * @return Action
  */
-export const failedRememberMeAction =
-  (failed: boolean): RememberMeFailedAction => ({
-    type: RememberMeActionTypes.FAILED, failed
+export const setRememberMeResultAction =
+  (result: boolean): RememberMeSetResultAction => ({
+    type: RememberMeActionTypes.SET_RESULT, result
   })

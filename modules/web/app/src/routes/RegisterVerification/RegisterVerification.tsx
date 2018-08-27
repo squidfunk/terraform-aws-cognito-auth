@@ -36,7 +36,7 @@ import {
   WithFormSubmit
 } from "enhancers"
 
-import { RegisterVerificationRedirect } from "./RegisterVerificationRedirect"
+import { RegisterVerificationSuccess } from "./RegisterVerificationSuccess"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -78,8 +78,8 @@ export const RegisterVerification =
       }
     }),
     branch<WithFormSubmit<RegisterVerificationRequest>>(
-      ({ form }) => form.success || !!form.err,
-      renderComponent(RegisterVerificationRedirect)
+      ({ form }) => form.success || Boolean(form.err),
+      renderComponent(RegisterVerificationSuccess)
     ),
     pure
   )(Render)

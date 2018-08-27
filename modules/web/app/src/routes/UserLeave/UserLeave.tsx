@@ -36,7 +36,7 @@ import {
   withFormSubmit
 } from "enhancers"
 
-import { UserLeaveRedirect } from "./UserLeaveRedirect"
+import { UserLeaveSuccess } from "./UserLeaveSuccess"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -80,8 +80,8 @@ export const UserLeave =
       }
     }),
     branch<WithFormSubmit<UserLeaveRequest>>(
-      ({ form }) => form.success || !!form.err,
-      renderComponent(UserLeaveRedirect)
+      ({ form }) => form.success || Boolean(form.err),
+      renderComponent(UserLeaveSuccess)
     ),
     pure
   )(Render)

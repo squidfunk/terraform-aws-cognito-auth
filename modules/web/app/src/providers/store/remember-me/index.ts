@@ -26,7 +26,7 @@
 
 export {
   RememberMeActions,
-  failedRememberMeAction,
+  setRememberMeResultAction,
   setRememberMeAction
 } from "./actions"
 export {

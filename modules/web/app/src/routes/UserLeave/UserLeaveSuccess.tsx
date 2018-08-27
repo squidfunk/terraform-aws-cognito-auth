@@ -21,6 +21,7 @@
  */
 
 import * as React from "react"
+import { Redirect } from "react-router-dom"
 import {
   compose,
   lifecycle,
@@ -28,38 +29,18 @@ import {
 } from "recompose"
 
 import {
-  AuthenticateRequest,
-  Session
-} from "common"
-import {
-  ExternalRedirect
-} from "components"
-import {
-  WithFormSubmit,
-  WithRememberMe,
-  withSession,
-  WithSession
-} from "enhancers"
+  RenderProps as UserLeaveRenderProps
+} from "./UserLeave"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication redirect properties
- */
-export type AuthenticateRedirectProps =
-  & WithRememberMe
-  & WithFormSubmit<AuthenticateRequest, Session<string>>
-
-/* ------------------------------------------------------------------------- */
-
-/**
  * Render properties
  */
 export type RenderProps =
-  & AuthenticateRedirectProps
-  & WithSession
+  & UserLeaveRenderProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -73,27 +54,22 @@ export type RenderProps =
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  ({ session }) =>
-    <ExternalRedirect href={
-      `//${window.env.APP_ORIGIN}#${session!.id.token}`
-    } />
+  () => <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication redirect component
+ * User sign out success component
  */
-export const AuthenticateRedirect =
-  compose<RenderProps, AuthenticateRedirectProps>(
-    withSession(),
+export const UserLeaveSuccess =
+  compose<RenderProps, {}>(
     lifecycle<RenderProps, {}>({
       async componentWillMount() {
-        const { form, remember, initSession, failedRememberMe } = this.props
-        initSession(form.response!)
-        if (remember.active)
-          failedRememberMe(false)
+        const { form, dismissNotification } = this.props
+        if (form.err)
+          dismissNotification()
       }
     }),
     pure

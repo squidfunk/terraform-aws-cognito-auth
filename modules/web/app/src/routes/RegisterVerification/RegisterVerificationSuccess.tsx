@@ -56,6 +56,6 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification redirect component
+ * Registration verification success component
  */
-export const RegisterVerificationRedirect = Render
+export const RegisterVerificationSuccess = Render

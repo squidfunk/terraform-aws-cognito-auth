@@ -40,7 +40,7 @@ import {
   WithRememberMe
 } from "enhancers"
 
-import { AuthenticateRedirect } from "./AuthenticateRedirect"
+import { AuthenticateSuccess } from "./AuthenticateSuccess"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -90,17 +90,17 @@ export const AuthenticateWithToken =
     lifecycle<RenderProps, {}>({
       async componentDidMount() {
         const {
-          form, submit, dismissNotification, failedRememberMe
+          form, submit, dismissNotification, setRememberMeResult
         } = this.props
         await submit()
         dismissNotification()
         if (!form.success)
-          failedRememberMe(true)
+          setRememberMeResult(false)
       }
     }),
     branch<WithFormSubmit<AuthenticateRequest>>(
       ({ form }) => form.success,
-      renderComponent(AuthenticateRedirect)
+      renderComponent(AuthenticateSuccess)
     ),
     pure
   )(Render)
