@@ -48,8 +48,7 @@ describe("handlers/register", () => {
       const event = mockAPIGatewayProxyEvent<Request>({
         body: { email, password }
       })
-      const registerMock =
-        mockAuthenticationClientRegisterWithSuccess()
+      const registerMock = mockAuthenticationClientRegisterWithSuccess()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(200)
       expect(body).toEqual("{}")
@@ -57,13 +56,32 @@ describe("handlers/register", () => {
         .toHaveBeenCalledWith(email, password)
     })
 
+    /* Test: should resolve with password policy error */
+    it("should resolve with password policy error", async () => {
+      const event = mockAPIGatewayProxyEvent<Request>({
+        body: { email, password: "" }
+      })
+      const registerMock = mockAuthenticationClientRegisterWithError()
+      const { statusCode, body } = await post(event)
+      expect(statusCode).toEqual(400)
+      expect(body).toEqual(JSON.stringify({
+        type: "Error",
+        message:
+          "Password must be at least 8 letters long, " +
+          "contain a capital letter, " +
+          "contain a lowercase letter, " +
+          "contain a number, " +
+          "and contain a special character"
+      }))
+      expect(registerMock).not.toHaveBeenCalledWith()
+    })
+
     /* Test: should resolve with authentication client error */
     it("should resolve with authentication client error", async () => {
       const event = mockAPIGatewayProxyEvent<Request>({
         body: { email, password }
       })
-      const registerMock =
-        mockAuthenticationClientRegisterWithError()
+      const registerMock = mockAuthenticationClientRegisterWithError()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({

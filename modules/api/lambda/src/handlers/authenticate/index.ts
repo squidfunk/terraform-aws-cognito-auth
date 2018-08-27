@@ -153,14 +153,14 @@ export const post = handler<{}, Request, Session | string>(schema,
 
     /* If token-based authentication failed, invalidate cookie */
     } catch (err) {
-      if (token) {
+      if (!username) {
         err.code = err.code || err.name
         return {
           statusCode: 403,
-          body: JSON.stringify({
+          body: {
             type: err.code,
             message: err.message.replace(/\.$/, "")
-          }),
+          },
           headers: {
             "Set-Cookie": resetToken(path)
           }

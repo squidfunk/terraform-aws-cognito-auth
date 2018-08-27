@@ -20,36 +20,58 @@
  * IN THE SOFTWARE.
  */
 
-import { SessionClient } from "clients/session"
-import { UserLeaveRequest } from "common"
-import { handler } from "handlers"
-
-import schema = require("common/events/user/leave/index.json")
+import { Callback } from "aws-lambda"
+import { mock, restore } from "aws-sdk-mock"
 
 /* ----------------------------------------------------------------------------
- * Handler
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Terminate the session associated with the given access token
+ * Mock CognitoIdentityServiceProvider.globalSignOut
  *
- * @param event - API Gateway event
+ * @param spy - Spy/fake to mock Cognito
  *
- * @return Promise resolving with session
+ * @return Jasmine spy
  */
-export const post = handler<{}, UserLeaveRequest>(schema,
-  async ({ headers }) => {
-    const token = (headers.Authorization || "").replace(/^Bearer\s+/, "")
-    try {
-      const session = new SessionClient(token)
-      await session.signOut()
-      return {
-        statusCode: 204
-      }
-    } catch (err) {
-      err.statusCode = 403
-      throw err
-    }
-  })
+function mockCognitoGlobalSignOut(
+  spy: jasmine.Spy
+): jasmine.Spy {
+  mock("CognitoIdentityServiceProvider", "globalSignOut",
+    (data: any, cb: Callback) => {
+      cb(undefined, spy(data))
+    })
+  return spy
+}
 
-// TODO: invalidate cookie!!!
+/**
+ * Mock CognitoIdentityServiceProvider.globalSignOut returning with success
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoGlobalSignOutWithSuccess(): jasmine.Spy {
+  return mockCognitoGlobalSignOut(
+    jasmine.createSpy("globalSignOut"))
+}
+
+/**
+ * Mock CognitoIdentityServiceProvider.globalSignOut throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockCognitoGlobalSignOutWithError(
+  err: Error = new Error("globalSignOut")
+): jasmine.Spy {
+  return mockCognitoGlobalSignOut(
+    jasmine.createSpy("globalSignOut")
+      .and.callFake(() => { throw err }))
+}
+
+/**
+ * Restore CognitoIdentityServiceProvider.globalSignOut
+ */
+export function restoreCognitoGlobalSignOut() {
+  restore("CognitoIdentityServiceProvider", "globalSignOut")
+}

@@ -80,7 +80,11 @@ describe("clients/management", () => {
         mockCognitoAdminUpdateUserAttributesWithSuccess()
         const mgmt = new ManagementClient()
         await mgmt.verifyUser(username)
-        expect(adminConfirmSignUpMock).toHaveBeenCalled()
+        expect(adminConfirmSignUpMock).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            Username: username
+          })
+        )
       })
 
       /* Test: should confirm user email address */
@@ -90,11 +94,15 @@ describe("clients/management", () => {
           mockCognitoAdminUpdateUserAttributesWithSuccess()
         const mgmt = new ManagementClient()
         await mgmt.verifyUser(username)
-        expect(adminUpdateUserAttributesMock).toHaveBeenCalled()
+        expect(adminUpdateUserAttributesMock).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            Username: username
+          })
+        )
       })
 
       /* Test: should reject on AWS Cognito error (confirm sign up) */
-      it ("should reject on AWS Cognito error (confirm sign up)",
+      it("should reject on AWS Cognito error (confirm sign up)",
         async done => {
           const errMock = new Error()
           const adminConfirmSignUpMock =
@@ -112,7 +120,7 @@ describe("clients/management", () => {
         })
 
       /* Test: should reject on AWS Cognito error (update attributes) */
-      it ("should reject on AWS Cognito error (update attributes)",
+      it("should reject on AWS Cognito error (update attributes)",
         async done => {
           const errMock = new Error()
           mockCognitoAdminConfirmSignUpWithSuccess()
@@ -146,8 +154,21 @@ describe("clients/management", () => {
           .toBeUndefined()
       })
 
+      /* Test: should delete user */
+      it("should delete user", async () => {
+        const adminDeleteUserMock = mockCognitoAdminDeleteUserWithSuccess()
+        const mgmt = new ManagementClient()
+        expect(await mgmt.deleteUser(username))
+          .toBeUndefined()
+        expect(adminDeleteUserMock).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            Username: username
+          })
+        )
+      })
+
       /* Test: should reject on AWS Cognito error */
-      it ("should reject on AWS Cognito error",
+      it("should reject on AWS Cognito error",
         async done => {
           const errMock = new Error()
           const adminDeleteUserMock =
@@ -193,13 +214,17 @@ describe("clients/management", () => {
 
       /* Test: should retrieve and delete old user */
       it("should retrieve and delete old user", async () => {
-        mockCognitoAdminGetUserWithResult(username)
+        const adminGetUserMock = mockCognitoAdminGetUserWithResult(username)
         const adminDeleteUserMock = mockCognitoAdminDeleteUserWithSuccess()
         mockCognitoSignUpWithSuccess()
         mockCognitoAdminConfirmSignUpWithSuccess()
         mockCognitoAdminUpdateUserAttributesWithSuccess()
         const mgmt = new ManagementClient()
         await mgmt.changePassword(username, password)
+        expect(adminGetUserMock).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            Username: username
+          }))
         expect(adminDeleteUserMock).toHaveBeenCalledWith(
           jasmine.objectContaining({
             Username: username

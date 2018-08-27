@@ -24,5 +24,6 @@
  * Re-exports
  * ------------------------------------------------------------------------- */
 
+export * from "./error"
 export * from "./events"
 export * from "./session"

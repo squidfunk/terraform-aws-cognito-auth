@@ -20,39 +20,33 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  RegisterVerificationParameters as Parameters,
-  RegisterVerificationRequest as Request
-} from "common"
 import { post } from "handlers/register/verify"
 
+import { chance } from "_/helpers"
 import {
   mockManagementClientVerifyUserWithError,
-  mockManagementClientVerifyUserWithSuccess
+  mockManagementClientVerifyUserWithSuccess // TODO mock session client...
 } from "_/mocks/clients"
 import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
-import {
-  mockVerificationClaimWithError,
-  mockVerificationClaimWithResult,
-  mockVerificationCode
-} from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Registration verification */
-describe("handlers/register/verify", () => {
+/* Terminate session */
+describe("handlers/user/leave", () => {
 
-  /* POST /register/:code */
+  /* POST /user/leave */
   describe("post", () => {
 
-    /* Registration request and verification code */
-    const code = mockVerificationCode()
+    /* Access token */
+    const token = chance.string({ length: 128 })
 
     /* API Gateway event */
-    const event = mockAPIGatewayProxyEvent<Parameters, Request>({
-      pathParameters: { code: code.id }
+    const event = mockAPIGatewayProxyEvent<{}, {}>({
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
 
     /* Test: should resolve with empty body */
@@ -69,38 +63,38 @@ describe("handlers/register/verify", () => {
         .toHaveBeenCalledWith(code.subject)
     })
 
-    /* Test: should resolve with verification error */
-    it("should resolve with verification error", async () => {
-      const claimMock = mockVerificationClaimWithError()
-      const verifyUserMock =
-        mockManagementClientVerifyUserWithSuccess()
-      const { statusCode, body } = await post(event)
-      expect(statusCode).toEqual(403)
-      expect(body).toEqual(JSON.stringify({
-        type: "Error",
-        message: "claim"
-      }))
-      expect(claimMock)
-        .toHaveBeenCalledWith("register", code.id)
-      expect(verifyUserMock)
-        .not.toHaveBeenCalled()
-    })
+    // /* Test: should resolve with verification error */
+    // it("should resolve with verification error", async () => {
+    //   const claimMock = mockVerificationClaimWithError()
+    //   const verifyUserMock =
+    //     mockManagementClientVerifyUserWithSuccess()
+    //   const { statusCode, body } = await post(event)
+    //   expect(statusCode).toEqual(403)
+    //   expect(body).toEqual(JSON.stringify({
+    //     type: "Error",
+    //     message: "claim"
+    //   }))
+    //   expect(claimMock)
+    //     .toHaveBeenCalledWith("register", code.id)
+    //   expect(verifyUserMock)
+    //     .not.toHaveBeenCalled()
+    // })
 
-    /* Test: should resolve with management client error */
-    it("should resolve with management client error", async () => {
-      const claimMock = mockVerificationClaimWithResult(code)
-      const changePasswordMock =
-        mockManagementClientVerifyUserWithError()
-      const { statusCode, body } = await post(event)
-      expect(statusCode).toEqual(403)
-      expect(body).toEqual(JSON.stringify({
-        type: "Error",
-        message: "verifyUser"
-      }))
-      expect(claimMock)
-        .toHaveBeenCalledWith("register", code.id)
-      expect(changePasswordMock)
-        .toHaveBeenCalledWith(code.subject)
-    })
+    // /* Test: should resolve with management client error */
+    // it("should resolve with management client error", async () => {
+    //   const claimMock = mockVerificationClaimWithResult(code)
+    //   const changePasswordMock =
+    //     mockManagementClientVerifyUserWithError()
+    //   const { statusCode, body } = await post(event)
+    //   expect(statusCode).toEqual(403)
+    //   expect(body).toEqual(JSON.stringify({
+    //     type: "Error",
+    //     message: "verifyUser"
+    //   }))
+    //   expect(claimMock)
+    //     .toHaveBeenCalledWith("register", code.id)
+    //   expect(changePasswordMock)
+    //     .toHaveBeenCalledWith(code.subject)
+    // })
   })
 })

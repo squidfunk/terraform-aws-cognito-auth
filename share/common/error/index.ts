@@ -20,36 +20,21 @@
  * IN THE SOFTWARE.
  */
 
-import { SessionClient } from "clients/session"
-import { UserLeaveRequest } from "common"
-import { handler } from "handlers"
-
-import schema = require("common/events/user/leave/index.json")
-
 /* ----------------------------------------------------------------------------
- * Handler
+ * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Terminate the session associated with the given access token
- *
- * @param event - API Gateway event
- *
- * @return Promise resolving with session
+ * Error response
  */
-export const post = handler<{}, UserLeaveRequest>(schema,
-  async ({ headers }) => {
-    const token = (headers.Authorization || "").replace(/^Bearer\s+/, "")
-    try {
-      const session = new SessionClient(token)
-      await session.signOut()
-      return {
-        statusCode: 204
-      }
-    } catch (err) {
-      err.statusCode = 403
-      throw err
-    }
-  })
+export interface ErrorResponse {
+  type: string                         /* Error type */
+  message: string                      /* Error message */
+}
 
-// TODO: invalidate cookie!!!
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Type used for JSON schema
+ */
+export type __JSON__ = ErrorResponse

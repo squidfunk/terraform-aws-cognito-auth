@@ -27,6 +27,8 @@ import {
 import { AWSError } from "aws-sdk"
 import { validate } from "jsonschema"
 
+import { ErrorResponse } from "common"
+
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
@@ -58,7 +60,7 @@ export interface HandlerCallbackResponse<TResponse> {
   headers?: {                          /* Response headers */
     [name: string]: string
   }
-  body?: TResponse                     /* Response body */
+  body?: TResponse | ErrorResponse     /* Response body */
 }
 
 /**

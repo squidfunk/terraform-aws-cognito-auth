@@ -52,13 +52,11 @@ describe("handlers/reset/verify", () => {
     const { password } = mockResetVerifyRequest()
     const code = mockVerificationCode()
 
-    /* API Gateway event */
-    const event = mockAPIGatewayProxyEvent<Parameters, Request>({
-      body: { password }, pathParameters: { code: code.id }
-    })
-
     /* Test: should resolve with empty body */
     it("should resolve with empty body", async () => {
+      const event = mockAPIGatewayProxyEvent<Parameters, Request>({
+        body: { password }, pathParameters: { code: code.id }
+      })
       const claimMock = mockVerificationClaimWithResult(code)
       const changePasswordMock =
         mockManagementClientChangePasswordWithSuccess()
@@ -71,13 +69,36 @@ describe("handlers/reset/verify", () => {
         .toHaveBeenCalledWith(code.subject, password)
     })
 
+    /* Test: should resolve with password policy error */
+    it("should resolve with password policy error", async () => {
+      const event = mockAPIGatewayProxyEvent<Parameters, Request>({
+        body: { password: "" }
+      })
+      const claimMock = mockVerificationClaimWithError()
+      const { statusCode, body } = await post(event)
+      expect(statusCode).toEqual(400)
+      expect(body).toEqual(JSON.stringify({
+        type: "Error",
+        message:
+          "Password must be at least 8 letters long, " +
+          "contain a capital letter, " +
+          "contain a lowercase letter, " +
+          "contain a number, " +
+          "and contain a special character"
+      }))
+      expect(claimMock).not.toHaveBeenCalledWith()
+    })
+
     /* Test: should resolve with verification error */
     it("should resolve with verification error", async () => {
+      const event = mockAPIGatewayProxyEvent<Parameters, Request>({
+        body: { password }, pathParameters: { code: code.id }
+      })
       const claimMock = mockVerificationClaimWithError()
       const changePasswordMock =
         mockManagementClientChangePasswordWithSuccess()
       const { statusCode, body } = await post(event)
-      expect(statusCode).toEqual(400)
+      expect(statusCode).toEqual(403)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
         message: "claim"
@@ -90,11 +111,14 @@ describe("handlers/reset/verify", () => {
 
     /* Test: should resolve with management client error */
     it("should resolve with management client error", async () => {
+      const event = mockAPIGatewayProxyEvent<Parameters, Request>({
+        body: { password }, pathParameters: { code: code.id }
+      })
       const claimMock = mockVerificationClaimWithResult(code)
       const changePasswordMock =
         mockManagementClientChangePasswordWithError()
       const { statusCode, body } = await post(event)
-      expect(statusCode).toEqual(400)
+      expect(statusCode).toEqual(403)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
         message: "changePassword"

@@ -43,24 +43,6 @@ export class SessionClient extends Client {
   }
 
   /**
-   * Change password for current user
-   *
-   * @param previous - Previous password
-   * @param proposed - Proposed password
-   *
-   * @return Promise resolving with no result
-   */
-  public async changePassword(
-    previous: string, proposed: string
-  ): Promise<void> {
-    await this.cognito.changePassword({
-      AccessToken: this.token,
-      PreviousPassword: previous,
-      ProposedPassword: proposed
-    }).promise()
-  }
-
-  /**
    * Terminate session for current user
    */
   public async signOut() {
