@@ -136,7 +136,7 @@ export function handler<
 
       /* Execute handler and return response */
       const { statusCode, headers, body } = {
-        statusCode: 200,
+        statusCode: undefined,
         headers: {},
         body: undefined,
         ...(await cb({
@@ -147,9 +147,9 @@ export function handler<
         }))
       }
       return {
-        statusCode,
+        statusCode: statusCode || (body ? 200 : 204),
         headers,
-        body: body ? JSON.stringify(body) : "{}"
+        body: body ? JSON.stringify(body) : ""
       }
 
     /* Catch errors */

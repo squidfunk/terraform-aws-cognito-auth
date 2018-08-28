@@ -54,7 +54,7 @@ describe("handlers/leave", () => {
       const signOutMock = mockSessionClientSignOutWithSuccess()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(204)
-      expect(body).toEqual("{}")
+      expect(body).toEqual("")
       expect(signOutMock).toHaveBeenCalled()
     })
 

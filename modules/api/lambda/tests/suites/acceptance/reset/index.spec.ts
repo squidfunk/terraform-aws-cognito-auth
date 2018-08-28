@@ -137,7 +137,7 @@ describe("POST /reset", () => {
       return request.post("/reset")
         .set("Content-Type", "application/json")
         .send({ username: email })
-        .expect(200, "{}")
+        .expect(204, "")
     })
   })
 })

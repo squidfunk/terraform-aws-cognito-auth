@@ -45,7 +45,7 @@ describe("POST /register", () => {
     return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ length: 8 }))
-      .expect(200)
+      .expect(204)
   })
 
   /* Test: should accept 256-letter passwords */
@@ -53,7 +53,7 @@ describe("POST /register", () => {
     return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ length: 256 }))
-      .expect(200)
+      .expect(204)
   })
 
   /* Test: should return empty body */
@@ -61,7 +61,7 @@ describe("POST /register", () => {
     return request.post("/register")
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest())
-      .expect(200, "{}")
+      .expect(204, "")
   })
 
   /* Test: should return error for empty request */

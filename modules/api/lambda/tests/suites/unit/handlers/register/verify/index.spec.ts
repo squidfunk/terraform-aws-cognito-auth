@@ -59,8 +59,8 @@ describe("handlers/register/verify", () => {
       const verifyUserMock =
         mockManagementClientVerifyUserWithSuccess()
       const { statusCode, body } = await post(event)
-      expect(statusCode).toEqual(200)
-      expect(body).toEqual("{}")
+      expect(statusCode).toEqual(204)
+      expect(body).toEqual("")
       expect(claimMock)
         .toHaveBeenCalledWith("register", code.id)
       expect(verifyUserMock)

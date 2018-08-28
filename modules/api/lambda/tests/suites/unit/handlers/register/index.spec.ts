@@ -50,8 +50,8 @@ describe("handlers/register", () => {
     it("should resolve with empty body", async () => {
       const registerMock = mockAuthenticationClientRegisterWithSuccess()
       const { statusCode, body } = await post(event)
-      expect(statusCode).toEqual(200)
-      expect(body).toEqual("{}")
+      expect(statusCode).toEqual(204)
+      expect(body).toEqual("")
       expect(registerMock)
         .toHaveBeenCalledWith(email, password)
     })

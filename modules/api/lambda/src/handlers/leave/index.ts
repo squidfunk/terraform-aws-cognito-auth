@@ -48,7 +48,6 @@ export const post = handler<{}, LeaveRequest>(schema,
       const session = new SessionClient(token)
       await session.signOut()
       return {
-        statusCode: 204,
         headers: {
           "Set-Cookie": resetTokenCookie()
         }

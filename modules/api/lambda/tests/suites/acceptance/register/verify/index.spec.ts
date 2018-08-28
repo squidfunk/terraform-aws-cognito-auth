@@ -42,7 +42,7 @@ describe("POST /register/:code", () => {
     const { id } = await auth.register(user.email, user.password)
     return request.post(`/register/${id}`)
       .set("Content-Type", "application/json")
-      .expect(200, "{}")
+      .expect(204, "")
   })
 
   /* Test: should return error for malformed request */

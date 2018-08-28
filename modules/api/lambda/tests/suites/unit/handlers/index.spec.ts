@@ -104,7 +104,7 @@ describe("handlers", () => {
       const result = { [chance.string()]: chance.string() }
       const cb = mockHandlerCallbackWithSuccess(undefined, result)
       const { statusCode, headers } = await handler({}, cb)(event)
-      expect(statusCode).toEqual(200)
+      expect(statusCode).toEqual(204)
       expect(headers).toEqual(result)
     })
 
@@ -176,7 +176,7 @@ describe("handlers", () => {
       mockValidateWithSuccess()
       const cb = mockHandlerCallbackWithSuccess()
       const { statusCode } = await handler({}, cb)(event)
-      expect(statusCode).toEqual(200)
+      expect(statusCode).toEqual(204)
     })
   })
 })

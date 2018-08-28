@@ -49,8 +49,8 @@ describe("handlers/reset", () => {
       const forgotPasswordMock =
         mockAuthenticationClientForgotPasswordWithSuccess()
       const { statusCode, body } = await post(event)
-      expect(statusCode).toEqual(200)
-      expect(body).toEqual("{}")
+      expect(statusCode).toEqual(204)
+      expect(body).toEqual("")
       expect(forgotPasswordMock)
         .toHaveBeenCalledWith(username)
     })
