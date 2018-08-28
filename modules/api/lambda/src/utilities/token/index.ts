@@ -20,27 +20,21 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "clients/authentication"
-import { RegisterRequest as Request } from "common"
-import { handler } from "handlers"
-import { throwOnPasswordPolicyBreach } from "utilities"
-
-import schema = require("common/events/register/index.json")
-
 /* ----------------------------------------------------------------------------
- * Handler
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Register user with email address and password
+ * Extract token from authorization header
  *
- * @param event - API Gateway event
+ * Will return an empty string if the given parameter is falsey, as it will
+ * fail in subsequent requests and checking for existence is obsolete as it
+ * needs to be validated by AWS anyways.
  *
- * @return Promise resolving with no result
+ * @param authorization - Authorization header
+ *
+ * @return Extracted token or empty string
  */
-export const post = handler<{}, Request>(schema,
-  async ({ body: { email, password } }) => {
-    throwOnPasswordPolicyBreach(password)
-    const auth = new AuthenticationClient()
-    await auth.register(email, password)
-  })
+export function parseTokenFromHeader(authorization?: string) {
+  return (authorization || "").replace(/^Bearer\s+/, "")
+}

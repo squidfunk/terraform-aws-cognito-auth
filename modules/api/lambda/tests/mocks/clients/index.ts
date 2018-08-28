@@ -26,3 +26,4 @@
 
 export * from "./authentication"
 export * from "./management"
+export * from "./session"

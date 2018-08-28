@@ -40,14 +40,14 @@ describe("handlers/register", () => {
   /* POST /register */
   describe("post", () => {
 
-    /* Registration request */
+    /* Credentials and event */
     const { email, password } = mockRegisterRequest()
+    const event = mockAPIGatewayProxyEvent<Request>({
+      body: { email, password }
+    })
 
     /* Test: should resolve with empty body */
     it("should resolve with empty body", async () => {
-      const event = mockAPIGatewayProxyEvent<Request>({
-        body: { email, password }
-      })
       const registerMock = mockAuthenticationClientRegisterWithSuccess()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(200)
@@ -58,11 +58,11 @@ describe("handlers/register", () => {
 
     /* Test: should resolve with password policy error */
     it("should resolve with password policy error", async () => {
-      const event = mockAPIGatewayProxyEvent<Request>({
-        body: { email, password: "" }
-      })
       const registerMock = mockAuthenticationClientRegisterWithError()
-      const { statusCode, body } = await post(event)
+      const { statusCode, body } = await post(
+        mockAPIGatewayProxyEvent<Request>({
+          body: { email, password: "" }
+        }))
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
@@ -78,9 +78,6 @@ describe("handlers/register", () => {
 
     /* Test: should resolve with authentication client error */
     it("should resolve with authentication client error", async () => {
-      const event = mockAPIGatewayProxyEvent<Request>({
-        body: { email, password }
-      })
       const registerMock = mockAuthenticationClientRegisterWithError()
       const { statusCode, body } = await post(event)
       expect(statusCode).toEqual(400)

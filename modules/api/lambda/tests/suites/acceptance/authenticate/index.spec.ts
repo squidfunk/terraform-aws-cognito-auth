@@ -144,8 +144,8 @@ describe("POST /authenticate", () => {
       await mgmt.deleteUser(email)
     })
 
-    /* Test: should return ID token for valid credentials */
-    it("should return ID token for valid credentials", async () => {
+    /* Test: should return identity token for valid credentials */
+    it("should return identity token for valid credentials", async () => {
       const { body } = await request.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password })
@@ -200,8 +200,8 @@ describe("POST /authenticate", () => {
           }; HttpOnly; Secure; SameSite=Strict`)
       })
 
-    /* Test: should return ID token for valid refresh token */
-    it("should return ID token for valid refresh token", async () => {
+    /* Test: should return identity token for valid refresh token */
+    it("should return identity token for valid refresh token", async () => {
       const { body: { refresh } } = await request.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password })

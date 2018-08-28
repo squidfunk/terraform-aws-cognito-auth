@@ -47,10 +47,8 @@ describe("handlers/register/verify", () => {
   /* POST /register/:code */
   describe("post", () => {
 
-    /* Registration request and verification code */
+    /* Verification code and event */
     const code = mockVerificationCode()
-
-    /* API Gateway event */
     const event = mockAPIGatewayProxyEvent<Parameters, Request>({
       pathParameters: { code: code.id }
     })

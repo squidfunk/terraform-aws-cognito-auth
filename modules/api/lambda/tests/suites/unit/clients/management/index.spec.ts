@@ -83,8 +83,7 @@ describe("clients/management", () => {
         expect(adminConfirmSignUpMock).toHaveBeenCalledWith(
           jasmine.objectContaining({
             Username: username
-          })
-        )
+          }))
       })
 
       /* Test: should confirm user email address */
@@ -97,8 +96,7 @@ describe("clients/management", () => {
         expect(adminUpdateUserAttributesMock).toHaveBeenCalledWith(
           jasmine.objectContaining({
             Username: username
-          })
-        )
+          }))
       })
 
       /* Test: should reject on AWS Cognito error (confirm sign up) */

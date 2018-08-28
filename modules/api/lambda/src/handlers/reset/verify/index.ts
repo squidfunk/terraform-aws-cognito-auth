@@ -26,7 +26,7 @@ import {
   ResetVerificationRequest as Request
 } from "common"
 import { handler } from "handlers"
-import { validate } from "utilities/password"
+import { throwOnPasswordPolicyBreach } from "utilities"
 import { Verification } from "verification"
 
 import schema = require("common/events/reset/verify/index.json")
@@ -44,7 +44,7 @@ import schema = require("common/events/reset/verify/index.json")
  */
 export const post = handler<Parameters, Request>(schema,
   async ({ pathParameters: { code }, body: { password } }) => {
-    validate(password)
+    throwOnPasswordPolicyBreach(password)
     try {
       const verification = new Verification()
       const mgmt = new ManagementClient()

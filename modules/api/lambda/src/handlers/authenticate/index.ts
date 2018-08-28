@@ -20,18 +20,20 @@
  * IN THE SOFTWARE.
  */
 
-import * as cookie from "cookie"
-
 import { AuthenticationClient } from "clients/authentication"
 import {
   AuthenticateRequestWithCredentials,
   AuthenticateRequestWithToken,
-  Session,
-  SessionToken
+  Session
 } from "common"
 import { handler } from "handlers"
 
 import schema = require("common/events/authenticate/index.json")
+import {
+  issueTokenCookie,
+  parseTokenCookie,
+  resetTokenCookie
+} from "utilities"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -45,80 +47,6 @@ type Request =
   & AuthenticateRequestWithToken
 
 /* ----------------------------------------------------------------------------
- * Constants
- * ------------------------------------------------------------------------- */
-
-/**
- * Refresh token cookie name
- */
-const TOKEN_COOKIE_NAME = "__Secure-token"
-
-/* ----------------------------------------------------------------------------
- * Functions
- * ------------------------------------------------------------------------- */
-
-/**
- * Parse refresh token from cookie
- *
- * @param header - Cookie header
- *
- * @return Refresh token
- */
-function parseToken(value: string) {
-  if (!(value && value.length))
-    throw new TypeError("Invalid request")
-  const { [TOKEN_COOKIE_NAME]: token } = cookie.parse(value)
-  return token
-}
-
-/**
- * Serialize refresh token for set-cookie header
- *
- * The refresh token is sent back to the client in the body and as a cookie
- * header. While non-browser clients should obtain the refresh token from the
- * body, browser clients will handle the refresh token automatically as it is
- * set via a HTTP-only secure cookie that is not accessible from JavaScript.
- *
- * At no time or circumstance should a browser client store the refresh token
- * in local storage as this will introduce XSS vulnerabilities.
- *
- * @param token - Refresh token
- * @param path - Cookie path
- *
- * @return Serialized cookie
- */
-function issueToken(
-  { token, expires }: SessionToken, path: string
-) {
-  return cookie.serialize(TOKEN_COOKIE_NAME, token, {
-    expires,
-    domain: process.env.COGNITO_IDENTITY_POOL_PROVIDER!,
-    path,
-    secure: true,
-    httpOnly: true,
-    sameSite: true
-  })
-}
-
-/**
- * Invalidate refresh token on client
- *
- * @param path - Cookie path
- *
- * @return Serialized cookie
- */
-function resetToken(path: string) {
-  return cookie.serialize(TOKEN_COOKIE_NAME, "", {
-    expires: new Date(0),
-    domain: process.env.COGNITO_IDENTITY_POOL_PROVIDER!,
-    path,
-    secure: true,
-    httpOnly: true,
-    sameSite: true
-  })
-}
-
-/* ----------------------------------------------------------------------------
  * Handler
  * ------------------------------------------------------------------------- */
 
@@ -130,44 +58,44 @@ function resetToken(path: string) {
  * @return Promise resolving with session
  */
 export const post = handler<{}, Request, Session | string>(schema,
-  async ({ path, headers, body: { username, password, remember, token } }) => {
+  async ({ headers, body: { username, password, remember, token } }) => {
     const auth = new AuthenticationClient()
-    try {
-      const session = await auth.authenticate(
-        username || token || parseToken(headers.Cookie),
-        password
-      )
 
-      /* Return a refresh token if the user requested it */
-      const { refresh, ...body } = session
+    /* Authenticate with credentials and return refresh token if requested */
+    if (username && password) {
+      const { refresh, ...body } =
+        await auth.authenticateWithCredentials(username, password)
       return {
         body: remember ? { ...body, refresh } : body,
         ...(remember && refresh
           ? {
-            headers: {
-              "Set-Cookie": issueToken(refresh, path)
+              headers: {
+                "Set-Cookie": issueTokenCookie(refresh)
+              }
             }
-          }
           : {})
       }
 
-    /* If token-based authentication failed, invalidate cookie */
-    } catch (err) {
-      if (!username) {
+    /* Authenticate with refresh token */
+    } else {
+      token = token || parseTokenCookie(headers.Cookie)
+      try {
+        const session = await auth.authenticateWithToken(token)
+        return {
+          body: session
+        }
+      } catch (err) {
         err.code = err.code || err.name
         return {
-          statusCode: 403,
+          statusCode: err.statusCode || 400,
           body: {
             type: err.code,
             message: err.message.replace(/\.$/, "")
           },
           headers: {
-            "Set-Cookie": resetToken(path)
+            "Set-Cookie": resetTokenCookie()
           }
         }
-      } else {
-        err.statusCode = 403
-        throw err
       }
     }
   })

@@ -48,15 +48,15 @@ describe("handlers/reset/verify", () => {
   /* POST /reset/:code */
   describe("post", () => {
 
-    /* Reset verification request and verification code */
+    /* Password, verification code and event */
     const { password } = mockResetVerifyRequest()
     const code = mockVerificationCode()
+    const event = mockAPIGatewayProxyEvent<Parameters, Request>({
+      body: { password }, pathParameters: { code: code.id }
+    })
 
     /* Test: should resolve with empty body */
     it("should resolve with empty body", async () => {
-      const event = mockAPIGatewayProxyEvent<Parameters, Request>({
-        body: { password }, pathParameters: { code: code.id }
-      })
       const claimMock = mockVerificationClaimWithResult(code)
       const changePasswordMock =
         mockManagementClientChangePasswordWithSuccess()
@@ -71,11 +71,11 @@ describe("handlers/reset/verify", () => {
 
     /* Test: should resolve with password policy error */
     it("should resolve with password policy error", async () => {
-      const event = mockAPIGatewayProxyEvent<Parameters, Request>({
-        body: { password: "" }
-      })
       const claimMock = mockVerificationClaimWithError()
-      const { statusCode, body } = await post(event)
+      const { statusCode, body } = await post(
+        mockAPIGatewayProxyEvent<Parameters, Request>({
+          body: { password: "" }
+        }))
       expect(statusCode).toEqual(400)
       expect(body).toEqual(JSON.stringify({
         type: "Error",
@@ -91,9 +91,6 @@ describe("handlers/reset/verify", () => {
 
     /* Test: should resolve with verification error */
     it("should resolve with verification error", async () => {
-      const event = mockAPIGatewayProxyEvent<Parameters, Request>({
-        body: { password }, pathParameters: { code: code.id }
-      })
       const claimMock = mockVerificationClaimWithError()
       const changePasswordMock =
         mockManagementClientChangePasswordWithSuccess()
@@ -111,9 +108,6 @@ describe("handlers/reset/verify", () => {
 
     /* Test: should resolve with management client error */
     it("should resolve with management client error", async () => {
-      const event = mockAPIGatewayProxyEvent<Parameters, Request>({
-        body: { password }, pathParameters: { code: code.id }
-      })
       const claimMock = mockVerificationClaimWithResult(code)
       const changePasswordMock =
         mockManagementClientChangePasswordWithError()

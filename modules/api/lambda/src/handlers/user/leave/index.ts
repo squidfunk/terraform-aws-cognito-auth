@@ -25,6 +25,10 @@ import { UserLeaveRequest } from "common"
 import { handler } from "handlers"
 
 import schema = require("common/events/user/leave/index.json")
+import {
+  parseTokenFromHeader,
+  resetTokenCookie
+} from "utilities"
 
 /* ----------------------------------------------------------------------------
  * Handler
@@ -39,17 +43,27 @@ import schema = require("common/events/user/leave/index.json")
  */
 export const post = handler<{}, UserLeaveRequest>(schema,
   async ({ headers }) => {
-    const token = (headers.Authorization || "").replace(/^Bearer\s+/, "")
+    const token = parseTokenFromHeader(headers.Authorization)
     try {
       const session = new SessionClient(token)
       await session.signOut()
       return {
-        statusCode: 204
+        statusCode: 204,
+        headers: {
+          "Set-Cookie": resetTokenCookie()
+        }
       }
     } catch (err) {
-      err.statusCode = 403
-      throw err
+      err.code = err.code || err.name
+      return {
+        statusCode: err.statusCode || 400,
+        body: {
+          type: err.code,
+          message: err.message.replace(/\.$/, "")
+        },
+        headers: {
+          "Set-Cookie": resetTokenCookie()
+        }
+      }
     }
   })
-
-// TODO: invalidate cookie!!!

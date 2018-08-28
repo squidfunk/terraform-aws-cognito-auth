@@ -20,27 +20,10 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "clients/authentication"
-import { RegisterRequest as Request } from "common"
-import { handler } from "handlers"
-import { throwOnPasswordPolicyBreach } from "utilities"
-
-import schema = require("common/events/register/index.json")
-
 /* ----------------------------------------------------------------------------
- * Handler
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Register user with email address and password
- *
- * @param event - API Gateway event
- *
- * @return Promise resolving with no result
- */
-export const post = handler<{}, Request>(schema,
-  async ({ body: { email, password } }) => {
-    throwOnPasswordPolicyBreach(password)
-    const auth = new AuthenticationClient()
-    await auth.register(email, password)
-  })
+export * from "./cookie"
+export * from "./password"
+export * from "./token"

@@ -40,10 +40,8 @@ describe("handlers/reset", () => {
   /* POST /reset */
   describe("post", () => {
 
-    /* Reset request */
+    /* Username and event */
     const { username } = mockResetRequest()
-
-    /* API Gateway event */
     const event = mockAPIGatewayProxyEvent<Request>({ body: { username } })
 
     /* Test: should resolve with empty body */

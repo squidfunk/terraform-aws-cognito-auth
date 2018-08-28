@@ -40,7 +40,7 @@ export interface SessionToken<TExpires = Date> {
  * @template TExpires - Session token expiry type (JSON = string, JS = Date)
  */
 export interface Session<TExpires = Date> {
-  id: SessionToken<TExpires>           /* ID token */
+  id: SessionToken<TExpires>           /* Identity token */
   access: SessionToken<TExpires>       /* Access token */
   refresh?: SessionToken<TExpires>     /* Refresh token */
 }

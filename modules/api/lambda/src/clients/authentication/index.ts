@@ -124,39 +124,6 @@ export class AuthenticationClient extends Client {
   }
 
   /**
-   * Authenticate using credentials or refresh token
-   *
-   * @param usernameOrToken - Username, email address or refresh token
-   * @param password - Password if username is supplied
-   *
-   * @return Promise resolving with session
-   */
-  public authenticate(
-    usernameOrToken: string, password?: string
-  ): Promise<Session> {
-    return password
-      ? this.authenticateWithCredentials(usernameOrToken, password)
-      : this.authenticateWithToken(usernameOrToken)
-  }
-
-  /**
-   * Trigger authentication flow for password reset
-   *
-   * @param username - Username or email address
-   *
-   * @return Promise resolving with verification code
-   */
-  public async forgotPassword(username: string): Promise<VerificationCode> {
-    const { Username: id } = await this.cognito.adminGetUser({
-      UserPoolId: process.env.COGNITO_USER_POOL_ID!,
-      Username: username
-    }).promise()
-
-    /* Issue and return verification code */
-    return this.verification.issue("reset", id)
-  }
-
-  /**
    * Authenticate using username or email and password
    *
    * @param username - Username or email address
@@ -164,7 +131,7 @@ export class AuthenticationClient extends Client {
    *
    * @return Promise resolving with session
    */
-  protected async authenticateWithCredentials(
+  public async authenticateWithCredentials(
     username: string, password: string
   ): Promise<Session> {
     try {
@@ -209,7 +176,7 @@ export class AuthenticationClient extends Client {
    *
    * @return Promise resolving with session
    */
-  protected async authenticateWithToken(
+  public async authenticateWithToken(
     token: string
   ): Promise<Session> {
     try {
@@ -240,5 +207,22 @@ export class AuthenticationClient extends Client {
     } catch (err) {
       throw translate(err)
     }
+  }
+
+  /**
+   * Trigger authentication flow for password reset
+   *
+   * @param username - Username or email address
+   *
+   * @return Promise resolving with verification code
+   */
+  public async forgotPassword(username: string): Promise<VerificationCode> {
+    const { Username: id } = await this.cognito.adminGetUser({
+      UserPoolId: process.env.COGNITO_USER_POOL_ID!,
+      Username: username
+    }).promise()
+
+    /* Issue and return verification code */
+    return this.verification.issue("reset", id)
   }
 }

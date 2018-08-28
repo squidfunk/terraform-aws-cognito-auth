@@ -30,43 +30,93 @@ import { mockSession } from "_/mocks/common"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock AuthenticationClient.authenticate
+ * Mock AuthenticationClient.authenticateWithCredentials
  *
  * @param promise - Promise returned by authentication client
  *
  * @return Jasmine spy
  */
-function mockAuthenticationClientAuthenticate<T>(
+function mockAuthenticationClientAuthenticateWithCredentials<T>(
   promise: () => Promise<T>
 ): jasmine.Spy {
-  return spyOn(AuthenticationClient.prototype, "authenticate")
+  return spyOn(AuthenticationClient.prototype, "authenticateWithCredentials")
     .and.callFake(promise)
 }
 
 /**
- * Mock AuthenticationClient.authenticate returning with result
+ * Mock AuthenticationClient.authenticateWithCredentials returning with result
  *
  * @param session - Session
  *
  * @return Jasmine spy
  */
-export function mockAuthenticationClientAuthenticateWithResult(
+export function mockAuthenticationClientAuthenticateWithCredentialsWithResult(
   session: Session = mockSession()
 ): jasmine.Spy {
-  return mockAuthenticationClientAuthenticate(() => Promise.resolve(session))
+  return mockAuthenticationClientAuthenticateWithCredentials(
+    () => Promise.resolve(session)
+  )
 }
 
 /**
- * Mock AuthenticationClient.authenticate throwing an error
+ * Mock AuthenticationClient.authenticateWithCredentials throwing an error
  *
  * @param err - Error to be thrown
  *
  * @return Jasmine spy
  */
-export function mockAuthenticationClientAuthenticateWithError(
-  err: Error = new Error("authenticate")
+export function mockAuthenticationClientAuthenticateWithCredentialsWithError(
+  err: Error = new Error("authenticateWithCredentials")
 ): jasmine.Spy {
-  return mockAuthenticationClientAuthenticate(() => Promise.reject(err))
+  return mockAuthenticationClientAuthenticateWithCredentials(
+    () => Promise.reject(err)
+  )
+}
+
+/* ------------------------------------------------------------------------- */
+
+/**
+ * Mock AuthenticationClient.authenticateWithToken
+ *
+ * @param promise - Promise returned by authentication client
+ *
+ * @return Jasmine spy
+ */
+function mockAuthenticationClientAuthenticateWithToken<T>(
+  promise: () => Promise<T>
+): jasmine.Spy {
+  return spyOn(AuthenticationClient.prototype, "authenticateWithToken")
+    .and.callFake(promise)
+}
+
+/**
+ * Mock AuthenticationClient.authenticateWithToken returning with result
+ *
+ * @param session - Session
+ *
+ * @return Jasmine spy
+ */
+export function mockAuthenticationClientAuthenticateWithTokenWithResult(
+  session: Session = mockSession()
+): jasmine.Spy {
+  return mockAuthenticationClientAuthenticateWithToken(
+    () => Promise.resolve(session)
+  )
+}
+
+/**
+ * Mock AuthenticationClient.authenticateWithToken throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockAuthenticationClientAuthenticateWithTokenWithError(
+  err: Error = new Error("authenticateWithToken")
+): jasmine.Spy {
+  return mockAuthenticationClientAuthenticateWithToken(
+    () => Promise.reject(err)
+  )
 }
 
 /* ------------------------------------------------------------------------- */

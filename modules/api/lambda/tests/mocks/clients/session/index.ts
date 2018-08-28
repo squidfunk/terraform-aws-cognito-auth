@@ -20,27 +20,45 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "clients/authentication"
-import { RegisterRequest as Request } from "common"
-import { handler } from "handlers"
-import { throwOnPasswordPolicyBreach } from "utilities"
-
-import schema = require("common/events/register/index.json")
+import { SessionClient } from "clients/session"
 
 /* ----------------------------------------------------------------------------
- * Handler
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Register user with email address and password
+ * Mock SessionClient.signOut
  *
- * @param event - API Gateway event
+ * @param promise - Promise returned by authentication client
  *
- * @return Promise resolving with no result
+ * @return Jasmine spy
  */
-export const post = handler<{}, Request>(schema,
-  async ({ body: { email, password } }) => {
-    throwOnPasswordPolicyBreach(password)
-    const auth = new AuthenticationClient()
-    await auth.register(email, password)
-  })
+function mockSessionClientSignOut<T>(
+  promise: () => Promise<T>
+): jasmine.Spy {
+  return spyOn(SessionClient.prototype, "signOut")
+    .and.callFake(promise)
+}
+
+/**
+ * Mock SessionClient.signOut returning with success
+ *
+ * @return Jasmine spy
+ */
+export function mockSessionClientSignOutWithSuccess(
+): jasmine.Spy {
+  return mockSessionClientSignOut(() => Promise.resolve())
+}
+
+/**
+ * Mock SessionClient.signOut throwing an error
+ *
+ * @param err - Error to be thrown
+ *
+ * @return Jasmine spy
+ */
+export function mockSessionClientSignOutWithError(
+  err: Error = new Error("signOut")
+): jasmine.Spy {
+  return mockSessionClientSignOut(() => Promise.reject(err))
+}

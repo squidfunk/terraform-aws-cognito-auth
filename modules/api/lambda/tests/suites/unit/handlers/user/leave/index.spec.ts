@@ -20,12 +20,14 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "handlers/register/verify"
+import { post } from "handlers/user/leave"
+
+import { UserLeaveRequest } from "common"
 
 import { chance } from "_/helpers"
 import {
-  mockManagementClientVerifyUserWithError,
-  mockManagementClientVerifyUserWithSuccess // TODO mock session client...
+  mockSessionClientSignOutWithError,
+  mockSessionClientSignOutWithSuccess
 } from "_/mocks/clients"
 import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
 
@@ -39,11 +41,9 @@ describe("handlers/user/leave", () => {
   /* POST /user/leave */
   describe("post", () => {
 
-    /* Access token */
+    /* Access token and event */
     const token = chance.string({ length: 128 })
-
-    /* API Gateway event */
-    const event = mockAPIGatewayProxyEvent<{}, {}>({
+    const event = mockAPIGatewayProxyEvent<{}, UserLeaveRequest>({
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -51,50 +51,69 @@ describe("handlers/user/leave", () => {
 
     /* Test: should resolve with empty body */
     it("should resolve with empty body", async () => {
-      const claimMock = mockVerificationClaimWithResult(code)
-      const verifyUserMock =
-        mockManagementClientVerifyUserWithSuccess()
+      const signOutMock = mockSessionClientSignOutWithSuccess()
       const { statusCode, body } = await post(event)
-      expect(statusCode).toEqual(200)
+      expect(statusCode).toEqual(204)
       expect(body).toEqual("{}")
-      expect(claimMock)
-        .toHaveBeenCalledWith("register", code.id)
-      expect(verifyUserMock)
-        .toHaveBeenCalledWith(code.subject)
+      expect(signOutMock).toHaveBeenCalled()
     })
 
-    // /* Test: should resolve with verification error */
-    // it("should resolve with verification error", async () => {
-    //   const claimMock = mockVerificationClaimWithError()
-    //   const verifyUserMock =
-    //     mockManagementClientVerifyUserWithSuccess()
-    //   const { statusCode, body } = await post(event)
-    //   expect(statusCode).toEqual(403)
-    //   expect(body).toEqual(JSON.stringify({
-    //     type: "Error",
-    //     message: "claim"
-    //   }))
-    //   expect(claimMock)
-    //     .toHaveBeenCalledWith("register", code.id)
-    //   expect(verifyUserMock)
-    //     .not.toHaveBeenCalled()
-    // })
+    /* Test: should invalidate cookie for valid token */
+    it("should invalidate cookie for valid token", async () => {
+      const signOutMock = mockSessionClientSignOutWithSuccess()
+      const { statusCode, headers } = await post(event)
+      expect(statusCode).toEqual(204)
+      expect(headers).toEqual({
+        "Set-Cookie": `__Secure-token=; Domain=${
+          process.env.COGNITO_IDENTITY_POOL_PROVIDER!
+        }; Path=/authenticate; Expires=${
+          new Date(0).toUTCString()
+        }; HttpOnly; Secure; SameSite=Strict`
+      })
+      expect(signOutMock).toHaveBeenCalled()
+    })
 
-    // /* Test: should resolve with management client error */
-    // it("should resolve with management client error", async () => {
-    //   const claimMock = mockVerificationClaimWithResult(code)
-    //   const changePasswordMock =
-    //     mockManagementClientVerifyUserWithError()
-    //   const { statusCode, body } = await post(event)
-    //   expect(statusCode).toEqual(403)
-    //   expect(body).toEqual(JSON.stringify({
-    //     type: "Error",
-    //     message: "verifyUser"
-    //   }))
-    //   expect(claimMock)
-    //     .toHaveBeenCalledWith("register", code.id)
-    //   expect(changePasswordMock)
-    //     .toHaveBeenCalledWith(code.subject)
-    // })
+    /* Test: should invalidate cookie for invalid token */
+    it("should invalidate cookie for invalid token", async () => {
+      const signOutMock = mockSessionClientSignOutWithError()
+      const { statusCode, headers } = await post(event)
+      expect(statusCode).toEqual(400)
+      expect(headers).toEqual({
+        "Set-Cookie": `__Secure-token=; Domain=${
+          process.env.COGNITO_IDENTITY_POOL_PROVIDER!
+        }; Path=/authenticate; Expires=${
+          new Date(0).toUTCString()
+        }; HttpOnly; Secure; SameSite=Strict`
+      })
+      expect(signOutMock).toHaveBeenCalled()
+    })
+
+    /* Test: should invalidate cookie for missing token */
+    it("should invalidate cookie for missing token", async () => {
+      const signOutMock = mockSessionClientSignOutWithError()
+      const { statusCode, headers } = await post(
+        mockAPIGatewayProxyEvent<{}, UserLeaveRequest>())
+      expect(statusCode).toEqual(400)
+      expect(headers).toEqual({
+        "Set-Cookie": `__Secure-token=; Domain=${
+          process.env.COGNITO_IDENTITY_POOL_PROVIDER!
+        }; Path=/authenticate; Expires=${
+          new Date(0).toUTCString()
+        }; HttpOnly; Secure; SameSite=Strict`
+      })
+      expect(signOutMock).toHaveBeenCalled()
+    })
+
+    /* Test: should resolve with session client error */
+    it("should resolve with session client error", async () => {
+      const signOutMock = mockSessionClientSignOutWithError()
+      const { statusCode, body } = await post(event)
+      expect(statusCode).toEqual(400)
+      expect(body).toEqual(JSON.stringify({
+        type: "Error",
+        message: "signOut"
+      }))
+      expect(signOutMock).toHaveBeenCalled()
+    })
   })
 })

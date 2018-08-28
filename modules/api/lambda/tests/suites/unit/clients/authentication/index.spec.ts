@@ -119,8 +119,8 @@ describe("clients/authentication", () => {
           .toEqual(code)
       })
 
-      /* Test: should set username to random uuid */
-      it("should set username to random uuid", async () => {
+      /* Test: should initialize username to uuid */
+      it("should initialize username to uuid", async () => {
         const signUpMock = mockCognitoSignUpWithSuccess()
         mockVerificationIssueWithResult()
         const auth = new AuthenticationClient()
@@ -133,8 +133,8 @@ describe("clients/authentication", () => {
           }))
       })
 
-      /* Test: should set password */
-      it("should set password", async () => {
+      /* Test: should pass provided password */
+      it("should pass provided password", async () => {
         const signUpMock = mockCognitoSignUpWithSuccess()
         mockVerificationIssueWithResult()
         const auth = new AuthenticationClient()
@@ -145,8 +145,8 @@ describe("clients/authentication", () => {
           }))
       })
 
-      /* Test: should set email as attribute */
-      it("should set email as attribute", async () => {
+      /* Test: should pass provided email address */
+      it("should pass provided email address", async () => {
         const signUpMock = mockCognitoSignUpWithSuccess()
         mockVerificationIssueWithResult()
         const auth = new AuthenticationClient()
@@ -195,11 +195,103 @@ describe("clients/authentication", () => {
       })
     })
 
-    /* #authenticate */
-    describe("#authenticate", () => {
+    /* #authenticateWithCredentials */
+    describe("#authenticateWithCredentials", () => {
 
-      /* Authentication requests */
+      /* Authentication request */
       const { username, password } = mockAuthenticateRequestWithCredentials()
+
+      /* Restore AWS mocks */
+      afterEach(() => {
+        restoreCognitoInitiateAuth()
+      })
+
+      /* Test: should resolve with identity token */
+      it("should resolve with identity token", async () => {
+        mockCognitoInitiateAuthWithCredentials()
+        const auth = new AuthenticationClient()
+        const { id } =
+          await auth.authenticateWithCredentials(username, password)
+        expect(id.token).toEqual(jasmine.any(String))
+        expect(id.expires)
+          .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
+      })
+
+      /* Test: should resolve with access token */
+      it("should resolve with access token", async () => {
+        mockCognitoInitiateAuthWithCredentials()
+        const auth = new AuthenticationClient()
+        const { access } =
+          await auth.authenticateWithCredentials(username, password)
+        expect(access.token).toEqual(jasmine.any(String))
+        expect(access.expires)
+          .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
+      })
+
+      /* Test: should resolve with refresh token */
+      it("should resolve with refresh token", async () => {
+        mockCognitoInitiateAuthWithCredentials()
+        const auth = new AuthenticationClient()
+        const { refresh } =
+          await auth.authenticateWithCredentials(username, password)
+        expect(refresh).toBeDefined()
+        expect(refresh!.token).toEqual(jasmine.any(String))
+        expect(refresh!.expires)
+          .toBeGreaterThan(Date.now() + 1000 * 59 * 60 * 24 * 30)
+      })
+
+      /* Test: should pass provided credentials */
+      it("should pass provided credentials", async () => {
+        const initiateAuthMock = mockCognitoInitiateAuthWithCredentials()
+        const auth = new AuthenticationClient()
+        await auth.authenticateWithCredentials(username, password)
+        expect(initiateAuthMock).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            AuthParameters: {
+              USERNAME: username,
+              PASSWORD: password
+            }
+          }))
+      })
+
+      /* Test: should reject on pending challenge */
+      it("should reject on pending challenge", async done => {
+        const challenge = chance.string()
+        const initiateAuthMock =
+          mockCognitoInitiateAuthWithChallenge(challenge)
+        try {
+          const auth = new AuthenticationClient()
+          await auth.authenticateWithCredentials(username, password)
+          done.fail()
+        } catch (err) {
+          expect(initiateAuthMock).toHaveBeenCalled()
+          expect(err).toEqual(
+            new Error(`Invalid authentication: challenge "${challenge}"`))
+          done()
+        }
+      })
+
+      /* Test: should reject on AWS Cognito error */
+      it("should reject on AWS Cognito error", async done => {
+        const errMock = new Error()
+        const initiateAuthMock =
+          mockCognitoInitiateAuthWithError(errMock)
+        try {
+          const auth = new AuthenticationClient()
+          await auth.authenticateWithCredentials(username, password)
+          done.fail()
+        } catch (err) {
+          expect(initiateAuthMock).toHaveBeenCalled()
+          expect(err).toBe(errMock)
+          done()
+        }
+      })
+    })
+
+    /* #authenticateWithToken */
+    describe("#authenticateWithToken", () => {
+
+      /* Authentication request */
       const { token } = mockAuthenticateRequestWithToken()
 
       /* Restore AWS mocks */
@@ -207,136 +299,78 @@ describe("clients/authentication", () => {
         restoreCognitoInitiateAuth()
       })
 
-      /* with credentials */
-      describe("with credentials", () => {
-
-        /* Test: should resolve with ID token */
-        it("should resolve with ID token", async () => {
-          mockCognitoInitiateAuthWithCredentials()
-          const auth = new AuthenticationClient()
-          const { id } = await auth.authenticate(username, password)
-          expect(id.token).toEqual(jasmine.any(String))
-          expect(id.expires)
-            .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
-        })
-
-        /* Test: should resolve with access token */
-        it("should resolve with access token", async () => {
-          mockCognitoInitiateAuthWithCredentials()
-          const auth = new AuthenticationClient()
-          const { access } = await auth.authenticate(username, password)
-          expect(access.token).toEqual(jasmine.any(String))
-          expect(access.expires)
-            .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
-        })
-
-        /* Test: should resolve with refresh token */
-        it("should resolve with refresh token", async () => {
-          mockCognitoInitiateAuthWithCredentials()
-          const auth = new AuthenticationClient()
-          const { refresh } = await auth.authenticate(username, password)
-          expect(refresh!.token).toEqual(jasmine.any(String))
-          expect(refresh!.expires)
-            .toBeGreaterThan(Date.now() + 1000 * 59 * 60 * 24 * 30)
-        })
-
-        /* Test: should reject on pending challenge */
-        it("should reject on pending challenge", async done => {
-          const challenge = chance.string()
-          const initiateAuthMock =
-            mockCognitoInitiateAuthWithChallenge(challenge)
-          try {
-            const auth = new AuthenticationClient()
-            await auth.authenticate(username, password)
-            done.fail()
-          } catch (err) {
-            expect(initiateAuthMock).toHaveBeenCalled()
-            expect(err).toEqual(
-              new Error(`Invalid authentication: challenge "${challenge}"`))
-            done()
-          }
-        })
-
-        /* Test: should reject on AWS Cognito error */
-        it("should reject on AWS Cognito error", async done => {
-          const errMock = new Error()
-          const initiateAuthMock =
-            mockCognitoInitiateAuthWithError(errMock)
-          try {
-            const auth = new AuthenticationClient()
-            await auth.authenticate(username, password)
-            done.fail()
-          } catch (err) {
-            expect(initiateAuthMock).toHaveBeenCalled()
-            expect(err).toBe(errMock)
-            done()
-          }
-        })
+      /* Test: should resolve with identity token */
+      it("should resolve with identity token", async () => {
+        mockCognitoInitiateAuthWithToken()
+        const auth = new AuthenticationClient()
+        const { id } = await auth.authenticateWithToken(token)
+        expect(id.token).toEqual(jasmine.any(String))
+        expect(id.expires)
+          .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
       })
 
-      /* with valid refresh token */
-      describe("with refresh token", () => {
+      /* Test: should resolve with access token */
+      it("should resolve with access token", async () => {
+        mockCognitoInitiateAuthWithToken()
+        const auth = new AuthenticationClient()
+        const { access } = await auth.authenticateWithToken(token)
+        expect(access.token).toEqual(jasmine.any(String))
+        expect(access.expires)
+          .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
+      })
 
-        /* Test: should resolve with ID token */
-        it("should resolve with ID token", async () => {
-          mockCognitoInitiateAuthWithToken()
+      /* Test: should resolve with refresh token */
+      it("should resolve without refresh token", async () => {
+        mockCognitoInitiateAuthWithToken()
+        const auth = new AuthenticationClient()
+        const { refresh } = await auth.authenticateWithToken(token)
+        expect(refresh).toBeUndefined()
+      })
+
+      /* Test: should pass provided refresh token */
+      it("should pass provided refresh token", async () => {
+        const initiateAuthMock = mockCognitoInitiateAuthWithToken()
+        const auth = new AuthenticationClient()
+        await auth.authenticateWithToken(token)
+        expect(initiateAuthMock).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            AuthParameters: {
+              REFRESH_TOKEN: token
+            }
+          }))
+      })
+
+      /* Test: should reject on pending challenge */
+      it("should reject on pending challenge", async done => {
+        const challenge = chance.string()
+        const initiateAuthMock =
+          mockCognitoInitiateAuthWithChallenge(challenge)
+        try {
           const auth = new AuthenticationClient()
-          const { id } = await auth.authenticate(token)
-          expect(id.token).toEqual(jasmine.any(String))
-          expect(id.expires)
-            .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
-        })
+          await auth.authenticateWithToken(token)
+          done.fail()
+        } catch (err) {
+          expect(initiateAuthMock).toHaveBeenCalled()
+          expect(err).toEqual(
+            new Error(`Invalid authentication: challenge "${challenge}"`))
+          done()
+        }
+      })
 
-        /* Test: should resolve with access token */
-        it("should resolve with access token", async () => {
-          mockCognitoInitiateAuthWithToken()
+      /* Test: should reject on AWS Cognito error */
+      it("should reject on AWS Cognito error", async done => {
+        const errMock = new Error()
+        const initiateAuthMock =
+          mockCognitoInitiateAuthWithError(errMock)
+        try {
           const auth = new AuthenticationClient()
-          const { access } = await auth.authenticate(token)
-          expect(access.token).toEqual(jasmine.any(String))
-          expect(access.expires)
-            .toBeGreaterThan(Date.now() + 1000 * 59 * 60)
-        })
-
-        /* Test: should resolve with refresh token */
-        it("should resolve without refresh token", async () => {
-          mockCognitoInitiateAuthWithToken()
-          const auth = new AuthenticationClient()
-          const { refresh } = await auth.authenticate(token)
-          expect(refresh).toBeUndefined()
-        })
-
-        /* Test: should reject on pending challenge */
-        it("should reject on pending challenge", async done => {
-          const challenge = chance.string()
-          const initiateAuthMock =
-            mockCognitoInitiateAuthWithChallenge(challenge)
-          try {
-            const auth = new AuthenticationClient()
-            await auth.authenticate(token)
-            done.fail()
-          } catch (err) {
-            expect(initiateAuthMock).toHaveBeenCalled()
-            expect(err).toEqual(
-              new Error(`Invalid authentication: challenge "${challenge}"`))
-            done()
-          }
-        })
-
-        /* Test: should reject on AWS Cognito error */
-        it("should reject on AWS Cognito error", async done => {
-          const errMock = new Error()
-          const initiateAuthMock =
-            mockCognitoInitiateAuthWithError(errMock)
-          try {
-            const auth = new AuthenticationClient()
-            await auth.authenticate(token)
-            done.fail()
-          } catch (err) {
-            expect(initiateAuthMock).toHaveBeenCalled()
-            expect(err).toBe(errMock)
-            done()
-          }
-        })
+          await auth.authenticateWithToken(token)
+          done.fail()
+        } catch (err) {
+          expect(initiateAuthMock).toHaveBeenCalled()
+          expect(err).toBe(errMock)
+          done()
+        }
       })
     })
 
@@ -361,20 +395,26 @@ describe("clients/authentication", () => {
           .toEqual(code)
       })
 
-      /* Test: should reject on verification error */
-      it("should reject on verification error", async done => {
-        const errMock = new Error()
+      /* Test: should retrieve user */
+      it("should retrieve user", async () => {
+        const adminGetUserMock = mockCognitoAdminGetUserWithResult()
+        mockVerificationIssueWithResult(code)
+        const auth = new AuthenticationClient()
+        await auth.forgotPassword(username)
+        expect(adminGetUserMock).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            Username: username
+          }))
+      })
+
+      /* Test: should issue verification code */
+      it("should issue verification code", async () => {
         mockCognitoAdminGetUserWithResult()
-        const issueMock = mockVerificationIssueWithError(errMock)
-        try {
-          const auth = new AuthenticationClient()
-          await auth.forgotPassword(username)
-          done.fail()
-        } catch (err) {
-          expect(issueMock).toHaveBeenCalled()
-          expect(err).toBe(errMock)
-          done()
-        }
+        const issueMock = mockVerificationIssueWithResult(code)
+        const auth = new AuthenticationClient()
+        await auth.forgotPassword(username)
+        expect(issueMock)
+          .toHaveBeenCalledWith("reset", jasmine.any(String))
       })
 
       /* Test: should reject on AWS Cognito error */
@@ -388,6 +428,22 @@ describe("clients/authentication", () => {
           done.fail()
         } catch (err) {
           expect(adminGetUserMock).toHaveBeenCalled()
+          expect(err).toBe(errMock)
+          done()
+        }
+      })
+
+      /* Test: should reject on verification error */
+      it("should reject on verification error", async done => {
+        const errMock = new Error()
+        mockCognitoAdminGetUserWithResult()
+        const issueMock = mockVerificationIssueWithError(errMock)
+        try {
+          const auth = new AuthenticationClient()
+          await auth.forgotPassword(username)
+          done.fail()
+        } catch (err) {
+          expect(issueMock).toHaveBeenCalled()
           expect(err).toBe(errMock)
           done()
         }

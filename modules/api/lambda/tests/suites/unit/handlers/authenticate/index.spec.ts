@@ -26,10 +26,11 @@ import {
 } from "common"
 import { post } from "handlers/authenticate"
 
-import { chance } from "_/helpers"
 import {
-  mockAuthenticationClientAuthenticateWithError,
-  mockAuthenticationClientAuthenticateWithResult
+  mockAuthenticationClientAuthenticateWithCredentialsWithError,
+  mockAuthenticationClientAuthenticateWithCredentialsWithResult,
+  mockAuthenticationClientAuthenticateWithTokenWithError,
+  mockAuthenticationClientAuthenticateWithTokenWithResult
 } from "_/mocks/clients"
 import {
   mockAuthenticateRequestWithCredentials,
@@ -48,21 +49,22 @@ describe("handlers/authenticate", () => {
   /* POST /authenticate */
   describe("post", () => {
 
-    /* Credentials, token and session */
-    const { username, password } = mockAuthenticateRequestWithCredentials()
-    const { token } = mockAuthenticateRequestWithToken()
+    /* Session */
     const session = mockSession(true)
 
     /* with credentials */
     describe("with credentials", () => {
 
-      /* Test: should resolve with ID token */
-      it("should resolve with ID token", async () => {
-        const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
-          body: { username, password }
-        })
+      /* Credentials and event */
+      const { username, password } = mockAuthenticateRequestWithCredentials()
+      const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
+        body: { username, password }
+      })
+
+      /* Test: should resolve with identity token */
+      it("should resolve with identity token", async () => {
         const authenticateMock =
-          mockAuthenticationClientAuthenticateWithResult(session)
+          mockAuthenticationClientAuthenticateWithCredentialsWithResult(session)
         const { statusCode, body } = await post(event)
         expect(statusCode).toEqual(200)
         expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
@@ -76,11 +78,8 @@ describe("handlers/authenticate", () => {
 
       /* Test: should resolve with access token */
       it("should resolve with access token", async () => {
-        const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
-          body: { username, password }
-        })
         const authenticateMock =
-          mockAuthenticationClientAuthenticateWithResult(session)
+          mockAuthenticationClientAuthenticateWithCredentialsWithResult(session)
         const { statusCode, body } = await post(event)
         expect(statusCode).toEqual(200)
         expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
@@ -94,11 +93,8 @@ describe("handlers/authenticate", () => {
 
       /* Test: should resolve without refresh token (body) */
       it("should resolve without refresh token (body)", async () => {
-        const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
-          body: { username, password }
-        })
         const authenticateMock =
-          mockAuthenticationClientAuthenticateWithResult(session)
+          mockAuthenticationClientAuthenticateWithCredentialsWithResult(session)
         const { statusCode, body } = await post(event)
         expect(statusCode).toEqual(200)
         expect(JSON.parse(body).refresh).toBeUndefined()
@@ -108,11 +104,8 @@ describe("handlers/authenticate", () => {
 
       /* Test: should resolve without refresh token (cookie) */
       it("should resolve without refresh token (cookie)", async () => {
-        const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
-          body: { username, password }
-        })
         const authenticateMock =
-          mockAuthenticationClientAuthenticateWithResult(session)
+          mockAuthenticationClientAuthenticateWithCredentialsWithResult(session)
         const { statusCode, headers } = await post(event)
         expect(statusCode).toEqual(200)
         expect(headers).toEqual({})
@@ -122,138 +115,32 @@ describe("handlers/authenticate", () => {
 
       /* Test: should resolve with authentication client error */
       it("should resolve with authentication client error", async () => {
-        const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
-          body: { username, password }
-        })
         const authenticateMock =
-          mockAuthenticationClientAuthenticateWithError()
+          mockAuthenticationClientAuthenticateWithCredentialsWithError()
         const { statusCode, body } = await post(event)
-        expect(statusCode).toEqual(403)
+        expect(statusCode).toEqual(400)
         expect(body).toEqual(JSON.stringify({
           type: "Error",
-          message: "authenticate"
+          message: "authenticateWithCredentials"
         }))
         expect(authenticateMock)
           .toHaveBeenCalledWith(username, password)
       })
-
-      /* with remember me */
-      describe("with remember me", () => {
-
-        /* Test: should resolve with ID token */
-        it("should resolve with ID token", async () => {
-          const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
-            body: { username, password, remember: true }
-          })
-          const authenticateMock =
-            mockAuthenticationClientAuthenticateWithResult(session)
-          const { statusCode, body } = await post(event)
-          expect(statusCode).toEqual(200)
-          expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
-            id: jasmine.objectContaining({
-              token: session.id.token
-            })
-          }))
-          expect(authenticateMock)
-            .toHaveBeenCalledWith(username, password)
-        })
-
-        /* Test: should resolve with access token */
-        it("should resolve with access token", async () => {
-          const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
-            body: { username, password, remember: true }
-          })
-          const authenticateMock =
-            mockAuthenticationClientAuthenticateWithResult(session)
-          const { statusCode, body } = await post(event)
-          expect(statusCode).toEqual(200)
-          expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
-            access: jasmine.objectContaining({
-              token: session.access.token
-            })
-          }))
-          expect(authenticateMock)
-            .toHaveBeenCalledWith(username, password)
-        })
-
-        /* Test: should resolve with refresh token (body) */
-        it("should resolve with refresh token (body)", async () => {
-          const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
-            body: { username, password, remember: true }
-          })
-          const authenticateMock =
-            mockAuthenticationClientAuthenticateWithResult(session)
-          const { statusCode, body } = await post(event)
-          expect(statusCode).toEqual(200)
-          expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
-            refresh: jasmine.objectContaining({
-              token: session.refresh!.token
-            })
-          }))
-          expect(authenticateMock)
-            .toHaveBeenCalledWith(username, password)
-        })
-
-        /* Test: should resolve with refresh token (cookie) */
-        it("should resolve with refresh token (cookie)", async () => {
-          const path = chance.string()
-          const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
-            path, body: { username, password, remember: true }
-          })
-          const authenticateMock =
-            mockAuthenticationClientAuthenticateWithResult(session)
-          const { statusCode, headers } = await post(event)
-          expect(statusCode).toEqual(200)
-          expect(headers).toEqual({
-            "Set-Cookie": `__Secure-token=${
-              encodeURIComponent(session.refresh!.token)
-            }; Domain=${
-              process.env.COGNITO_IDENTITY_POOL_PROVIDER!
-            }; Path=${path}; Expires=${
-              session.refresh!.expires.toUTCString()
-            }; HttpOnly; Secure; SameSite=Strict`
-          })
-          expect(authenticateMock)
-            .toHaveBeenCalledWith(username, password)
-        })
-
-        /* Test: should invalidate cookie for invalid token */
-        it("should invalidate cookie for invalid token", async () => {
-          const path = chance.string()
-          const event = mockAPIGatewayProxyEvent<RequestWithToken>({
-            path, headers: { Cookie: `__Secure-token=${token}` }
-          })
-          const authenticateMock =
-            mockAuthenticationClientAuthenticateWithError()
-          const { statusCode, headers, body } = await post(event)
-          expect(statusCode).toEqual(403)
-          expect(headers).toEqual({
-            "Set-Cookie": `__Secure-token=; Domain=${
-              process.env.COGNITO_IDENTITY_POOL_PROVIDER!
-            }; Path=${path}; Expires=${
-              new Date(0).toUTCString()
-            }; HttpOnly; Secure; SameSite=Strict`
-          })
-          expect(body).toEqual(JSON.stringify({
-            type: "Error",
-            message: "authenticate"
-          }))
-          expect(authenticateMock)
-            .toHaveBeenCalledWith(token, undefined)
-        })
-      })
     })
 
-    /* with refresh token */
-    describe("with refresh token", () => {
+    /* with credentials and remember me */
+    describe("with credentials and remember me", () => {
 
-      /* Test: should resolve with ID token */
-      it("should resolve with ID token", async () => {
-        const event = mockAPIGatewayProxyEvent<RequestWithToken>({
-          body: { token }
-        })
+      /* Credentials and event */
+      const { username, password } = mockAuthenticateRequestWithCredentials()
+      const event = mockAPIGatewayProxyEvent<RequestWithCredentials>({
+        body: { username, password, remember: true }
+      })
+
+      /* Test: should resolve with identity token */
+      it("should resolve with identity token", async () => {
         const authenticateMock =
-          mockAuthenticationClientAuthenticateWithResult(session)
+          mockAuthenticationClientAuthenticateWithCredentialsWithResult(session)
         const { statusCode, body } = await post(event)
         expect(statusCode).toEqual(200)
         expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
@@ -262,16 +149,13 @@ describe("handlers/authenticate", () => {
           })
         }))
         expect(authenticateMock)
-          .toHaveBeenCalledWith(token, undefined)
+          .toHaveBeenCalledWith(username, password)
       })
 
       /* Test: should resolve with access token */
       it("should resolve with access token", async () => {
-        const event = mockAPIGatewayProxyEvent<RequestWithToken>({
-          body: { token }
-        })
         const authenticateMock =
-          mockAuthenticationClientAuthenticateWithResult(session)
+          mockAuthenticationClientAuthenticateWithCredentialsWithResult(session)
         const { statusCode, body } = await post(event)
         expect(statusCode).toEqual(200)
         expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
@@ -280,39 +164,205 @@ describe("handlers/authenticate", () => {
           })
         }))
         expect(authenticateMock)
-          .toHaveBeenCalledWith(token, undefined)
+          .toHaveBeenCalledWith(username, password)
       })
 
-      /* Test: should resolve with error for missing token (body, cookie) */
-      it("should resolve with error for missing token (body, cookie)",
-        async () => {
-          const event = mockAPIGatewayProxyEvent<RequestWithToken>()
-          const authenticateMock =
-            mockAuthenticationClientAuthenticateWithResult()
-          const { statusCode, body } = await post(event)
-          expect(statusCode).toEqual(403)
-          expect(body).toEqual(JSON.stringify({
-            type: "TypeError",
-            message: "Invalid request"
-          }))
-          expect(authenticateMock).not.toHaveBeenCalled()
+      /* Test: should resolve with refresh token (body) */
+      it("should resolve with refresh token (body)", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithCredentialsWithResult(session)
+        const { statusCode, body } = await post(event)
+        expect(statusCode).toEqual(200)
+        expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
+          refresh: jasmine.objectContaining({
+            token: session.refresh!.token
+          })
+        }))
+        expect(authenticateMock)
+          .toHaveBeenCalledWith(username, password)
+      })
+
+      /* Test: should resolve with refresh token (cookie) */
+      it("should resolve with refresh token (cookie)", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithCredentialsWithResult(session)
+        const { statusCode, headers } = await post(event)
+        expect(statusCode).toEqual(200)
+        expect(headers).toEqual({
+          "Set-Cookie": `__Secure-token=${
+            encodeURIComponent(session.refresh!.token)
+          }; Domain=${
+            process.env.COGNITO_IDENTITY_POOL_PROVIDER!
+          }; Path=/authenticate; Expires=${
+            session.refresh!.expires.toUTCString()
+          }; HttpOnly; Secure; SameSite=Strict`
         })
+        expect(authenticateMock)
+          .toHaveBeenCalledWith(username, password)
+      })
 
       /* Test: should resolve with authentication client error */
       it("should resolve with authentication client error", async () => {
-        const event = mockAPIGatewayProxyEvent<RequestWithToken>({
-          body: { token }
-        })
         const authenticateMock =
-          mockAuthenticationClientAuthenticateWithError()
+          mockAuthenticationClientAuthenticateWithCredentialsWithError()
         const { statusCode, body } = await post(event)
-        expect(statusCode).toEqual(403)
+        expect(statusCode).toEqual(400)
         expect(body).toEqual(JSON.stringify({
           type: "Error",
-          message: "authenticate"
+          message: "authenticateWithCredentials"
         }))
         expect(authenticateMock)
-          .toHaveBeenCalledWith(token, undefined)
+          .toHaveBeenCalledWith(username, password)
+      })
+    })
+
+    /* with refresh token (body) */
+    describe("with refresh token (body)", () => {
+
+      /* Token and event */
+      const { token } = mockAuthenticateRequestWithToken()
+      const event = mockAPIGatewayProxyEvent<RequestWithToken>({
+        body: { token }
+      })
+
+      /* Test: should resolve with identity token */
+      it("should resolve with identity token", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithTokenWithResult(session)
+        const { statusCode, body } = await post(event)
+        expect(statusCode).toEqual(200)
+        expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
+          id: jasmine.objectContaining({
+            token: session.id.token
+          })
+        }))
+        expect(authenticateMock).toHaveBeenCalledWith(token)
+      })
+
+      /* Test: should resolve with access token */
+      it("should resolve with access token", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithTokenWithResult(session)
+        const { statusCode, body } = await post(event)
+        expect(statusCode).toEqual(200)
+        expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
+          access: jasmine.objectContaining({
+            token: session.access.token
+          })
+        }))
+        expect(authenticateMock).toHaveBeenCalledWith(token)
+      })
+
+      /* Test: should resolve with error for missing token */
+      it("should resolve with error for missing token", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithTokenWithResult()
+        const { statusCode, body } =
+          await post(mockAPIGatewayProxyEvent<RequestWithToken>())
+        expect(statusCode).toEqual(400)
+        expect(body).toEqual(JSON.stringify({
+          type: "TypeError",
+          message: "Invalid request"
+        }))
+        expect(authenticateMock).not.toHaveBeenCalled()
+      })
+
+      /* Test: should resolve with authentication client error */
+      it("should resolve with authentication client error", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithTokenWithError()
+        const { statusCode, body } = await post(event)
+        expect(statusCode).toEqual(400)
+        expect(body).toEqual(JSON.stringify({
+          type: "Error",
+          message: "authenticateWithToken"
+        }))
+        expect(authenticateMock).toHaveBeenCalledWith(token)
+      })
+    })
+
+    /* with refresh token (cookie) */
+    describe("with refresh token (cookie)", () => {
+
+      /* Token and event */
+      const { token } = mockAuthenticateRequestWithToken()
+      const event = mockAPIGatewayProxyEvent<RequestWithToken>({
+        headers: { Cookie: `__Secure-token=${token}` }
+      })
+
+      /* Test: should resolve with identity token */
+      it("should resolve with identity token", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithTokenWithResult(session)
+        const { statusCode, body } = await post(event)
+        expect(statusCode).toEqual(200)
+        expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
+          id: jasmine.objectContaining({
+            token: session.id.token
+          })
+        }))
+        expect(authenticateMock).toHaveBeenCalledWith(token)
+      })
+
+      /* Test: should resolve with access token */
+      it("should resolve with access token", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithTokenWithResult(session)
+        const { statusCode, body } = await post(event)
+        expect(statusCode).toEqual(200)
+        expect(JSON.parse(body)).toEqual(jasmine.objectContaining({
+          access: jasmine.objectContaining({
+            token: session.access.token
+          })
+        }))
+        expect(authenticateMock).toHaveBeenCalledWith(token)
+      })
+
+      /* Test: should resolve with error for missing token */
+      it("should resolve with error for missing token", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithTokenWithResult()
+        const { statusCode, body } =
+          await post(mockAPIGatewayProxyEvent<RequestWithToken>())
+        expect(statusCode).toEqual(400)
+        expect(body).toEqual(JSON.stringify({
+          type: "TypeError",
+          message: "Invalid request"
+        }))
+        expect(authenticateMock).not.toHaveBeenCalled()
+      })
+
+      /* Test: should resolve with authentication client error */
+      it("should resolve with authentication client error", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithTokenWithError()
+        const { statusCode, body } = await post(event)
+        expect(statusCode).toEqual(400)
+        expect(body).toEqual(JSON.stringify({
+          type: "Error",
+          message: "authenticateWithToken"
+        }))
+        expect(authenticateMock).toHaveBeenCalledWith(token)
+      })
+
+      /* Test: should invalidate cookie for invalid token */
+      it("should invalidate cookie for invalid token", async () => {
+        const authenticateMock =
+          mockAuthenticationClientAuthenticateWithTokenWithError()
+        const { statusCode, headers, body } = await post(event)
+        expect(statusCode).toEqual(400)
+        expect(headers).toEqual({
+          "Set-Cookie": `__Secure-token=; Domain=${
+            process.env.COGNITO_IDENTITY_POOL_PROVIDER!
+          }; Path=/authenticate; Expires=${
+            new Date(0).toUTCString()
+          }; HttpOnly; Secure; SameSite=Strict`
+        })
+        expect(body).toEqual(JSON.stringify({
+          type: "Error",
+          message: "authenticateWithToken"
+        }))
+        expect(authenticateMock).toHaveBeenCalledWith(token)
       })
     })
   })
