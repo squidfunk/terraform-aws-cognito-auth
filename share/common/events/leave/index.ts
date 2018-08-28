@@ -25,13 +25,13 @@
  * ------------------------------------------------------------------------- */
 
 /**
- * User leave request
+ * Leave request
  */
-export interface UserLeaveRequest {}
+export interface LeaveRequest {}
 
 /* ------------------------------------------------------------------------- */
 
 /**
  * Type used for JSON schema
  */
-export type __JSON__ = UserLeaveRequest
+export type __JSON__ = LeaveRequest

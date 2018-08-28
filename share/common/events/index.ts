@@ -29,6 +29,7 @@ export {
   AuthenticateRequestWithCredentials,
   AuthenticateRequestWithToken
 } from "./authenticate"
+export { LeaveRequest } from "./leave"
 export { RegisterRequest } from "./register"
 export {
   RegisterVerificationParameters,
@@ -39,4 +40,3 @@ export {
   ResetVerificationParameters,
   ResetVerificationRequest
 } from "./reset/verify"
-export { UserLeaveRequest } from "./user/leave"
