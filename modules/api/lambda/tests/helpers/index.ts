@@ -33,6 +33,25 @@ import * as superagent from "supertest"
 export const chance = new Chance()
 
 /**
+ * Busy-wait the given number of milliseconds
+ *
+ * @param interval - Interval in milliseconds
+ *
+ * @return Promise resolving with no result
+ */
+export function wait(interval: number) {
+  return new Promise<void>(resolve => {
+    const start = Date.now()
+    while (true) {
+      if (Date.now() - start > interval) {
+        resolve()
+        break
+      }
+    }
+  })
+}
+
+/**
  * HTTP client for acceptance tests
  */
 export const request = superagent(`${

@@ -23,15 +23,15 @@
 import { AuthenticationClient } from "clients/authentication"
 import { ManagementClient } from "clients/management"
 
-import { chance, request } from "_/helpers"
+import { chance, request, wait } from "_/helpers"
 import { mockRegisterRequest } from "_/mocks/common"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Authentication check */
-describe("POST /check", () => {
+/* Authentication leave */
+describe("POST /leave", () => {
 
   /* Authentication and management client */
   const auth = new AuthenticationClient()
@@ -39,15 +39,15 @@ describe("POST /check", () => {
 
   /* Test: should return error for missing authentication header */
   it("should return error for missing authentication header", () => {
-    return request.get("/check")
-      .expect(401)
+    return request.post("/leave")
+      .expect(400)
   })
 
   /* Test: should return error for invalid authentication header */
   it("should return error for invalid authentication header", () => {
     return request.get("/check")
       .set("Authorization", chance.string())
-      .expect(401)
+      .expect(403)
   })
 
   /* with authenticated user */
@@ -67,26 +67,63 @@ describe("POST /check", () => {
       await mgmt.deleteUser(email)
     })
 
-    /* Test: should return empty body for valid access token */
-    it("should return empty body for valid access token", async () => {
+    /* Test: should return empty body */
+    it("should return empty body", async () => {
       const { body } =  await request.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password })
-      return request.get("/check")
+      wait(2000) // busy-wait synchronization
+      return request.post("/leave")
         .set("Authorization", `Bearer ${body.access.token}`)
-        .expect(200, "")
+        .expect(204, "")
     })
 
-    /* Test: should return appropriate cache-control header */
-    it("should return appropriate cache-control header", async () => {
+    /* Test: should invalidate cookie for valid token */
+    it("should invalidate cookie for valid token", async () => {
       const { body } =  await request.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password })
-      const { header } = await request.get("/check")
+      wait(2000) // busy-wait for synchronization
+      const { header } = await request.post("/leave")
         .set("Authorization", `Bearer ${body.access.token}`)
-        .expect(200, "")
-      expect(header["cache-control"])
-        .toEqual("public, max-age=0, must-revalidate")
+        .expect(204, "")
+      expect(header["set-cookie"]).toMatch(
+        `__Secure-token=; Domain=${
+          process.env.COGNITO_IDENTITY_POOL_PROVIDER!
+        }; Path=/${
+          process.env.API_BASE_PATH!
+        }/authenticate; Expires=${
+          new Date(0).toUTCString()
+        }; HttpOnly; Secure; SameSite=Strict`)
+    })
+
+    /* Test: should invalidate cookie for invalid token */
+    it("should invalidate cookie for invalid token", async () => {
+      const { header } = await request.post("/leave")
+        .set("Authorization", `Bearer ${chance.string()}`)
+        .expect(400)
+      expect(header["set-cookie"]).toMatch(
+        `__Secure-token=; Domain=${
+          process.env.COGNITO_IDENTITY_POOL_PROVIDER!
+        }; Path=/${
+          process.env.API_BASE_PATH!
+        }/authenticate; Expires=${
+          new Date(0).toUTCString()
+        }; HttpOnly; Secure; SameSite=Strict`)
+    })
+
+    /* Test: should invalidate cookie for missing token */
+    it("should invalidate cookie for missing token", async () => {
+      const { header } = await request.post("/leave")
+        .expect(400)
+      expect(header["set-cookie"]).toMatch(
+        `__Secure-token=; Domain=${
+          process.env.COGNITO_IDENTITY_POOL_PROVIDER!
+        }; Path=/${
+          process.env.API_BASE_PATH!
+        }/authenticate; Expires=${
+          new Date(0).toUTCString()
+        }; HttpOnly; Secure; SameSite=Strict`)
     })
   })
 })

@@ -71,7 +71,7 @@ describe("POST /reset/:code", () => {
     return request.post(`/reset/${id}`)
       .set("Content-Type", "application/json")
       .send(mockResetVerifyRequest())
-      .expect(400, {
+      .expect(403, {
         type: "Error",
         message: "Invalid verification code"
       })
@@ -112,7 +112,7 @@ describe("POST /reset/:code", () => {
         .send({ password: value })
         .expect(200, "{}")
       expect(async () => {
-        await auth.authenticate(subject, value)
+        await auth.authenticateWithCredentials(subject, value)
       }).not.toThrow()
     })
   })

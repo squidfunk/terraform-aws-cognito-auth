@@ -74,7 +74,7 @@ describe("POST /register/:code", () => {
     const { id } = mockVerificationCode("register")
     return request.post(`/register/${id}`)
       .set("Content-Type", "application/json")
-      .expect(400, {
+      .expect(403, {
         type: "Error",
         message: "Invalid verification code"
       })

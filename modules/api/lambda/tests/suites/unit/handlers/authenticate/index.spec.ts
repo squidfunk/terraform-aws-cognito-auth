@@ -194,7 +194,7 @@ describe("handlers/authenticate", () => {
           }; Domain=${
             process.env.COGNITO_IDENTITY_POOL_PROVIDER!
           }; Path=/${
-            process.env.API_BASE_PATH
+            process.env.API_BASE_PATH!
           }/authenticate; Expires=${
             session.refresh!.expires.toUTCString()
           }; HttpOnly; Secure; SameSite=Strict`
@@ -357,7 +357,7 @@ describe("handlers/authenticate", () => {
           "Set-Cookie": `__Secure-token=; Domain=${
             process.env.COGNITO_IDENTITY_POOL_PROVIDER!
           }; Path=/${
-            process.env.API_BASE_PATH
+            process.env.API_BASE_PATH!
           }/authenticate; Expires=${
             new Date(0).toUTCString()
           }; HttpOnly; Secure; SameSite=Strict`

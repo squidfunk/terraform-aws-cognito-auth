@@ -79,8 +79,8 @@ describe("POST /authenticate", () => {
       .set("Content-Type", "application/json")
       .send(mockAuthenticateRequestWithCredentials())
       .expect(400, {
-        type: "UserNotFoundException",
-        message: "User does not exist"
+        type: "NotAuthorizedException",
+        message: "Incorrect username or password"
       })
   })
 
@@ -121,8 +121,8 @@ describe("POST /authenticate", () => {
         .set("Content-Type", "application/json")
         .send({ username: email, password })
         .expect(400, {
-          type: "UserNotFoundException",
-          message: "User does not exist"
+          type: "NotAuthorizedException",
+          message: "Incorrect username or password"
         })
     })
   })
@@ -173,7 +173,7 @@ describe("POST /authenticate", () => {
       async () => {
         const { body } = await request.post("/authenticate")
           .set("Content-Type", "application/json")
-          .send({ username: email, password })
+          .send({ username: email, password, remember: true })
           .expect(200)
         expect(body.refresh.token)
           .toMatch(/^([a-zA-Z0-9\-_]+\.){4}[a-zA-Z0-9\-_]+$/)
@@ -186,7 +186,7 @@ describe("POST /authenticate", () => {
       async () => {
         const { body, header } = await request.post("/authenticate")
           .set("Content-Type", "application/json")
-          .send({ username: email, password })
+          .send({ username: email, password, remember: true })
           .expect(200)
         expect(header["set-cookie"]).toMatch(
           `__Secure-token=${
@@ -194,7 +194,7 @@ describe("POST /authenticate", () => {
           }; Domain=${
             process.env.COGNITO_IDENTITY_POOL_PROVIDER!
           }; Path=/${
-            process.env.API_BASE_PATH
+            process.env.API_BASE_PATH!
           }/authenticate; Expires=${
             new Date(Date.parse(body.refresh.expires)).toUTCString()
           }; HttpOnly; Secure; SameSite=Strict`)
@@ -204,7 +204,7 @@ describe("POST /authenticate", () => {
     it("should return identity token for valid refresh token", async () => {
       const { body: { refresh } } = await request.post("/authenticate")
         .set("Content-Type", "application/json")
-        .send({ username: email, password })
+        .send({ username: email, password, remember: true })
         .expect(200)
       const { body } = await request.post("/authenticate")
         .send({ token: refresh.token })
@@ -219,7 +219,7 @@ describe("POST /authenticate", () => {
     it("should return access token for valid refresh token", async () => {
       const { body: { refresh } } = await request.post("/authenticate")
         .set("Content-Type", "application/json")
-        .send({ username: email, password })
+        .send({ username: email, password, remember: true })
         .expect(200)
       const { body } = await request.post("/authenticate")
         .send({ token: refresh.token })

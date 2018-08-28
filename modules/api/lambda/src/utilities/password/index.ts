@@ -34,6 +34,7 @@ import rules = require("password-rules")
 export function throwOnPasswordPolicyBreach(password: string) {
   const result = rules(password, {
     minimumLength: 8,
+    maximumLength: 256,
     requireCapital: true,
     requireLower: true,
     requireNumber: true,

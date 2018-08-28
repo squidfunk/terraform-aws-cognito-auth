@@ -67,7 +67,7 @@ describe("handlers/leave", () => {
         "Set-Cookie": `__Secure-token=; Domain=${
           process.env.COGNITO_IDENTITY_POOL_PROVIDER!
         }; Path=/${
-          process.env.API_BASE_PATH
+          process.env.API_BASE_PATH!
         }/authenticate; Expires=${
           new Date(0).toUTCString()
         }; HttpOnly; Secure; SameSite=Strict`
@@ -84,7 +84,7 @@ describe("handlers/leave", () => {
         "Set-Cookie": `__Secure-token=; Domain=${
           process.env.COGNITO_IDENTITY_POOL_PROVIDER!
         }; Path=/${
-          process.env.API_BASE_PATH
+          process.env.API_BASE_PATH!
         }/authenticate; Expires=${
           new Date(0).toUTCString()
         }; HttpOnly; Secure; SameSite=Strict`
@@ -102,7 +102,7 @@ describe("handlers/leave", () => {
         "Set-Cookie": `__Secure-token=; Domain=${
           process.env.COGNITO_IDENTITY_POOL_PROVIDER!
         }; Path=/${
-          process.env.API_BASE_PATH
+          process.env.API_BASE_PATH!
         }/authenticate; Expires=${
           new Date(0).toUTCString()
         }; HttpOnly; Secure; SameSite=Strict`

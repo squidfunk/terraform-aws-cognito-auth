@@ -42,7 +42,7 @@ export function mockRegisterRequest(options?: Partial<Options>) {
   return {
     email: chance.email({ domain: "example.com" }),
     password: generate({
-      length: 8,
+      length: 32,
       numbers: true,
       symbols: true,
       uppercase: true,

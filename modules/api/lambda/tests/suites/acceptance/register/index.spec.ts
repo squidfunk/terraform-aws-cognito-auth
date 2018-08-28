@@ -113,10 +113,8 @@ describe("POST /register", () => {
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ length: 7 }))
       .expect(400, {
-        type: "InvalidPasswordException",
-        message:
-          "Password did not conform with policy: " +
-          "Password not long enough"
+        type: "Error",
+        message: "Password must be at least 8 letters long"
       })
   })
 
@@ -126,11 +124,8 @@ describe("POST /register", () => {
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ length: 257 }))
       .expect(400, {
-        type: "InvalidParameterException",
-        message:
-          "1 validation error detected: " +
-          "Value at 'password' failed to satisfy constraint: " +
-          "Member must have length less than or equal to 256"
+        type: "Error",
+        message: "Password must be less than 256 letters long"
       })
   })
 
@@ -140,10 +135,8 @@ describe("POST /register", () => {
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ numbers: false }))
       .expect(400, {
-        type: "InvalidPasswordException",
-        message:
-          "Password did not conform with policy: " +
-          "Password must have numeric characters"
+        type: "Error",
+        message: "Password must contain a number"
       })
   })
 
@@ -153,10 +146,8 @@ describe("POST /register", () => {
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ symbols: false }))
       .expect(400, {
-        type: "InvalidPasswordException",
-        message:
-          "Password did not conform with policy: " +
-          "Password must have symbol characters"
+        type: "Error",
+        message: "Password must contain a special character"
       })
   })
 
@@ -166,10 +157,8 @@ describe("POST /register", () => {
       .set("Content-Type", "application/json")
       .send(mockRegisterRequest({ uppercase: false }))
       .expect(400, {
-        type: "InvalidPasswordException",
-        message:
-          "Password did not conform with policy: " +
-          "Password must have uppercase characters"
+        type: "Error",
+        message: "Password must contain a capital letter"
       })
   })
 

@@ -23,6 +23,7 @@
 declare module "password-rules" {
   interface Options {
     minimumLength?: number
+    maximumLength?: number
     requireCapital?: boolean
     requireLower?: boolean
     requireNumber?: boolean
