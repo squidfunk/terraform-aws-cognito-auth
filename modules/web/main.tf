@@ -29,15 +29,57 @@ provider "aws" {
 }
 
 # -----------------------------------------------------------------------------
+# Local variables
+# -----------------------------------------------------------------------------
+
+# local.*
+locals {
+  enabled = "${length(var.app_domain) == 0 ? 0 : 1}"
+}
+
+# -----------------------------------------------------------------------------
 # Data: Distribution files
 # -----------------------------------------------------------------------------
 
 # data.external.dist
 data "external" "dist" {
+  count   = "${local.enabled}"
   program = ["${path.module}/s3/scripts/trigger.sh"]
 
   query {
     directory = "${path.module}/app/dist"
+  }
+}
+
+# -----------------------------------------------------------------------------
+# Data: S3
+# -----------------------------------------------------------------------------
+
+# data.template_file.s3_bucket_policy.rendered
+data "template_file" "s3_bucket_policy" {
+  count    = "${local.enabled}"
+  template = "${file("${path.module}/s3/bucket/policy.json")}"
+
+  vars {
+    bucket = "${var.namespace}"
+
+    cloudfront_origin_access_identity_iam_arn = "${
+      aws_cloudfront_origin_access_identity._.iam_arn
+    }"
+  }
+}
+
+# -----------------------------------------------------------------------------
+
+# data.template_file.index.rendered
+data "template_file" "index" {
+  count    = "${local.enabled}"
+  template = "${file("${path.module}/app/dist/index.html")}"
+
+  vars {
+    api_base_path              = "${var.api_base_path}"
+    app_origin                 = "${var.app_origin}"
+    cognito_identity_pool_name = "${var.cognito_identity_pool_name}"
   }
 }
 
@@ -47,7 +89,8 @@ data "external" "dist" {
 
 # aws_iam_role.lambda
 resource "aws_iam_role" "lambda" {
-  name = "${var.namespace}-web-lambda"
+  count = "${local.enabled}"
+  name  = "${var.namespace}-web-lambda"
 
   assume_role_policy = "${
     file("${path.module}/iam/policies/assume-role/lambda.json")
@@ -56,14 +99,16 @@ resource "aws_iam_role" "lambda" {
 
 # aws_iam_policy.lambda
 resource "aws_iam_policy" "lambda" {
-  name = "${var.namespace}-web-lambda"
+  count = "${local.enabled}"
+  name  = "${var.namespace}-web-lambda"
 
   policy = "${file("${path.module}/iam/policies/lambda.json")}"
 }
 
 # aws_iam_policy_attachment.lambda
 resource "aws_iam_policy_attachment" "lambda" {
-  name = "${var.namespace}-web-lambda"
+  count = "${local.enabled}"
+  name  = "${var.namespace}-web-lambda"
 
   policy_arn = "${aws_iam_policy.lambda.arn}"
   roles      = ["${aws_iam_role.lambda.name}"]
@@ -75,6 +120,8 @@ resource "aws_iam_policy_attachment" "lambda" {
 
 # null_resource.dist
 resource "null_resource" "dist" {
+  count = "${local.enabled}"
+
   triggers {
     md5 = "${data.external.dist.result["checksum"]}"
   }
@@ -91,41 +138,12 @@ resource "null_resource" "dist" {
 }
 
 # -----------------------------------------------------------------------------
-# Data: S3
-# -----------------------------------------------------------------------------
-
-# data.template_file.s3_bucket_policy.rendered
-data "template_file" "s3_bucket_policy" {
-  template = "${file("${path.module}/s3/bucket/policy.json")}"
-
-  vars {
-    bucket = "${var.namespace}"
-
-    cloudfront_origin_access_identity_iam_arn = "${
-      aws_cloudfront_origin_access_identity._.iam_arn
-    }"
-  }
-}
-
-# -----------------------------------------------------------------------------
-
-# data.template_file.index.rendered
-data "template_file" "index" {
-  template = "${file("${path.module}/app/dist/index.html")}"
-
-  vars {
-    api_base_path              = "${var.api_base_path}"
-    app_origin                 = "${var.app_origin}"
-    cognito_identity_pool_name = "${var.cognito_identity_pool_name}"
-  }
-}
-
-# -----------------------------------------------------------------------------
 # Resources: S3
 # -----------------------------------------------------------------------------
 
 # aws_s3_bucket._
 resource "aws_s3_bucket" "_" {
+  count  = "${local.enabled}"
   bucket = "${var.namespace}"
   acl    = "private"
   policy = "${data.template_file.s3_bucket_policy.rendered}"
@@ -133,6 +151,7 @@ resource "aws_s3_bucket" "_" {
 
 # aws_s3_bucket_object.index
 resource "aws_s3_bucket_object" "index" {
+  count         = "${local.enabled}"
   bucket        = "${aws_s3_bucket._.bucket}"
   key           = "index.html"
   content       = "${data.template_file.index.rendered}"
@@ -146,10 +165,13 @@ resource "aws_s3_bucket_object" "index" {
 # -----------------------------------------------------------------------------
 
 # aws_cloudfront_origin_access_identity._
-resource "aws_cloudfront_origin_access_identity" "_" {}
+resource "aws_cloudfront_origin_access_identity" "_" {
+  count = "${local.enabled}"
+}
 
 # aws_cloudfront_distribution._
 resource "aws_cloudfront_distribution" "_" {
+  count           = "${local.enabled}"
   aliases         = ["${var.app_domain}"]
   enabled         = true
   is_ipv6_enabled = true
@@ -268,13 +290,6 @@ resource "aws_cloudfront_distribution" "_" {
   default_root_object = "index.html"
 
   custom_error_response {
-    error_code            = 403
-    error_caching_min_ttl = 300
-    response_code         = 200
-    response_page_path    = "/index.html"
-  }
-
-  custom_error_response {
     error_code            = 404
     error_caching_min_ttl = 300
     response_code         = 200
@@ -302,6 +317,7 @@ resource "aws_cloudfront_distribution" "_" {
 
 # aws_lambda_function._
 resource "aws_lambda_function" "_" {
+  count         = "${local.enabled}"
   function_name = "${var.namespace}-web-security"
   role          = "${aws_iam_role.lambda.arn}"
   runtime       = "nodejs8.10"
@@ -321,6 +337,7 @@ resource "aws_lambda_function" "_" {
 
 # aws_lambda_permission._
 resource "aws_lambda_permission" "_" {
+  count         = "${local.enabled}"
   principal     = "cloudfront.amazonaws.com"
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function._.arn}"

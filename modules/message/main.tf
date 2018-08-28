@@ -33,6 +33,7 @@ locals {
 
 # data.template_file.lambda_iam_policy.rendered
 data "template_file" "lambda_iam_policy" {
+  count    = "${local.enabled}"
   template = "${file("${path.module}/iam/policies/lambda.json")}"
 
   vars {

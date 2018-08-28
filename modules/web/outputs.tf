@@ -24,10 +24,16 @@
 
 # output.cloudfront_distribution_domain_name
 output "cloudfront_distribution_domain_name" {
-  value = "${aws_cloudfront_distribution._.domain_name}"
+  value = "${local.enabled
+    ? aws_cloudfront_distribution._.0.domain_name
+    : ""
+  }"
 }
 
 # output.cloudfront_distribution_hosted_zone_id
 output "cloudfront_distribution_hosted_zone_id" {
-  value = "${aws_cloudfront_distribution._.hosted_zone_id}"
+  value = "${local.enabled
+    ? aws_cloudfront_distribution._.0.hosted_zone_id
+    : ""
+  }"
 }
