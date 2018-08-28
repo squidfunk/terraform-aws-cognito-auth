@@ -24,10 +24,4 @@
  * Re-exports
  * ------------------------------------------------------------------------- */
 
-export * from "./Authenticate"
-export * from "./Leave"
-export * from "./NotFound"
-export * from "./Register"
-export * from "./RegisterVerification"
-export * from "./Reset"
-export * from "./ResetVerification"
+export { Leave } from "./Leave"

@@ -21,16 +21,26 @@
  */
 
 import * as React from "react"
-import { Redirect } from "react-router-dom"
 import {
+  branch,
   compose,
   lifecycle,
-  pure
+  pure,
+  renderComponent
 } from "recompose"
 
+import { LeaveRequest } from "common"
+import { Loading } from "components"
 import {
-  RenderProps as UserLeaveRenderProps
-} from "./UserLeave"
+  WithFormSubmit,
+  withFormSubmit,
+  withRememberMe,
+  WithRememberMeDispatch,
+  WithSession,
+  withSession
+} from "enhancers"
+
+import { LeaveSuccess } from "./LeaveSuccess"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -40,7 +50,9 @@ import {
  * Render properties
  */
 export type RenderProps =
-  & UserLeaveRenderProps
+  & WithSession
+  & WithRememberMeDispatch
+  & WithFormSubmit<LeaveRequest>
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -49,28 +61,40 @@ export type RenderProps =
 /**
  * Render component
  *
- * @param props - Properties
- *
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  () => <Redirect to="/" />
+  () => <Loading />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
  * ------------------------------------------------------------------------- */
 
 /**
- * User sign out success component
+ * Sign out component
  */
-export const UserLeaveSuccess =
+export const Leave =
   compose<RenderProps, {}>(
+    withSession(),
+    withRememberMe(),
+    withFormSubmit<LeaveRequest>({
+      message: "You signed out of your account",
+      authorize: true
+    }),
     lifecycle<RenderProps, {}>({
-      async componentWillMount() {
-        const { form, dismissNotification } = this.props
-        if (form.err)
-          dismissNotification()
+      componentWillMount() {
+        const { setRememberMeResult } = this.props
+        setRememberMeResult(false) // avoid re-authentication
+      },
+      async componentDidMount() {
+        const { submit, terminateSession } = this.props
+        await submit()
+        terminateSession()
       }
     }),
+    branch<WithFormSubmit<LeaveRequest>>(
+      ({ form }) => form.success || Boolean(form.err),
+      renderComponent(LeaveSuccess)
+    ),
     pure
   )(Render)

@@ -20,8 +20,57 @@
  * IN THE SOFTWARE.
  */
 
+import * as React from "react"
+import { Redirect } from "react-router-dom"
+import {
+  compose,
+  lifecycle,
+  pure
+} from "recompose"
+
+import {
+  RenderProps as LeaveRenderProps
+} from "./Leave"
+
 /* ----------------------------------------------------------------------------
- * Re-exports
+ * Types
  * ------------------------------------------------------------------------- */
 
-export { UserLeave } from "./UserLeave"
+/**
+ * Render properties
+ */
+export type RenderProps =
+  & LeaveRenderProps
+
+/* ----------------------------------------------------------------------------
+ * Presentational component
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Render component
+ *
+ * @param props - Properties
+ *
+ * @return JSX element
+ */
+export const Render: React.SFC<RenderProps> =
+  () => <Redirect to="/" />
+
+/* ----------------------------------------------------------------------------
+ * Enhanced component
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Sign out success component
+ */
+export const LeaveSuccess =
+  compose<RenderProps, {}>(
+    lifecycle<RenderProps, {}>({
+      async componentWillMount() {
+        const { form, dismissNotification } = this.props
+        if (form.err)
+          dismissNotification()
+      }
+    }),
+    pure
+  )(Render)
