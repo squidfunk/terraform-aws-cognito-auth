@@ -46,6 +46,11 @@ variable "api_resource_id" {
   description = "API resource identifier"
 }
 
+# output.api_base_path
+variable "api_base_path" {
+  description = "API base path"
+}
+
 # -----------------------------------------------------------------------------
 # Variables: Cognito
 # -----------------------------------------------------------------------------

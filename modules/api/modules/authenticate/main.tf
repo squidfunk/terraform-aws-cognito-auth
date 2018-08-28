@@ -80,6 +80,7 @@ resource "aws_lambda_function" "_" {
 
   environment {
     variables = {
+      API_BASE_PATH                  = "${var.api_base_path}"
       COGNITO_USER_POOL_ID           = "${var.cognito_user_pool_id}"
       COGNITO_USER_POOL_CLIENT_ID    = "${var.cognito_user_pool_client_id}"
       COGNITO_IDENTITY_POOL_PROVIDER = "${var.cognito_identity_pool_provider}"

@@ -21,10 +21,10 @@
  */
 
 import { SessionClient } from "clients/session"
-import { UserLeaveRequest } from "common"
+import { LeaveRequest } from "common"
 import { handler } from "handlers"
 
-import schema = require("common/events/user/leave/index.json")
+import schema = require("common/events/leave/index.json")
 import {
   parseTokenFromHeader,
   resetTokenCookie
@@ -41,7 +41,7 @@ import {
  *
  * @return Promise resolving with session
  */
-export const post = handler<{}, UserLeaveRequest>(schema,
+export const post = handler<{}, LeaveRequest>(schema,
   async ({ headers }) => {
     const token = parseTokenFromHeader(headers.Authorization)
     try {

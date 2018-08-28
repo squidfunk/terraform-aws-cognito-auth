@@ -36,7 +36,7 @@ export const TOKEN_COOKIE_NAME = "__Secure-token"
 /**
  * Refresh token cookie path
  */
-export const TOKEN_COOKIE_PATH = "/authenticate"
+export const TOKEN_COOKIE_PATH = `/${process.env.API_BASE_PATH}/authenticate`
 
 /* ----------------------------------------------------------------------------
  * Functions

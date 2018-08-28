@@ -20,9 +20,9 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "handlers/user/leave"
+import { post } from "handlers/leave"
 
-import { UserLeaveRequest } from "common"
+import { LeaveRequest } from "common"
 
 import { chance } from "_/helpers"
 import {
@@ -36,14 +36,14 @@ import { mockAPIGatewayProxyEvent } from "_/mocks/vendor/aws-lambda"
  * ------------------------------------------------------------------------- */
 
 /* Terminate session */
-describe("handlers/user/leave", () => {
+describe("handlers/leave", () => {
 
-  /* POST /user/leave */
+  /* POST /leave */
   describe("post", () => {
 
     /* Access token and event */
     const token = chance.string({ length: 128 })
-    const event = mockAPIGatewayProxyEvent<{}, UserLeaveRequest>({
+    const event = mockAPIGatewayProxyEvent<{}, LeaveRequest>({
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -66,7 +66,9 @@ describe("handlers/user/leave", () => {
       expect(headers).toEqual({
         "Set-Cookie": `__Secure-token=; Domain=${
           process.env.COGNITO_IDENTITY_POOL_PROVIDER!
-        }; Path=/authenticate; Expires=${
+        }; Path=/${
+          process.env.API_BASE_PATH
+        }/authenticate; Expires=${
           new Date(0).toUTCString()
         }; HttpOnly; Secure; SameSite=Strict`
       })
@@ -81,7 +83,9 @@ describe("handlers/user/leave", () => {
       expect(headers).toEqual({
         "Set-Cookie": `__Secure-token=; Domain=${
           process.env.COGNITO_IDENTITY_POOL_PROVIDER!
-        }; Path=/authenticate; Expires=${
+        }; Path=/${
+          process.env.API_BASE_PATH
+        }/authenticate; Expires=${
           new Date(0).toUTCString()
         }; HttpOnly; Secure; SameSite=Strict`
       })
@@ -92,12 +96,14 @@ describe("handlers/user/leave", () => {
     it("should invalidate cookie for missing token", async () => {
       const signOutMock = mockSessionClientSignOutWithError()
       const { statusCode, headers } = await post(
-        mockAPIGatewayProxyEvent<{}, UserLeaveRequest>())
+        mockAPIGatewayProxyEvent<{}, LeaveRequest>())
       expect(statusCode).toEqual(400)
       expect(headers).toEqual({
         "Set-Cookie": `__Secure-token=; Domain=${
           process.env.COGNITO_IDENTITY_POOL_PROVIDER!
-        }; Path=/authenticate; Expires=${
+        }; Path=/${
+          process.env.API_BASE_PATH
+        }/authenticate; Expires=${
           new Date(0).toUTCString()
         }; HttpOnly; Secure; SameSite=Strict`
       })

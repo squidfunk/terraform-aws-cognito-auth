@@ -26,14 +26,14 @@
 data "aws_caller_identity" "_" {}
 
 # -----------------------------------------------------------------------------
-# Resources: API Gateway: POST /user
+# Resources: API Gateway: POST /leave
 # -----------------------------------------------------------------------------
 
 # aws_api_gateway_resource._
 resource "aws_api_gateway_resource" "_" {
   rest_api_id = "${var.api_id}"
   parent_id   = "${var.api_resource_id}"
-  path_part   = "user"
+  path_part   = "leave"
 }
 
 # aws_api_gateway_method._
@@ -66,7 +66,7 @@ resource "aws_api_gateway_integration" "_" {
 
 # aws_lambda_function._
 resource "aws_lambda_function" "_" {
-  function_name = "${var.namespace}-api-user"
+  function_name = "${var.namespace}-api-leave"
   role          = "${var.lambda_role_arn}"
   runtime       = "nodejs8.10"
   filename      = "${var.lambda_filename}"
