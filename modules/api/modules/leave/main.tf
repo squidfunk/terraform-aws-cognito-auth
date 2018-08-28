@@ -77,6 +77,13 @@ resource "aws_lambda_function" "_" {
   source_code_hash = "${
     base64sha256(file("${var.lambda_filename}"))
   }"
+
+  environment {
+    variables = {
+      API_BASE_PATH                  = "${var.api_base_path}"
+      COGNITO_IDENTITY_POOL_PROVIDER = "${var.cognito_identity_pool_provider}"
+    }
+  }
 }
 
 # aws_lambda_permission._

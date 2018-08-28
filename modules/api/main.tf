@@ -175,6 +175,9 @@ module "leave" {
 
   api_id          = "${aws_api_gateway_rest_api._.id}"
   api_resource_id = "${aws_api_gateway_resource._.id}"
+  api_base_path   = "${aws_api_gateway_resource._.path_part}"
+
+  cognito_identity_pool_provider = "${var.cognito_identity_pool_provider}"
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
