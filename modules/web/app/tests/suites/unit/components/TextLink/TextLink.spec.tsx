@@ -20,33 +20,18 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
+import { mount, render, shallow } from "enzyme"
+import * as React from "react"
+
+import { Render } from "components/TextLink/TextLink"
 
 /* ----------------------------------------------------------------------------
- * Types
+ * Tests
  * ------------------------------------------------------------------------- */
 
-/**
- * Styles
- */
-export type Styles = typeof styles
-
-/* ----------------------------------------------------------------------------
- * Data
- * ------------------------------------------------------------------------- */
-
-/**
- * Styles
- *
- * @param theme - Material theme
- *
- * @return CSS styles
- */
-export const styles = ({ spacing }: Theme) =>
-  createStyles({
-    root: {
-      borderRadius: 2,
-      fontSmoothing: "antialiased",
-      marginTop: spacing.unit * 2
-    }
+describe("foo", () => {
+  it("should whatever2", () => {
+    // console.log(shallow(<Render classes={{ root: "" }} handleClickCapture={() => {}} to="/">Foobar</Render>))
+    expect(shallow(<div>Foobar</div>)).toMatchSnapshot()
   })
+})

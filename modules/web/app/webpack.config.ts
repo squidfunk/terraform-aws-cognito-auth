@@ -153,7 +153,7 @@ export default (_env: never, args: Configuration) => {
         warningsFilter: /export .* was not found in/
       } as any,
 
-      /* Proxy all /identity requests to the API Gateway development server */
+      /* Proxy all /identity requests to API development server */
       before: (app: Application) => app.use("/identity", proxy({
         target: "http://localhost:9091",
         changeOrigin: true

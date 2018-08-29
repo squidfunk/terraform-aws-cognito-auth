@@ -20,33 +20,29 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
-
-/* ----------------------------------------------------------------------------
- * Types
- * ------------------------------------------------------------------------- */
-
-/**
- * Styles
- */
-export type Styles = typeof styles
+import { AnyAction } from "redux"
+import configureStore from "redux-mock-store"
 
 /* ----------------------------------------------------------------------------
  * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Styles
+ * Mock Redux store
  *
- * @param theme - Material theme
- *
- * @return CSS styles
+ * @return Store
  */
-export const styles = ({ spacing }: Theme) =>
-  createStyles({
-    root: {
-      borderRadius: 2,
-      fontSmoothing: "antialiased",
-      marginTop: spacing.unit * 2
-    }
-  })
+export function mockStore() {
+  return configureStore()()
+}
+
+/**
+ * Mock Redux action
+ *
+ * @return Action
+ */
+export function mockAction(): AnyAction {
+  return {
+    type: "<type>"
+  }
+}

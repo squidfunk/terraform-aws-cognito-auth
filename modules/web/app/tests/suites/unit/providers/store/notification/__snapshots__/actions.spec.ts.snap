@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`providers/store/notification dismissNotificationAction should dismiss all notifications 1`] = `
+Array [
+  Object {
+    "type": "NOTIFICATION_DISMISS",
+  },
+]
+`;
+
+exports[`providers/store/notification displayNotificationAction should create a notification to indicate an error 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "message": "<message>",
+      "type": "ERROR",
+    },
+    "type": "NOTIFICATION_DISPLAY",
+  },
+]
+`;
+
+exports[`providers/store/notification displayNotificationAction should create a notification to indicate success 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "message": "<message>",
+      "type": "SUCCESS",
+    },
+    "type": "NOTIFICATION_DISPLAY",
+  },
+]
+`;

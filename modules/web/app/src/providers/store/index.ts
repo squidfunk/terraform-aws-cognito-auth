@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { defaultTo, pick } from "ramda"
+import { pick } from "ramda"
 import { combineReducers, createStore } from "redux"
 
 import {
@@ -77,7 +77,7 @@ export function rehydrate(): State {
 }
 
 /* ----------------------------------------------------------------------------
- * Values
+ * Data
  * ------------------------------------------------------------------------- */
 
 /**

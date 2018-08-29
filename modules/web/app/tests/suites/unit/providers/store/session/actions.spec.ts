@@ -20,33 +20,47 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
+import {
+  initSessionAction,
+  terminateSessionAction
+} from "providers/store/session"
+
+import { mockSession } from "_/mocks/common"
+import { mockStore } from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
- * Types
+ * Tests
  * ------------------------------------------------------------------------- */
 
-/**
- * Styles
- */
-export type Styles = typeof styles
+/* Session actions */
+describe("providers/store/session", () => {
 
-/* ----------------------------------------------------------------------------
- * Data
- * ------------------------------------------------------------------------- */
+  /* Initialize store and session */
+  const store = mockStore()
+  const session = mockSession()
 
-/**
- * Styles
- *
- * @param theme - Material theme
- *
- * @return CSS styles
- */
-export const styles = ({ spacing }: Theme) =>
-  createStyles({
-    root: {
-      borderRadius: 2,
-      fontSmoothing: "antialiased",
-      marginTop: spacing.unit * 2
-    }
+  /* Clear store */
+  beforeEach(() => {
+    store.clearActions()
   })
+
+  /* initSessionAction */
+  describe("initSessionAction", () => {
+
+    /* Test: should initialize session */
+    it("should initialize session", () => {
+      store.dispatch(initSessionAction(session))
+      expect(store.getActions()).toMatchSnapshot()
+    })
+  })
+
+  /* terminateSessionAction */
+  describe("terminateSessionAction", () => {
+
+    /* Test: should terminate session */
+    it("should terminate session", () => {
+      store.dispatch(terminateSessionAction())
+      expect(store.getActions()).toMatchSnapshot()
+    })
+  })
+})

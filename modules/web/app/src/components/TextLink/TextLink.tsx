@@ -54,7 +54,7 @@ export type TextLinkProps = LinkProps
  * Handler properties
  */
 interface HandlerProps {
-  handleClick(): void                  /* Link click handler */
+  handleClickCapture(): void           /* Link click capture handler */
 }
 
 /* ------------------------------------------------------------------------- */
@@ -65,8 +65,31 @@ interface HandlerProps {
 export type RenderProps =
   & TextLinkProps
   & WithStyles<Styles>
-  & WithNotificationDispatch
   & HandlerProps
+
+/* ----------------------------------------------------------------------------
+ * Enhancers
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Enhance component with styles
+ */
+export const addStyles =
+  withStyles(styles)
+
+/**
+ * Enhance component with notification
+ */
+export const addNotification =
+  withNotification()
+
+/**
+ * Enhance component with handlers
+ */
+export const addHandlers =
+  withHandlers<WithNotificationDispatch, HandlerProps>({
+    handleClickCapture: ({ dismissNotification }) => dismissNotification
+  })
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -80,9 +103,9 @@ export type RenderProps =
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  ({ classes, children, handleClick, to, tabIndex }) =>
+  ({ classes, children, handleClickCapture, to, tabIndex }) =>
     <Link
-      className={classes.root} onClickCapture={handleClick}
+      className={classes.root} onClickCapture={handleClickCapture}
       to={to} tabIndex={tabIndex}
     >
       {children}
@@ -97,10 +120,8 @@ export const Render: React.SFC<RenderProps> =
  */
 export const TextLink =
   compose<RenderProps, TextLinkProps>(
-    withStyles(styles),
-    withNotification(),
-    withHandlers<WithNotificationDispatch, HandlerProps>({
-      handleClick: ({ dismissNotification }) => dismissNotification
-    }),
+    addStyles,
+    addNotification,
+    addHandlers,
     pure
   )(Render)

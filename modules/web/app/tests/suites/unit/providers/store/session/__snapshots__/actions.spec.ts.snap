@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`providers/store/session initSessionAction should initialize session 1`] = `
+Array [
+  Object {
+    "session": Object {
+      "access": Object {
+        "expires": "<expires>",
+        "token": "<token>",
+      },
+      "id": Object {
+        "expires": "<expires>",
+        "token": "<token>",
+      },
+    },
+    "type": "SESSION_INIT",
+  },
+]
+`;
+
+exports[`providers/store/session terminateSessionAction should terminate session 1`] = `
+Array [
+  Object {
+    "type": "SESSION_TERMINATE",
+  },
+]
+`;

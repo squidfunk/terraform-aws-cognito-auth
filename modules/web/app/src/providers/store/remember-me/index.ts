@@ -30,5 +30,6 @@ export {
   setRememberMeAction
 } from "./actions"
 export {
-  RememberMeState
+  RememberMeState,
+  remember
 } from "./reducers"

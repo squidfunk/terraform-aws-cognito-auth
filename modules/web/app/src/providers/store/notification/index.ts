@@ -32,5 +32,6 @@ export {
 export {
   NotificationData,
   NotificationState,
-  NotificationType
+  NotificationType,
+  notification
 } from "./reducers"

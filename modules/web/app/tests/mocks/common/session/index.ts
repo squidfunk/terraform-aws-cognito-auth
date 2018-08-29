@@ -20,33 +20,36 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
-
-/* ----------------------------------------------------------------------------
- * Types
- * ------------------------------------------------------------------------- */
-
-/**
- * Styles
- */
-export type Styles = typeof styles
+import { Session } from "common/session"
 
 /* ----------------------------------------------------------------------------
  * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Styles
+ * Mock session
  *
- * @param theme - Material theme
+ * @param refresh - Whether to return a refresh token
  *
- * @return CSS styles
+ * @return Session
  */
-export const styles = ({ spacing }: Theme) =>
-  createStyles({
-    root: {
-      borderRadius: 2,
-      fontSmoothing: "antialiased",
-      marginTop: spacing.unit * 2
-    }
-  })
+export function mockSession(refresh: boolean = false): Session<string> {
+  return {
+    id: {
+      token: "<token>",
+      expires: "<expires>"
+    },
+    access: {
+      token: "<token>",
+      expires: "<expires>"
+    },
+    ...(refresh
+      ? {
+        refresh: {
+          token: "<token>",
+          expires: "<expires>"
+        }
+      }
+      : {})
+  }
+}

@@ -20,33 +20,12 @@
  * IN THE SOFTWARE.
  */
 
-import { createStyles, Theme } from "@material-ui/core"
+import * as enzyme from "enzyme"
+import * as Adapter from "enzyme-adapter-react-16"
 
 /* ----------------------------------------------------------------------------
- * Types
+ * Entrypoint
  * ------------------------------------------------------------------------- */
 
-/**
- * Styles
- */
-export type Styles = typeof styles
-
-/* ----------------------------------------------------------------------------
- * Data
- * ------------------------------------------------------------------------- */
-
-/**
- * Styles
- *
- * @param theme - Material theme
- *
- * @return CSS styles
- */
-export const styles = ({ spacing }: Theme) =>
-  createStyles({
-    root: {
-      borderRadius: 2,
-      fontSmoothing: "antialiased",
-      marginTop: spacing.unit * 2
-    }
-  })
+/* Setup Enzyme with Jest */
+enzyme.configure({ adapter: new Adapter() })

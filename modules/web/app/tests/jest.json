@@ -1,0 +1,32 @@
+{
+  "rootDir": "../",
+  "modulePaths": [
+    "<rootDir>/src"
+  ],
+  "moduleNameMapper": {
+    "_/(.*)": "<rootDir>/tests/$1"
+  },
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js",
+    "jsx",
+    "json"
+  ],
+  "setupTestFrameworkScriptFile": "<rootDir>/tests/index.ts",
+  "snapshotSerializers": [
+    "enzyme-to-json/serializer"
+  ],
+  "testRegex": "(/tests/suites/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "coveragePathIgnorePatterns": [
+    "tests"
+  ],
+  "coverageReporters": [
+    "html",
+    "lcov",
+    "text"
+  ]
+}

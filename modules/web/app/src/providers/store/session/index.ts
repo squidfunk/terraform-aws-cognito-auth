@@ -30,5 +30,6 @@ export {
   terminateSessionAction
 } from "./actions"
 export {
-  SessionState
+  SessionState,
+  session
 } from "./reducers"

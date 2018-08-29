@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`providers/store/remember-me setRememberMeAction should activate remember me 1`] = `
+Array [
+  Object {
+    "active": true,
+    "type": "REMEMBER_ME_SET",
+  },
+]
+`;
+
+exports[`providers/store/remember-me setRememberMeAction should deactivate remember me 1`] = `
+Array [
+  Object {
+    "active": false,
+    "type": "REMEMBER_ME_SET",
+  },
+]
+`;
+
+exports[`providers/store/remember-me setRememberMeResultAction should indicate a failed authentication attempt 1`] = `
+Array [
+  Object {
+    "result": false,
+    "type": "REMEMBER_ME_SET_RESULT",
+  },
+]
+`;
+
+exports[`providers/store/remember-me setRememberMeResultAction should indicate a successful authentication attempt 1`] = `
+Array [
+  Object {
+    "result": true,
+    "type": "REMEMBER_ME_SET_RESULT",
+  },
+]
+`;
