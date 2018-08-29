@@ -1,0 +1,11 @@
+{
+  "extends": [
+    "../tslint.json"
+  ],
+  "rules": {
+    "no-commented-code": false,
+    "no-duplicate-string": false,
+    "no-big-function": false,
+    "no-identical-functions": false
+  }
+}

@@ -43,6 +43,7 @@ build:
 	make -C modules/identity/lambda build
 	make -C modules/message/lambda build
 	make -C modules/web/app build
+	make -C modules/web/lambda build
 
 # Clean distribution files
 clean:
@@ -50,20 +51,23 @@ clean:
 	make -C modules/identity/lambda clean
 	make -C modules/message/lambda clean
 	make -C modules/web/app clean
+	make -C modules/web/lambda clean
 
 # Lint source files
 lint:
 	make -C modules/api/lambda lint
 	make -C modules/identity/lambda lint
 	make -C modules/message/lambda lint
-	#make -C modules/web/app lint
+	make -C modules/web/app lint
+	make -C modules/web/lambda lint
 
 # Execute unit tests
 test:
 	make -C modules/api/lambda test
 	make -C modules/identity/lambda test
 	make -C modules/message/lambda test
-	#make -C modules/web/app test
+	make -C modules/web/app test
+	make -C modules/web/lambda test
 
 # -----------------------------------------------------------------------------
 

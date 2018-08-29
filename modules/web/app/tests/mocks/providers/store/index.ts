@@ -20,8 +20,10 @@
  * IN THE SOFTWARE.
  */
 
-import { AnyAction } from "redux"
+import { AnyAction, DeepPartial } from "redux"
 import configureStore from "redux-mock-store"
+
+import { State } from "providers/store"
 
 /* ----------------------------------------------------------------------------
  * Data
@@ -30,16 +32,20 @@ import configureStore from "redux-mock-store"
 /**
  * Mock Redux store
  *
- * @return Store
+ * @template T - Redux store state type
+ *
+ * @param state - Initial state
+ *
+ * @return Redux store
  */
-export function mockStore() {
-  return configureStore()()
+export function mockStore<T extends State>(state?: DeepPartial<T>) {
+  return configureStore<DeepPartial<T>>()(state)
 }
 
 /**
  * Mock Redux action
  *
- * @return Action
+ * @return Redux action
  */
 export function mockAction(): AnyAction {
   return {

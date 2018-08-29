@@ -20,6 +20,8 @@
  * IN THE SOFTWARE.
  */
 
+import "dotenv/config"
+
 import * as enzyme from "enzyme"
 import * as Adapter from "enzyme-adapter-react-16"
 
@@ -29,3 +31,10 @@ import * as Adapter from "enzyme-adapter-react-16"
 
 /* Setup Enzyme with Jest */
 enzyme.configure({ adapter: new Adapter() })
+
+/* Initialize environment variables */
+window.env = {
+  API_BASE_PATH: process.env.API_BASE_PATH!,
+  APP_ORIGIN: process.env.APP_ORIGIN!,
+  COGNITO_IDENTITY_POOL_NAME: process.env.COGNITO_IDENTITY_POOL_NAME!
+}

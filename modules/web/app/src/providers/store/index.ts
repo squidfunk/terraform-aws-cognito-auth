@@ -21,7 +21,11 @@
  */
 
 import { pick } from "ramda"
-import { combineReducers, createStore } from "redux"
+import {
+  combineReducers,
+  createStore,
+  DeepPartial
+} from "redux"
 
 import {
   notification,
@@ -72,7 +76,7 @@ export function dehydrate(state: State) {
  *
  * @return Redux store state
  */
-export function rehydrate(): State {
+export function rehydrate(): DeepPartial<State> {
   return JSON.parse(localStorage.getItem("state") || "{}")
 }
 

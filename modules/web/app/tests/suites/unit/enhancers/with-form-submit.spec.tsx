@@ -20,19 +20,23 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  setRememberMeAction,
-  setRememberMeResultAction
-} from "providers/store/remember-me"
+import { mount } from "enzyme"
+import * as React from "react"
 
+import {
+  withFormSubmit,
+  WithFormSubmit
+} from "enhancers"
+
+import { Placeholder } from "_/helpers"
 import { mockStore } from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Remember me actions */
-describe("providers/store/remember-me", () => {
+/* Form submission enhancer */
+describe("enhancers/with-form-submit", () => {
 
   /* Initialize store */
   const store = mockStore()
@@ -42,35 +46,44 @@ describe("providers/store/remember-me", () => {
     store.clearActions()
   })
 
-  /* setRememberMeAction */
-  describe("setRememberMeAction", () => {
+  /* withFormSubmit */
+  describe("withFormSubmit", () => {
 
-    /* Test: should activate remember me */
-    it("should activate remember me", () => {
-      store.dispatch(setRememberMeAction(true))
-      expect(store.getActions()).toMatchSnapshot()
+    /* Apply enhancer to placeholder component */
+    const Component = withFormSubmit({})(Placeholder)
+    const component = mount(<Component />, {
+      context: { store }
     })
 
-    /* Test: should deactivate remember me */
-    it("should deactivate remember me", () => {
-      store.dispatch(setRememberMeAction(false))
-      expect(store.getActions()).toMatchSnapshot()
-    })
-  })
+    /* { form } */
+    describe("{ form }", () => {
 
-  /* setRememberMeResultAction */
-  describe("setRememberMeResultAction", () => {
+      /* Form state */
+      const form = component
+        .find<WithFormSubmit>(Placeholder)
+        .prop("form")
 
-    /* Test: should indicate a successful authentication attempt */
-    it("should indicate a successful authentication attempt", () => {
-      store.dispatch(setRememberMeResultAction(true))
-      expect(store.getActions()).toMatchSnapshot()
+      /* Test: should initialize form state */
+      it("should initialize form state", () => {
+        expect(form).toEqual({ pending: false, success: false })
+      })
     })
 
-    /* Test: should indicate a failed authentication attempt */
-    it("should indicate a failed authentication attempt", () => {
-      store.dispatch(setRememberMeResultAction(false))
-      expect(store.getActions()).toMatchSnapshot()
+    /* { setForm } */
+    describe("{ setForm }", () => {
+
+      /* Form state reducer */
+      const setForm = component
+        .find<WithFormSubmit>(Placeholder)
+        .prop("setForm")
+
+      /* Test: should update form state */
+      it("should update form state", () => {
+        setForm({ pending: true, success: false })
+        component.update()
+        expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
+          .toEqual({ pending: true, success: false })
+      })
     })
   })
 })

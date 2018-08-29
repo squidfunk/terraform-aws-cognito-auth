@@ -24,7 +24,6 @@ import { lensProp, set } from "ramda"
 import {
   compose,
   withHandlers,
-  withProps,
   withState
 } from "recompose"
 

@@ -21,6 +21,7 @@
  */
 
 import { Chance } from "chance"
+import * as React from "react"
 
 /* ----------------------------------------------------------------------------
  * Data
@@ -30,3 +31,8 @@ import { Chance } from "chance"
  * Chance.js instance to generate random values
  */
 export const chance = new Chance()
+
+/**
+ * Placeholder component for testing enhancers
+ */
+export const Placeholder = () => <div></div>

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`enhancers/with-notification withNotification { dismissNotification } should dispatch action 1`] = `
+Array [
+  Object {
+    "type": "NOTIFICATION_DISMISS",
+  },
+]
+`;
+
+exports[`enhancers/with-notification withNotification { displayNotification } should dispatch action 1`] = `
+Array [
+  Object {
+    "data": Object {
+      "message": "<message>",
+      "type": "SUCCESS",
+    },
+    "type": "NOTIFICATION_DISPLAY",
+  },
+]
+`;
