@@ -7,11 +7,5 @@
   ],
   "plugins": [
     "transform-runtime"
-  ],
-  "env": {
-    "test": {
-      "presets": [],
-      "plugins": []
-    }
-  }
+  ]
 }

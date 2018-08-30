@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/FormRememberMe FormRememberMe { handleChange } should toggle remember me 1`] = `
+Array [
+  Object {
+    "active": true,
+    "type": "REMEMBER_ME_SET",
+  },
+]
+`;
+
+exports[`components/FormRememberMe FormRememberMe should render correctly 1`] = `
+<withHandlers(mapProps(pure(Component)))
+  onChange={[MockFunction]}
+  remember={
+    Object {
+      "active": false,
+    }
+  }
+  setRememberMe={[Function]}
+  setRememberMeResult={[Function]}
+/>
+`;
+
+exports[`components/FormRememberMe Render should render with additional checkbox props 1`] = `
+<WithStyles(Checkbox)
+  onBlur={[MockFunction]}
+  onChange={[MockFunction]}
+>
+  __CHILDREN__
+</WithStyles(Checkbox)>
+`;
+
+exports[`components/FormRememberMe Render should render with default props 1`] = `
+<WithStyles(Checkbox)
+  onChange={[MockFunction]}
+>
+  __CHILDREN__
+</WithStyles(Checkbox)>
+`;

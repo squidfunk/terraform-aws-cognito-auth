@@ -66,11 +66,16 @@ start: node_modules
 # Execute unit tests
 test: node_modules
 	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
-	$(shell npm bin)/jest --config tests/jest.json --collectCoverage
+	$(shell npm bin)/jest \
+		--config tests/jest.json \
+		--collectCoverage \
+		--detectOpenHandles
 
 # Execute unit tests in watch mode
 watch: node_modules
-	$(shell npm bin)/jest --config tests/jest.json --watch --no-verbose
+	$(shell npm bin)/jest \
+		--config tests/jest.json \
+		--watch --no-verbose
 
 # -----------------------------------------------------------------------------
 

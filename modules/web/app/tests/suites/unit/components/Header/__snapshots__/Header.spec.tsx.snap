@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/Header Header should render correctly 1`] = `
+<pure(Component)
+  classes={
+    Object {
+      "root": "pure-Component--root-1",
+      "text": "pure-Component--text-2",
+    }
+  }
+  primary="__PRIMARY__"
+  secondary="__SECONDARY__"
+/>
+`;
+
+exports[`components/Header Render should render with default props 1`] = `
+<div
+  className="__ROOT__"
+>
+  <WithStyles(Typography)
+    className="__TEXT__"
+    variant="headline"
+  >
+    __PRIMARY__
+  </WithStyles(Typography)>
+  <WithStyles(Typography)
+    className="__TEXT__"
+  >
+    __SECONDARY__
+  </WithStyles(Typography)>
+</div>
+`;

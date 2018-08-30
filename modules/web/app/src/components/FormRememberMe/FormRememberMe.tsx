@@ -22,9 +22,11 @@
 
 import { Checkbox } from "@material-ui/core"
 import { CheckboxProps } from "@material-ui/core/Checkbox"
+import { omit } from "ramda"
 import * as React from "react"
 import {
   compose,
+  mapProps,
   pure,
   withHandlers
 } from "recompose"
@@ -41,7 +43,12 @@ import {
 /**
  * Form remember me properties
  */
-export type FormRememberMeProps = CheckboxProps
+export interface FormRememberMeProps extends CheckboxProps {
+  onChange(
+    ev: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ): void                              /* Form change handler */
+}
 
 /* ------------------------------------------------------------------------- */
 
@@ -55,6 +62,13 @@ interface HandlerProps {
   ): void                              /* Form change handler */
 }
 
+/**
+ * Inner properties
+ */
+type InnerProps =
+  & FormRememberMeProps
+  & WithRememberMe
+
 /* ------------------------------------------------------------------------- */
 
 /**
@@ -62,7 +76,6 @@ interface HandlerProps {
  */
 export type RenderProps =
   & FormRememberMeProps
-  & WithRememberMe
   & HandlerProps
 
 /* ----------------------------------------------------------------------------
@@ -77,8 +90,8 @@ export type RenderProps =
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  ({ name, checked, handleChange }) =>
-    <Checkbox name={name} checked={checked} onChange={handleChange} />
+  ({ handleChange, ...props }) =>
+    <Checkbox {...props} onChange={handleChange} />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -90,15 +103,18 @@ export const Render: React.SFC<RenderProps> =
 export const FormRememberMe =
   compose<RenderProps, FormRememberMeProps>(
     withRememberMe(),
-    withHandlers<RenderProps, HandlerProps>({
+    withHandlers<InnerProps, HandlerProps>({
 
-      /* Toggle visibility */
+      /* Toggle active flag */
       handleChange: ({ onChange, setRememberMe }) => (ev, checked) => {
-        if (onChange) {
-          onChange(ev, checked)
-          setRememberMe(checked)
-        }
+        onChange(ev, checked)
+        setRememberMe(checked)
       }
     }),
+    mapProps(omit([
+      "remember",
+      "setRememberMe",
+      "setRememberMeResult"
+    ])),
     pure
   )(Render)
