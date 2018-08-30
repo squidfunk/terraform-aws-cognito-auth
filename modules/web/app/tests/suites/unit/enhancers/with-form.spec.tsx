@@ -97,7 +97,11 @@ describe("enhancers/with-form", () => {
         const request = { [chance.string()]: chance.string() }
         setRequest(request)
         component.update()
-        expect(component.find<WithForm>(Placeholder).prop("request"))
+        expect(
+          component
+            .find<WithForm>(Placeholder)
+            .prop("request")
+        )
           .toEqual(request)
       })
     })
@@ -124,7 +128,11 @@ describe("enhancers/with-form", () => {
         }
         handleChange(mockTextChangeEvent(options))
         component.update()
-        expect(component.find<WithForm>(Placeholder).prop("request"))
+        expect(
+          component
+            .find<WithForm>(Placeholder)
+            .prop("request")
+        )
           .toEqual(jasmine.objectContaining({
             ...initial, [options.name]: options.value
           }))
@@ -138,7 +146,11 @@ describe("enhancers/with-form", () => {
         }
         handleChange(mockCheckboxChangeEvent(options))
         component.update()
-        expect(component.find<WithForm>(Placeholder).prop("request"))
+        expect(
+          component
+            .find<WithForm>(Placeholder)
+            .prop("request")
+        )
           .toEqual(jasmine.objectContaining({
             ...initial, [options.name]: options.checked
           }))

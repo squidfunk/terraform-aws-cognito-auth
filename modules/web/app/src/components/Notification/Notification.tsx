@@ -27,11 +27,9 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core"
-import { omit } from "ramda"
 import * as React from "react"
 import {
   compose,
-  mapProps,
   pure
 } from "recompose"
 
@@ -89,9 +87,5 @@ export const Notification =
   compose<RenderProps, {}>(
     withStyles(styles),
     withNotification(),
-    mapProps(omit([
-      "displayNotification",
-      "dismissNotification"
-    ])),
     pure
   )(Render)

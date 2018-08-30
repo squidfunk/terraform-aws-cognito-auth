@@ -55,7 +55,7 @@ describe("components/TextLink", () => {
     it("should render with default props", () => {
       const component = shallow(
         <Render {...props}>
-          Link
+          __CHILDREN__
         </Render>
       )
       expect(component).toMatchSnapshot()
@@ -65,7 +65,7 @@ describe("components/TextLink", () => {
     it("should render with additional link props", () => {
       const component = shallow(
         <Render {...props} onBlur={jest.fn()}>
-          Link
+          __CHILDREN__
         </Render>
       )
       expect(component).toMatchSnapshot()
@@ -88,7 +88,7 @@ describe("components/TextLink", () => {
       const component = shallow(
         <MemoryRouter>
           <TextLink to="__TO__">
-            Link
+            __CHILDREN__
           </TextLink>
         </MemoryRouter>, {
           context: { store }
@@ -104,7 +104,7 @@ describe("components/TextLink", () => {
       const component = mount(
         <MemoryRouter>
           <TextLink to="__TO__">
-            Link
+            __CHILDREN__
           </TextLink>
         </MemoryRouter>, {
           context: { store },
@@ -116,7 +116,7 @@ describe("components/TextLink", () => {
 
       /* Link click capture handler */
       const handleClickCapture = component
-        .find(Render)
+        .find<RenderProps>(Render as any)
         .prop("handleClickCapture")
 
       /* Test: should dismiss notification */

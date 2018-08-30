@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { render, shallow } from "enzyme"
+import { shallow } from "enzyme"
 import * as React from "react"
 
 import {
@@ -29,7 +29,6 @@ import {
   RenderProps
 } from "components/Notification/Notification"
 import {
-  displayNotificationAction,
   NotificationData,
   NotificationType
 } from "providers/store/notification"
@@ -60,20 +59,14 @@ describe("components/Notification", () => {
 
     /* Test: should render collapsed if not visible */
     it("should render collapsed if not visible", () => {
-      const component = shallow(
-        <Render {...props}>
-          Link
-        </Render>
-      )
+      const component = shallow(<Render {...props} />)
       expect(component).toMatchSnapshot()
     })
 
     /* Test: should render collapsed if message is missing */
     it("should render collapsed if message is missing", () => {
       const component = shallow(
-        <Render {...props} notification={{ show: true }}>
-          Link
-        </Render>
+        <Render {...props} notification={{ show: true }} />
       )
       expect(component).toMatchSnapshot()
     })
@@ -85,9 +78,7 @@ describe("components/Notification", () => {
         message: "__MESSAGE__"
       }
       const component = shallow(
-        <Render {...props} notification={{ ...props.notification, data }}>
-          Link
-        </Render>
+        <Render {...props} notification={{ ...props.notification, data }} />
       )
       expect(component).toMatchSnapshot()
     })
@@ -99,9 +90,7 @@ describe("components/Notification", () => {
         message: "__MESSAGE__"
       }
       const component = shallow(
-        <Render {...props} notification={{ ...props.notification, data }}>
-          Link
-        </Render>
+        <Render {...props} notification={{ ...props.notification, data }} />
       )
       expect(component).toMatchSnapshot()
     })

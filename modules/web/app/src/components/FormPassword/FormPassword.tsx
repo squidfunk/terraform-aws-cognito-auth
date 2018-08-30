@@ -50,7 +50,8 @@ import { styles, Styles } from "./FormPassword.styles"
 /**
  * Form password properties
  */
-export type FormPasswordProps = TextFieldProps
+export type FormPasswordProps =
+  Pick<TextFieldProps, Exclude<keyof TextFieldProps, "classes">>
 
 /* ------------------------------------------------------------------------- */
 
@@ -142,7 +143,7 @@ export const FormPassword =
   compose<RenderProps, FormPasswordProps>(
     withStyles(styles),
     withState("visibility", "setVisibility", (): boolean => false),
-    withHandlers<RenderProps, HandlerProps>({
+    withHandlers<StateProps, HandlerProps>({
 
       /* Toggle visibility */
       handleClick: ({ visibility, setVisibility }) => () => {

@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/Notification Notification should render correctly 1`] = `
-<mapProps(pure(Component))
+<pure(Component)
   classes={
     Object {
-      "error": "Connect-mapProps-pure-Component----error-3",
-      "root": "Connect-mapProps-pure-Component----root-1",
-      "success": "Connect-mapProps-pure-Component----success-2",
+      "error": "Connect-pure-Component---error-3",
+      "root": "Connect-pure-Component---root-1",
+      "success": "Connect-pure-Component---success-2",
     }
   }
   dismissNotification={[Function]}

@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/Form Form should render correctly 1`] = `
+<pure(Component)
+  classes={
+    Object {
+      "root": "pure-Component--root-1",
+    }
+  }
+  onSubmit={[MockFunction]}
+>
+  __CHILDREN__
+</pure(Component)>
+`;
+
+exports[`components/Form Render should render with default props 1`] = `
+<form
+  autoComplete="off"
+  className="__ROOT__"
+  method="post"
+  onSubmit={[MockFunction]}
+>
+  __CHILDREN__
+</form>
+`;

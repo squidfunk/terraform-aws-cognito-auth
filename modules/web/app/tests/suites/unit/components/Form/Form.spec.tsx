@@ -20,66 +20,55 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
+import { shallow } from "enzyme"
 import * as React from "react"
+
 import {
-  compose,
-  pure
-} from "recompose"
-
-import { Styles, styles } from "./Form.styles"
-
-/* ----------------------------------------------------------------------------
- * Types
- * ------------------------------------------------------------------------- */
-
-/**
- * Form properties
- */
-export interface FormProps {
-  onSubmit(
-    ev: React.ChangeEvent<HTMLFormElement>
-  ): Promise<void>                     /* Form submit handler */
-}
-
-/* ------------------------------------------------------------------------- */
-
-/**
- * Render properties
- */
-export type RenderProps =
-  & FormProps
-  & WithStyles<Styles>
+  Form,
+  Render,
+  RenderProps
+} from "components/Form/Form"
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Tests
  * ------------------------------------------------------------------------- */
 
-/**
- * Render component
- *
- * @param props - Properties
- *
- * @return JSX element
- */
-export const Render: React.SFC<RenderProps> =
-  ({ classes, children, ...props }) =>
-    <form method="post" className={classes.root} autoComplete="off" {...props}>
-      {children}
-    </form>
+/* Form component */
+describe("components/Form", () => {
 
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
+  /* Render component */
+  describe("Render", () => {
 
-/**
- * Form component
- */
-export const Form =
-  compose<RenderProps, FormProps>(
-    withStyles(styles),
-    pure
-  )(Render)
+    /* Default props */
+    const props: RenderProps = {
+      classes: {
+        root: "__ROOT__"
+      },
+      onSubmit: jest.fn()
+    }
+
+    /* Test: should render with default props */
+    it("should render with default props", () => {
+      const component = shallow(
+        <Render {...props}>
+          __CHILDREN__
+        </Render>
+      )
+      expect(component).toMatchSnapshot()
+    })
+  })
+
+  /* Enhanced component */
+  describe("Form", () => {
+
+    /* Test: should render correctly */
+    it("should render correctly", () => {
+      const component = shallow(
+        <Form onSubmit={jest.fn()}>
+          __CHILDREN__
+        </Form>
+      )
+      expect(component).toMatchSnapshot()
+    })
+  })
+})

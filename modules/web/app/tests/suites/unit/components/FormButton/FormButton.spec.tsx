@@ -20,66 +20,64 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  withStyles,
-  WithStyles
-} from "@material-ui/core"
+import { shallow } from "enzyme"
 import * as React from "react"
+
 import {
-  compose,
-  pure
-} from "recompose"
-
-import { Styles, styles } from "./Form.styles"
-
-/* ----------------------------------------------------------------------------
- * Types
- * ------------------------------------------------------------------------- */
-
-/**
- * Form properties
- */
-export interface FormProps {
-  onSubmit(
-    ev: React.ChangeEvent<HTMLFormElement>
-  ): Promise<void>                     /* Form submit handler */
-}
-
-/* ------------------------------------------------------------------------- */
-
-/**
- * Render properties
- */
-export type RenderProps =
-  & FormProps
-  & WithStyles<Styles>
+  FormButton,
+  Render,
+  RenderProps
+} from "components/FormButton/FormButton"
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Tests
  * ------------------------------------------------------------------------- */
 
-/**
- * Render component
- *
- * @param props - Properties
- *
- * @return JSX element
- */
-export const Render: React.SFC<RenderProps> =
-  ({ classes, children, ...props }) =>
-    <form method="post" className={classes.root} autoComplete="off" {...props}>
-      {children}
-    </form>
+/* Form button component */
+describe("components/FormButton", () => {
 
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
+  /* Render component */
+  describe("Render", () => {
 
-/**
- * Form component
- */
-export const Form =
-  compose<RenderProps, FormProps>(
-    withStyles(styles),
-    pure
-  )(Render)
+    /* Default props */
+    const props: RenderProps = {
+      classes: {
+        root: "__ROOT__"
+      }
+    }
+
+    /* Test: should render with default props */
+    it("should render with default props", () => {
+      const component = shallow(
+        <Render {...props}>
+          __CHILDREN__
+        </Render>
+      )
+      expect(component).toMatchSnapshot()
+    })
+
+    /* Test: should render with additional button props */
+    it("should render with additional button props", () => {
+      const component = shallow(
+        <Render {...props} disableRipple={true}>
+          __CHILDREN__
+        </Render>
+      )
+      expect(component).toMatchSnapshot()
+    })
+  })
+
+  /* Enhanced component */
+  describe("FormButton", () => {
+
+    /* Test: should render correctly */
+    it("should render correctly", () => {
+      const component = shallow(
+        <FormButton>
+          __CHILDREN__
+        </FormButton>
+      )
+      expect(component).toMatchSnapshot()
+    })
+  })
+})

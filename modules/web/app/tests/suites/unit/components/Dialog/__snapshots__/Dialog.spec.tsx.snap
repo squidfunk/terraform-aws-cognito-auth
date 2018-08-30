@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/Dialog Dialog should render correctly 1`] = `
+<pure(Component)
+  classes={
+    Object {
+      "root": "pure-Component--root-1",
+    }
+  }
+>
+  __CHILDREN__
+</pure(Component)>
+`;
+
+exports[`components/Dialog Render should render with default props 1`] = `
+<WithStyles(Paper)
+  className="__ROOT__"
+  elevation={1}
+>
+  __CHILDREN__
+</WithStyles(Paper)>
+`;

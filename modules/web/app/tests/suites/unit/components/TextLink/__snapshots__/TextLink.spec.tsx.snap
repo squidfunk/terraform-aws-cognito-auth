@@ -8,7 +8,7 @@ exports[`components/TextLink Render should render with additional link props 1`]
   replace={false}
   to="__TO__"
 >
-  Link
+  __CHILDREN__
 </Link>
 `;
 
@@ -19,7 +19,7 @@ exports[`components/TextLink Render should render with default props 1`] = `
   replace={false}
   to="__TO__"
 >
-  Link
+  __CHILDREN__
 </Link>
 `;
 
@@ -40,6 +40,6 @@ exports[`components/TextLink TextLink should render correctly 1`] = `
   }
   to="__TO__"
 >
-  Link
+  __CHILDREN__
 </Connect(withHandlers(mapProps(pure(Component))))>
 `;

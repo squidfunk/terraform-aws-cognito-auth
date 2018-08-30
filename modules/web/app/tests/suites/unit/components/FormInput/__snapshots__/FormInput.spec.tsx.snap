@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/FormInput FormInput should render correctly 1`] = `
+<TextField
+  InputLabelProps={
+    Object {
+      "required": false,
+    }
+  }
+  autoCapitalize="false"
+  autoCorrect="false"
+  fullWidth={true}
+  margin="dense"
+  required={false}
+  select={false}
+  type="text"
+/>
+`;
+
+exports[`components/FormInput Render should render with additional input props 1`] = `
+<TextField
+  InputLabelProps={
+    Object {
+      "required": false,
+    }
+  }
+  autoCapitalize="false"
+  autoCorrect="false"
+  classes={
+    Object {
+      "root": "__ROOT__",
+    }
+  }
+  fullWidth={true}
+  margin="dense"
+  required={false}
+  select={false}
+  type="password"
+/>
+`;
+
+exports[`components/FormInput Render should render with default props 1`] = `
+<TextField
+  InputLabelProps={
+    Object {
+      "required": false,
+    }
+  }
+  autoCapitalize="false"
+  autoCorrect="false"
+  classes={
+    Object {
+      "root": "__ROOT__",
+    }
+  }
+  fullWidth={true}
+  margin="dense"
+  required={false}
+  select={false}
+  type="text"
+/>
+`;
