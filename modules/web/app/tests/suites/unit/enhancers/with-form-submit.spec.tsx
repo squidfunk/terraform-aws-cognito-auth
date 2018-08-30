@@ -20,7 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-import axios from "axios"
 import { mount } from "enzyme"
 import * as React from "react"
 
@@ -64,13 +63,13 @@ describe("enhancers/with-form-submit", () => {
         context: { store }
       })
 
-      /* Form state */
+      /* Form submission state */
       const form = component
         .find<WithFormSubmit>(Placeholder)
         .prop("form")
 
-      /* Test: should initialize form state */
-      it("should initialize form state", () => {
+      /* Test: should initialize form submission state */
+      it("should initialize form submission state", () => {
         expect(form).toEqual({ pending: false, success: false })
       })
     })
@@ -84,13 +83,13 @@ describe("enhancers/with-form-submit", () => {
         context: { store }
       })
 
-      /* Form state reducer */
+      /* Form submission state reducer */
       const setForm = component
         .find<WithFormSubmit>(Placeholder)
         .prop("setForm")
 
-      /* Test: should update form state */
-      it("should update form state", () => {
+      /* Test: should update form submission state */
+      it("should update form submission state", () => {
         setForm({ pending: true, success: false })
         component.update()
         expect(component.find<WithFormSubmit>(Placeholder).prop("form"))

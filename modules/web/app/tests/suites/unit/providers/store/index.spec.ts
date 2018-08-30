@@ -110,6 +110,4 @@ describe("providers/store", () => {
       expect(rehydrate()).toEqual({})
     })
   })
-
-
 })

@@ -91,11 +91,11 @@ interface HandlerProps<TRequest extends {}> {
 }
 
 /**
- * Handler inbound properties
+ * Inner properties
  *
  * @template TResponse - Form response type
  */
-type HandlerInboundProps<TResponse = void> =
+type InnerProps<TResponse = void> =
   & WithNotificationDispatch
   & WithSessionState
   & StateProps<TResponse>
@@ -139,7 +139,7 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>(
       pending: false,
       success: false
     })),
-    withHandlers<HandlerInboundProps<TResponse>, HandlerProps<TRequest>>({
+    withHandlers<InnerProps<TResponse>, HandlerProps<TRequest>>({
       submit: ({
         setForm, displayNotification, dismissNotification, session
       }) => async request => {

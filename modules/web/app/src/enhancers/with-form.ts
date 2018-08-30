@@ -82,7 +82,7 @@ interface HandlerProps {
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  */
-export type WithForm<TRequest extends {}, TResponse = void> =
+export type WithForm<TRequest extends {} = {}, TResponse = void> =
   & WithFormSubmit<TRequest, TResponse>
   & StateProps<TRequest>
   & HandlerProps
