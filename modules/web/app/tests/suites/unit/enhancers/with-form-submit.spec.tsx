@@ -238,7 +238,7 @@ describe("enhancers/with-form-submit", () => {
         /* Test: should display notification */
         it("should display notification", async () => {
           const errMock = new Error()
-          mockAxiosPostWithError(errMock, "<message>")
+          mockAxiosPostWithError(errMock, "__MESSAGE__")
           await submit()
           expect(store.getActions()).toMatchSnapshot()
         })
@@ -296,7 +296,7 @@ describe("enhancers/with-form-submit", () => {
       describe("{ submit }", () => {
 
         /* Message rendered on success */
-        const message = "<message>"
+        const message = "__MESSAGE__"
 
         /* Apply enhancer to placeholder component */
         const Component = withFormSubmit({ message })(Placeholder)
@@ -346,7 +346,7 @@ describe("enhancers/with-form-submit", () => {
           jasmine.any(Object),
           jasmine.objectContaining({
             headers: jasmine.objectContaining({
-              Authorization: "Bearer <token>"
+              Authorization: "Bearer __TOKEN__"
             })
           })
         )

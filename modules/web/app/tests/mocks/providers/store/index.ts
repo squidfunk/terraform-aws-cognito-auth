@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { AnyAction, DeepPartial } from "redux"
+import { AnyAction } from "redux"
 import configureStore from "redux-mock-store"
 
 import { State } from "providers/store"
@@ -38,8 +38,8 @@ import { State } from "providers/store"
  *
  * @return Redux store
  */
-export function mockStore<T extends State>(state?: DeepPartial<T>) {
-  return configureStore<DeepPartial<T>>()(state)
+export function mockStore<T extends State>(state?: Partial<T>) {
+  return configureStore<Partial<T>>()(state)
 }
 
 /**
@@ -49,6 +49,6 @@ export function mockStore<T extends State>(state?: DeepPartial<T>) {
  */
 export function mockAction(): AnyAction {
   return {
-    type: "<type>"
+    type: "__TYPE__"
   }
 }

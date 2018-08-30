@@ -49,8 +49,8 @@ describe("providers/store/notification", () => {
     /* Test: should create a notification to indicate success */
     it("should create a notification to indicate success", () => {
       store.dispatch(displayNotificationAction({
-        message: "<message>",
-        type: NotificationType.SUCCESS
+        type: NotificationType.SUCCESS,
+        message: "__MESSAGE__"
       }))
       expect(store.getActions()).toMatchSnapshot()
     })
@@ -58,8 +58,8 @@ describe("providers/store/notification", () => {
     /* Test: should create a notification to indicate an error */
     it("should create a notification to indicate an error", () => {
       store.dispatch(displayNotificationAction({
-        message: "<message>",
-        type: NotificationType.ERROR
+        type: NotificationType.ERROR,
+        message: "__MESSAGE__"
       }))
       expect(store.getActions()).toMatchSnapshot()
     })

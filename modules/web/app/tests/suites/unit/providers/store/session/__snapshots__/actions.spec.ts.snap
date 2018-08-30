@@ -5,12 +5,12 @@ Array [
   Object {
     "session": Object {
       "access": Object {
-        "expires": "<expires>",
-        "token": "<token>",
+        "expires": "__EXPIRES__",
+        "token": "__TOKEN__",
       },
       "id": Object {
-        "expires": "<expires>",
-        "token": "<token>",
+        "expires": "__EXPIRES__",
+        "token": "__TOKEN__",
       },
     },
     "type": "SESSION_INIT",

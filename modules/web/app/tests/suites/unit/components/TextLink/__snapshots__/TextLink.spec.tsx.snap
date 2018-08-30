@@ -1,7 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`foo should whatever2 1`] = `
-<div>
-  Foobar
-</div>
+exports[`components/TextLink Render should render with additional link props 1`] = `
+<Link
+  className="__ROOT__"
+  onBlur={[MockFunction]}
+  onClickCapture={[MockFunction]}
+  replace={false}
+  to="__TO__"
+>
+  Link
+</Link>
+`;
+
+exports[`components/TextLink Render should render with default props 1`] = `
+<Link
+  className="__ROOT__"
+  onClickCapture={[MockFunction]}
+  replace={false}
+  to="__TO__"
+>
+  Link
+</Link>
+`;
+
+exports[`components/TextLink TextLink { handleClickCapture } should dismiss notification 1`] = `
+Array [
+  Object {
+    "type": "NOTIFICATION_DISMISS",
+  },
+]
+`;
+
+exports[`components/TextLink TextLink should render correctly 1`] = `
+<Connect(withHandlers(mapProps(pure(Component))))
+  classes={
+    Object {
+      "root": "Connect-withHandlers-mapProps-pure-Component-----root-1",
+    }
+  }
+  to="__TO__"
+>
+  Link
+</Connect(withHandlers(mapProps(pure(Component))))>
 `;

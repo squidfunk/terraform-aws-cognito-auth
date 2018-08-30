@@ -12,7 +12,7 @@ exports[`enhancers/with-notification withNotification { displayNotification } sh
 Array [
   Object {
     "data": Object {
-      "message": "<message>",
+      "message": "__MESSAGE__",
       "type": "SUCCESS",
     },
     "type": "NOTIFICATION_DISPLAY",

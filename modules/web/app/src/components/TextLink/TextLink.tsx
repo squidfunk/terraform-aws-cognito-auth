@@ -24,10 +24,12 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core"
+import { omit } from "ramda"
 import * as React from "react"
 import { Link, LinkProps } from "react-router-dom"
 import {
   compose,
+  mapProps,
   pure,
   withHandlers
 } from "recompose"
@@ -68,30 +70,6 @@ export type RenderProps =
   & HandlerProps
 
 /* ----------------------------------------------------------------------------
- * Enhancers
- * ------------------------------------------------------------------------- */
-
-/**
- * Enhance component with styles
- */
-export const addStyles =
-  withStyles(styles)
-
-/**
- * Enhance component with notification
- */
-export const addNotification =
-  withNotification()
-
-/**
- * Enhance component with handlers
- */
-export const addHandlers =
-  withHandlers<WithNotificationDispatch, HandlerProps>({
-    handleClickCapture: ({ dismissNotification }) => dismissNotification
-  })
-
-/* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
 
@@ -103,10 +81,9 @@ export const addHandlers =
  * @return JSX element
  */
 export const Render: React.SFC<RenderProps> =
-  ({ classes, children, handleClickCapture, to, tabIndex }) =>
+  ({ classes, children, handleClickCapture, ...props }) =>
     <Link
-      className={classes.root} onClickCapture={handleClickCapture}
-      to={to} tabIndex={tabIndex}
+      className={classes.root} onClickCapture={handleClickCapture} {...props}
     >
       {children}
     </Link>
@@ -120,8 +97,15 @@ export const Render: React.SFC<RenderProps> =
  */
 export const TextLink =
   compose<RenderProps, TextLinkProps>(
-    addStyles,
-    addNotification,
-    addHandlers,
+    withStyles(styles),
+    withNotification(),
+    withHandlers<WithNotificationDispatch, HandlerProps>({
+      handleClickCapture: ({ dismissNotification }) => dismissNotification
+    }),
+    mapProps(omit([
+      "notification",
+      "displayNotification",
+      "dismissNotification"
+    ])),
     pure
   )(Render)

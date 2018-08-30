@@ -36,18 +36,18 @@ import { Session } from "common/session"
 export function mockSession(refresh: boolean = false): Session<string> {
   return {
     id: {
-      token: "<token>",
-      expires: "<expires>"
+      token: "__TOKEN__",
+      expires: "__EXPIRES__"
     },
     access: {
-      token: "<token>",
-      expires: "<expires>"
+      token: "__TOKEN__",
+      expires: "__EXPIRES__"
     },
     ...(refresh
       ? {
         refresh: {
-          token: "<token>",
-          expires: "<expires>"
+          token: "__TOKEN__",
+          expires: "__EXPIRES__"
         }
       }
       : {})

@@ -12,7 +12,7 @@ exports[`providers/store/notification displayNotificationAction should create a 
 Array [
   Object {
     "data": Object {
-      "message": "<message>",
+      "message": "__MESSAGE__",
       "type": "ERROR",
     },
     "type": "NOTIFICATION_DISPLAY",
@@ -24,7 +24,7 @@ exports[`providers/store/notification displayNotificationAction should create a 
 Array [
   Object {
     "data": Object {
-      "message": "<message>",
+      "message": "__MESSAGE__",
       "type": "SUCCESS",
     },
     "type": "NOTIFICATION_DISPLAY",

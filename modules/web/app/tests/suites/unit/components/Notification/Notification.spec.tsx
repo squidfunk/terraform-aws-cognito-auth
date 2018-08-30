@@ -20,15 +20,19 @@
  * IN THE SOFTWARE.
  */
 
-import { mount, shallow } from "enzyme"
+import { render, shallow } from "enzyme"
 import * as React from "react"
-import { MemoryRouter } from "react-router"
 
 import {
+  Notification,
   Render,
-  RenderProps,
-  TextLink
-} from "components/TextLink/TextLink"
+  RenderProps
+} from "components/Notification/Notification"
+import {
+  displayNotificationAction,
+  NotificationData,
+  NotificationType
+} from "providers/store/notification"
 
 import { mockStore } from "_/mocks/providers"
 
@@ -36,23 +40,26 @@ import { mockStore } from "_/mocks/providers"
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Text link component */
-describe("components/TextLink", () => {
+/* Notification component */
+describe("components/Notification", () => {
 
   /* Render component */
   describe("Render", () => {
 
     /* Default props */
     const props: RenderProps = {
-      to: "__TO__",
       classes: {
-        root: "__ROOT__"
+        root: "__ROOT__",
+        success: "__SUCCESS__",
+        error: "__ERROR__"
       },
-      handleClickCapture: jest.fn()
+      notification: {
+        show: false
+      }
     }
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
+    /* Test: should render collapsed if not visible */
+    it("should render collapsed if not visible", () => {
       const component = shallow(
         <Render {...props}>
           Link
@@ -61,10 +68,38 @@ describe("components/TextLink", () => {
       expect(component).toMatchSnapshot()
     })
 
-    /* Test: should render with additional link props */
-    it("should render with additional link props", () => {
+    /* Test: should render collapsed if message is missing */
+    it("should render collapsed if message is missing", () => {
       const component = shallow(
-        <Render {...props} onBlur={jest.fn()}>
+        <Render {...props} notification={{ show: true }}>
+          Link
+        </Render>
+      )
+      expect(component).toMatchSnapshot()
+    })
+
+    /* Test: should render expanded for success message */
+    it("should render expanded for success message", () => {
+      const data: NotificationData = {
+        type: NotificationType.SUCCESS,
+        message: "__MESSAGE__"
+      }
+      const component = shallow(
+        <Render {...props} notification={{ ...props.notification, data }}>
+          Link
+        </Render>
+      )
+      expect(component).toMatchSnapshot()
+    })
+
+    /* Test: should render expanded for error message */
+    it("should render expanded for error message", () => {
+      const data: NotificationData = {
+        type: NotificationType.ERROR,
+        message: "__MESSAGE__"
+      }
+      const component = shallow(
+        <Render {...props} notification={{ ...props.notification, data }}>
           Link
         </Render>
       )
@@ -73,10 +108,18 @@ describe("components/TextLink", () => {
   })
 
   /* Enhanced component */
-  describe("TextLink", () => {
+  describe("Notification", () => {
 
     /* Initialize store */
-    const store = mockStore()
+    const store = mockStore({
+      notification: {
+        data: {
+          type: NotificationType.ERROR,
+          message: "__MESSAGE__"
+        },
+        show: true
+      }
+    })
 
     /* Clear store */
     beforeEach(() => {
@@ -85,45 +128,10 @@ describe("components/TextLink", () => {
 
     /* Test: should render correctly */
     it("should render correctly", () => {
-      const component = shallow(
-        <MemoryRouter>
-          <TextLink to="__TO__">
-            Link
-          </TextLink>
-        </MemoryRouter>, {
-          context: { store }
-        }
-      ).dive()
-      expect(component.dive()).toMatchSnapshot()
-    })
-
-    /* { handleClickCapture } */
-    describe("{ handleClickCapture }", () => {
-
-      /* Mount component inside router */
-      const component = mount(
-        <MemoryRouter>
-          <TextLink to="__TO__">
-            Link
-          </TextLink>
-        </MemoryRouter>, {
-          context: { store },
-          childContextTypes: {
-            store: () => null
-          }
-        }
-      )
-
-      /* Link click capture handler */
-      const handleClickCapture = component
-        .find(Render)
-        .prop("handleClickCapture")
-
-      /* Test: should dismiss notification */
-      it("should dismiss notification", () => {
-        handleClickCapture()
-        expect(store.getActions()).toMatchSnapshot()
+      const component = shallow(<Notification />, {
+        context: { store }
       })
+      expect(component.dive()).toMatchSnapshot()
     })
   })
 })

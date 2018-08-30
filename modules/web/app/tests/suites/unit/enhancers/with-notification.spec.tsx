@@ -86,7 +86,7 @@ describe("enhancers/with-notification", () => {
       it("should dispatch action", () => {
         displayNotification({
           type: NotificationType.SUCCESS,
-          message: "<message>"
+          message: "__MESSAGE__"
         })
         expect(store.getActions()).toMatchSnapshot()
         expect(store.getActions().length).toEqual(1)

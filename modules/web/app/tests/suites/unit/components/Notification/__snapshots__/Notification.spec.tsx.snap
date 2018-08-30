@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/Notification Notification should render correctly 1`] = `
+<mapProps(pure(Component))
+  classes={
+    Object {
+      "error": "Connect-mapProps-pure-Component----error-3",
+      "root": "Connect-mapProps-pure-Component----root-1",
+      "success": "Connect-mapProps-pure-Component----success-2",
+    }
+  }
+  dismissNotification={[Function]}
+  displayNotification={[Function]}
+  notification={
+    Object {
+      "data": Object {
+        "message": "__MESSAGE__",
+        "type": "ERROR",
+      },
+      "show": true,
+    }
+  }
+/>
+`;
+
+exports[`components/Notification Render should render collapsed if message is missing 1`] = `
+<WithStyles(Collapse)
+  in={true}
+/>
+`;
+
+exports[`components/Notification Render should render collapsed if not visible 1`] = `
+<WithStyles(Collapse)
+  in={false}
+/>
+`;
+
+exports[`components/Notification Render should render expanded for error message 1`] = `
+<WithStyles(Collapse)
+  in={false}
+>
+  <WithTheme(Fade)
+    in={false}
+  >
+    <WithStyles(Typography)
+      className="__ROOT__ __ERROR__"
+    >
+      __MESSAGE__
+    </WithStyles(Typography)>
+  </WithTheme(Fade)>
+</WithStyles(Collapse)>
+`;
+
+exports[`components/Notification Render should render expanded for success message 1`] = `
+<WithStyles(Collapse)
+  in={false}
+>
+  <WithTheme(Fade)
+    in={false}
+  >
+    <WithStyles(Typography)
+      className="__ROOT__ __SUCCESS__"
+    >
+      __MESSAGE__
+    </WithStyles(Typography)>
+  </WithTheme(Fade)>
+</WithStyles(Collapse)>
+`;
