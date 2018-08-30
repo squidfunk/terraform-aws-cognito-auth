@@ -90,6 +90,16 @@ interface HandlerProps<TRequest extends {}> {
   ) => Promise<void>                   /* Submit form */
 }
 
+/**
+ * Handler inbound properties
+ *
+ * @template TResponse - Form response type
+ */
+type HandlerInboundProps<TResponse = void> =
+  & WithNotificationDispatch
+  & WithSessionState
+  & StateProps<TResponse>
+
 /* ------------------------------------------------------------------------- */
 
 /**
@@ -99,8 +109,6 @@ interface HandlerProps<TRequest extends {}> {
  * @template TResponse - Form response type
  */
 export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
-  & WithNotificationDispatch
-  & WithSessionState
   & StateProps<TResponse>
   & HandlerProps<TRequest>
 
@@ -122,7 +130,7 @@ export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
  * @return Component enhancer
  */
 export const withFormSubmit = <TRequest extends {}, TResponse = void>(
-  { target, message, authorize }: WithFormSubmitOptions
+  { target, message, authorize }: WithFormSubmitOptions = {}
 ) =>
   compose<WithFormSubmit<TRequest, TResponse>, {}>(
     withNotification(),
@@ -131,10 +139,10 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>(
       pending: false,
       success: false
     })),
-    withHandlers<WithFormSubmit<TRequest, TResponse>, HandlerProps<TRequest>>({
+    withHandlers<HandlerInboundProps<TResponse>, HandlerProps<TRequest>>({
       submit: ({
         setForm, displayNotification, dismissNotification, session
-      }) => async data => {
+      }) => async request => {
         const url = `/${window.env.API_BASE_PATH}/${
           (target || location.pathname).replace(/^\//, "")
         }`
@@ -144,7 +152,7 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>(
         try {
           dismissNotification()
           const { data: response } =
-            await axios.post<TResponse>(url, data || {}, {
+            await axios.post<TResponse>(url, request || {}, {
               withCredentials: true,
               headers: {
                 "Content-Type": "application/json",
@@ -161,7 +169,7 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>(
           if (message) {
             displayNotification({
               type: NotificationType.SUCCESS,
-              message: message!
+              message
             })
           }
 

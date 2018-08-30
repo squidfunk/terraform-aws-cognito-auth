@@ -20,44 +20,54 @@
  * IN THE SOFTWARE.
  */
 
-import { SessionClient } from "clients/session"
+import axios from "axios"
 
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SessionClient.signOut
+ * Mock Axios.post
  *
- * @param promise - Promise returned by authentication client
+ * @param promise - Promise returned by Axios
  *
  * @return Jasmine spy
  */
-function mockSessionClientSignOut<T>(
+function mockAxiosPost<T>(
   promise: () => Promise<T>
 ): jasmine.Spy {
-  return spyOn(SessionClient.prototype, "signOut")
+  return spyOn(axios, "post")
     .and.callFake(promise)
 }
 
 /**
- * Mock SessionClient.signOut returning with success
+ * Mock Axios.post returning with result
+ *
+ * @template T - Response type
  *
  * @return Jasmine spy
  */
-export function mockSessionClientSignOutWithSuccess(): jasmine.Spy {
-  return mockSessionClientSignOut(() => Promise.resolve())
+export function mockAxiosPostWithResult<T = void>(
+  response?: T
+): jasmine.Spy {
+  return mockAxiosPost(() => Promise.resolve({
+    data: response
+  }))
 }
 
 /**
- * Mock SessionClient.signOut throwing an error
+ * Mock Axios.post throwing an error
  *
  * @param err - Error to be thrown
+ * @param message - Error message
  *
  * @return Jasmine spy
  */
-export function mockSessionClientSignOutWithError(
-  err: Error = new Error("signOut")
+export function mockAxiosPostWithError(
+  err: Error = new Error("post"),
+  message?: string
 ): jasmine.Spy {
-  return mockSessionClientSignOut(() => Promise.reject(err))
+  if (message)
+    (err as any).response = { data: { message } }
+  return mockAxiosPost(() => Promise.reject(err))
 }

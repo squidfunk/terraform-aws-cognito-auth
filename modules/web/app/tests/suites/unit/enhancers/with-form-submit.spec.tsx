@@ -20,6 +20,7 @@
  * IN THE SOFTWARE.
  */
 
+import axios from "axios"
 import { mount } from "enzyme"
 import * as React from "react"
 
@@ -28,8 +29,13 @@ import {
   WithFormSubmit
 } from "enhancers"
 
-import { Placeholder } from "_/helpers"
+import { chance, Placeholder } from "_/helpers"
+import { mockSession } from "_/mocks/common/session"
 import { mockStore } from "_/mocks/providers"
+import {
+  mockAxiosPostWithError,
+  mockAxiosPostWithResult
+} from "_/mocks/vendor/axios"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -49,14 +55,14 @@ describe("enhancers/with-form-submit", () => {
   /* withFormSubmit */
   describe("withFormSubmit", () => {
 
-    /* Apply enhancer to placeholder component */
-    const Component = withFormSubmit({})(Placeholder)
-    const component = mount(<Component />, {
-      context: { store }
-    })
-
     /* { form } */
     describe("{ form }", () => {
+
+      /* Apply enhancer to placeholder component */
+      const Component = withFormSubmit()(Placeholder)
+      const component = mount(<Component />, {
+        context: { store }
+      })
 
       /* Form state */
       const form = component
@@ -72,6 +78,12 @@ describe("enhancers/with-form-submit", () => {
     /* { setForm } */
     describe("{ setForm }", () => {
 
+      /* Apply enhancer to placeholder component */
+      const Component = withFormSubmit()(Placeholder)
+      const component = mount(<Component />, {
+        context: { store }
+      })
+
       /* Form state reducer */
       const setForm = component
         .find<WithFormSubmit>(Placeholder)
@@ -83,6 +95,262 @@ describe("enhancers/with-form-submit", () => {
         component.update()
         expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
           .toEqual({ pending: true, success: false })
+      })
+    })
+
+    /* { submit } */
+    describe("{ submit }", () => {
+
+      /* Apply enhancer to placeholder component */
+      const Component = withFormSubmit()(Placeholder)
+      const component = mount(<Component />, {
+        context: { store }
+      })
+
+      /* Submit form */
+      const submit = component
+        .find<WithFormSubmit>(Placeholder)
+        .prop("submit")
+
+      /* Test: should prepend API base path to current location */
+      it("should prepend API base path to current location", async () => {
+        const postMock = mockAxiosPostWithResult()
+        await submit()
+        expect(postMock).toHaveBeenCalledWith(
+          jasmine.stringMatching(process.env.API_BASE_PATH!),
+          jasmine.any(Object),
+          jasmine.any(Object)
+        )
+      })
+
+      /* Test: should send request to current location */
+      it("should send request to current location", async () => {
+        const postMock = mockAxiosPostWithResult()
+        await submit()
+        expect(postMock).toHaveBeenCalledWith(
+          `/${process.env.API_BASE_PATH!}/`,
+          jasmine.any(Object),
+          jasmine.any(Object)
+        )
+      })
+
+      /* Test: should send request with provided payload */
+      it("should send request with provided payload", async () => {
+        const data = { [chance.string()]: chance.string() }
+        const postMock = mockAxiosPostWithResult()
+        await submit(data)
+        expect(postMock).toHaveBeenCalledWith(
+          jasmine.any(String),
+          data,
+          jasmine.any(Object)
+        )
+      })
+
+      /* Test: should send request with content-type header */
+      it("should send request with content-type header", async () => {
+        const postMock = mockAxiosPostWithResult()
+        await submit()
+        expect(postMock).toHaveBeenCalledWith(
+          jasmine.any(String),
+          jasmine.any(Object),
+          jasmine.objectContaining({
+            headers: {
+              "Content-Type": "application/json"
+            }
+          })
+        )
+      })
+
+      /* should send request with credentials */
+      it("should send request with credentials", async () => {
+        const postMock = mockAxiosPostWithResult()
+        await submit()
+        expect(postMock).toHaveBeenCalledWith(
+          jasmine.any(String),
+          jasmine.any(Object),
+          jasmine.objectContaining({
+            withCredentials: true
+          })
+        )
+      })
+
+      /* Test: should dismiss notification before sending request */
+      it("should dismiss notification before sending request", async () => {
+        mockAxiosPostWithResult()
+        await submit()
+        expect(store.getActions()).toMatchSnapshot()
+      })
+
+      /* with successful request */
+      describe("with successful request", () => {
+
+        /* Test: should set response */
+        it("should set response", async () => {
+          const data = { [chance.string()]: chance.string() }
+          mockAxiosPostWithResult(data)
+          await submit()
+          component.update()
+          expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
+            .toEqual(jasmine.objectContaining({
+              response: data
+            }))
+        })
+
+        /* Test: should enable success flag */
+        it("should enable success flag", async () => {
+          mockAxiosPostWithResult()
+          await submit()
+          component.update()
+          expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
+            .toEqual(jasmine.objectContaining({
+              pending: false,
+              success: true
+            }))
+        })
+      })
+
+      /* with failed request */
+      describe("with failed request", () => {
+
+        /* Test: should set response */
+        it("should set response", async () => {
+          const errMock = new Error()
+          mockAxiosPostWithError(errMock)
+          await submit()
+          component.update()
+          expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
+            .toEqual(jasmine.objectContaining({
+              err: errMock
+            }))
+        })
+
+        /* Test: should disable success flag */
+        it("should disable success flag", async () => {
+          mockAxiosPostWithError()
+          await submit()
+          component.update()
+          expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
+            .toEqual(jasmine.objectContaining({
+              pending: false,
+              success: false
+            }))
+        })
+
+        /* Test: should display notification */
+        it("should display notification", async () => {
+          const errMock = new Error()
+          mockAxiosPostWithError(errMock, "<message>")
+          await submit()
+          expect(store.getActions()).toMatchSnapshot()
+        })
+      })
+    })
+
+    /* with target */
+    describe("with target", () => {
+
+      /* { submit } */
+      describe("{ submit }", () => {
+
+        /* Target URL */
+        const target = chance.string()
+
+        /* Apply enhancer to placeholder component */
+        const Component = withFormSubmit({ target })(Placeholder)
+        const component = mount(<Component />, {
+          context: { store }
+        })
+
+        /* Submit form */
+        const submit = component
+          .find<WithFormSubmit>(Placeholder)
+          .prop("submit")
+
+        /* Test: should prepend API base path to provided target URL */
+        it("should prepend API base path to provided target URL", async () => {
+          const postMock = mockAxiosPostWithResult()
+          await submit()
+          expect(postMock).toHaveBeenCalledWith(
+            jasmine.stringMatching(process.env.API_BASE_PATH!),
+            jasmine.any(Object),
+            jasmine.any(Object)
+          )
+        })
+
+        /* Test: should send request to provided target URL */
+        it("should send request to provided target URL", async () => {
+          const postMock = mockAxiosPostWithResult()
+          await submit()
+          expect(postMock).toHaveBeenCalledWith(
+            `/${process.env.API_BASE_PATH!}/${target}`,
+            jasmine.any(Object),
+            jasmine.any(Object)
+          )
+        })
+      })
+    })
+
+    /* with message */
+    describe("with message", () => {
+
+      /* { submit } */
+      describe("{ submit }", () => {
+
+        /* Message rendered on success */
+        const message = "<message>"
+
+        /* Apply enhancer to placeholder component */
+        const Component = withFormSubmit({ message })(Placeholder)
+        const component = mount(<Component />, {
+          context: { store }
+        })
+
+        /* Submit form */
+        const submit = component
+          .find<WithFormSubmit>(Placeholder)
+          .prop("submit")
+
+        /* Test: should display notification */
+        it("should display notification", async () => {
+          mockAxiosPostWithResult()
+          await submit()
+          expect(store.getActions()).toMatchSnapshot()
+        })
+      })
+    })
+
+    /* with authorization */
+    describe("with authorization", () => {
+
+      /* Session */
+      const session = mockSession()
+
+      /* Apply enhancer to placeholder component */
+      const Component = withFormSubmit({ authorize: true })(Placeholder)
+      const component = mount(<Component />, {
+        context: {
+          store: mockStore({ session })
+        }
+      })
+
+      /* Submit form */
+      const submit = component
+        .find<WithFormSubmit>(Placeholder)
+        .prop("submit")
+
+      /* Test: should send request with authorization header */
+      it("should send request with authorization header", async () => {
+        const postMock = mockAxiosPostWithResult()
+        await submit()
+        expect(postMock).toHaveBeenCalledWith(
+          jasmine.any(String),
+          jasmine.any(Object),
+          jasmine.objectContaining({
+            headers: jasmine.objectContaining({
+              Authorization: "Bearer <token>"
+            })
+          })
+        )
       })
     })
   })
