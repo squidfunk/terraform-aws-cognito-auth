@@ -39,6 +39,7 @@ cache:
 # Empty environment variable for unit tests
 env:
   global:
+    - API_BASE_PATH=
     - COGNITO_USER_POOL_ID=
     - COGNITO_USER_POOL_CLIENT_ID=
     - COGNITO_IDENTITY_POOL_NAME=
