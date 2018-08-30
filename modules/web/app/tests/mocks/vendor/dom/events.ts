@@ -66,3 +66,14 @@ export function mockSubmitEvent(): React.ChangeEvent<HTMLFormElement> {
     preventDefault: jest.fn()
   } as any
 }
+
+/**
+ * Mock mouse down event
+ *
+ * @return Mouse down event
+ */
+export function mockMouseDownEvent(): React.MouseEvent<HTMLButtonElement> {
+  return {
+    preventDefault: jest.fn()
+  } as any
+}

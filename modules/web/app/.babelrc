@@ -8,5 +8,10 @@
   "plugins": [
     "transform-runtime"
   ],
-  "compact": false
+  "env": {
+    "test": {
+      "presets": [],
+      "plugins": []
+    }
+  }
 }

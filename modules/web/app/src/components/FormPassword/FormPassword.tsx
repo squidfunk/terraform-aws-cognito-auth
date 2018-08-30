@@ -69,9 +69,7 @@ interface StateProps {
  * Handler properties
  */
 interface HandlerProps {
-  handleClick(
-    ev: React.MouseEvent<HTMLButtonElement>
-  ): void                              /* Visibility click handler */
+  handleClick(): void                  /* Visibility click handler */
   handleMouseDown(
     ev: React.MouseEvent<HTMLButtonElement>
   ): void                              /* Visibility mouse down handler */

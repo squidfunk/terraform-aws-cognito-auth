@@ -29,6 +29,10 @@ import {
   RenderProps
 } from "components/FormPassword/FormPassword"
 
+import {
+  mockMouseDownEvent
+} from "_/mocks/vendor/dom/events"
+
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
@@ -130,6 +134,49 @@ describe("components/FormPassword", () => {
             .prop("visibility")
         )
           .toEqual(true)
+      })
+    })
+
+    /* { handleClick } */
+    describe("{ handleClick }", () => {
+
+      /* Mount component */
+      const component = mount(<FormPassword />)
+
+      /* Visibility click handler */
+      const handleClick = component
+        .find<RenderProps>(Render as any)
+        .prop("handleClick")
+
+      /* Test: should toggle visibility */
+      it("should toggle visibility", () => {
+        handleClick()
+        component.update()
+        expect(
+          component
+            .find<RenderProps>(Render as any)
+            .prop("visibility")
+        )
+          .toEqual(true)
+      })
+    })
+
+    /* { handleMouseDown } */
+    describe("{ handleMouseDown }", () => {
+
+      /* Mount component */
+      const component = mount(<FormPassword />)
+
+      /* Visibility mouse down handler */
+      const handleMouseDown = component
+        .find<RenderProps>(Render as any)
+        .prop("handleMouseDown")
+
+      /* Test: should prevent interference with click event */
+      it("should prevent interference with click event", () => {
+        const ev = mockMouseDownEvent()
+        handleMouseDown(ev)
+        expect(ev.preventDefault).toHaveBeenCalledWith()
       })
     })
   })
