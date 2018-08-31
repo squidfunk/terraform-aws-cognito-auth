@@ -44,6 +44,8 @@ dist: $(shell find src) webpack.config.ts
 # -----------------------------------------------------------------------------
 # Rules
 # -----------------------------------------------------------------------------
+foo:
+	echo ${TEST_ARGS}
 
 # Build distribution files
 build: node_modules | dist
@@ -69,7 +71,7 @@ test: node_modules
 	$(shell npm bin)/jest \
 		--config tests/jest.json \
 		--collectCoverage \
-		--forceExit
+		$(CI:true=--runInBand)
 
 # Execute unit tests in watch mode
 watch: node_modules
