@@ -28,7 +28,8 @@ import {
 import * as React from "react"
 import {
   compose,
-  pure
+  pure,
+  setDisplayName
 } from "recompose"
 
 import { Styles, styles } from "./Header.styles"
@@ -86,5 +87,6 @@ export const Render: React.SFC<RenderProps> =
 export const Header =
   compose<RenderProps, HeaderProps>(
     withStyles(styles),
-    pure
+    pure,
+    setDisplayName("Header")
   )(Render)

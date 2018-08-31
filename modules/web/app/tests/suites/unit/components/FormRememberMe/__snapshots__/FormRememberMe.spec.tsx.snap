@@ -9,16 +9,10 @@ Array [
 ]
 `;
 
-exports[`components/FormRememberMe FormRememberMe should render correctly 1`] = `
-<withHandlers(mapProps(pure(Component)))
+exports[`components/FormRememberMe FormRememberMe should render with default props 1`] = `
+<FormRememberMe
+  handleChange={[Function]}
   onChange={[MockFunction]}
-  remember={
-    Object {
-      "active": false,
-    }
-  }
-  setRememberMe={[Function]}
-  setRememberMeResult={[Function]}
 />
 `;
 

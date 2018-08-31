@@ -28,6 +28,7 @@ import {
   compose,
   mapProps,
   pure,
+  setDisplayName,
   withHandlers
 } from "recompose"
 
@@ -116,5 +117,6 @@ export const FormRememberMe =
       "setRememberMe",
       "setRememberMeResult"
     ])),
-    pure
+    pure,
+    setDisplayName("FormRememberMe")
   )(Render)

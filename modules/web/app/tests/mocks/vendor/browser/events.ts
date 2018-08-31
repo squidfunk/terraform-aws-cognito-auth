@@ -27,13 +27,13 @@ import * as React from "react"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock text change event
+ * Mock change event for text input
  *
  * @param options - Options
  *
  * @return Input change event
  */
-export function mockTextChangeEvent(
+export function mockChangeEventForTextInput(
   options: { name: string, value: string }
 ): React.ChangeEvent<HTMLInputElement> {
   return {
@@ -42,13 +42,13 @@ export function mockTextChangeEvent(
 }
 
 /**
- * Mock checkbox change event
+ * Mock change event for checkbox input
  *
  * @param options - Options
  *
  * @return Input change event
  */
-export function mockCheckboxChangeEvent(
+export function mockChangeEventForCheckboxInput(
   options: { name: string, checked: boolean }
 ): React.ChangeEvent<HTMLInputElement> {
   return {

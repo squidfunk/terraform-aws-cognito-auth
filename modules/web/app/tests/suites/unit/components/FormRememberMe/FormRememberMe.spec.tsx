@@ -22,7 +22,6 @@
 
 import { mount, shallow } from "enzyme"
 import * as React from "react"
-import { MemoryRouter } from "react-router"
 
 import {
   FormRememberMe,
@@ -32,7 +31,9 @@ import {
 
 import { chance } from "_/helpers"
 import { mockStore } from "_/mocks/providers"
-import { mockCheckboxChangeEvent } from "_/mocks/vendor/dom/events"
+import {
+  mockChangeEventForCheckboxInput
+} from "_/mocks/vendor/browser/events"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -46,6 +47,7 @@ describe("components/FormRememberMe", () => {
 
     /* Default props */
     const props: RenderProps = {
+      onChange: jest.fn(),
       handleChange: jest.fn()
     }
 
@@ -85,12 +87,16 @@ describe("components/FormRememberMe", () => {
       store.clearActions()
     })
 
-    /* Test: should render correctly */
-    it("should render correctly", () => {
+    /* Test: should render with default props */
+    it("should render with default props", () => {
       const component = shallow(<FormRememberMe onChange={jest.fn()} />, {
         context: { store }
       })
-      expect(component).toMatchSnapshot()
+      expect(component
+        .dive()
+        .dive()
+        .dive()
+      ).toMatchSnapshot()
     })
 
     /* { handleChange } */
@@ -114,7 +120,7 @@ describe("components/FormRememberMe", () => {
           name: chance.string(),
           checked: true
         }
-        handleChange(mockCheckboxChangeEvent(options), true)
+        handleChange(mockChangeEventForCheckboxInput(options), true)
         expect(store.getActions()).toMatchSnapshot()
       })
     })

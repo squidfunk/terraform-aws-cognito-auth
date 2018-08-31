@@ -24,7 +24,8 @@ import * as React from "react"
 import {
   compose,
   lifecycle,
-  pure
+  pure,
+  setDisplayName
 } from "recompose"
 
 import { Loading } from "components"
@@ -74,8 +75,9 @@ export const ExternalRedirect =
     lifecycle<RenderProps, {}>({
       componentDidMount() {
         const { href } = this.props
-        location.href = href
+        location.assign(href)
       }
     }),
-    pure
+    pure,
+    setDisplayName("ExternalRedirect")
   )(Render)

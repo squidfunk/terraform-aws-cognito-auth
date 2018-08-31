@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/App App should render correctly 1`] = `
-<Component
+exports[`components/App App should render with default props 1`] = `
+<App
   classes={
     Object {
-      "root": "Component-root-1",
+      "root": "App-root-1",
     }
   }
 />

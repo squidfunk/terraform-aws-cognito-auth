@@ -115,12 +115,15 @@ describe("components/Notification", () => {
       store.clearActions()
     })
 
-    /* Test: should render correctly */
-    it("should render correctly", () => {
+    /* Test: should render with default props */
+    it("should render with default props", () => {
       const component = shallow(<Notification />, {
         context: { store }
       })
-      expect(component.dive()).toMatchSnapshot()
+      expect(component
+        .dive()
+        .dive()
+      ).toMatchSnapshot()
     })
   })
 })

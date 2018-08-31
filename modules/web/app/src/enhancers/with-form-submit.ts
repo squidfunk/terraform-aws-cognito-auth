@@ -108,7 +108,7 @@ type InnerProps<TResponse = void> =
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  */
-export type WithFormSubmit<TRequest extends {} = {}, TResponse = void> =
+export type WithFormSubmit<TRequest extends {} = any, TResponse = void> =
   & StateProps<TResponse>
   & HandlerProps<TRequest>
 

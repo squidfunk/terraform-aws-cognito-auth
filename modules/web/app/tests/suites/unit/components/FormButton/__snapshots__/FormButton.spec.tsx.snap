@@ -1,15 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/FormButton FormButton should render correctly 1`] = `
-<pure(Component)
+exports[`components/FormButton FormButton should render with default props 1`] = `
+<FormButton
   classes={
     Object {
-      "root": "pure-Component--root-1",
+      "root": "pure-FormButton--root-1",
     }
   }
 >
   __CHILDREN__
-</pure(Component)>
+</FormButton>
 `;
 
 exports[`components/FormButton Render should render with additional button props 1`] = `

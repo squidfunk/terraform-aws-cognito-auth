@@ -27,7 +27,8 @@ import {
 import * as React from "react"
 import {
   compose,
-  pure
+  pure,
+  setDisplayName
 } from "recompose"
 
 import { Styles, styles } from "./Form.styles"
@@ -81,5 +82,6 @@ export const Render: React.SFC<RenderProps> =
 export const Form =
   compose<RenderProps, FormProps>(
     withStyles(styles),
-    pure
+    pure,
+    setDisplayName("Form")
   )(Render)

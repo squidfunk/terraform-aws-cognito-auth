@@ -59,12 +59,12 @@ describe("components/Header", () => {
   /* Enhanced component */
   describe("Header", () => {
 
-    /* Test: should render correctly */
-    it("should render correctly", () => {
+    /* Test: should render with default props */
+    it("should render with default props", () => {
       const component = shallow(
         <Header primary="__PRIMARY__" secondary="__SECONDARY__" />
       )
-      expect(component).toMatchSnapshot()
+      expect(component.dive()).toMatchSnapshot()
     })
   })
 })

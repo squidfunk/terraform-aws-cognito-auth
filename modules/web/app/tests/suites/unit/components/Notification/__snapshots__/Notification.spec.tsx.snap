@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/Notification Notification should render correctly 1`] = `
-<pure(Component)
+exports[`components/Notification Notification should render with default props 1`] = `
+<Notification
   classes={
     Object {
-      "error": "Connect-pure-Component---error-3",
-      "root": "Connect-pure-Component---root-1",
-      "success": "Connect-pure-Component---success-2",
+      "error": "Connect-pure-Notification---error-3",
+      "root": "Connect-pure-Notification---root-1",
+      "success": "Connect-pure-Notification---success-2",
     }
   }
   dismissNotification={[Function]}

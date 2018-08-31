@@ -35,8 +35,7 @@ if (process.env.NODE_ENV === "development") {
 
 /* Hack: must be required, since TypeScript typings are crap and don't really
    work with the normal import syntax */
-// tslint:disable-next-line variable-name
-const Jasmine = require("jasmine")
+const Jasmine = require("jasmine") // tslint:disable-line variable-name
 
 /* Create new test suite from config file */
 const jasmine = new Jasmine()

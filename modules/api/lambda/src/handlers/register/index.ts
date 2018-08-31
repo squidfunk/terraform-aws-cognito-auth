@@ -23,7 +23,7 @@
 import { AuthenticationClient } from "clients/authentication"
 import { RegisterRequest as Request } from "common"
 import { handler } from "handlers"
-import { throwOnPasswordPolicyBreach } from "utilities"
+import { throwOnPasswordPolicyViolation } from "utilities"
 
 import schema = require("common/events/register/index.json")
 
@@ -40,7 +40,7 @@ import schema = require("common/events/register/index.json")
  */
 export const post = handler<{}, Request>(schema,
   async ({ body: { email, password } }) => {
-    throwOnPasswordPolicyBreach(password)
+    throwOnPasswordPolicyViolation(password)
     const auth = new AuthenticationClient()
     await auth.register(email, password)
   })

@@ -211,8 +211,8 @@ describe("enhancers/with-form-submit", () => {
       /* with failed request */
       describe("with failed request", () => {
 
-        /* Test: should set response */
-        it("should set response", async () => {
+        /* Test: should set error */
+        it("should set error", async () => {
           const errMock = new Error()
           mockAxiosPostWithError(errMock)
           await submit()

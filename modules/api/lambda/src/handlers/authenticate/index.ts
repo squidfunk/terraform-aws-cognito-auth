@@ -27,13 +27,13 @@ import {
   Session
 } from "common"
 import { handler } from "handlers"
-
-import schema = require("common/events/authenticate/index.json")
 import {
   issueTokenCookie,
   parseTokenCookie,
   resetTokenCookie
 } from "utilities"
+
+import schema = require("common/events/authenticate/index.json")
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -57,11 +57,11 @@ type Request =
  *
  * @return Promise resolving with session
  */
-export const post = handler<{}, Request, Session | string>(schema,
+export const post = handler<{}, Request, Session>(schema,
   async ({ headers, body: { username, password, remember, token } }) => {
     const auth = new AuthenticationClient()
 
-    /* Authenticate with credentials and return refresh token if requested */
+    /* Authenticate with credentials; return refresh token if requested */
     if (username && password) {
       const { refresh, ...body } =
         await auth.authenticateWithCredentials(username, password)

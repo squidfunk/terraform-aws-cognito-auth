@@ -60,14 +60,14 @@ describe("components/Dialog", () => {
   /* Enhanced component */
   describe("Dialog", () => {
 
-    /* Test: should render correctly */
-    it("should render correctly", () => {
+    /* Test: should render with default props */
+    it("should render with default props", () => {
       const component = shallow(
         <Dialog>
           __CHILDREN__
         </Dialog>
       )
-      expect(component).toMatchSnapshot()
+      expect(component.dive()).toMatchSnapshot()
     })
   })
 })

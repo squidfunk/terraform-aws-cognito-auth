@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/Form Form should render correctly 1`] = `
-<pure(Component)
+exports[`components/Form Form should render with default props 1`] = `
+<Form
   classes={
     Object {
-      "root": "pure-Component--root-1",
+      "root": "pure-Form--root-1",
     }
   }
   onSubmit={[MockFunction]}
 >
   __CHILDREN__
-</pure(Component)>
+</Form>
 `;
 
 exports[`components/Form Render should render with default props 1`] = `

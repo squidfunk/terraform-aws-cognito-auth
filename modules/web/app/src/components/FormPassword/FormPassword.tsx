@@ -37,6 +37,7 @@ import * as React from "react"
 import {
   compose,
   pure,
+  setDisplayName,
   withHandlers,
   withState
 } from "recompose"
@@ -153,5 +154,6 @@ export const FormPassword =
         ev.preventDefault()
       }
     }),
-    pure
+    pure,
+    setDisplayName("FormPassword")
   )(Render)

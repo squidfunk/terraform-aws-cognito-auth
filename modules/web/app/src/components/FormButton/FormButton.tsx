@@ -29,7 +29,8 @@ import { ButtonProps } from "@material-ui/core/Button"
 import * as React from "react"
 import {
   compose,
-  pure
+  pure,
+  setDisplayName
 } from "recompose"
 
 import { Styles, styles } from "./FormButton.styles"
@@ -80,5 +81,6 @@ export const Render: React.SFC<RenderProps> =
 export const FormButton =
   compose<RenderProps, FormButtonProps>(
     withStyles(styles),
-    pure
+    pure,
+    setDisplayName("FormButton")
   )(Render)

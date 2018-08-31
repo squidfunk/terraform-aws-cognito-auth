@@ -20,35 +20,54 @@
  * IN THE SOFTWARE.
  */
 
-import "dotenv/config"
+import { shallow } from "enzyme"
+import * as React from "react"
 
-import { SpecReporter } from "jasmine-spec-reporter"
+import {
+  ExternalRedirect,
+  Render,
+  RenderProps
+} from "components/ExternalRedirect/ExternalRedirect"
+
+import { mockLocationAssign } from "_/mocks/vendor/browser/location"
 
 /* ----------------------------------------------------------------------------
- * Entrypoint
+ * Tests
  * ------------------------------------------------------------------------- */
 
-/* Reset console in watch mode */
-if (process.env.NODE_ENV === "development") {
-  process.stdout.write("\x1Bc")
-}
+/* External redirect component */
+describe("components/ExternalRedirect", () => {
 
-/* Hack: must be required, since TypeScript typings are crap and don't really
-   work with the normal import syntax */
-const Jasmine = require("jasmine") // tslint:disable-line variable-name
+  /* Render component */
+  describe("Render", () => {
 
-/* Create new test suite from config file */
-const jasmine = new Jasmine()
-jasmine.loadConfig({
-  ...require("./jasmine.json"),
-  spec_files: [process.argv[2] || "suites/**/*.spec.ts"]
+    /* Default props */
+    const props: RenderProps = {
+      href: "__HREF__"
+    }
+
+    /* Test: should render with default props */
+    it("should render with default props", () => {
+      const component = shallow(<Render {...props} />)
+      expect(component.dive()).toMatchSnapshot()
+    })
+  })
+
+  /* Enhanced component */
+  describe("ExternalRedirect", () => {
+
+    /* Test: should render with default props */
+    it("should render with default props", () => {
+      mockLocationAssign()
+      const component = shallow(<ExternalRedirect href="__HREF__" />)
+      expect(component.dive()).toMatchSnapshot()
+    })
+
+    /* Test: should perform redirect */
+    it("should perform redirect", () => {
+      const assignMock = mockLocationAssign()
+      shallow(<ExternalRedirect href="__HREF__" />)
+      expect(assignMock).toHaveBeenCalled()
+    })
+  })
 })
-
-/* Configure reporters */
-jasmine.clearReporters()
-jasmine.addReporter(new SpecReporter({
-  spec: { displayStacktrace: true }
-}))
-
-/* Start test runner */
-jasmine.execute()

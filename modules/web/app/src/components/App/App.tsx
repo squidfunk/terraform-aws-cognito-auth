@@ -26,7 +26,10 @@ import {
 } from "@material-ui/core"
 import * as React from "react"
 import { Route, Switch } from "react-router-dom"
-import { compose } from "recompose"
+import {
+  compose,
+  setDisplayName
+} from "recompose"
 
 import {
   Authenticate,
@@ -84,5 +87,6 @@ export const Render: React.SFC<RenderProps> =
  */
 export const App =
   compose<RenderProps, {}>(
-    withStyles(styles)
+    withStyles(styles),
+    setDisplayName("App")
   )(Render)

@@ -23,12 +23,12 @@
 import { SessionClient } from "clients/session"
 import { LeaveRequest } from "common"
 import { handler } from "handlers"
-
-import schema = require("common/events/leave/index.json")
 import {
   parseTokenFromHeader,
   resetTokenCookie
 } from "utilities"
+
+import schema = require("common/events/leave/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handler

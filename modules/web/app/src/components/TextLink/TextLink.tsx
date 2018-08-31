@@ -31,6 +31,7 @@ import {
   compose,
   mapProps,
   pure,
+  setDisplayName,
   withHandlers
 } from "recompose"
 
@@ -107,5 +108,6 @@ export const TextLink =
       "displayNotification",
       "dismissNotification"
     ])),
-    pure
+    pure,
+    setDisplayName("TextLink")
   )(Render)

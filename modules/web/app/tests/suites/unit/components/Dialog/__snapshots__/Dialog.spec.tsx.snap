@@ -1,15 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/Dialog Dialog should render correctly 1`] = `
-<pure(Component)
+exports[`components/Dialog Dialog should render with default props 1`] = `
+<Dialog
   classes={
     Object {
-      "root": "pure-Component--root-1",
+      "root": "pure-Dialog--root-1",
     }
   }
 >
   __CHILDREN__
-</pure(Component)>
+</Dialog>
 `;
 
 exports[`components/Dialog Render should render with default props 1`] = `

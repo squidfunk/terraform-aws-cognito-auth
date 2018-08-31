@@ -22,6 +22,11 @@
 
 import { CircularProgress } from "@material-ui/core"
 import * as React from "react"
+import {
+  compose,
+  pure,
+  setDisplayName
+} from "recompose"
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -44,4 +49,8 @@ export const Render: React.SFC<{}> =
 /**
  * Loading indicator
  */
-export const Loading = Render
+export const Loading =
+  compose(
+    pure,
+    setDisplayName("Loading")
+  )(Render)

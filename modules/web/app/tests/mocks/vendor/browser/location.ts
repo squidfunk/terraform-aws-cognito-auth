@@ -20,35 +20,10 @@
  * IN THE SOFTWARE.
  */
 
-import "dotenv/config"
-
-import { SpecReporter } from "jasmine-spec-reporter"
-
 /* ----------------------------------------------------------------------------
- * Entrypoint
+ * Data
  * ------------------------------------------------------------------------- */
 
-/* Reset console in watch mode */
-if (process.env.NODE_ENV === "development") {
-  process.stdout.write("\x1Bc")
+export function mockLocationAssign() {
+  return spyOn(location, "assign")
 }
-
-/* Hack: must be required, since TypeScript typings are crap and don't really
-   work with the normal import syntax */
-const Jasmine = require("jasmine") // tslint:disable-line variable-name
-
-/* Create new test suite from config file */
-const jasmine = new Jasmine()
-jasmine.loadConfig({
-  ...require("./jasmine.json"),
-  spec_files: [process.argv[2] || "suites/**/*.spec.ts"]
-})
-
-/* Configure reporters */
-jasmine.clearReporters()
-jasmine.addReporter(new SpecReporter({
-  spec: { displayStacktrace: true }
-}))
-
-/* Start test runner */
-jasmine.execute()

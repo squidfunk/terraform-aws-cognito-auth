@@ -31,15 +31,16 @@ Array [
 ]
 `;
 
-exports[`components/TextLink TextLink should render correctly 1`] = `
-<Connect(withHandlers(mapProps(pure(Component))))
+exports[`components/TextLink TextLink should render with default props 1`] = `
+<TextLink
   classes={
     Object {
-      "root": "Connect-withHandlers-mapProps-pure-Component-----root-1",
+      "root": "Connect-withHandlers-mapProps-pure-TextLink-----root-1",
     }
   }
+  handleClickCapture={[Function]}
   to="__TO__"
 >
   __CHILDREN__
-</Connect(withHandlers(mapProps(pure(Component))))>
+</TextLink>
 `;

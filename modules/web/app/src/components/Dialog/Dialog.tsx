@@ -26,7 +26,11 @@ import {
   WithStyles
 } from "@material-ui/core"
 import * as React from "react"
-import { compose, pure } from "recompose"
+import {
+  compose,
+  pure,
+  setDisplayName
+} from "recompose"
 
 import { Styles, styles } from "./Dialog.styles"
 
@@ -67,5 +71,6 @@ export const Render: React.SFC<RenderProps> =
 export const Dialog =
   compose<RenderProps, {}>(
     withStyles(styles),
-    pure
+    pure,
+    setDisplayName("Dialog")
   )(Render)

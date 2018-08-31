@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/Loading Loading should render correctly 1`] = `<WithStyles(CircularProgress) />`;
+exports[`components/Loading Loading should render with default props 1`] = `<Loading />`;
 
 exports[`components/Loading Render should render with default props 1`] = `<WithStyles(CircularProgress) />`;

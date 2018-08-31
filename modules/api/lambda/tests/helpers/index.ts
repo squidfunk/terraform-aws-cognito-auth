@@ -21,7 +21,7 @@
  */
 
 import { Chance } from "chance"
-import * as superagent from "supertest"
+import * as supertest from "supertest"
 
 /* ----------------------------------------------------------------------------
  * Data
@@ -54,7 +54,7 @@ export function wait(interval: number) {
 /**
  * HTTP client for acceptance tests
  */
-export const request = superagent(`${
+export const request = supertest(`${
   process.env.API_INVOKE_URL!
 }/${
   process.env.API_BASE_PATH!

@@ -56,8 +56,8 @@ describe("components/App", () => {
   /* Enhanced component */
   describe("App", () => {
 
-    /* Test: should render correctly */
-    it("should render correctly", () => {
+    /* Test: should render with default props */
+    it("should render with default props", () => {
       const component = shallow(<App />)
       expect(component).toMatchSnapshot()
     })

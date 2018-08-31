@@ -110,4 +110,9 @@ module "web" {
   app_origin          = "${var.app_origin}"
 
   cognito_identity_pool_name = "${var.cognito_identity_pool_name}"
+
+  bucket = "${length(var.bucket) == 0
+    ? var.namespace
+    : var.bucket
+  }"
 }

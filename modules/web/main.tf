@@ -61,7 +61,7 @@ data "template_file" "s3_bucket_policy" {
   template = "${file("${path.module}/s3/bucket/policy.json")}"
 
   vars {
-    bucket = "${var.namespace}"
+    bucket = "${var.bucket}"
 
     cloudfront_origin_access_identity_iam_arn = "${
       aws_cloudfront_origin_access_identity._.iam_arn
@@ -144,7 +144,7 @@ resource "null_resource" "dist" {
 # aws_s3_bucket._
 resource "aws_s3_bucket" "_" {
   count  = "${local.enabled}"
-  bucket = "${var.namespace}"
+  bucket = "${var.bucket}"
   acl    = "private"
   policy = "${data.template_file.s3_bucket_policy.rendered}"
 }

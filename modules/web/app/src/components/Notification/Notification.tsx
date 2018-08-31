@@ -30,7 +30,8 @@ import {
 import * as React from "react"
 import {
   compose,
-  pure
+  pure,
+  setDisplayName
 } from "recompose"
 
 import {
@@ -87,5 +88,6 @@ export const Notification =
   compose<RenderProps, {}>(
     withStyles(styles),
     withNotification(),
-    pure
+    pure,
+    setDisplayName("Notification")
   )(Render)

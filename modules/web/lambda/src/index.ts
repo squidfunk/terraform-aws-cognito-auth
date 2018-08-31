@@ -53,7 +53,11 @@ export function handler(
     ].join("; "),
 
     /* Clients may only connect via HTTPS */
-    "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+    "Strict-Transport-Security": [
+      "max-age=31536000",
+      "includeSubdomains",
+      "preload"
+    ].join("; "),
 
     /* Client should never send its referrer */
     "Referrer-Policy": "no-referrer",
@@ -65,7 +69,10 @@ export function handler(
     "X-Frame-Options": "DENY",
 
     /* Site will stop loading if XSS is attempted */
-    "X-XSS-Protection": "1; mode=block"
+    "X-XSS-Protection": [
+      "1",
+      "mode=block"
+    ].join("; ")
   }
 
   /* Add security headers and return modified response */

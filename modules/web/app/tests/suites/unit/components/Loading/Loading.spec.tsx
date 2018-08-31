@@ -48,8 +48,8 @@ describe("components/Loading", () => {
   /* Enhanced component */
   describe("Loading", () => {
 
-    /* Test: should render correctly */
-    it("should render correctly", () => {
+    /* Test: should render with default props */
+    it("should render with default props", () => {
       const component = shallow(<Loading />)
       expect(component).toMatchSnapshot()
     })

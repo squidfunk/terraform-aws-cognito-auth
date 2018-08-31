@@ -83,8 +83,8 @@ describe("components/TextLink", () => {
       store.clearActions()
     })
 
-    /* Test: should render correctly */
-    it("should render correctly", () => {
+    /* Test: should render with default props */
+    it("should render with default props", () => {
       const component = shallow(
         <MemoryRouter>
           <TextLink to="__TO__">
@@ -93,8 +93,15 @@ describe("components/TextLink", () => {
         </MemoryRouter>, {
           context: { store }
         }
-      ).dive()
-      expect(component.dive()).toMatchSnapshot()
+      )
+      expect(component
+        .dive()
+        .dive()
+        .dive()
+        .dive()
+        .dive()
+        .dive()
+      ).toMatchSnapshot()
     })
 
     /* { handleClickCapture } */

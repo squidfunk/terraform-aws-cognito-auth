@@ -70,14 +70,14 @@ describe("components/FormButton", () => {
   /* Enhanced component */
   describe("FormButton", () => {
 
-    /* Test: should render correctly */
-    it("should render correctly", () => {
+    /* Test: should render with default props */
+    it("should render with default props", () => {
       const component = shallow(
         <FormButton>
           __CHILDREN__
         </FormButton>
       )
-      expect(component).toMatchSnapshot()
+      expect(component.dive()).toMatchSnapshot()
     })
   })
 })

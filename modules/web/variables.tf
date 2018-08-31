@@ -83,3 +83,12 @@ variable "app_origin" {
 variable "cognito_identity_pool_name" {
   description = "Cognito identity pool name"
 }
+
+# -----------------------------------------------------------------------------
+# Variables: S3
+# -----------------------------------------------------------------------------
+
+# var.bucket
+variable "bucket" {
+  description = "S3 bucket name"
+}

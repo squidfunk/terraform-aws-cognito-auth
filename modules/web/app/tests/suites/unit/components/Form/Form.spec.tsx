@@ -61,14 +61,14 @@ describe("components/Form", () => {
   /* Enhanced component */
   describe("Form", () => {
 
-    /* Test: should render correctly */
-    it("should render correctly", () => {
+    /* Test: should render with default props */
+    it("should render with default props", () => {
       const component = shallow(
         <Form onSubmit={jest.fn()}>
           __CHILDREN__
         </Form>
       )
-      expect(component).toMatchSnapshot()
+      expect(component.dive()).toMatchSnapshot()
     })
   })
 })

@@ -93,3 +93,13 @@ variable "ses_sender_address" {
   description = "SES sender email address"
   default     = ""
 }
+
+# -----------------------------------------------------------------------------
+# Variables: S3
+# -----------------------------------------------------------------------------
+
+# var.bucket
+variable "bucket" {
+  description = "S3 bucket name"
+  default     = ""
+}

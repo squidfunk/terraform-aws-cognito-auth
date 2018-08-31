@@ -32,10 +32,10 @@ import { chance, Placeholder } from "_/helpers"
 import { mockStore } from "_/mocks/providers"
 import { mockAxiosPostWithResult } from "_/mocks/vendor/axios"
 import {
-  mockCheckboxChangeEvent,
-  mockSubmitEvent,
-  mockTextChangeEvent
-} from "_/mocks/vendor/dom/events"
+  mockChangeEventForCheckboxInput,
+  mockChangeEventForTextInput,
+  mockSubmitEvent
+} from "_/mocks/vendor/browser/events"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -126,7 +126,7 @@ describe("enhancers/with-form", () => {
           name: chance.string(),
           value: chance.string()
         }
-        handleChange(mockTextChangeEvent(options))
+        handleChange(mockChangeEventForTextInput(options))
         component.update()
         expect(
           component
@@ -144,7 +144,7 @@ describe("enhancers/with-form", () => {
           name: chance.string(),
           checked: chance.bool()
         }
-        handleChange(mockCheckboxChangeEvent(options))
+        handleChange(mockChangeEventForCheckboxInput(options))
         component.update()
         expect(
           component

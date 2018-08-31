@@ -31,7 +31,7 @@ import rules = require("password-rules")
  *
  * @param password - Password to validate
  */
-export function throwOnPasswordPolicyBreach(password: string) {
+export function throwOnPasswordPolicyViolation(password: string) {
   const result = rules(password, {
     minimumLength: 8,
     maximumLength: 256,

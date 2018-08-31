@@ -23,6 +23,11 @@
 import { TextField } from "@material-ui/core"
 import { TextFieldProps } from "@material-ui/core/TextField"
 import * as React from "react"
+import {
+  compose,
+  pure,
+  setDisplayName
+} from "recompose"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -66,4 +71,8 @@ export const Render: React.SFC<RenderProps> =
 /**
  * Form input component
  */
-export const FormInput = Render
+export const FormInput =
+  compose<RenderProps, FormInputProps>(
+    pure,
+    setDisplayName("FormInput")
+  )(Render)

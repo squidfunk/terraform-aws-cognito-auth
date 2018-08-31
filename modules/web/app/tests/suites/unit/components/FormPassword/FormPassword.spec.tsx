@@ -31,7 +31,7 @@ import {
 
 import {
   mockMouseDownEvent
-} from "_/mocks/vendor/dom/events"
+} from "_/mocks/vendor/browser/events"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -88,12 +88,14 @@ describe("components/FormPassword", () => {
   /* Enhanced component */
   describe("FormPassword", () => {
 
-    /* Test: should render correctly */
-    it("should render correctly", () => {
-      const component = shallow(
-        <FormPassword />
-      )
-      expect(component).toMatchSnapshot()
+    /* Test: should render with default props */
+    it("should render with default props", () => {
+      const component = shallow(<FormPassword />)
+      expect(component
+        .dive()
+        .dive()
+        .dive()
+      ).toMatchSnapshot()
     })
 
     /* { visibility } */
@@ -124,8 +126,8 @@ describe("components/FormPassword", () => {
         .find<RenderProps>(Render as any)
         .prop("setVisibility")
 
-      /* Test: should update form submission state */
-      it("should update form submission state", () => {
+      /* Test: should update visibility state */
+      it("should update visibility state", () => {
         setVisibility(true)
         component.update()
         expect(
