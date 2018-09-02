@@ -48,8 +48,8 @@ describe("components/App", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<Render {...props} />)
-      expect(component).toMatchSnapshot()
+      const wrapper = shallow(<Render {...props} />)
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -58,8 +58,8 @@ describe("components/App", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<App />)
-      expect(component).toMatchSnapshot()
+      const wrapper = shallow(<App />)
+      expect(wrapper).toMatchSnapshot()
     })
   })
 })

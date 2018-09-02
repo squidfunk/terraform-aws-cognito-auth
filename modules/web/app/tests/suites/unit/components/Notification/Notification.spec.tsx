@@ -33,6 +33,7 @@ import {
   NotificationType
 } from "providers/store/notification"
 
+import { search } from "_/helpers"
 import { mockStore } from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
@@ -59,16 +60,16 @@ describe("components/Notification", () => {
 
     /* Test: should render collapsed if not visible */
     it("should render collapsed if not visible", () => {
-      const component = shallow(<Render {...props} />)
-      expect(component).toMatchSnapshot()
+      const wrapper = shallow(<Render {...props} />)
+      expect(wrapper).toMatchSnapshot()
     })
 
     /* Test: should render collapsed if message is missing */
     it("should render collapsed if message is missing", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props} notification={{ show: true }} />
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
 
     /* Test: should render expanded for success message */
@@ -77,10 +78,10 @@ describe("components/Notification", () => {
         type: NotificationType.SUCCESS,
         message: "__MESSAGE__"
       }
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props} notification={{ ...props.notification, data }} />
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
 
     /* Test: should render expanded for error message */
@@ -89,10 +90,10 @@ describe("components/Notification", () => {
         type: NotificationType.ERROR,
         message: "__MESSAGE__"
       }
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props} notification={{ ...props.notification, data }} />
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -117,13 +118,10 @@ describe("components/Notification", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<Notification />, {
+      const wrapper = shallow(<Notification />, {
         context: { store }
       })
-      expect(component
-        .dive()
-        .dive()
-      ).toMatchSnapshot()
+      expect(search(wrapper, Render)).toMatchSnapshot()
     })
   })
 })

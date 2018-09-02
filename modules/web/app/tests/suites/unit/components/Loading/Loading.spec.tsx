@@ -40,8 +40,8 @@ describe("components/Loading", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<Render />)
-      expect(component).toMatchSnapshot()
+      const wrapper = shallow(<Render />)
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -50,8 +50,8 @@ describe("components/Loading", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<Loading />)
-      expect(component).toMatchSnapshot()
+      const wrapper = shallow(<Loading />)
+      expect(wrapper).toMatchSnapshot()
     })
   })
 })

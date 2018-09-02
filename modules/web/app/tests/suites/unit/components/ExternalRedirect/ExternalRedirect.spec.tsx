@@ -29,6 +29,7 @@ import {
   RenderProps
 } from "components/ExternalRedirect/ExternalRedirect"
 
+import { search } from "_/helpers"
 import { mockLocationAssign } from "_/mocks/vendor/browser/location"
 
 /* ----------------------------------------------------------------------------
@@ -48,8 +49,8 @@ describe("components/ExternalRedirect", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<Render {...props} />)
-      expect(component.dive()).toMatchSnapshot()
+      const wrapper = shallow(<Render {...props} />)
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -59,12 +60,12 @@ describe("components/ExternalRedirect", () => {
     /* Test: should render with default props */
     it("should render with default props", () => {
       mockLocationAssign()
-      const component = shallow(<ExternalRedirect href="__HREF__" />)
-      expect(component.dive()).toMatchSnapshot()
+      const wrapper = shallow(<ExternalRedirect href="__HREF__" />)
+      expect(search(wrapper, Render)).toMatchSnapshot()
     })
 
-    /* Test: should perform redirect */
-    it("should perform redirect", () => {
+    /* Test: should perform redirect after mount */
+    it("should perform redirect after mount", () => {
       const assignMock = mockLocationAssign()
       shallow(<ExternalRedirect href="__HREF__" />)
       expect(assignMock).toHaveBeenCalled()

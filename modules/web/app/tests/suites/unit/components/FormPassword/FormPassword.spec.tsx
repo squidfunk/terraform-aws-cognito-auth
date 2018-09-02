@@ -20,7 +20,11 @@
  * IN THE SOFTWARE.
  */
 
-import { mount, shallow } from "enzyme"
+import {
+  mount,
+  shallow,
+  StatelessComponent
+} from "enzyme"
 import * as React from "react"
 
 import {
@@ -29,6 +33,7 @@ import {
   RenderProps
 } from "components/FormPassword/FormPassword"
 
+import { search } from "_/helpers"
 import {
   mockMouseDownEvent
 } from "_/mocks/vendor/browser/events"
@@ -56,32 +61,32 @@ describe("components/FormPassword", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<Render {...props} />)
-      expect(component).toMatchSnapshot()
+      const wrapper = shallow(<Render {...props} />)
+      expect(wrapper).toMatchSnapshot()
     })
 
     /* Test: should render with helper text */
     it("should render with helper text", () => {
-      const component = shallow(
-        <Render {...props} helperText={"__HELPER_TEXT__"} />
+      const wrapper = shallow(
+        <Render {...props} helperText="__HELPER_TEXT__" />
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
 
     /* Test: should render as plain-text */
     it("should render as plain-text", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props} visibility={true}
       />)
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
 
     /* Test: should render as read-only */
     it("should render as read-only", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props} InputProps={{ readOnly: true }}
       />)
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -90,23 +95,19 @@ describe("components/FormPassword", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<FormPassword />)
-      expect(component
-        .dive()
-        .dive()
-        .dive()
-      ).toMatchSnapshot()
+      const wrapper = shallow(<FormPassword />)
+      expect(search(wrapper, Render)).toMatchSnapshot()
     })
 
     /* { visibility } */
     describe("{ visibility }", () => {
 
       /* Mount component */
-      const component = mount(<FormPassword />)
+      const wrapper = mount(<FormPassword />)
 
       /* Visibility state */
-      const visibility = component
-        .find<RenderProps>(Render as any)
+      const visibility = wrapper
+        .find(Render as StatelessComponent<RenderProps>)
         .prop("visibility")
 
       /* Test: should initialize form submission state */
@@ -119,20 +120,20 @@ describe("components/FormPassword", () => {
     describe("{ setVisibility }", () => {
 
       /* Mount component */
-      const component = mount(<FormPassword />)
+      const wrapper = mount(<FormPassword />)
 
       /* Visibility state reducer */
-      const setVisibility = component
-        .find<RenderProps>(Render as any)
+      const setVisibility = wrapper
+        .find(Render as StatelessComponent<RenderProps>)
         .prop("setVisibility")
 
       /* Test: should update visibility state */
       it("should update visibility state", () => {
         setVisibility(true)
-        component.update()
+        wrapper.update()
         expect(
-          component
-            .find<RenderProps>(Render as any)
+          wrapper
+            .find(Render as StatelessComponent<RenderProps>)
             .prop("visibility")
         )
           .toEqual(true)
@@ -143,20 +144,20 @@ describe("components/FormPassword", () => {
     describe("{ handleClick }", () => {
 
       /* Mount component */
-      const component = mount(<FormPassword />)
+      const wrapper = mount(<FormPassword />)
 
       /* Visibility click handler */
-      const handleClick = component
-        .find<RenderProps>(Render as any)
+      const handleClick = wrapper
+        .find(Render as StatelessComponent<RenderProps>)
         .prop("handleClick")
 
       /* Test: should toggle visibility */
       it("should toggle visibility", () => {
         handleClick()
-        component.update()
+        wrapper.update()
         expect(
-          component
-            .find<RenderProps>(Render as any)
+          wrapper
+            .find(Render as StatelessComponent<RenderProps>)
             .prop("visibility")
         )
           .toEqual(true)
@@ -167,11 +168,11 @@ describe("components/FormPassword", () => {
     describe("{ handleMouseDown }", () => {
 
       /* Mount component */
-      const component = mount(<FormPassword />)
+      const wrapper = mount(<FormPassword />)
 
       /* Visibility mouse down handler */
-      const handleMouseDown = component
-        .find<RenderProps>(Render as any)
+      const handleMouseDown = wrapper
+        .find(Render as StatelessComponent<RenderProps>)
         .prop("handleMouseDown")
 
       /* Test: should prevent interference with click event */

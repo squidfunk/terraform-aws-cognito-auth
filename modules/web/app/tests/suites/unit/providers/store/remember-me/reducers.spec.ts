@@ -41,7 +41,7 @@ describe("providers/store/remember-me", () => {
     /* Test: should initialize state */
     it("should initialize state", () => {
       const action = mockAction()
-      expect(remember(undefined, action as any))
+      expect(remember(undefined, action))
         .toEqual({ active: false })
     })
 

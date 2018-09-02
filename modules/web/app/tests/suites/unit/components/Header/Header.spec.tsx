@@ -23,6 +23,7 @@
 import { shallow } from "enzyme"
 import * as React from "react"
 
+import { search } from "_/helpers"
 import {
   Header,
   Render,
@@ -51,8 +52,8 @@ describe("components/Header", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<Render {...props} />)
-      expect(component).toMatchSnapshot()
+      const wrapper = shallow(<Render {...props} />)
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -61,10 +62,10 @@ describe("components/Header", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Header primary="__PRIMARY__" secondary="__SECONDARY__" />
       )
-      expect(component.dive()).toMatchSnapshot()
+      expect(search(wrapper, Render)).toMatchSnapshot()
     })
   })
 })

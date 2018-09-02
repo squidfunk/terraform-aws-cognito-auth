@@ -6,4 +6,4 @@ exports[`components/ExternalRedirect ExternalRedirect should render with default
 />
 `;
 
-exports[`components/ExternalRedirect Render should render with default props 1`] = `<Loading />`;
+exports[`components/ExternalRedirect Render should render with default props 1`] = `<pure(Loading) />`;

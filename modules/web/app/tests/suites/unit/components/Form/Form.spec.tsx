@@ -29,6 +29,8 @@ import {
   RenderProps
 } from "components/Form/Form"
 
+import { search } from "_/helpers"
+
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
@@ -49,12 +51,12 @@ describe("components/Form", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props}>
           __CHILDREN__
         </Render>
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -63,12 +65,12 @@ describe("components/Form", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Form onSubmit={jest.fn()}>
           __CHILDREN__
         </Form>
       )
-      expect(component.dive()).toMatchSnapshot()
+      expect(search(wrapper, Render)).toMatchSnapshot()
     })
   })
 })

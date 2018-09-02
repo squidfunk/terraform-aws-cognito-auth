@@ -29,6 +29,8 @@ import {
   RenderProps
 } from "components/Dialog/Dialog"
 
+import { search } from "_/helpers"
+
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
@@ -48,12 +50,12 @@ describe("components/Dialog", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props}>
           __CHILDREN__
         </Render>
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -62,12 +64,12 @@ describe("components/Dialog", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Dialog>
           __CHILDREN__
         </Dialog>
       )
-      expect(component.dive()).toMatchSnapshot()
+      expect(search(wrapper, Render)).toMatchSnapshot()
     })
   })
 })

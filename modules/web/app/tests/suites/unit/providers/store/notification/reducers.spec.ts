@@ -44,7 +44,7 @@ describe("providers/store/notification", () => {
     /* Test: should initialize state */
     it("should initialize state", () => {
       const action = mockAction()
-      expect(notification(undefined, action as any))
+      expect(notification(undefined, action))
         .toEqual({ show: false })
     })
 

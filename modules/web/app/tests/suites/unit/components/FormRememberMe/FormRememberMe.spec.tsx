@@ -20,7 +20,11 @@
  * IN THE SOFTWARE.
  */
 
-import { mount, shallow } from "enzyme"
+import {
+  mount,
+  shallow,
+  StatelessComponent
+} from "enzyme"
 import * as React from "react"
 
 import {
@@ -29,7 +33,7 @@ import {
   RenderProps
 } from "components/FormRememberMe/FormRememberMe"
 
-import { chance } from "_/helpers"
+import { chance, search } from "_/helpers"
 import { mockStore } from "_/mocks/providers"
 import {
   mockChangeEventForCheckboxInput
@@ -53,22 +57,22 @@ describe("components/FormRememberMe", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props}>
           __CHILDREN__
         </Render>
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
 
     /* Test: should render with additional checkbox props */
     it("should render with additional checkbox props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props} onBlur={jest.fn()}>
           __CHILDREN__
         </Render>
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -89,29 +93,25 @@ describe("components/FormRememberMe", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<FormRememberMe onChange={jest.fn()} />, {
+      const wrapper = shallow(<FormRememberMe onChange={jest.fn()} />, {
         context: { store }
       })
-      expect(component
-        .dive()
-        .dive()
-        .dive()
-      ).toMatchSnapshot()
+      expect(search(wrapper, Render)).toMatchSnapshot()
     })
 
     /* { handleChange } */
     describe("{ handleChange }", () => {
 
       /* Mount component inside router */
-      const component = mount(
+      const wrapper = mount(
         <FormRememberMe onChange={jest.fn()} />, {
           context: { store }
         }
       )
 
       /* Form change handler */
-      const handleChange = component
-        .find<RenderProps>(Render as any)
+      const handleChange = wrapper
+        .find(Render as StatelessComponent<RenderProps>)
         .prop("handleChange")
 
       /* Test: should toggle remember me */

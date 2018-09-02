@@ -48,14 +48,14 @@ describe("components/FormInput", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<Render {...props} />)
-      expect(component).toMatchSnapshot()
+      const wrapper = shallow(<Render {...props} />)
+      expect(wrapper).toMatchSnapshot()
     })
 
     /* Test: should render with additional input props */
     it("should render with additional input props", () => {
-      const component = shallow(<Render {...props} type="password" />)
-      expect(component).toMatchSnapshot()
+      const wrapper = shallow(<Render {...props} type="password" />)
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -64,8 +64,8 @@ describe("components/FormInput", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(<FormInput />)
-      expect(component).toMatchSnapshot()
+      const wrapper = shallow(<FormInput />)
+      expect(wrapper).toMatchSnapshot()
     })
   })
 })

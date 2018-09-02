@@ -71,7 +71,7 @@ test: node_modules
 	$(shell npm bin)/jest \
 		--config tests/jest.json \
 		--collectCoverage \
-		$(CI:true=--runInBand)
+		--runInBand
 
 # Execute unit tests in watch mode
 watch: node_modules

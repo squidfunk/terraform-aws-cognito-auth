@@ -22,7 +22,7 @@
 
 import "dotenv/config"
 
-import * as enzyme from "enzyme"
+import { configure } from "enzyme"
 import * as Adapter from "enzyme-adapter-react-16"
 
 /* ----------------------------------------------------------------------------
@@ -30,7 +30,7 @@ import * as Adapter from "enzyme-adapter-react-16"
  * ------------------------------------------------------------------------- */
 
 /* Setup Enzyme with Jest */
-enzyme.configure({ adapter: new Adapter() })
+configure({ adapter: new Adapter() })
 
 /* Initialize environment variables */
 window.env = {

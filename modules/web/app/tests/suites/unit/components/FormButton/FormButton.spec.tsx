@@ -29,6 +29,8 @@ import {
   RenderProps
 } from "components/FormButton/FormButton"
 
+import { search } from "_/helpers"
+
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
@@ -48,22 +50,22 @@ describe("components/FormButton", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props}>
           __CHILDREN__
         </Render>
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
 
     /* Test: should render with additional button props */
     it("should render with additional button props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props} disableRipple={true}>
           __CHILDREN__
         </Render>
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -72,12 +74,12 @@ describe("components/FormButton", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <FormButton>
           __CHILDREN__
         </FormButton>
       )
-      expect(component.dive()).toMatchSnapshot()
+      expect(search(wrapper, Render)).toMatchSnapshot()
     })
   })
 })

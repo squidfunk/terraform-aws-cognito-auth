@@ -21,6 +21,10 @@
  */
 
 import { Chance } from "chance"
+import {
+  ShallowWrapper,
+  StatelessComponent
+} from "enzyme"
 import * as React from "react"
 
 /* ----------------------------------------------------------------------------
@@ -32,7 +36,38 @@ import * as React from "react"
  */
 export const chance = new Chance()
 
+/* ----------------------------------------------------------------------------
+ * Functions
+ * ------------------------------------------------------------------------- */
+
 /**
- * Placeholder component for testing enhancers
+ * Create a placeholder component accepting the given properties
+ *
+ * @return Stateless component
  */
-export const Placeholder = () => <div></div>
+export function placeholder<T>(): StatelessComponent<T> {
+  return () => <div />
+}
+
+/**
+ * Deep-dive to find a stateless component inside a shallow-wrapped component
+ *
+ * This is a simple wrapper function to ease testing using shallow wrapped
+ * components because Enzyme doesn't support it out-of-the-box.
+ *
+ * @template TProps - Component properties type
+ *
+ * @param wrapper - Component wrapper
+ * @param Component - Component
+ *
+ * @return Stateless component
+ */
+export function search<TProps extends {}>(
+  wrapper: ShallowWrapper<TProps>,
+  Component: React.SFC<TProps>
+): ShallowWrapper<TProps> {
+  const component = wrapper.find(Component)
+  return !component.exists()
+    ? search(wrapper.dive(), Component)
+    : component
+}

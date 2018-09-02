@@ -30,7 +30,7 @@ import {
 } from "enhancers"
 import { NotificationType } from "providers/store/notification"
 
-import { Placeholder } from "_/helpers"
+import { placeholder } from "_/helpers"
 import { mockStore } from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
@@ -54,8 +54,9 @@ describe("enhancers/with-notification", () => {
   describe("withNotification", () => {
 
     /* Apply enhancer to placeholder component */
+    const Placeholder = placeholder<WithNotification>()
     const Component = withNotification()(Placeholder)
-    const component = shallow<WithNotification>(<Component />, {
+    const wrapper = shallow<WithNotification>(<Component />, {
       context: { store }
     })
 
@@ -63,7 +64,7 @@ describe("enhancers/with-notification", () => {
     describe("{ notification }", () => {
 
       /* Notification */
-      const notification = component.prop("notification")
+      const notification = wrapper.prop("notification")
 
       /* Test: should map state to props */
       it("should map state to props", () => {
@@ -75,7 +76,7 @@ describe("enhancers/with-notification", () => {
     describe("{ displayNotification }", () => {
 
       /* Display notification dispatcher */
-      const displayNotification = component.prop("displayNotification")
+      const displayNotification = wrapper.prop("displayNotification")
 
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {
@@ -97,7 +98,7 @@ describe("enhancers/with-notification", () => {
     describe("{ dismissNotification }", () => {
 
       /* Dismiss notification dispatcher */
-      const dismissNotification = component.prop("dismissNotification")
+      const dismissNotification = wrapper.prop("dismissNotification")
 
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {

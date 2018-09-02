@@ -20,7 +20,10 @@
  * IN THE SOFTWARE.
  */
 
-import { mount } from "enzyme"
+import {
+  mount,
+  StatelessComponent
+} from "enzyme"
 import * as React from "react"
 
 import {
@@ -28,7 +31,7 @@ import {
   WithFormSubmit
 } from "enhancers"
 
-import { chance, Placeholder } from "_/helpers"
+import { chance, placeholder } from "_/helpers"
 import { mockSession } from "_/mocks/common/session"
 import { mockStore } from "_/mocks/providers"
 import {
@@ -58,14 +61,15 @@ describe("enhancers/with-form-submit", () => {
     describe("{ form }", () => {
 
       /* Apply enhancer to placeholder component */
+      const Placeholder = placeholder<WithFormSubmit>()
       const Component = withFormSubmit()(Placeholder)
-      const component = mount(<Component />, {
+      const wrapper = mount(<Component />, {
         context: { store }
       })
 
       /* Form submission state */
-      const form = component
-        .find<WithFormSubmit>(Placeholder)
+      const form = wrapper
+        .find(Placeholder)
         .prop("form")
 
       /* Test: should initialize form submission state */
@@ -78,21 +82,25 @@ describe("enhancers/with-form-submit", () => {
     describe("{ setForm }", () => {
 
       /* Apply enhancer to placeholder component */
+      const Placeholder = placeholder<WithFormSubmit>()
       const Component = withFormSubmit()(Placeholder)
-      const component = mount(<Component />, {
+      const wrapper = mount(<Component />, {
         context: { store }
       })
 
       /* Form submission state reducer */
-      const setForm = component
-        .find<WithFormSubmit>(Placeholder)
+      const setForm = wrapper
+        .find(Placeholder)
         .prop("setForm")
 
       /* Test: should update form submission state */
       it("should update form submission state", () => {
         setForm({ pending: true, success: false })
-        component.update()
-        expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
+        wrapper.update()
+        expect(wrapper
+          .find(Placeholder)
+          .prop("form")
+        )
           .toEqual({ pending: true, success: false })
       })
     })
@@ -101,14 +109,15 @@ describe("enhancers/with-form-submit", () => {
     describe("{ submit }", () => {
 
       /* Apply enhancer to placeholder component */
+      const Placeholder = placeholder<WithFormSubmit>()
       const Component = withFormSubmit()(Placeholder)
-      const component = mount(<Component />, {
+      const wrapper = mount(<Component />, {
         context: { store }
       })
 
       /* Submit form */
-      const submit = component
-        .find<WithFormSubmit>(Placeholder)
+      const submit = wrapper
+        .find(Placeholder)
         .prop("submit")
 
       /* Test: should prepend API base path to current location */
@@ -188,8 +197,11 @@ describe("enhancers/with-form-submit", () => {
           const data = { [chance.string()]: chance.string() }
           mockAxiosPostWithResult(data)
           await submit()
-          component.update()
-          expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
+          wrapper.update()
+          expect(wrapper
+            .find(Placeholder)
+            .prop("form")
+          )
             .toEqual(jasmine.objectContaining({
               response: data
             }))
@@ -199,8 +211,11 @@ describe("enhancers/with-form-submit", () => {
         it("should enable success flag", async () => {
           mockAxiosPostWithResult()
           await submit()
-          component.update()
-          expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
+          wrapper.update()
+          expect(wrapper
+            .find(Placeholder)
+            .prop("form")
+          )
             .toEqual(jasmine.objectContaining({
               pending: false,
               success: true
@@ -216,8 +231,11 @@ describe("enhancers/with-form-submit", () => {
           const errMock = new Error()
           mockAxiosPostWithError(errMock)
           await submit()
-          component.update()
-          expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
+          wrapper.update()
+          expect(wrapper
+            .find(Placeholder)
+            .prop("form")
+          )
             .toEqual(jasmine.objectContaining({
               err: errMock
             }))
@@ -227,8 +245,11 @@ describe("enhancers/with-form-submit", () => {
         it("should disable success flag", async () => {
           mockAxiosPostWithError()
           await submit()
-          component.update()
-          expect(component.find<WithFormSubmit>(Placeholder).prop("form"))
+          wrapper.update()
+          expect(wrapper
+            .find(Placeholder)
+            .prop("form")
+          )
             .toEqual(jasmine.objectContaining({
               pending: false,
               success: false
@@ -255,14 +276,15 @@ describe("enhancers/with-form-submit", () => {
         const target = chance.string()
 
         /* Apply enhancer to placeholder component */
+        const Placeholder = placeholder<WithFormSubmit>()
         const Component = withFormSubmit({ target })(Placeholder)
-        const component = mount(<Component />, {
+        const wrapper = mount(<Component />, {
           context: { store }
         })
 
         /* Submit form */
-        const submit = component
-          .find<WithFormSubmit>(Placeholder)
+        const submit = wrapper
+          .find(Placeholder)
           .prop("submit")
 
         /* Test: should prepend API base path to provided target URL */
@@ -299,14 +321,15 @@ describe("enhancers/with-form-submit", () => {
         const message = "__MESSAGE__"
 
         /* Apply enhancer to placeholder component */
+        const Placeholder = placeholder<WithFormSubmit>()
         const Component = withFormSubmit({ message })(Placeholder)
-        const component = mount(<Component />, {
+        const wrapper = mount(<Component />, {
           context: { store }
         })
 
         /* Submit form */
-        const submit = component
-          .find<WithFormSubmit>(Placeholder)
+        const submit = wrapper
+          .find(Placeholder)
           .prop("submit")
 
         /* Test: should display notification */
@@ -325,16 +348,17 @@ describe("enhancers/with-form-submit", () => {
       const session = mockSession()
 
       /* Apply enhancer to placeholder component */
+      const Placeholder = placeholder<WithFormSubmit>()
       const Component = withFormSubmit({ authorize: true })(Placeholder)
-      const component = mount(<Component />, {
+      const wrapper = mount(<Component />, {
         context: {
           store: mockStore({ session })
         }
       })
 
       /* Submit form */
-      const submit = component
-        .find<WithFormSubmit>(Placeholder)
+      const submit = wrapper
+        .find(Placeholder)
         .prop("submit")
 
       /* Test: should send request with authorization header */

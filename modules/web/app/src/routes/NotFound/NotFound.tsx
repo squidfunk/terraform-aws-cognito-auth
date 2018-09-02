@@ -22,6 +22,11 @@
 
 import * as React from "react"
 import { Redirect } from "react-router-dom"
+import {
+  compose,
+  pure,
+  setDisplayName
+} from "recompose"
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -32,7 +37,7 @@ import { Redirect } from "react-router-dom"
  *
  * @return JSX element
  */
-export const Render: React.SFC<{}> =
+export const Render: React.SFC =
   () => <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------
@@ -42,4 +47,8 @@ export const Render: React.SFC<{}> =
 /**
  * "Page not found" component
  */
-export const NotFound = Render
+export const NotFound =
+  compose(
+    pure,
+    setDisplayName("NotFound")
+  )(Render)

@@ -47,7 +47,7 @@ export function mockStore<T extends State>(state?: Partial<T>) {
  *
  * @return Redux action
  */
-export function mockAction(): AnyAction {
+export function mockAction(): any {
   return {
     type: "__TYPE__"
   }

@@ -42,7 +42,7 @@ describe("providers/store/session", () => {
     /* Test: should initialize state */
     it("should initialize state", () => {
       const action = mockAction()
-      expect(session(undefined, action as any))
+      expect(session(undefined, action))
         .toEqual(null)
     })
 

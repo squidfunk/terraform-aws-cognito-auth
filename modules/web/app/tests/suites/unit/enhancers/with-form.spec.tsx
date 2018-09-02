@@ -28,7 +28,7 @@ import {
   WithForm
 } from "enhancers"
 
-import { chance, Placeholder } from "_/helpers"
+import { chance, placeholder } from "_/helpers"
 import { mockStore } from "_/mocks/providers"
 import { mockAxiosPostWithResult } from "_/mocks/vendor/axios"
 import {
@@ -62,14 +62,15 @@ describe("enhancers/with-form", () => {
     describe("{ request }", () => {
 
       /* Apply enhancer to placeholder component */
+      const Placeholder = placeholder<WithForm>()
       const Component = withForm({ initial })(Placeholder)
-      const component = mount(<Component />, {
+      const wrapper = mount(<Component />, {
         context: { store }
       })
 
       /* Form state */
-      const request = component
-        .find<WithForm>(Placeholder)
+      const request = wrapper
+        .find(Placeholder)
         .prop("request")
 
       /* Test: should initialize form state */
@@ -82,24 +83,25 @@ describe("enhancers/with-form", () => {
     describe("{ setRequest }", () => {
 
       /* Apply enhancer to placeholder component */
+      const Placeholder = placeholder<WithForm>()
       const Component = withForm({ initial })(Placeholder)
-      const component = mount(<Component />, {
+      const wrapper = mount(<Component />, {
         context: { store }
       })
 
       /* Form state reducer */
-      const setRequest = component
-        .find<WithForm>(Placeholder)
+      const setRequest = wrapper
+        .find(Placeholder)
         .prop("setRequest")
 
       /* Test: should update form state */
       it("should update form state", () => {
         const request = { [chance.string()]: chance.string() }
         setRequest(request)
-        component.update()
+        wrapper.update()
         expect(
-          component
-            .find<WithForm>(Placeholder)
+          wrapper
+            .find(Placeholder)
             .prop("request")
         )
           .toEqual(request)
@@ -110,14 +112,15 @@ describe("enhancers/with-form", () => {
     describe("{ handleChange }", () => {
 
       /* Apply enhancer to placeholder component */
+      const Placeholder = placeholder<WithForm>()
       const Component = withForm({ initial })(Placeholder)
-      const component = mount(<Component />, {
+      const wrapper = mount(<Component />, {
         context: { store }
       })
 
       /* Update form data handler */
-      const handleChange = component
-        .find<WithForm>(Placeholder)
+      const handleChange = wrapper
+        .find(Placeholder)
         .prop("handleChange")
 
       /* Test: should update form state for text input */
@@ -127,10 +130,10 @@ describe("enhancers/with-form", () => {
           value: chance.string()
         }
         handleChange(mockChangeEventForTextInput(options))
-        component.update()
+        wrapper.update()
         expect(
-          component
-            .find<WithForm>(Placeholder)
+          wrapper
+            .find(Placeholder)
             .prop("request")
         )
           .toEqual(jasmine.objectContaining({
@@ -145,10 +148,10 @@ describe("enhancers/with-form", () => {
           checked: chance.bool()
         }
         handleChange(mockChangeEventForCheckboxInput(options))
-        component.update()
+        wrapper.update()
         expect(
-          component
-            .find<WithForm>(Placeholder)
+          wrapper
+            .find(Placeholder)
             .prop("request")
         )
           .toEqual(jasmine.objectContaining({
@@ -161,14 +164,15 @@ describe("enhancers/with-form", () => {
     describe("{ handleSubmit }", () => {
 
       /* Apply enhancer to placeholder component */
+      const Placeholder = placeholder<WithForm>()
       const Component = withForm({ initial })(Placeholder)
-      const component = mount(<Component />, {
+      const wrapper = mount(<Component />, {
         context: { store }
       })
 
       /* Submit form data handler */
-      const handleSubmit = component
-        .find<WithForm>(Placeholder)
+      const handleSubmit = wrapper
+        .find(Placeholder)
         .prop("handleSubmit")
 
       /* Test: should submit form */

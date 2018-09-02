@@ -25,8 +25,10 @@ import {
   branch,
   compose,
   lifecycle,
+  mapProps,
   pure,
-  renderComponent
+  renderComponent,
+  setDisplayName
 } from "recompose"
 
 import { LeaveRequest } from "common"
@@ -47,9 +49,9 @@ import { LeaveSuccess } from "./LeaveSuccess"
  * ------------------------------------------------------------------------- */
 
 /**
- * Render properties
+ * Inner properties
  */
-export type RenderProps =
+type InnerProps =
   & WithSession
   & WithRememberMeDispatch
   & WithFormSubmit<LeaveRequest>
@@ -63,7 +65,7 @@ export type RenderProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.SFC =
   () => <Loading />
 
 /* ----------------------------------------------------------------------------
@@ -74,14 +76,14 @@ export const Render: React.SFC<RenderProps> =
  * Sign out component
  */
 export const Leave =
-  compose<RenderProps, {}>(
+  compose(
     withSession(),
     withRememberMe(),
     withFormSubmit<LeaveRequest>({
       message: "You signed out of your account",
       authorize: true
     }),
-    lifecycle<RenderProps, {}>({
+    lifecycle<InnerProps, {}>({
       componentWillMount() {
         const { setRememberMeResult } = this.props
         setRememberMeResult(false) // avoid re-authentication
@@ -96,5 +98,7 @@ export const Leave =
       ({ form }) => form.success || Boolean(form.err),
       renderComponent(LeaveSuccess)
     ),
-    pure
+    mapProps(() => {}), // tslint:disable-line no-empty
+    pure,
+    setDisplayName("Leave")
   )(Render)

@@ -29,7 +29,7 @@ import {
   WithSession
 } from "enhancers"
 
-import { Placeholder } from "_/helpers"
+import { placeholder } from "_/helpers"
 import { mockSession } from "_/mocks/common"
 import { mockStore } from "_/mocks/providers"
 
@@ -54,8 +54,9 @@ describe("enhancers/with-session", () => {
   describe("withSession", () => {
 
     /* Apply enhancer to placeholder component */
+    const Placeholder = placeholder<WithSession>()
     const Component = withSession()(Placeholder)
-    const component = shallow<WithSession>(<Component />, {
+    const wrapper = shallow<WithSession>(<Component />, {
       context: { store }
     })
 
@@ -63,7 +64,7 @@ describe("enhancers/with-session", () => {
     describe("{ session }", () => {
 
       /* Session */
-      const session = component.prop("session")
+      const session = wrapper.prop("session")
 
       /* Test: should map state to props */
       it("should map state to props", () => {
@@ -75,7 +76,7 @@ describe("enhancers/with-session", () => {
     describe("{ initSession }", () => {
 
       /* Initialize session dispatcher */
-      const initSession = component.prop("initSession")
+      const initSession = wrapper.prop("initSession")
 
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {
@@ -94,7 +95,7 @@ describe("enhancers/with-session", () => {
     describe("{ terminateSession }", () => {
 
       /* Terminate session dispatcher */
-      const terminateSession = component.prop("terminateSession")
+      const terminateSession = wrapper.prop("terminateSession")
 
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {

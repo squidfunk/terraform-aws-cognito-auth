@@ -29,7 +29,7 @@ import {
   WithRememberMe
 } from "enhancers"
 
-import { Placeholder } from "_/helpers"
+import { placeholder } from "_/helpers"
 import { mockStore } from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
@@ -53,8 +53,9 @@ describe("enhancers/with-remember-me", () => {
   describe("withRememberMe", () => {
 
     /* Apply enhancer to placeholder component */
+    const Placeholder = placeholder<WithRememberMe>()
     const Component = withRememberMe()(Placeholder)
-    const component = shallow<WithRememberMe>(<Component />, {
+    const wrapper = shallow<WithRememberMe>(<Component />, {
       context: { store }
     })
 
@@ -62,7 +63,7 @@ describe("enhancers/with-remember-me", () => {
     describe("{ remember }", () => {
 
       /* Remember me */
-      const remember = component.prop("remember")
+      const remember = wrapper.prop("remember")
 
       /* Test: should map state to props */
       it("should map state to props", () => {
@@ -74,7 +75,7 @@ describe("enhancers/with-remember-me", () => {
     describe("{ setRememberMe }", () => {
 
       /* Remember me toggle dispatcher */
-      const setRememberMe = component.prop("setRememberMe")
+      const setRememberMe = wrapper.prop("setRememberMe")
 
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {
@@ -93,7 +94,7 @@ describe("enhancers/with-remember-me", () => {
     describe("{ setRememberMeResult }", () => {
 
       /* Authentication result dispatcher */
-      const setRememberMeResult = component.prop("setRememberMeResult")
+      const setRememberMeResult = wrapper.prop("setRememberMeResult")
 
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {

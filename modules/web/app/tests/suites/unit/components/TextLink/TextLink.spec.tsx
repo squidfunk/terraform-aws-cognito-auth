@@ -20,7 +20,11 @@
  * IN THE SOFTWARE.
  */
 
-import { mount, shallow } from "enzyme"
+import {
+  mount,
+  shallow,
+  StatelessComponent
+} from "enzyme"
 import * as React from "react"
 import { MemoryRouter } from "react-router"
 
@@ -30,6 +34,7 @@ import {
   TextLink
 } from "components/TextLink/TextLink"
 
+import { search } from "_/helpers"
 import { mockStore } from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
@@ -53,22 +58,22 @@ describe("components/TextLink", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props}>
           __CHILDREN__
         </Render>
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
 
     /* Test: should render with additional link props */
     it("should render with additional link props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <Render {...props} onBlur={jest.fn()}>
           __CHILDREN__
         </Render>
       )
-      expect(component).toMatchSnapshot()
+      expect(wrapper).toMatchSnapshot()
     })
   })
 
@@ -85,7 +90,7 @@ describe("components/TextLink", () => {
 
     /* Test: should render with default props */
     it("should render with default props", () => {
-      const component = shallow(
+      const wrapper = shallow(
         <MemoryRouter>
           <TextLink to="__TO__">
             __CHILDREN__
@@ -94,21 +99,14 @@ describe("components/TextLink", () => {
           context: { store }
         }
       )
-      expect(component
-        .dive()
-        .dive()
-        .dive()
-        .dive()
-        .dive()
-        .dive()
-      ).toMatchSnapshot()
+      expect(search(wrapper, Render)).toMatchSnapshot()
     })
 
     /* { handleClickCapture } */
     describe("{ handleClickCapture }", () => {
 
       /* Mount component inside router */
-      const component = mount(
+      const wrapper = mount(
         <MemoryRouter>
           <TextLink to="__TO__">
             __CHILDREN__
@@ -122,8 +120,8 @@ describe("components/TextLink", () => {
       )
 
       /* Link click capture handler */
-      const handleClickCapture = component
-        .find<RenderProps>(Render as any)
+      const handleClickCapture = wrapper
+        .find(Render as StatelessComponent<RenderProps>)
         .prop("handleClickCapture")
 
       /* Test: should dismiss notification */
