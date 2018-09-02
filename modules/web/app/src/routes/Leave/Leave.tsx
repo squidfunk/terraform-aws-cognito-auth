@@ -49,11 +49,17 @@ import { LeaveSuccess } from "./LeaveSuccess"
  * ------------------------------------------------------------------------- */
 
 /**
- * Inner properties
+ * Lifecycle properties
  */
-type InnerProps =
+type LifecycleProps =
   & WithSession
   & WithRememberMeDispatch
+  & WithFormSubmit<LeaveRequest>
+
+/**
+ * Branch properties
+ */
+type BranchProps =
   & WithFormSubmit<LeaveRequest>
 
 /* ----------------------------------------------------------------------------
@@ -83,7 +89,7 @@ export const Leave =
       message: "You signed out of your account",
       authorize: true
     }),
-    lifecycle<InnerProps, {}>({
+    lifecycle<LifecycleProps, {}>({
       componentWillMount() {
         const { setRememberMeResult } = this.props
         setRememberMeResult(false) // avoid re-authentication
@@ -94,7 +100,7 @@ export const Leave =
         terminateSession()
       }
     }),
-    branch<WithFormSubmit<LeaveRequest>>(
+    branch<BranchProps>(
       ({ form }) => form.success || Boolean(form.err),
       renderComponent(LeaveSuccess)
     ),

@@ -89,8 +89,8 @@ describe("enhancers/with-notification", () => {
           type: NotificationType.SUCCESS,
           message: "__MESSAGE__"
         })
-        expect(store.getActions()).toMatchSnapshot()
         expect(store.getActions().length).toEqual(1)
+        expect(store.getActions()).toMatchSnapshot()
       })
     })
 
@@ -108,8 +108,8 @@ describe("enhancers/with-notification", () => {
       /* Test: should dispatch action */
       it("should dispatch action", () => {
         dismissNotification()
-        expect(store.getActions()).toMatchSnapshot()
         expect(store.getActions().length).toEqual(1)
+        expect(store.getActions()).toMatchSnapshot()
       })
     })
   })

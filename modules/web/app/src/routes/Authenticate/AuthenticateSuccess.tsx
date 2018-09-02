@@ -60,11 +60,24 @@ export type AuthenticateSuccessProps =
 /* ------------------------------------------------------------------------- */
 
 /**
- * Redirect properties
+ * Inner properties
  */
-interface RedirectProps {
+interface InnerProps {
   path: string                         /* Redirect path */
 }
+
+/**
+ * Lifecycle properties
+ */
+type LifecycleProps =
+  & AuthenticateSuccessProps
+  & WithSession
+
+/**
+ * Branch properties
+ */
+type BranchProps =
+  & WithSession
 
 /* ------------------------------------------------------------------------- */
 
@@ -72,9 +85,8 @@ interface RedirectProps {
  * Render properties
  */
 export type RenderProps =
-  & AuthenticateSuccessProps
   & WithSession
-  & RedirectProps
+  & InnerProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -103,13 +115,13 @@ export const Render: React.SFC<RenderProps> =
 export const AuthenticateSuccess =
   compose<RenderProps, AuthenticateSuccessProps>(
     withSession(),
-    withProps<RedirectProps, RenderProps>(() => {
+    withProps<InnerProps, RenderProps>(() => {
       const { redirect } = parse(location.search)
       return {
         path: redirect || ""
       }
     }),
-    lifecycle<RenderProps, {}>({
+    lifecycle<LifecycleProps, {}>({
       componentDidMount() {
         const { form, initSession, setRememberMeResult } = this.props
         if (form.response) {
@@ -119,7 +131,7 @@ export const AuthenticateSuccess =
         }
       }
     }),
-    branch<WithSession>(
+    branch<BranchProps>(
       ({ session }) => !(session && session.renewed),
       renderComponent(() => <Loading />)
     ),

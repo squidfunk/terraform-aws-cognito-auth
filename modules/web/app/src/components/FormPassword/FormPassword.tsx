@@ -76,6 +76,12 @@ interface HandlerProps {
   ): void                              /* Visibility mouse down handler */
 }
 
+/**
+ * Handler callback properties
+ */
+type HandlerCallbackProps =
+  & StateProps
+
 /* ------------------------------------------------------------------------- */
 
 /**
@@ -142,7 +148,7 @@ export const FormPassword =
   compose<RenderProps, FormPasswordProps>(
     withStyles(styles),
     withState("visibility", "setVisibility", (): boolean => false),
-    withHandlers<StateProps, HandlerProps>({
+    withHandlers<HandlerCallbackProps, HandlerProps>({
 
       /* Toggle visibility */
       handleClick: ({ visibility, setVisibility }) => () => {

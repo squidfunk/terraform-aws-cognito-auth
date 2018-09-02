@@ -85,8 +85,8 @@ describe("enhancers/with-remember-me", () => {
       /* Test: should dispatch action */
       it("should dispatch action", () => {
         setRememberMe(true)
-        expect(store.getActions()).toMatchSnapshot()
         expect(store.getActions().length).toEqual(1)
+        expect(store.getActions()).toMatchSnapshot()
       })
     })
 
@@ -104,8 +104,8 @@ describe("enhancers/with-remember-me", () => {
       /* Test: should dispatch action */
       it("should dispatch action", () => {
         setRememberMeResult(true)
-        expect(store.getActions()).toMatchSnapshot()
         expect(store.getActions().length).toEqual(1)
+        expect(store.getActions()).toMatchSnapshot()
       })
     })
   })

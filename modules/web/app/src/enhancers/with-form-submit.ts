@@ -36,9 +36,7 @@ import {
   withSession,
   WithSessionState
 } from "enhancers"
-import {
-  NotificationType
-} from "providers/store/notification"
+import { NotificationType } from "providers/store/notification"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -91,11 +89,11 @@ interface HandlerProps<TRequest extends {}> {
 }
 
 /**
- * Inner properties
+ * Handler callback properties
  *
  * @template TResponse - Form response type
  */
-type InnerProps<TResponse = void> =
+type HandlerCallbackProps<TResponse = void> =
   & WithNotificationDispatch
   & WithSessionState
   & StateProps<TResponse>
@@ -139,7 +137,7 @@ export const withFormSubmit = <TRequest extends {}, TResponse = void>(
       pending: false,
       success: false
     })),
-    withHandlers<InnerProps<TResponse>, HandlerProps<TRequest>>({
+    withHandlers<HandlerCallbackProps<TResponse>, HandlerProps<TRequest>>({
       submit: ({
         setForm, displayNotification, dismissNotification, session
       }) => async request => {

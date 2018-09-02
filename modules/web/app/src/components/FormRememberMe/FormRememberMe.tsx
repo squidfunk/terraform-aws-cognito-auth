@@ -64,9 +64,9 @@ interface HandlerProps {
 }
 
 /**
- * Inner properties
+ * Handler callback properties
  */
-type InnerProps =
+type HandlerCallbackProps =
   & FormRememberMeProps
   & WithRememberMe
 
@@ -104,7 +104,7 @@ export const Render: React.SFC<RenderProps> =
 export const FormRememberMe =
   compose<RenderProps, FormRememberMeProps>(
     withRememberMe(),
-    withHandlers<InnerProps, HandlerProps>({
+    withHandlers<HandlerCallbackProps, HandlerProps>({
 
       /* Toggle active flag */
       handleChange: ({ onChange, setRememberMe }) => (ev, checked) => {

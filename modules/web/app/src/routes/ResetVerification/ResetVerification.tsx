@@ -56,6 +56,12 @@ import { ResetVerificationSuccess } from "./ResetVerificationSuccess"
  * ------------------------------------------------------------------------- */
 
 /**
+ * Branch properties
+ */
+type BranchProps =
+  & WithForm<ResetVerificationRequest>
+
+/**
  * Render properties
  */
 export type RenderProps =
@@ -115,7 +121,7 @@ export const ResetVerification =
         password: ""
       }
     }),
-    branch<WithForm<ResetVerificationRequest>>(
+    branch<BranchProps>(
       ({ form }) => form.success,
       renderComponent(ResetVerificationSuccess)
     ),

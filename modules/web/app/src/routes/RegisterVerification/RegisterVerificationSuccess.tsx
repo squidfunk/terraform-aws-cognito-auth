@@ -23,20 +23,6 @@
 import * as React from "react"
 import { Redirect } from "react-router-dom"
 
-import {
-  RenderProps as RegisterVerificationRenderProps
-} from "./RegisterVerification"
-
-/* ----------------------------------------------------------------------------
- * Types
- * ------------------------------------------------------------------------- */
-
-/**
- * Render properties
- */
-export type RenderProps =
-  & RegisterVerificationRenderProps
-
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
@@ -44,11 +30,9 @@ export type RenderProps =
 /**
  * Render component
  *
- * @param props - Properties
- *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.SFC =
   () => <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------

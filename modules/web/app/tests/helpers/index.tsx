@@ -66,7 +66,9 @@ export function search<TProps extends {}>(
   wrapper: ShallowWrapper<TProps>,
   Component: React.SFC<TProps>
 ): ShallowWrapper<TProps> {
-  const component = wrapper.find(Component)
+  const component = wrapper.find<TProps>(
+    Component as StatelessComponent<TProps>
+  )
   return !component.exists()
     ? search(wrapper.dive(), Component)
     : component

@@ -32,6 +32,7 @@ import {
   Render,
   RenderProps
 } from "components/FormRememberMe/FormRememberMe"
+import { setRememberMeAction } from "providers/store/remember-me"
 
 import { chance, search } from "_/helpers"
 import { mockStore } from "_/mocks/providers"
@@ -121,7 +122,9 @@ describe("components/FormRememberMe", () => {
           checked: true
         }
         handleChange(mockChangeEventForCheckboxInput(options), true)
-        expect(store.getActions()).toMatchSnapshot()
+        expect(store.getActions().length).toEqual(1)
+        expect(store.getActions()[0])
+          .toEqual(setRememberMeAction(true))
       })
     })
   })

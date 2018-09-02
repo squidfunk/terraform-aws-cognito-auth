@@ -86,8 +86,8 @@ describe("enhancers/with-session", () => {
       /* Test: should dispatch action */
       it("should dispatch action", () => {
         initSession(mockSession())
-        expect(store.getActions()).toMatchSnapshot()
         expect(store.getActions().length).toEqual(1)
+        expect(store.getActions()).toMatchSnapshot()
       })
     })
 
@@ -105,8 +105,8 @@ describe("enhancers/with-session", () => {
       /* Test: should dispatch action */
       it("should dispatch action", () => {
         terminateSession()
-        expect(store.getActions()).toMatchSnapshot()
         expect(store.getActions().length).toEqual(1)
+        expect(store.getActions()).toMatchSnapshot()
       })
     })
   })

@@ -35,8 +35,6 @@ import {
 /**
  * Render component
  *
- * @param props - Properties
- *
  * @return JSX element
  */
 export const Render: React.SFC =

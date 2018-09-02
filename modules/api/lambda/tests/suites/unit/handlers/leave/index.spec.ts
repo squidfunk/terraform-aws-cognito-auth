@@ -20,9 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-import { post } from "handlers/leave"
-
 import { LeaveRequest } from "common"
+import { post } from "handlers/leave"
 
 import { chance } from "_/helpers"
 import {

@@ -40,6 +40,14 @@ import { AuthenticateWithToken } from "./AuthenticateWithToken"
  * ------------------------------------------------------------------------- */
 
 /**
+ * Branch properties
+ */
+type BranchProps =
+  & WithRememberMe
+
+/* ------------------------------------------------------------------------- */
+
+/**
  * Render properties
  */
 export type RenderProps =
@@ -68,7 +76,7 @@ export const Render = AuthenticateWithCredentials
 export const Authenticate =
   compose<RenderProps, {}>(
     withRememberMe(),
-    branch<WithRememberMe>(
+    branch<BranchProps>(
       ({ remember: { active, result } }) => {
         return active && typeof result === "undefined"
       },

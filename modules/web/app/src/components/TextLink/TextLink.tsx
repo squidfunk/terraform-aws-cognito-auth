@@ -60,6 +60,12 @@ interface HandlerProps {
   handleClickCapture(): void           /* Link click capture handler */
 }
 
+/**
+ * Handler callback properties
+ */
+type HandlerCallbackProps =
+  & WithNotificationDispatch
+
 /* ------------------------------------------------------------------------- */
 
 /**
@@ -100,7 +106,7 @@ export const TextLink =
   compose<RenderProps, TextLinkProps>(
     withStyles(styles),
     withNotification(),
-    withHandlers<WithNotificationDispatch, HandlerProps>({
+    withHandlers<HandlerCallbackProps, HandlerProps>({
       handleClickCapture: ({ dismissNotification }) => dismissNotification
     }),
     mapProps(omit([

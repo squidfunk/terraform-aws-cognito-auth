@@ -73,10 +73,24 @@ export type AuthenticateWithCredentialsProps =
 /* ------------------------------------------------------------------------- */
 
 /**
+ * Lifecycle properties
+ */
+type LifecycleProps =
+  & AuthenticateWithCredentialsProps
+  & WithForm<AuthenticateRequest, Session<string>>
+
+/**
+ * Branch properties
+ */
+type BranchProps =
+  & WithForm<AuthenticateRequest, Session<string>>
+
+/* ------------------------------------------------------------------------- */
+
+/**
  * Render properties
  */
 export type RenderProps =
-  & AuthenticateWithCredentialsProps
   & WithStyles<Styles>
   & WithForm<AuthenticateRequest, Session<string>>
 
@@ -152,7 +166,7 @@ export const AuthenticateWithCredentials =
         remember: false
       }
     }),
-    lifecycle<RenderProps, {}>({
+    lifecycle<LifecycleProps, {}>({
       async componentWillMount() {
         const { remember, setRememberMeResult } = this.props
         const { request, setRequest } = this.props
@@ -163,7 +177,7 @@ export const AuthenticateWithCredentials =
         setRememberMeResult(false)
       }
     }),
-    branch<WithForm<AuthenticateRequest>>(
+    branch<BranchProps>(
       ({ form }) => form.success && Boolean(form.response),
       renderComponent(AuthenticateSuccess)
     ),

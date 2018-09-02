@@ -28,19 +28,29 @@ import {
   pure
 } from "recompose"
 
+import { LeaveRequest } from "common"
 import {
-  RenderProps as LeaveRenderProps
-} from "./Leave"
+  WithFormSubmit,
+  withNotification,
+  WithNotificationDispatch
+} from "enhancers"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * Render properties
+ * Sign out success properties
  */
-export type RenderProps =
-  & LeaveRenderProps
+export type LeaveSuccessProps =
+  & WithFormSubmit<LeaveRequest>
+
+/**
+ * Lifecycle properties
+ */
+type LifecycleProps =
+ & LeaveSuccessProps
+ & WithNotificationDispatch
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -49,11 +59,9 @@ export type RenderProps =
 /**
  * Render component
  *
- * @param props - Properties
- *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.SFC =
   () => <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------
@@ -64,8 +72,9 @@ export const Render: React.SFC<RenderProps> =
  * Sign out success component
  */
 export const LeaveSuccess =
-  compose<RenderProps, {}>(
-    lifecycle<RenderProps, {}>({
+  compose<{}, LeaveSuccessProps>(
+    withNotification(),
+    lifecycle<LifecycleProps, {}>({
       async componentWillMount() {
         const { form, dismissNotification } = this.props
         if (form.err)

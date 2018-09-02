@@ -21,9 +21,14 @@
  */
 
 /* ----------------------------------------------------------------------------
- * Data
+ * Functions
  * ------------------------------------------------------------------------- */
 
-export function mockLocationAssign() {
+/**
+ * Mock location.assign
+ *
+ * @return Jasmine spy
+ */
+export function mockLocationAssign(): jasmine.Spy {
   return spyOn(location, "assign")
 }

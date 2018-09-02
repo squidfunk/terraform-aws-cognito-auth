@@ -37,6 +37,8 @@ import { Loading } from "components"
 import {
   withFormSubmit,
   WithFormSubmit,
+  withNotification,
+  WithNotificationDispatch,
   WithRememberMe
 } from "enhancers"
 
@@ -55,11 +57,18 @@ export type AuthenticateWithTokenProps =
 /* ------------------------------------------------------------------------- */
 
 /**
- * Render properties
+ * Lifecycle properties
  */
-export type RenderProps =
+type LifecycleProps =
   & AuthenticateWithTokenProps
+  & WithNotificationDispatch
   & WithFormSubmit<AuthenticateRequest, Session<string>>
+
+/**
+ * Branch properties
+ */
+type BranchProps =
+  & WithFormSubmit<AuthenticateRequest>
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -68,11 +77,9 @@ export type RenderProps =
 /**
  * Render component
  *
- * @param props - Properties
- *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.SFC =
   () => <Loading />
 
 /* ----------------------------------------------------------------------------
@@ -83,11 +90,12 @@ export const Render: React.SFC<RenderProps> =
  * Authentication with refresh token
  */
 export const AuthenticateWithToken =
-  compose<RenderProps, AuthenticateWithTokenProps>(
+  compose<{}, AuthenticateWithTokenProps>(
+    withNotification(),
     withFormSubmit<AuthenticateRequest>({
       target: "/authenticate"
     }),
-    lifecycle<RenderProps, {}>({
+    lifecycle<LifecycleProps, {}>({
       async componentDidMount() {
         const { submit, dismissNotification } = this.props
         const { form, setRememberMeResult } = this.props
@@ -97,7 +105,7 @@ export const AuthenticateWithToken =
           setRememberMeResult(false)
       }
     }),
-    branch<WithFormSubmit<AuthenticateRequest>>(
+    branch<BranchProps>(
       ({ form }) => form.success && Boolean(form.response),
       renderComponent(AuthenticateSuccess)
     ),

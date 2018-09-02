@@ -44,6 +44,14 @@ export interface ExternalRedirectProps {
 /* ------------------------------------------------------------------------- */
 
 /**
+ * Lifecycle properties
+ */
+type LifecycleProps =
+  & ExternalRedirectProps
+
+/* ------------------------------------------------------------------------- */
+
+/**
  * Render properties
  */
 export type RenderProps =
@@ -72,7 +80,7 @@ export const Render: React.SFC<RenderProps> =
  */
 export const ExternalRedirect =
   compose<RenderProps, ExternalRedirectProps>(
-    lifecycle<RenderProps, {}>({
+    lifecycle<LifecycleProps, {}>({
       componentDidMount() {
         const { href } = this.props
         location.assign(href)

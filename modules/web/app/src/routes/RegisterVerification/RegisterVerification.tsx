@@ -43,9 +43,15 @@ import { RegisterVerificationSuccess } from "./RegisterVerificationSuccess"
  * ------------------------------------------------------------------------- */
 
 /**
- * Render properties
+ * Lifecycle properties
  */
-export type RenderProps =
+type LifecycleProps =
+  & WithFormSubmit<RegisterVerificationRequest>
+
+/**
+ * Branch properties
+ */
+type BranchProps =
   & WithFormSubmit<RegisterVerificationRequest>
 
 /* ----------------------------------------------------------------------------
@@ -55,7 +61,7 @@ export type RenderProps =
 /**
  * Render component
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.SFC =
   () => <Loading />
 
 /* ----------------------------------------------------------------------------
@@ -66,18 +72,18 @@ export const Render: React.SFC<RenderProps> =
  * Registration verification component
  */
 export const RegisterVerification =
-  compose<RenderProps, {}>(
+  compose(
     withFormSubmit<RegisterVerificationRequest>({
       message: "You have successfully verified your email address. " +
                "Use your email address and password to sign in to your account"
     }),
-    lifecycle<RenderProps, {}>({
+    lifecycle<LifecycleProps, {}>({
       componentDidMount() {
         const { submit } = this.props
         return submit()
       }
     }),
-    branch<WithFormSubmit<RegisterVerificationRequest>>(
+    branch<BranchProps>(
       ({ form }) => form.success || Boolean(form.err),
       renderComponent(RegisterVerificationSuccess)
     ),

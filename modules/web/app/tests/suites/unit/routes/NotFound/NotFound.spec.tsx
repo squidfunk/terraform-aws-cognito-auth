@@ -20,26 +20,38 @@
  * IN THE SOFTWARE.
  */
 
+import { shallow } from "enzyme"
 import * as React from "react"
-import { Redirect } from "react-router-dom"
+
+import {
+  NotFound,
+  Render
+} from "routes/NotFound/NotFound"
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Tests
  * ------------------------------------------------------------------------- */
 
-/**
- * Render component
- *
- * @return JSX element
- */
-export const Render: React.SFC =
-  () => <Redirect to="/" />
+/* Page not found component */
+describe("components/NotFound", () => {
 
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
+  /* Render component */
+  describe("Render", () => {
 
-/**
- * Password reset verification success component
- */
-export const ResetVerificationSuccess = Render
+    /* Test: should render with default props */
+    it("should render with default props", () => {
+      const wrapper = shallow(<Render />)
+      expect(wrapper).toMatchSnapshot()
+    })
+  })
+
+  /* Enhanced component */
+  describe("NotFound", () => {
+
+    /* Test: should render with default props */
+    it("should render with default props", () => {
+      const wrapper = shallow(<NotFound />)
+      expect(wrapper).toMatchSnapshot()
+    })
+  })
+})

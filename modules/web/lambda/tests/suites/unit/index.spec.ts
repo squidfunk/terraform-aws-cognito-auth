@@ -22,9 +22,7 @@
 
 import { handler } from "index"
 
-import {
-  mockCloudFrontResponseEvent
-} from "_/mocks/vendor/aws-lambda"
+import { mockCloudFrontResponseEvent } from "_/mocks/vendor/aws-lambda"
 
 /* ----------------------------------------------------------------------------
  * Tests

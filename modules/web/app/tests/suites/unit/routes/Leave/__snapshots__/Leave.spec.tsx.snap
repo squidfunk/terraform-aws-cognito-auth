@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/Leave Leave should render with default props 1`] = `<Leave />`;
+
+exports[`components/Leave Render should render with default props 1`] = `<pure(Loading) />`;

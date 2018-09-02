@@ -22,9 +22,7 @@
 
 import { handler } from "index"
 
-import {
-  mockCognitoUserPoolTriggerEvent
-} from "_/mocks/vendor/aws-lambda"
+import { mockCognitoUserPoolTriggerEvent } from "_/mocks/vendor/aws-lambda"
 import {
   mockCognitoListUsersWithError,
   mockCognitoListUsersWithoutResult,

@@ -20,7 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-import { AnyAction } from "redux"
 import configureStore from "redux-mock-store"
 
 import { State } from "providers/store"

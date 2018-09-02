@@ -74,6 +74,16 @@ interface HandlerProps {
   ): Promise<void>                     /* Form submit handler */
 }
 
+/**
+ * Handler callback properties
+ *
+ * @template TRequest - Form request type
+ * @template TResponse - Form response type
+ */
+type HandlerCallbackProps<TRequest extends {}, TResponse = void> =
+  & WithFormSubmit<TRequest, TResponse>
+  & StateProps<TRequest>
+
 /* ------------------------------------------------------------------------- */
 
 /**
@@ -107,7 +117,7 @@ export const withForm = <TRequest extends {}, TResponse = void>(
   compose<WithForm<TRequest, TResponse>, {}>(
     withFormSubmit<TRequest, TResponse>(options),
     withState("request", "setRequest", initial),
-    withHandlers<WithForm<TRequest, TResponse>, HandlerProps>({
+    withHandlers<HandlerCallbackProps<TRequest, TResponse>, HandlerProps>({
 
       /* Update form data */
       handleChange: ({ request, setRequest }) => ev => {
