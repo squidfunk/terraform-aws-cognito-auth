@@ -57,18 +57,18 @@ describe("providers/store/notification", () => {
         message: chance.string()
       }
 
-      /* Test: should create a notification */
-      it("should create a notification", () => {
-        const action = displayNotificationAction(data)
-        expect(notification(undefined, action))
-          .toEqual(jasmine.objectContaining({ data }))
-      })
-
       /* Test: should show notification */
       it("should show notification", () => {
         const action = displayNotificationAction(data)
         expect(notification({ show: false }, action))
           .toEqual(jasmine.objectContaining({ show: true }))
+      })
+
+      /* Test: should persist notification data */
+      it("should persist notification data", () => {
+        const action = displayNotificationAction(data)
+        expect(notification(undefined, action))
+          .toEqual(jasmine.objectContaining({ data }))
       })
     })
 

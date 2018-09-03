@@ -23,6 +23,8 @@
 import {
   dismissNotificationAction,
   displayNotificationAction,
+  NotificationActionTypes,
+  NotificationData,
   NotificationType
 } from "providers/store/notification"
 
@@ -48,20 +50,28 @@ describe("providers/store/notification", () => {
 
     /* Test: should create a notification to indicate success */
     it("should create a notification to indicate success", () => {
-      store.dispatch(displayNotificationAction({
+      const data: NotificationData = {
         type: NotificationType.SUCCESS,
         message: "__MESSAGE__"
-      }))
-      expect(store.getActions()).toMatchSnapshot()
+      }
+      store.dispatch(displayNotificationAction(data))
+      expect(store.getActions().pop()).toEqual({
+        type: NotificationActionTypes.DISPLAY,
+        data
+      })
     })
 
     /* Test: should create a notification to indicate an error */
     it("should create a notification to indicate an error", () => {
-      store.dispatch(displayNotificationAction({
+      const data: NotificationData = {
         type: NotificationType.ERROR,
         message: "__MESSAGE__"
-      }))
-      expect(store.getActions()).toMatchSnapshot()
+      }
+      store.dispatch(displayNotificationAction(data))
+      expect(store.getActions().pop()).toEqual({
+        type: NotificationActionTypes.DISPLAY,
+        data
+      })
     })
   })
 
@@ -71,7 +81,9 @@ describe("providers/store/notification", () => {
     /* Test: should dismiss all notifications */
     it("should dismiss all notifications", () => {
       store.dispatch(dismissNotificationAction())
-      expect(store.getActions()).toMatchSnapshot()
+      expect(store.getActions().pop()).toEqual({
+        type: NotificationActionTypes.DISMISS
+      })
     })
   })
 })

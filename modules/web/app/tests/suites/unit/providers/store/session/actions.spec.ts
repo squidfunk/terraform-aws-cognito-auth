@@ -22,6 +22,7 @@
 
 import {
   initSessionAction,
+  SessionActionTypes,
   terminateSessionAction
 } from "providers/store/session"
 
@@ -50,7 +51,10 @@ describe("providers/store/session", () => {
     /* Test: should initialize session */
     it("should initialize session", () => {
       store.dispatch(initSessionAction(session))
-      expect(store.getActions()).toMatchSnapshot()
+      expect(store.getActions().pop()).toEqual({
+        type: SessionActionTypes.INIT,
+        session
+      })
     })
   })
 
@@ -60,7 +64,9 @@ describe("providers/store/session", () => {
     /* Test: should terminate session */
     it("should terminate session", () => {
       store.dispatch(terminateSessionAction())
-      expect(store.getActions()).toMatchSnapshot()
+      expect(store.getActions().pop()).toEqual({
+        type: SessionActionTypes.TERMINATE
+      })
     })
   })
 })

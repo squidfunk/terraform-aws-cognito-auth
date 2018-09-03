@@ -21,6 +21,7 @@
  */
 
 import {
+  RememberMeActionTypes,
   setRememberMeAction,
   setRememberMeResultAction
 } from "providers/store/remember-me"
@@ -48,13 +49,19 @@ describe("providers/store/remember-me", () => {
     /* Test: should activate remember me */
     it("should activate remember me", () => {
       store.dispatch(setRememberMeAction(true))
-      expect(store.getActions()).toMatchSnapshot()
+      expect(store.getActions().pop()).toEqual({
+        type: RememberMeActionTypes.SET,
+        active: true
+      })
     })
 
     /* Test: should deactivate remember me */
     it("should deactivate remember me", () => {
       store.dispatch(setRememberMeAction(false))
-      expect(store.getActions()).toMatchSnapshot()
+      expect(store.getActions().pop()).toEqual({
+        type: RememberMeActionTypes.SET,
+        active: false
+      })
     })
   })
 
@@ -64,13 +71,19 @@ describe("providers/store/remember-me", () => {
     /* Test: should indicate a successful authentication attempt */
     it("should indicate a successful authentication attempt", () => {
       store.dispatch(setRememberMeResultAction(true))
-      expect(store.getActions()).toMatchSnapshot()
+      expect(store.getActions().pop()).toEqual({
+        type: RememberMeActionTypes.SET_RESULT,
+        result: true
+      })
     })
 
     /* Test: should indicate a failed authentication attempt */
     it("should indicate a failed authentication attempt", () => {
       store.dispatch(setRememberMeResultAction(false))
-      expect(store.getActions()).toMatchSnapshot()
+      expect(store.getActions().pop()).toEqual({
+        type: RememberMeActionTypes.SET_RESULT,
+        result: false
+      })
     })
   })
 })

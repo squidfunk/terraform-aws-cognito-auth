@@ -52,8 +52,8 @@ describe("providers/store/session", () => {
       /* Session data */
       const { id, access } = mockSession()
 
-      /* Test: should initialize session */
-      it("should initialize session", () => {
+      /* Test: should persist session data */
+      it("should persist session data", () => {
         const action = initSessionAction({ id, access })
         expect(session(undefined, action))
           .toEqual(jasmine.objectContaining({ id, access }))
@@ -73,8 +73,8 @@ describe("providers/store/session", () => {
       /* Session data */
       const { id, access } = mockSession()
 
-      /* Test: should reset session */
-      it("should reset session", () => {
+      /* Test: should reset session data */
+      it("should reset session data", () => {
         const action = terminateSessionAction()
         expect(session({ id, access }, action))
           .toEqual(null)
