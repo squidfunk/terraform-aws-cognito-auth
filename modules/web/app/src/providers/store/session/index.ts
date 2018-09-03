@@ -26,6 +26,7 @@
 
 export {
   SessionActions,
+  SessionActionTypes,
   initSessionAction,
   terminateSessionAction
 } from "./actions"

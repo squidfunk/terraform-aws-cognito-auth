@@ -66,7 +66,7 @@ export type RememberMeActions =
  * ------------------------------------------------------------------------- */
 
 /**
- * Set remember me flag
+ * Set remember me flag action creator
  *
  * @param active - Whether to remember the user
  *
@@ -78,7 +78,7 @@ export const setRememberMeAction =
   })
 
 /**
- * Set authentication result
+ * Set authentication result action creator
  *
  * @param result - Authentication result
  *

@@ -23,13 +23,14 @@
 import {
   dismissNotificationAction,
   displayNotificationAction,
-  notification,
-  NotificationData,
-  NotificationType,
+  notification
 } from "providers/store/notification"
 
-import { chance } from "_/helpers"
-import { mockAction } from "_/mocks/providers"
+import {
+  mockAction,
+  mockNotificationDataWithError,
+  mockNotificationDataWithSuccess
+} from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -52,10 +53,7 @@ describe("providers/store/notification", () => {
     describe("with NOTIFICATION_DISPLAY", () => {
 
       /* Notification data */
-      const data: NotificationData = {
-        type: NotificationType.SUCCESS,
-        message: chance.string()
-      }
+      const data = mockNotificationDataWithSuccess()
 
       /* Test: should show notification */
       it("should show notification", () => {
@@ -76,10 +74,7 @@ describe("providers/store/notification", () => {
     describe("with NOTIFICATION_DISMISS", () => {
 
       /* Notification data */
-      const data: NotificationData = {
-        type: NotificationType.ERROR,
-        message: chance.string()
-      }
+      const data = mockNotificationDataWithError()
 
       /* Test: should hide notification */
       it("should hide notification", () => {

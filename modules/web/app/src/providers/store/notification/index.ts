@@ -26,6 +26,7 @@
 
 export {
   NotificationActions,
+  NotificationActionTypes,
   dismissNotificationAction,
   displayNotificationAction
 } from "./actions"

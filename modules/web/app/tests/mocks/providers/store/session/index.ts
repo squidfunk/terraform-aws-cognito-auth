@@ -20,11 +20,30 @@
  * IN THE SOFTWARE.
  */
 
+import * as _ from "providers/store/session"
+
+import { mockAction } from "_/mocks/providers"
+
 /* ----------------------------------------------------------------------------
- * Re-exports
+ * Functions
  * ------------------------------------------------------------------------- */
 
-export * from "./store/notification"
-export * from "./store/remember-me"
-export * from "./store/session"
-export * from "./store"
+/**
+ * Mock initialize session action creator
+ *
+ * @return Jasmine spy
+ */
+export function mockInitSessionAction(): jasmine.Spy {
+  return spyOn(_, "initSessionAction")
+    .and.returnValue(mockAction())
+}
+
+/**
+ * Mock terminate session action creator
+ *
+ * @return Jasmine spy
+ */
+export function mockTerminateSessionAction(): jasmine.Spy {
+  return spyOn(_, "terminateSessionAction")
+    .and.returnValue(mockAction())
+}

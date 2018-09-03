@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
  *
@@ -20,11 +21,52 @@
  * IN THE SOFTWARE.
  */
 
+import { WithFormSubmit } from "enhancers"
+
+import { mockAxiosError } from "_/mocks/vendor/axios"
+
 /* ----------------------------------------------------------------------------
- * Re-exports
+ * Data
  * ------------------------------------------------------------------------- */
 
-export * from "./store/notification"
-export * from "./store/remember-me"
-export * from "./store/session"
-export * from "./store"
+/**
+ * Mock form submission properties returning with success
+ *
+ * @param refresh - Whether to return a refresh token
+ *
+ * @return Session
+ */
+export function mockFormSubmitPropsWithSuccess<TResponse extends void>(
+  response?: TResponse
+): WithFormSubmit<{}, TResponse> {
+  return {
+    form: {
+      pending: false,
+      success: true,
+      response
+    },
+    setForm: jest.fn(),
+    submit: jest.fn()
+  }
+}
+
+/**
+ * Mock form submission properties throwing an error
+ *
+ * @param refresh - Whether to return a refresh token
+ *
+ * @return Session
+ */
+export function mockFormSubmitPropsWithError<TResponse extends void>(
+  err: Error = new Error("submit")
+): WithFormSubmit<{}, TResponse> {
+  return {
+    form: {
+      pending: false,
+      success: false,
+      err: mockAxiosError(err)
+    },
+    setForm: jest.fn(),
+    submit: jest.fn()
+  }
+}

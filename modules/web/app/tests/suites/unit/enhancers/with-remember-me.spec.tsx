@@ -30,7 +30,11 @@ import {
 } from "enhancers"
 
 import { placeholder } from "_/helpers"
-import { mockStore } from "_/mocks/providers"
+import {
+  mockSetRememberMeAction,
+  mockSetRememberMeResultAction,
+  mockStore
+} from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -84,9 +88,17 @@ describe("enhancers/with-remember-me", () => {
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        mockSetRememberMeAction()
         setRememberMe(true)
         expect(store.getActions().length).toEqual(1)
-        expect(store.getActions()).toMatchSnapshot()
+      })
+
+      /* Test: should invoke action creator */
+      it("should invoke action creator", () => {
+        const setRememberMeActionMock = mockSetRememberMeAction()
+        setRememberMe(true)
+        expect(setRememberMeActionMock)
+          .toHaveBeenCalledWith(true)
       })
     })
 
@@ -103,9 +115,17 @@ describe("enhancers/with-remember-me", () => {
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        mockSetRememberMeResultAction()
         setRememberMeResult(true)
         expect(store.getActions().length).toEqual(1)
-        expect(store.getActions()).toMatchSnapshot()
+      })
+
+      /* Test: should invoke action creator */
+      it("should invoke action creator", () => {
+        const setRememberMeResultActionMock = mockSetRememberMeResultAction()
+        setRememberMeResult(true)
+        expect(setRememberMeResultActionMock)
+          .toHaveBeenCalledWith(true)
       })
     })
   })

@@ -28,10 +28,15 @@ import {
   withNotification,
   WithNotification
 } from "enhancers"
-import { NotificationType } from "providers/store/notification"
 
 import { placeholder } from "_/helpers"
-import { mockStore } from "_/mocks/providers"
+import {
+  mockDismissNotificationAction,
+  mockDisplayNotificationAction,
+  mockNotificationDataWithError,
+  mockNotificationDataWithSuccess,
+  mockStore
+} from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -85,12 +90,18 @@ describe("enhancers/with-notification", () => {
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
-        displayNotification({
-          type: NotificationType.SUCCESS,
-          message: "__MESSAGE__"
-        })
+        mockDisplayNotificationAction()
+        displayNotification(mockNotificationDataWithSuccess())
         expect(store.getActions().length).toEqual(1)
-        expect(store.getActions()).toMatchSnapshot()
+      })
+
+      /* Test: should invoke action creator */
+      it("should invoke action creator", () => {
+        const displayNotificationActionMock = mockDisplayNotificationAction()
+        const data = mockNotificationDataWithError()
+        displayNotification(data)
+        expect(displayNotificationActionMock)
+          .toHaveBeenCalledWith(data)
       })
     })
 
@@ -107,9 +118,17 @@ describe("enhancers/with-notification", () => {
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        mockDismissNotificationAction()
         dismissNotification()
         expect(store.getActions().length).toEqual(1)
-        expect(store.getActions()).toMatchSnapshot()
+      })
+
+      /* Test: should invoke action creator */
+      it("should invoke action creator", () => {
+        const dismissNotificationActionMock = mockDismissNotificationAction()
+        dismissNotification()
+        expect(dismissNotificationActionMock)
+          .toHaveBeenCalledWith()
       })
     })
   })

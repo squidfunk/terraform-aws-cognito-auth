@@ -20,11 +20,59 @@
  * IN THE SOFTWARE.
  */
 
+import * as _ from "providers/store/notification"
+
+import { chance } from "_/helpers"
+import { mockAction } from "_/mocks/providers"
+
 /* ----------------------------------------------------------------------------
- * Re-exports
+ * Data
  * ------------------------------------------------------------------------- */
 
-export * from "./store/notification"
-export * from "./store/remember-me"
-export * from "./store/session"
-export * from "./store"
+/**
+ * Mock notification data with success
+ *
+ * @return Notification data
+ */
+export function mockNotificationDataWithSuccess(): _.NotificationData {
+  return {
+    type: _.NotificationType.SUCCESS,
+    message: chance.string()
+  }
+}
+
+/**
+ * Mock notification data with error
+ *
+ * @return Notification data
+ */
+export function mockNotificationDataWithError(): _.NotificationData {
+  return {
+    type: _.NotificationType.ERROR,
+    message: chance.string()
+  }
+}
+
+/* ----------------------------------------------------------------------------
+ * Functions
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Mock display notification action creator
+ *
+ * @return Jasmine spy
+ */
+export function mockDisplayNotificationAction(): jasmine.Spy {
+  return spyOn(_, "displayNotificationAction")
+    .and.returnValue(mockAction())
+}
+
+/**
+ * Mock dismiss notification action creator
+ *
+ * @return Jasmine spy
+ */
+export function mockDismissNotificationAction(): jasmine.Spy {
+  return spyOn(_, "dismissNotificationAction")
+    .and.returnValue(mockAction())
+}

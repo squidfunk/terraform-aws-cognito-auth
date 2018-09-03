@@ -20,7 +20,32 @@
  * IN THE SOFTWARE.
  */
 
-import axios from "axios"
+import {
+  AxiosError,
+  default as axios
+} from "axios"
+
+/* ----------------------------------------------------------------------------
+ * Data
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Mock an Axios error
+ *
+ * @param err - Error
+ * @param message - Error message
+ *
+ * @return Axios error
+ */
+export function mockAxiosError(
+  err?: Error,
+  message?: string
+): AxiosError {
+  const instance: any = err || new Error("AxiosError")
+  if (message)
+    instance.response = { data: { message } }
+  return err as AxiosError
+}
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -67,7 +92,5 @@ export function mockAxiosPostWithError(
   err: Error = new Error("post"),
   message?: string
 ): jasmine.Spy {
-  if (message)
-    (err as any).response = { data: { message } }
-  return mockAxiosPost(() => Promise.reject(err))
+  return mockAxiosPost(() => Promise.reject(mockAxiosError(err, message)))
 }

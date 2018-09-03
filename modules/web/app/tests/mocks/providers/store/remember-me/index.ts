@@ -20,11 +20,30 @@
  * IN THE SOFTWARE.
  */
 
+import * as _ from "providers/store/remember-me"
+
+import { mockAction } from "_/mocks/providers"
+
 /* ----------------------------------------------------------------------------
- * Re-exports
+ * Functions
  * ------------------------------------------------------------------------- */
 
-export * from "./store/notification"
-export * from "./store/remember-me"
-export * from "./store/session"
-export * from "./store"
+/**
+ * Mock set remember me flag action creator
+ *
+ * @return Jasmine spy
+ */
+export function mockSetRememberMeAction(): jasmine.Spy {
+  return spyOn(_, "setRememberMeAction")
+    .and.returnValue(mockAction())
+}
+
+/**
+ * Mock set authentication result action creator
+ *
+ * @return Jasmine spy
+ */
+export function mockSetRememberMeResultAction(): jasmine.Spy {
+  return spyOn(_, "setRememberMeResultAction")
+    .and.returnValue(mockAction())
+}

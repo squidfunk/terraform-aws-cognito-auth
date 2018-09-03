@@ -67,7 +67,7 @@ export type SessionActions =
  * ------------------------------------------------------------------------- */
 
 /**
- * Initialize session
+ * Initialize session action creator
  *
  * @param session - Session
  *
@@ -79,7 +79,7 @@ export const initSessionAction =
   })
 
 /**
- * Terminate session
+ * Terminate session action creator
  *
  * @return Action
  */

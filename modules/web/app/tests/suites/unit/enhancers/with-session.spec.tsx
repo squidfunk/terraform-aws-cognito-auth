@@ -31,7 +31,11 @@ import {
 
 import { placeholder } from "_/helpers"
 import { mockSession } from "_/mocks/common"
-import { mockStore } from "_/mocks/providers"
+import {
+  mockInitSessionAction,
+  mockStore,
+  mockTerminateSessionAction
+} from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -85,9 +89,18 @@ describe("enhancers/with-session", () => {
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        mockInitSessionAction()
         initSession(mockSession())
         expect(store.getActions().length).toEqual(1)
-        expect(store.getActions()).toMatchSnapshot()
+      })
+
+      /* Test: should invoke action creator */
+      it("should invoke action creator", () => {
+        const initSessionActionMock = mockInitSessionAction()
+        const session = mockSession()
+        initSession(session)
+        expect(initSessionActionMock)
+          .toHaveBeenCalledWith(session)
       })
     })
 
@@ -104,9 +117,17 @@ describe("enhancers/with-session", () => {
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        mockTerminateSessionAction()
         terminateSession()
         expect(store.getActions().length).toEqual(1)
-        expect(store.getActions()).toMatchSnapshot()
+      })
+
+      /* Test: should invoke action creator */
+      it("should invoke action creator", () => {
+        const terminateSessionActionMock = mockTerminateSessionAction()
+        terminateSession()
+        expect(terminateSessionActionMock)
+          .toHaveBeenCalledWith()
       })
     })
   })
