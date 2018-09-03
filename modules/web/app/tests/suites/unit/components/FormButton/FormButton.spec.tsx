@@ -24,12 +24,12 @@ import { shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  FormButton,
+  enhance,
   Render,
   RenderProps
 } from "components/FormButton/FormButton"
 
-import { search } from "_/helpers"
+import { chance, search } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -39,47 +39,70 @@ import { search } from "_/helpers"
 describe("components/FormButton", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Default props */
-    const props: RenderProps = {
-      classes: {
-        root: "__ROOT__"
-      }
-    }
+    /* Shallow-render component */
+    const wrapper = shallow(
+      <Render classes={{ root: chance.string() }}>
+        __CHILDREN__
+      </Render>
+    )
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(
-        <Render {...props}>
-          __CHILDREN__
-        </Render>
-      )
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render button */
+    it("should render button", () => {
+      const button = search(wrapper, "Button")
+      expect(button.exists()).toBe(true)
     })
 
-    /* Test: should render with additional button props */
-    it("should render with additional button props", () => {
-      const wrapper = shallow(
-        <Render {...props} disableRipple={true}>
-          __CHILDREN__
-        </Render>
-      )
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render button with default type */
+    it("should render button with default type", () => {
+      const button = search(wrapper, "Button")
+      expect(button.prop<RenderProps>("type")).toEqual("submit")
+    })
+
+    /* Test: should render button with default variant */
+    it("should render button with default variant", () => {
+      const button = search(wrapper, "Button")
+      expect(button.prop<RenderProps>("variant")).toEqual("contained")
+    })
+
+    /* Test: should render button with default color */
+    it("should render button with default color", () => {
+      const button = search(wrapper, "Button")
+      expect(button.prop<RenderProps>("color")).toEqual("primary")
+    })
+
+    /* Test: should render button with full width */
+    it("should render button with full width", () => {
+      const button = search(wrapper, "Button")
+      expect(button.prop<RenderProps>("fullWidth")).toBe(true)
+    })
+
+    /* Test: should render children */
+    it("should render children", () => {
+      const paper = search(wrapper, "Button")
+      expect(paper.children().length).toEqual(1)
     })
   })
 
-  /* Enhanced component */
-  describe("FormButton", () => {
+  /* Form button */
+  describe("<FormButton />", () => {
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(
-        <FormButton>
-          __CHILDREN__
-        </FormButton>
-      )
-      expect(search(wrapper, Render)).toMatchSnapshot()
+    /* Enhance component */
+    const FormButton = enhance()(Render)
+
+    /* Test: should render with styles */
+    it("should render with styles", () => {
+      const wrapper = shallow(<FormButton />)
+      const component = search(wrapper, Render)
+      expect(component.prop<RenderProps>("classes")).toBeDefined()
+    })
+
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      const wrapper = shallow(<FormButton />)
+      const component = search(wrapper, Render)
+      expect(component.name()).toEqual("FormButton")
     })
   })
 })

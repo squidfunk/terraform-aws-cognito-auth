@@ -20,26 +20,29 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import { Redirect } from "react-router-dom"
+import { withProps } from "recompose"
+
+import * as _ from "enhancers"
+import { RememberMeState } from "providers/store/remember-me"
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Render component
+ * Mock remember me component enhancer
  *
- * @return JSX element
+ * @param remember - Remember me state
+ *
+ * @return Component enhancer
  */
-export const Render: React.SFC =
-  () => <Redirect to="/" />
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Password reset verification success
- */
-export const ResetVerificationSuccess = Render
+export function mockWithRememberMe(
+  remember: RememberMeState = { active: false }
+) {
+  return spyOn(_, "withRememberMe")
+    .and.callFake(() => withProps<_.WithRememberMe, {}>({
+      remember,
+      setRememberMe: jest.fn(),
+      setRememberMeResult: jest.fn()
+    }))
+}

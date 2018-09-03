@@ -110,7 +110,7 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication success component
+ * Authentication success
  */
 export const AuthenticateSuccess =
   compose<RenderProps, AuthenticateSuccessProps>(

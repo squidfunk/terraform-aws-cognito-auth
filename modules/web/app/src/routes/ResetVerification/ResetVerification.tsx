@@ -109,7 +109,7 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset verification component
+ * Password reset verification
  */
 export const ResetVerification =
   compose<RenderProps, {}>(

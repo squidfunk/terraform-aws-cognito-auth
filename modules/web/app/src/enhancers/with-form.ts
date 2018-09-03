@@ -43,7 +43,7 @@ import {
  * @template TRequest - Form request type
  */
 export interface WithFormOptions<
-  TRequest extends {}
+  TRequest extends {} = any
 > extends WithFormSubmitOptions {
   initial: Readonly<TRequest>          /* Initial form request */
 }
@@ -107,7 +107,7 @@ export type WithForm<TRequest extends {} = any, TResponse = void> =
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  *
- * @param options - Form submission options
+ * @param options - Form options
  *
  * @return Component enhancer
  */

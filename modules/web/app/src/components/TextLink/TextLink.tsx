@@ -100,7 +100,7 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Text link component
+ * Text link
  */
 export const TextLink =
   compose<RenderProps, TextLinkProps>(

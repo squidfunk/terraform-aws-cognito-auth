@@ -71,6 +71,7 @@ test: node_modules
 	$(shell npm bin)/jest \
 		--config tests/jest.json \
 		--collectCoverage \
+		--verbose \
 		--runInBand
 
 # Execute unit tests in watch mode
@@ -78,7 +79,8 @@ watch: node_modules
 	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
 	$(shell npm bin)/jest \
 		--config tests/jest.json \
-		--watch --no-verbose
+		--no-verbose \
+		--watch
 
 # -----------------------------------------------------------------------------
 

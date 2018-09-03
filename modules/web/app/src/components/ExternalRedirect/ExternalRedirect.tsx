@@ -76,10 +76,12 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * External redirect component
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const ExternalRedirect =
-  compose<RenderProps, ExternalRedirectProps>(
+export function enhance() {
+  return compose<RenderProps, ExternalRedirectProps>(
     lifecycle<LifecycleProps, {}>({
       componentDidMount() {
         const { href } = this.props
@@ -88,4 +90,10 @@ export const ExternalRedirect =
     }),
     pure,
     setDisplayName("ExternalRedirect")
-  )(Render)
+  )
+}
+
+/**
+ * External redirect
+ */
+export const ExternalRedirect = enhance()(Render)

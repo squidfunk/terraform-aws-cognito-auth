@@ -77,11 +77,19 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form component
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const Form =
-  compose<RenderProps, FormProps>(
+export function enhance() {
+  return compose<RenderProps, FormProps>(
     withStyles(styles),
     pure,
     setDisplayName("Form")
-  )(Render)
+  )
+}
+
+/**
+ * Form
+ */
+export const Form = enhance()(Render)

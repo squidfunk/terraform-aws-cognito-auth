@@ -20,26 +20,29 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import { Redirect } from "react-router-dom"
+import { withProps } from "recompose"
+
+import * as _ from "enhancers"
+import { NotificationState } from "providers/store/notification"
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Render component
+ * Mock notification component enhancer
  *
- * @return JSX element
+ * @param notification - Notification state
+ *
+ * @return Component enhancer
  */
-export const Render: React.SFC =
-  () => <Redirect to="/" />
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Password reset verification success
- */
-export const ResetVerificationSuccess = Render
+export function mockWithNotification(
+  notification: NotificationState = { show: false }
+) {
+  return spyOn(_, "withNotification")
+    .and.callFake(() => withProps<_.WithNotification, {}>({
+      notification,
+      displayNotification: jest.fn(),
+      dismissNotification: jest.fn()
+    }))
+}

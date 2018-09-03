@@ -58,18 +58,18 @@ export function placeholder<T>(): StatelessComponent<T> {
  * @template TProps - Component properties type
  *
  * @param wrapper - Component wrapper
- * @param Component - Component
+ * @param selector - Selector
  *
  * @return Stateless component
  */
 export function search<TProps extends {}>(
   wrapper: ShallowWrapper<TProps>,
-  Component: React.SFC<TProps>
+  selector: React.SFC<TProps> | string
 ): ShallowWrapper<TProps> {
   const component = wrapper.find<TProps>(
-    Component as StatelessComponent<TProps>
+    selector as StatelessComponent<TProps>
   )
   return !component.exists()
-    ? search(wrapper.dive(), Component)
+    ? search(wrapper.dive(), selector)
     : component
 }

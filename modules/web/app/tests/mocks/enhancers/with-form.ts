@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
  *
@@ -20,26 +21,41 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import { Redirect } from "react-router-dom"
+import { withProps } from "recompose"
+
+import * as _ from "enhancers"
+
+import { mockWithFormSubmit } from "_/mocks/enhancers"
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Render component
+ * Mock form component enhancer
  *
- * @return JSX element
+ * @template TRequest - Form request type
+ * @template TResponse - Form response type
+ *
+ * @param options - Form options
+ * @param form - Form submission properties
+ *
+ * @return Component enhancer properties
  */
-export const Render: React.SFC =
-  () => <Redirect to="/" />
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Password reset verification success
- */
-export const ResetVerificationSuccess = Render
+export function mockWithForm<
+  TRequest extends {} = any, TResponse = void
+>(
+  request: TRequest,
+  form: _.WithFormSubmit<TRequest, TResponse> = mockWithFormSubmit()
+) {
+  const props: _.WithForm<TRequest, TResponse> = {
+    ...form,
+    request,
+    setRequest: jest.fn(),
+    handleChange: jest.fn(),
+    handleSubmit: jest.fn()
+  }
+  spyOn(_, "withFormSubmit")
+    .and.callFake(() => withProps(props))
+  return props
+}

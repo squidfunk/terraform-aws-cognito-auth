@@ -45,7 +45,7 @@ export const Render: React.SFC =
  * ------------------------------------------------------------------------- */
 
 /**
- * Page not found component
+ * Page not found
  */
 export const NotFound =
   compose(

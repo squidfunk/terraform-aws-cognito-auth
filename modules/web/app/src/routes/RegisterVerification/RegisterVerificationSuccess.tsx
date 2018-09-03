@@ -40,6 +40,6 @@ export const Render: React.SFC =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification success component
+ * Registration verification success
  */
 export const RegisterVerificationSuccess = Render

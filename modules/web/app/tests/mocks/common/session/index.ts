@@ -22,6 +22,8 @@
 
 import { Session } from "common/session"
 
+import { chance } from "_/helpers"
+
 /* ----------------------------------------------------------------------------
  * Data
  * ------------------------------------------------------------------------- */
@@ -36,18 +38,18 @@ import { Session } from "common/session"
 export function mockSession(refresh: boolean = false): Session<string> {
   return {
     id: {
-      token: "__TOKEN__",
-      expires: "__EXPIRES__"
+      token: chance.string({ length: 128 }),
+      expires: chance.date().toISOString()
     },
     access: {
-      token: "__TOKEN__",
-      expires: "__EXPIRES__"
+      token: chance.string({ length: 128 }),
+      expires: chance.date().toISOString()
     },
     ...(refresh
       ? {
         refresh: {
-          token: "__TOKEN__",
-          expires: "__EXPIRES__"
+          token: chance.string({ length: 128 }),
+          expires: chance.date().toISOString()
         }
       }
       : {})

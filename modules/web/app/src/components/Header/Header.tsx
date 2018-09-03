@@ -82,7 +82,7 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Header component
+ * Header
  */
 export const Header =
   compose<RenderProps, HeaderProps>(

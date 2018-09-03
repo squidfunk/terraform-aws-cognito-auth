@@ -82,7 +82,7 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Notification component
+ * Notification
  */
 export const Notification =
   compose<RenderProps, {}>(

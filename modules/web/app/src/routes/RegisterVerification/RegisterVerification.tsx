@@ -69,7 +69,7 @@ export const Render: React.SFC =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification component
+ * Registration verification
  */
 export const RegisterVerification =
   compose(

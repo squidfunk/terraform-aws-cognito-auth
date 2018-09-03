@@ -76,11 +76,19 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form button component
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const FormButton =
-  compose<RenderProps, FormButtonProps>(
+export function enhance() {
+  return compose<RenderProps, FormButtonProps>(
     withStyles(styles),
     pure,
     setDisplayName("FormButton")
-  )(Render)
+  )
+}
+
+/**
+ * Form button
+ */
+export const FormButton = enhance()(Render)

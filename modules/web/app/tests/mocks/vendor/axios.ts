@@ -32,18 +32,16 @@ import {
 /**
  * Mock an Axios error
  *
- * @param err - Error
  * @param message - Error message
  *
  * @return Axios error
  */
 export function mockAxiosError(
-  err?: Error,
   message?: string
 ): AxiosError {
-  const instance: any = err || new Error("AxiosError")
+  const err: any = new Error("AxiosError")
   if (message)
-    instance.response = { data: { message } }
+    err.response = { data: { message } }
   return err as AxiosError
 }
 
@@ -89,8 +87,7 @@ export function mockAxiosPostWithResult<T = void>(
  * @return Jasmine spy
  */
 export function mockAxiosPostWithError(
-  err: Error = new Error("post"),
-  message?: string
+  err: AxiosError = mockAxiosError()
 ): jasmine.Spy {
-  return mockAxiosPost(() => Promise.reject(mockAxiosError(err, message)))
+  return mockAxiosPost(() => Promise.reject(err))
 }

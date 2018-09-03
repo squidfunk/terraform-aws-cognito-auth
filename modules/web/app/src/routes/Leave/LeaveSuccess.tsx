@@ -69,13 +69,13 @@ export const Render: React.SFC =
  * ------------------------------------------------------------------------- */
 
 /**
- * Sign out success component
+ * Sign out success
  */
 export const LeaveSuccess =
   compose<{}, LeaveSuccessProps>(
     withNotification(),
     lifecycle<LifecycleProps, {}>({
-      async componentWillMount() {
+      componentWillMount() {
         const { form, dismissNotification } = this.props
         if (form.err)
           dismissNotification()

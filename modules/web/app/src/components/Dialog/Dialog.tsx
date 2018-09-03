@@ -66,11 +66,19 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Dialog
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const Dialog =
-  compose<RenderProps, {}>(
+export function enhance() {
+  return compose<RenderProps, {}>(
     withStyles(styles),
     pure,
     setDisplayName("Dialog")
-  )(Render)
+  )
+}
+
+/**
+ * Dialog
+ */
+export const Dialog = enhance()(Render)

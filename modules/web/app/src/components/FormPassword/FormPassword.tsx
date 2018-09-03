@@ -142,7 +142,7 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form password component
+ * Form password
  */
 export const FormPassword =
   compose<RenderProps, FormPasswordProps>(

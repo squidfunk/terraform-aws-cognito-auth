@@ -1,14 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/FormRememberMe FormRememberMe { handleChange } should toggle remember me 1`] = `
-Array [
-  Object {
-    "active": true,
-    "type": "REMEMBER_ME_SET",
-  },
-]
-`;
-
 exports[`components/FormRememberMe FormRememberMe should render with default props 1`] = `
 <FormRememberMe
   handleChange={[Function]}

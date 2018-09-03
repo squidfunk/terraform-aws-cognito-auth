@@ -21,7 +21,6 @@
  */
 
 import { pick } from "ramda"
-import { DeepPartial } from "redux"
 
 import {
   dehydrate,
@@ -62,8 +61,8 @@ describe("providers/store", () => {
         }))
     })
 
-    /* Test: should persist session state */
-    it("should persist session state", () => {
+    /* Test: should persist valid session state */
+    it("should persist valid session state", () => {
       dehydrate(state)
       expect(JSON.parse(localStorage.getItem("state") || "{}"))
         .toEqual(jasmine.objectContaining({
@@ -94,7 +93,7 @@ describe("providers/store", () => {
   describe("rehydrate", () => {
 
     /* Redux store state */
-    const state: DeepPartial<State> = {
+    const state: Partial<State> = {
       remember: { active: false },
       session: null
     }

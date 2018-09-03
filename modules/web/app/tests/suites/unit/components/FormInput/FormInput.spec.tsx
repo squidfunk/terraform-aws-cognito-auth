@@ -24,10 +24,12 @@ import { shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  FormInput,
+  enhance,
   Render,
   RenderProps
 } from "components/FormInput/FormInput"
+
+import { chance, search } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -37,35 +39,67 @@ import {
 describe("components/FormInput", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Default props */
-    const props: RenderProps = {
-      classes: {
-        root: "__ROOT__"
-      }
-    }
+    /* Shallow-render component */
+    const wrapper = shallow(<Render classes={{ root: chance.string() }} />)
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(<Render {...props} />)
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render input */
+    it("should render input", () => {
+      const input = search(wrapper, "TextField")
+      expect(input.exists()).toBe(true)
     })
 
-    /* Test: should render with additional input props */
-    it("should render with additional input props", () => {
-      const wrapper = shallow(<Render {...props} type="password" />)
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render input with default type */
+    it("should render input with default type", () => {
+      const input = search(wrapper, "TextField")
+      expect(input.prop<RenderProps>("type")).toEqual("text")
+    })
+
+    /* Test: should render input with default margin */
+    it("should render input with default margin", () => {
+      const input = search(wrapper, "TextField")
+      expect(input.prop<RenderProps>("margin")).toEqual("dense")
+    })
+
+    /* Test: should render input without asterisk */
+    it("should render input without asterisk", () => {
+      const input = search(wrapper, "TextField")
+      expect(input.prop<RenderProps>("InputLabelProps")).toEqual({
+        required: false
+      })
+    })
+
+    /* Test: should render input with full width */
+    it("should render input with full width", () => {
+      const input = search(wrapper, "TextField")
+      expect(input.prop<RenderProps>("fullWidth")).toBe(true)
+    })
+
+    /* Test: should render input with disabled auto-capitalize */
+    it("should render input with disabled auto-capitalize", () => {
+      const input = search(wrapper, "TextField")
+      expect(input.prop<RenderProps>("autoCapitalize")).toEqual("false")
+    })
+
+    /* Test: should render input with disabled auto-correct */
+    it("should render input with disabled auto-correct", () => {
+      const input = search(wrapper, "TextField")
+      expect(input.prop<RenderProps>("autoCorrect")).toEqual("false")
     })
   })
 
-  /* Enhanced component */
-  describe("FormInput", () => {
+  /* FormInput */
+  describe("<FormInput />", () => {
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
+    /* Enhance component */
+    const FormInput = enhance()(Render)
+
+    /* Test: should render with display name */
+    it("should render with display name", () => {
       const wrapper = shallow(<FormInput />)
-      expect(wrapper).toMatchSnapshot()
+      const component = search(wrapper, Render)
+      expect(component.name()).toEqual("FormInput")
     })
   })
 })

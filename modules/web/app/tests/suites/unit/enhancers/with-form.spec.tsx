@@ -25,12 +25,12 @@ import * as React from "react"
 
 import {
   withForm,
-  WithForm
+  WithForm,
+  WithFormOptions
 } from "enhancers"
 
 import { chance, placeholder } from "_/helpers"
-import { mockStore } from "_/mocks/providers"
-import { mockAxiosPostWithResult } from "_/mocks/vendor/axios"
+import { mockWithFormSubmit } from "_/mocks/enhancers"
 import {
   mockChangeEventForCheckboxInput,
   mockChangeEventForTextInput,
@@ -38,19 +38,33 @@ import {
 } from "_/mocks/vendor/browser/events"
 
 /* ----------------------------------------------------------------------------
+ * Helpers
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Wrap placeholder component with form enhancer
+ *
+ * @param options - Form options
+ *
+ * @return Stateless component
+ */
+function wrapWithForm(options: WithFormOptions) {
+  const Placeholder = placeholder<WithForm>()
+  const Component = withForm(options)(Placeholder)
+  const wrapper = mount(<Component />)
+  return {
+    Placeholder,
+    Component,
+    wrapper
+  }
+}
+
+/* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
 /* Form enhancer */
 describe("enhancers/with-form", () => {
-
-  /* Initialize store */
-  const store = mockStore()
-
-  /* Clear store */
-  beforeEach(() => {
-    store.clearActions()
-  })
 
   /* withForm */
   describe("withForm", () => {
@@ -61,20 +75,15 @@ describe("enhancers/with-form", () => {
     /* { request } */
     describe("{ request }", () => {
 
-      /* Apply enhancer to placeholder component */
-      const Placeholder = placeholder<WithForm>()
-      const Component = withForm({ initial })(Placeholder)
-      const wrapper = mount(<Component />, {
-        context: { store }
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithFormSubmit()
       })
-
-      /* Form state */
-      const request = wrapper
-        .find(Placeholder)
-        .prop("request")
 
       /* Test: should initialize form state */
       it("should initialize form state", () => {
+        const { wrapper, Placeholder } = wrapWithForm({ initial })
+        const request = wrapper.find(Placeholder).prop("request")
         expect(request).toEqual(initial)
       })
     })
@@ -82,28 +91,19 @@ describe("enhancers/with-form", () => {
     /* { setRequest } */
     describe("{ setRequest }", () => {
 
-      /* Apply enhancer to placeholder component */
-      const Placeholder = placeholder<WithForm>()
-      const Component = withForm({ initial })(Placeholder)
-      const wrapper = mount(<Component />, {
-        context: { store }
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithFormSubmit()
       })
-
-      /* Form state reducer */
-      const setRequest = wrapper
-        .find(Placeholder)
-        .prop("setRequest")
 
       /* Test: should update form state */
       it("should update form state", () => {
+        const { wrapper, Placeholder } = wrapWithForm({ initial })
+        const setRequest = wrapper.find(Placeholder).prop("setRequest")
         const request = { [chance.string()]: chance.string() }
         setRequest(request)
         wrapper.update()
-        expect(
-          wrapper
-            .find(Placeholder)
-            .prop("request")
-        )
+        expect(wrapper.find(Placeholder).prop("request"))
           .toEqual(request)
       })
     })
@@ -111,31 +111,19 @@ describe("enhancers/with-form", () => {
     /* { handleChange } */
     describe("{ handleChange }", () => {
 
-      /* Apply enhancer to placeholder component */
-      const Placeholder = placeholder<WithForm>()
-      const Component = withForm({ initial })(Placeholder)
-      const wrapper = mount(<Component />, {
-        context: { store }
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithFormSubmit()
       })
-
-      /* Update form data handler */
-      const handleChange = wrapper
-        .find(Placeholder)
-        .prop("handleChange")
 
       /* Test: should update form state for text input */
       it("should update form state for text input", () => {
-        const options = {
-          name: chance.string(),
-          value: chance.string()
-        }
+        const { wrapper, Placeholder } = wrapWithForm({ initial })
+        const handleChange = wrapper.find(Placeholder).prop("handleChange")
+        const options = { name: chance.string(), value: chance.string() }
         handleChange(mockChangeEventForTextInput(options))
         wrapper.update()
-        expect(
-          wrapper
-            .find(Placeholder)
-            .prop("request")
-        )
+        expect(wrapper.find(Placeholder).prop("request"))
           .toEqual(jasmine.objectContaining({
             ...initial, [options.name]: options.value
           }))
@@ -143,17 +131,12 @@ describe("enhancers/with-form", () => {
 
       /* Test: should update form state for checkbox input */
       it("should update form state for checkbox input", () => {
-        const options = {
-          name: chance.string(),
-          checked: chance.bool()
-        }
+        const { wrapper, Placeholder } = wrapWithForm({ initial })
+        const handleChange = wrapper.find(Placeholder).prop("handleChange")
+        const options = { name: chance.string(), checked: chance.bool() }
         handleChange(mockChangeEventForCheckboxInput(options))
         wrapper.update()
-        expect(
-          wrapper
-            .find(Placeholder)
-            .prop("request")
-        )
+        expect(wrapper.find(Placeholder).prop("request"))
           .toEqual(jasmine.objectContaining({
             ...initial, [options.name]: options.checked
           }))
@@ -163,29 +146,20 @@ describe("enhancers/with-form", () => {
     /* { handleSubmit } */
     describe("{ handleSubmit }", () => {
 
-      /* Apply enhancer to placeholder component */
-      const Placeholder = placeholder<WithForm>()
-      const Component = withForm({ initial })(Placeholder)
-      const wrapper = mount(<Component />, {
-        context: { store }
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithFormSubmit()
       })
-
-      /* Submit form data handler */
-      const handleSubmit = wrapper
-        .find(Placeholder)
-        .prop("handleSubmit")
 
       /* Test: should submit form */
       it("should submit form", () => {
-        const postMock = mockAxiosPostWithResult()
+        const { wrapper, Placeholder } = wrapWithForm({ initial })
+        const handleSubmit = wrapper.find(Placeholder).prop("handleSubmit")
         const ev = mockSubmitEvent()
         handleSubmit(ev)
         expect(ev.preventDefault).toHaveBeenCalledWith()
-        expect(postMock).toHaveBeenCalledWith(
-          jasmine.any(String),
-          initial,
-          jasmine.any(Object)
-        )
+        expect(wrapper.find(Placeholder).prop("submit"))
+          .toHaveBeenCalledWith(wrapper.find(Placeholder).prop("request"))
       })
     })
   })

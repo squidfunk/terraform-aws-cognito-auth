@@ -69,11 +69,11 @@ export const Render: React.SFC<RenderProps> =
     <div className={classes.root}>
       <Switch>
         <Route exact path="/" component={Authenticate} />
+        <Route exact path="/leave" component={Leave} />
         <Route exact path="/register" component={Register} />
         <Route path="/register/:code+" component={RegisterVerification} />
         <Route exact path="/reset" component={Reset} />
         <Route path="/reset/:code+" component={ResetVerification} />
-        <Route path="/leave" component={Leave} />
         <Route component={NotFound} />
       </Switch>
     </div>
@@ -83,10 +83,18 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Application
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const App =
-  compose<RenderProps, {}>(
+export function enhance() {
+  return compose<RenderProps, {}>(
     withStyles(styles),
     setDisplayName("App")
-  )(Render)
+  )
+}
+
+/**
+ * Application
+ */
+export const App = enhance()(Render)

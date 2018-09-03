@@ -22,12 +22,24 @@
 
 import { shallow } from "enzyme"
 import * as React from "react"
+import { RouteProps } from "react-router-dom"
 
 import {
-  App,
+  enhance,
   Render,
   RenderProps
 } from "components/App/App"
+import {
+  Authenticate,
+  Leave,
+  NotFound,
+  Register,
+  RegisterVerification,
+  Reset,
+  ResetVerification
+} from "routes"
+
+import { chance, search } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -37,29 +49,169 @@ import {
 describe("components/App", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Default props */
-    const props: RenderProps = {
-      classes: {
-        root: "__ROOT__"
-      }
-    }
+    /* Shallow-render component */
+    const wrapper = shallow(<Render classes={{ root: chance.string() }} />)
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(<Render {...props} />)
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render switch */
+    it("should render switch", () => {
+      expect(search(wrapper, "Switch").exists()).toBe(true)
+    })
+
+    /* with path / */
+    describe("with path /", () => {
+
+      /* Route and props */
+      const route = search(wrapper, `[path="/"]`)
+      const props: RouteProps = route.props()
+
+      /* Test: should render exact route */
+      it("should render exact route", () => {
+        expect(route.is("Route")).toBe(true)
+        expect(props.exact).toBe(true)
+      })
+
+      /* Test: should link to authentication / */
+      it("should link to authentication", () => {
+        expect(props.component).toEqual(Authenticate)
+      })
+    })
+
+    /* with path / */
+    describe("with path /leave", () => {
+
+      /* Route and props */
+      const route = search(wrapper, `[path="/leave"]`)
+      const props: RouteProps = route.props()
+
+      /* Test: should render exact route */
+      it("should render exact route", () => {
+        expect(route.is("Route")).toBe(true)
+        expect(props.exact).toBe(true)
+      })
+
+      /* Test: should link to sign out / */
+      it("should link to sign out", () => {
+        expect(props.component).toEqual(Leave)
+      })
+    })
+
+    /* with path /register */
+    describe("with path /register", () => {
+
+      /* Route and props */
+      const route = search(wrapper, `[path="/register"]`)
+      const props: RouteProps = route.props()
+
+      /* Test: should render exact route */
+      it("should render exact route", () => {
+        expect(route.is("Route")).toBe(true)
+        expect(props.exact).toBe(true)
+      })
+
+      /* Test: should link to registration / */
+      it("should link to registration", () => {
+        expect(props.component).toEqual(Register)
+      })
+    })
+
+    /* with path /register/:code */
+    describe("with path /register/:code", () => {
+
+      /* Route and props */
+      const route = search(wrapper, `[path="/register/:code+"]`)
+      const props: RouteProps = route.props()
+
+      /* Test: should render wildcard route */
+      it("should render wildcard route", () => {
+        expect(route.is("Route")).toBe(true)
+        expect(props.exact).toBeFalsy()
+      })
+
+      /* Test: should link to registration / */
+      it("should link to registration verification", () => {
+        expect(props.component).toEqual(RegisterVerification)
+      })
+    })
+
+    /* with path /reset */
+    describe("with path /reset", () => {
+
+      /* Route and props */
+      const route = search(wrapper, `[path="/reset"]`)
+      const props: RouteProps = route.props()
+
+      /* Test: should render exact route */
+      it("should render exact route", () => {
+        expect(route.is("Route")).toBe(true)
+        expect(props.exact).toBe(true)
+      })
+
+      /* Test: should link to password reset / */
+      it("should link to password reset", () => {
+        expect(props.component).toEqual(Reset)
+      })
+    })
+
+    /* with path /reset/:code */
+    describe("with path /reset/:code", () => {
+
+      /* Route and props */
+      const route = search(wrapper, `[path="/reset/:code+"]`)
+      const props: RouteProps = route.props()
+
+      /* Test: should render wildcard route */
+      it("should render wildcard route", () => {
+        expect(route.is("Route")).toBe(true)
+        expect(props.exact).toBeFalsy()
+      })
+
+      /* Test: should link to password reset / */
+      it("should link to password reset verification", () => {
+        expect(props.component).toEqual(ResetVerification)
+      })
+    })
+
+    /* with catch all (not found) */
+    describe("with catch all (not found)", () => {
+
+      /* Route and props */
+      const route = search(wrapper, "Route").last()
+      const props: RouteProps = route.props()
+
+      /* Test: should render catch-all route */
+      it("should render catch-all route", () => {
+        expect(route.is("Route")).toBe(true)
+        expect(props.path).toBeFalsy()
+        expect(props.exact).toBeFalsy()
+      })
+
+      /* Test: should link to page not found / */
+      it("should link to page not found", () => {
+        expect(props.component).toEqual(NotFound)
+      })
     })
   })
 
-  /* Enhanced component */
-  describe("App", () => {
+  /* Application */
+  describe("<App />", () => {
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
+    /* Enhance component */
+    const App = enhance()(Render)
+
+    /* Test: should render with styles */
+    it("should render with styles", () => {
       const wrapper = shallow(<App />)
-      expect(wrapper).toMatchSnapshot()
+      const component = search(wrapper, Render)
+      expect(component.prop<RenderProps>("classes")).toBeDefined()
+    })
+
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      const wrapper = shallow(<App />)
+      const component = search(wrapper, Render)
+      expect(component.name()).toEqual("App")
     })
   })
 })

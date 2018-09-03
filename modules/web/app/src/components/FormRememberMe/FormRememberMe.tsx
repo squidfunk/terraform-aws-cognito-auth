@@ -99,7 +99,7 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form remember me component
+ * Form remember me
  */
 export const FormRememberMe =
   compose<RenderProps, FormRememberMeProps>(

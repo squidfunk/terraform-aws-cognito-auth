@@ -24,6 +24,8 @@ import configureStore from "redux-mock-store"
 
 import { State } from "providers/store"
 
+import { chance } from "_/helpers"
+
 /* ----------------------------------------------------------------------------
  * Data
  * ------------------------------------------------------------------------- */
@@ -48,6 +50,6 @@ export function mockStore<T extends State>(state?: Partial<T>) {
  */
 export function mockAction(): any {
   return {
-    type: "__TYPE__"
+    type: chance.string()
   }
 }

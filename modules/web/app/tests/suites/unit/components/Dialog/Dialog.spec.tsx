@@ -24,12 +24,12 @@ import { shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  Dialog,
+  enhance,
   Render,
   RenderProps
 } from "components/Dialog/Dialog"
 
-import { search } from "_/helpers"
+import { chance, search } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -39,37 +39,46 @@ import { search } from "_/helpers"
 describe("components/Dialog", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Default props */
-    const props: RenderProps = {
-      classes: {
-        root: "__ROOT__"
-      }
-    }
+    /* Shallow-render component */
+    const wrapper = shallow(
+      <Render classes={{ root: chance.string() }}>
+        __CHILDREN__
+      </Render>
+    )
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(
-        <Render {...props}>
-          __CHILDREN__
-        </Render>
-      )
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render paper */
+    it("should render paper", () => {
+      const paper = search(wrapper, "Paper")
+      expect(paper.exists()).toBe(true)
+    })
+
+    /* Test: should render children */
+    it("should render children", () => {
+      const paper = search(wrapper, "Paper")
+      expect(paper.children().length).toEqual(1)
     })
   })
 
-  /* Enhanced component */
-  describe("Dialog", () => {
+  /* Dialog */
+  describe("<Dialog />", () => {
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(
-        <Dialog>
-          __CHILDREN__
-        </Dialog>
-      )
-      expect(search(wrapper, Render)).toMatchSnapshot()
+    /* Enhance component */
+    const Dialog = enhance()(Render)
+
+    /* Test: should render with styles */
+    it("should render with styles", () => {
+      const wrapper = shallow(<Dialog />)
+      const component = search(wrapper, Render)
+      expect(component.prop<RenderProps>("classes")).toBeDefined()
+    })
+
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      const wrapper = shallow(<Dialog />)
+      const component = search(wrapper, Render)
+      expect(component.name()).toEqual("Dialog")
     })
   })
 })

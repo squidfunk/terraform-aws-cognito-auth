@@ -79,7 +79,7 @@ export const Render: React.SFC =
  * ------------------------------------------------------------------------- */
 
 /**
- * Sign out component
+ * Sign out
  */
 export const Leave =
   compose(

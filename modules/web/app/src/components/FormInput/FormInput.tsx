@@ -60,8 +60,8 @@ export type RenderProps =
 export const Render: React.SFC<RenderProps> =
   props =>
     <TextField
-      type="text" margin="dense" fullWidth={true} autoCapitalize="false"
-      autoCorrect="false" InputLabelProps={{ required: false }} {...props}
+      type="text" margin="dense" InputLabelProps={{ required: false }}
+      fullWidth={true} autoCapitalize="false" autoCorrect="false" {...props}
     />
 
 /* ----------------------------------------------------------------------------
@@ -69,10 +69,18 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form input component
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const FormInput =
-  compose<RenderProps, FormInputProps>(
+export function enhance() {
+  return compose<RenderProps, FormInputProps>(
     pure,
     setDisplayName("FormInput")
-  )(Render)
+  )
+}
+
+/**
+ * Form input
+ */
+export const FormInput = enhance()(Render)

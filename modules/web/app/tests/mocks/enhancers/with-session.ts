@@ -20,26 +20,29 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import { Redirect } from "react-router-dom"
+import { withProps } from "recompose"
+
+import * as _ from "enhancers"
+import { SessionState } from "providers/store/session"
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Render component
+ * Mock session component enhancer
  *
- * @return JSX element
+ * @param session - Session state
+ *
+ * @return Component enhancer
  */
-export const Render: React.SFC =
-  () => <Redirect to="/" />
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Password reset verification success
- */
-export const ResetVerificationSuccess = Render
+export function mockWithSession(
+  session: SessionState = null
+) {
+  return spyOn(_, "withSession")
+    .and.callFake(() => withProps<_.WithSession, {}>({
+      session,
+      initSession: jest.fn(),
+      terminateSession: jest.fn()
+    }))
+}

@@ -25,16 +25,44 @@ import * as React from "react"
 
 import {
   withFormSubmit,
-  WithFormSubmit
+  WithFormSubmit,
+  WithFormSubmitOptions
 } from "enhancers"
+import { NotificationType } from "providers/store/notification"
 
 import { chance, placeholder } from "_/helpers"
 import { mockSession } from "_/mocks/common/session"
-import { mockStore } from "_/mocks/providers"
 import {
+  mockWithNotification,
+  mockWithSession
+} from "_/mocks/enhancers"
+import {
+  mockAxiosError,
   mockAxiosPostWithError,
   mockAxiosPostWithResult
 } from "_/mocks/vendor/axios"
+
+/* ----------------------------------------------------------------------------
+ * Helpers
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Wrap placeholder component with form submission enhancer
+ *
+ * @param options - Form submission options
+ *
+ * @return Stateless component
+ */
+function wrapWithFormSubmit(options?: WithFormSubmitOptions) {
+  const Placeholder = placeholder<WithFormSubmit>()
+  const Component = withFormSubmit(options)(Placeholder)
+  const wrapper = mount(<Component />)
+  return {
+    Placeholder,
+    Component,
+    wrapper
+  }
+}
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -43,34 +71,22 @@ import {
 /* Form submission enhancer */
 describe("enhancers/with-form-submit", () => {
 
-  /* Initialize store */
-  const store = mockStore()
-
-  /* Clear store */
-  beforeEach(() => {
-    store.clearActions()
-  })
-
   /* withFormSubmit */
   describe("withFormSubmit", () => {
 
     /* { form } */
     describe("{ form }", () => {
 
-      /* Apply enhancer to placeholder component */
-      const Placeholder = placeholder<WithFormSubmit>()
-      const Component = withFormSubmit()(Placeholder)
-      const wrapper = mount(<Component />, {
-        context: { store }
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithNotification()
+        mockWithSession()
       })
-
-      /* Form submission state */
-      const form = wrapper
-        .find(Placeholder)
-        .prop("form")
 
       /* Test: should initialize form submission state */
       it("should initialize form submission state", () => {
+        const { wrapper, Placeholder } = wrapWithFormSubmit()
+        const form = wrapper.find(Placeholder).prop("form")
         expect(form).toEqual({ pending: false, success: false })
       })
     })
@@ -78,26 +94,19 @@ describe("enhancers/with-form-submit", () => {
     /* { setForm } */
     describe("{ setForm }", () => {
 
-      /* Apply enhancer to placeholder component */
-      const Placeholder = placeholder<WithFormSubmit>()
-      const Component = withFormSubmit()(Placeholder)
-      const wrapper = mount(<Component />, {
-        context: { store }
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithNotification()
+        mockWithSession()
       })
-
-      /* Form submission state reducer */
-      const setForm = wrapper
-        .find(Placeholder)
-        .prop("setForm")
 
       /* Test: should update form submission state */
       it("should update form submission state", () => {
+        const { wrapper, Placeholder } = wrapWithFormSubmit()
+        const setForm = wrapper.find(Placeholder).prop("setForm")
         setForm({ pending: true, success: false })
         wrapper.update()
-        expect(wrapper
-          .find(Placeholder)
-          .prop("form")
-        )
+        expect(wrapper.find(Placeholder).prop("form"))
           .toEqual({ pending: true, success: false })
       })
     })
@@ -105,20 +114,16 @@ describe("enhancers/with-form-submit", () => {
     /* { submit } */
     describe("{ submit }", () => {
 
-      /* Apply enhancer to placeholder component */
-      const Placeholder = placeholder<WithFormSubmit>()
-      const Component = withFormSubmit()(Placeholder)
-      const wrapper = mount(<Component />, {
-        context: { store }
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithNotification()
+        mockWithSession()
       })
-
-      /* Submit form */
-      const submit = wrapper
-        .find(Placeholder)
-        .prop("submit")
 
       /* Test: should prepend API base path to current location */
       it("should prepend API base path to current location", async () => {
+        const { wrapper, Placeholder } = wrapWithFormSubmit()
+        const submit = wrapper.find(Placeholder).prop("submit")
         const postMock = mockAxiosPostWithResult()
         await submit()
         expect(postMock).toHaveBeenCalledWith(
@@ -130,6 +135,8 @@ describe("enhancers/with-form-submit", () => {
 
       /* Test: should send request to current location */
       it("should send request to current location", async () => {
+        const { wrapper, Placeholder } = wrapWithFormSubmit()
+        const submit = wrapper.find(Placeholder).prop("submit")
         const postMock = mockAxiosPostWithResult()
         await submit()
         expect(postMock).toHaveBeenCalledWith(
@@ -141,6 +148,8 @@ describe("enhancers/with-form-submit", () => {
 
       /* Test: should send request with provided payload */
       it("should send request with provided payload", async () => {
+        const { wrapper, Placeholder } = wrapWithFormSubmit()
+        const submit = wrapper.find(Placeholder).prop("submit")
         const data = { [chance.string()]: chance.string() }
         const postMock = mockAxiosPostWithResult()
         await submit(data)
@@ -153,6 +162,8 @@ describe("enhancers/with-form-submit", () => {
 
       /* Test: should send request with content-type header */
       it("should send request with content-type header", async () => {
+        const { wrapper, Placeholder } = wrapWithFormSubmit()
+        const submit = wrapper.find(Placeholder).prop("submit")
         const postMock = mockAxiosPostWithResult()
         await submit()
         expect(postMock).toHaveBeenCalledWith(
@@ -168,6 +179,8 @@ describe("enhancers/with-form-submit", () => {
 
       /* should send request with credentials */
       it("should send request with credentials", async () => {
+        const { wrapper, Placeholder } = wrapWithFormSubmit()
+        const submit = wrapper.find(Placeholder).prop("submit")
         const postMock = mockAxiosPostWithResult()
         await submit()
         expect(postMock).toHaveBeenCalledWith(
@@ -181,9 +194,12 @@ describe("enhancers/with-form-submit", () => {
 
       /* Test: should dismiss notification before sending request */
       it("should dismiss notification before sending request", async () => {
+        const { wrapper, Placeholder } = wrapWithFormSubmit()
+        const submit = wrapper.find(Placeholder).prop("submit")
         mockAxiosPostWithResult()
         await submit()
-        expect(store.getActions()).toMatchSnapshot()
+        expect(wrapper.find(Placeholder).prop("dismissNotification"))
+          .toHaveBeenCalledWith()
       })
 
       /* with successful request */
@@ -191,14 +207,13 @@ describe("enhancers/with-form-submit", () => {
 
         /* Test: should set response */
         it("should set response", async () => {
+          const { wrapper, Placeholder } = wrapWithFormSubmit()
+          const submit = wrapper.find(Placeholder).prop("submit")
           const data = { [chance.string()]: chance.string() }
           mockAxiosPostWithResult(data)
           await submit()
           wrapper.update()
-          expect(wrapper
-            .find(Placeholder)
-            .prop("form")
-          )
+          expect(wrapper.find(Placeholder).prop("form"))
             .toEqual(jasmine.objectContaining({
               response: data
             }))
@@ -206,13 +221,12 @@ describe("enhancers/with-form-submit", () => {
 
         /* Test: should enable success flag */
         it("should enable success flag", async () => {
+          const { wrapper, Placeholder } = wrapWithFormSubmit()
+          const submit = wrapper.find(Placeholder).prop("submit")
           mockAxiosPostWithResult()
           await submit()
           wrapper.update()
-          expect(wrapper
-            .find(Placeholder)
-            .prop("form")
-          )
+          expect(wrapper.find(Placeholder).prop("form"))
             .toEqual(jasmine.objectContaining({
               pending: false,
               success: true
@@ -225,14 +239,13 @@ describe("enhancers/with-form-submit", () => {
 
         /* Test: should set error */
         it("should set error", async () => {
-          const errMock = new Error()
+          const { wrapper, Placeholder } = wrapWithFormSubmit()
+          const submit = wrapper.find(Placeholder).prop("submit")
+          const errMock = mockAxiosError()
           mockAxiosPostWithError(errMock)
           await submit()
           wrapper.update()
-          expect(wrapper
-            .find(Placeholder)
-            .prop("form")
-          )
+          expect(wrapper.find(Placeholder).prop("form"))
             .toEqual(jasmine.objectContaining({
               err: errMock
             }))
@@ -240,13 +253,12 @@ describe("enhancers/with-form-submit", () => {
 
         /* Test: should disable success flag */
         it("should disable success flag", async () => {
+          const { wrapper, Placeholder } = wrapWithFormSubmit()
+          const submit = wrapper.find(Placeholder).prop("submit")
           mockAxiosPostWithError()
           await submit()
           wrapper.update()
-          expect(wrapper
-            .find(Placeholder)
-            .prop("form")
-          )
+          expect(wrapper.find(Placeholder).prop("form"))
             .toEqual(jasmine.objectContaining({
               pending: false,
               success: false
@@ -255,10 +267,16 @@ describe("enhancers/with-form-submit", () => {
 
         /* Test: should display notification */
         it("should display notification", async () => {
-          const errMock = new Error()
-          mockAxiosPostWithError(errMock, "__MESSAGE__")
+          const { wrapper, Placeholder } = wrapWithFormSubmit()
+          const submit = wrapper.find(Placeholder).prop("submit")
+          const errMock = mockAxiosError(chance.string())
+          mockAxiosPostWithError(errMock)
           await submit()
-          expect(store.getActions()).toMatchSnapshot()
+          expect(wrapper.find(Placeholder).prop("displayNotification"))
+            .toHaveBeenCalledWith({
+              type: NotificationType.ERROR,
+              message: errMock.response!.data.message
+            })
         })
       })
     })
@@ -266,26 +284,22 @@ describe("enhancers/with-form-submit", () => {
     /* with target */
     describe("with target", () => {
 
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithNotification()
+        mockWithSession()
+      })
+
       /* { submit } */
       describe("{ submit }", () => {
 
         /* Target URL */
         const target = chance.string()
 
-        /* Apply enhancer to placeholder component */
-        const Placeholder = placeholder<WithFormSubmit>()
-        const Component = withFormSubmit({ target })(Placeholder)
-        const wrapper = mount(<Component />, {
-          context: { store }
-        })
-
-        /* Submit form */
-        const submit = wrapper
-          .find(Placeholder)
-          .prop("submit")
-
         /* Test: should prepend API base path to provided target URL */
         it("should prepend API base path to provided target URL", async () => {
+          const { wrapper, Placeholder } = wrapWithFormSubmit({ target })
+          const submit = wrapper.find(Placeholder).prop("submit")
           const postMock = mockAxiosPostWithResult()
           await submit()
           expect(postMock).toHaveBeenCalledWith(
@@ -297,6 +311,8 @@ describe("enhancers/with-form-submit", () => {
 
         /* Test: should send request to provided target URL */
         it("should send request to provided target URL", async () => {
+          const { wrapper, Placeholder } = wrapWithFormSubmit({ target })
+          const submit = wrapper.find(Placeholder).prop("submit")
           const postMock = mockAxiosPostWithResult()
           await submit()
           expect(postMock).toHaveBeenCalledWith(
@@ -311,29 +327,29 @@ describe("enhancers/with-form-submit", () => {
     /* with message */
     describe("with message", () => {
 
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithNotification()
+        mockWithSession()
+      })
+
       /* { submit } */
       describe("{ submit }", () => {
 
         /* Message rendered on success */
-        const message = "__MESSAGE__"
-
-        /* Apply enhancer to placeholder component */
-        const Placeholder = placeholder<WithFormSubmit>()
-        const Component = withFormSubmit({ message })(Placeholder)
-        const wrapper = mount(<Component />, {
-          context: { store }
-        })
-
-        /* Submit form */
-        const submit = wrapper
-          .find(Placeholder)
-          .prop("submit")
+        const message = chance.string()
 
         /* Test: should display notification */
         it("should display notification", async () => {
+          const { wrapper, Placeholder } = wrapWithFormSubmit({ message })
+          const submit = wrapper.find(Placeholder).prop("submit")
           mockAxiosPostWithResult()
           await submit()
-          expect(store.getActions()).toMatchSnapshot()
+          expect(wrapper.find(Placeholder).prop("displayNotification"))
+            .toHaveBeenCalledWith({
+              type: NotificationType.SUCCESS,
+              message
+            })
         })
       })
     })
@@ -344,22 +360,16 @@ describe("enhancers/with-form-submit", () => {
       /* Session */
       const session = mockSession()
 
-      /* Apply enhancer to placeholder component */
-      const Placeholder = placeholder<WithFormSubmit>()
-      const Component = withFormSubmit({ authorize: true })(Placeholder)
-      const wrapper = mount(<Component />, {
-        context: {
-          store: mockStore({ session })
-        }
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithNotification()
+        mockWithSession(session)
       })
-
-      /* Submit form */
-      const submit = wrapper
-        .find(Placeholder)
-        .prop("submit")
 
       /* Test: should send request with authorization header */
       it("should send request with authorization header", async () => {
+        const { wrapper, Placeholder } = wrapWithFormSubmit({ authorize: true })
+        const submit = wrapper.find(Placeholder).prop("submit")
         const postMock = mockAxiosPostWithResult()
         await submit()
         expect(postMock).toHaveBeenCalledWith(
@@ -367,7 +377,7 @@ describe("enhancers/with-form-submit", () => {
           jasmine.any(Object),
           jasmine.objectContaining({
             headers: jasmine.objectContaining({
-              Authorization: "Bearer __TOKEN__"
+              Authorization: `Bearer ${session.access.token}`
             })
           })
         )

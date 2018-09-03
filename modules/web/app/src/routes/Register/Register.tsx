@@ -106,7 +106,7 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration component
+ * Registration
  */
 export const Register =
   compose<RenderProps, {}>(

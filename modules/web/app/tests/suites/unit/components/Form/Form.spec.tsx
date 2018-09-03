@@ -24,12 +24,12 @@ import { shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  Form,
+  enhance,
   Render,
   RenderProps
 } from "components/Form/Form"
 
-import { search } from "_/helpers"
+import { chance, search } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -39,38 +39,69 @@ import { search } from "_/helpers"
 describe("components/Form", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Default props */
-    const props: RenderProps = {
-      classes: {
-        root: "__ROOT__"
-      },
-      onSubmit: jest.fn()
-    }
+    /* Shallow-render component */
+    const wrapper = shallow(
+      <Render classes={{ root: chance.string() }} onSubmit={jest.fn()}>
+        __CHILDREN__
+      </Render>
+    )
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(
-        <Render {...props}>
-          __CHILDREN__
-        </Render>
-      )
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render form */
+    it("should render form", () => {
+      const form = search(wrapper, "form")
+      expect(form.exists()).toBe(true)
+    })
+
+    /* Test: should render form with disabled auto-complete */
+    it("should render form with disabled auto-complete", () => {
+      const form = search(wrapper, "form")
+      expect(form.prop<RenderProps>("autoComplete")).toEqual("off")
+    })
+
+    /* Test: should render children */
+    it("should render children", () => {
+      const form = search(wrapper, "form")
+      expect(form.children().length).toEqual(1)
     })
   })
 
-  /* Enhanced component */
-  describe("Form", () => {
+  /* Form */
+  describe("<Form />", () => {
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(
-        <Form onSubmit={jest.fn()}>
-          __CHILDREN__
-        </Form>
-      )
-      expect(search(wrapper, Render)).toMatchSnapshot()
+    /* Enhance component */
+    const Form = enhance()(Render)
+
+    /* Form submit handler */
+    const onSubmit = jest.fn()
+
+    /* Test: should render with styles */
+    it("should render with styles", () => {
+      const wrapper = shallow(<Form onSubmit={onSubmit} />)
+      const component = search(wrapper, Render)
+      expect(component.prop<RenderProps>("classes")).toBeDefined()
+    })
+
+    /* Test: should render with submit handler */
+    it("should render with submit handler", () => {
+      const wrapper = shallow(<Form onSubmit={onSubmit} />)
+      const component = search(wrapper, Render)
+      expect(component.prop<RenderProps>("onSubmit")).toEqual(onSubmit)
+    })
+
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      const wrapper = shallow(<Form onSubmit={onSubmit} />)
+      const component = search(wrapper, Render)
+      expect(component.name()).toEqual("Form")
+    })
+
+    /* Test: should invoke handler on submit event */
+    it("should invoke handler on submit event", () => {
+      const wrapper = shallow(<Form onSubmit={onSubmit} />)
+      wrapper.simulate("submit")
+      expect(onSubmit).toHaveBeenCalled()
     })
   })
 })

@@ -104,7 +104,7 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset component
+ * Password reset
  */
 export const Reset =
   compose<RenderProps, {}>(

@@ -153,7 +153,7 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication with credentials component
+ * Authentication with credentials
  */
 export const AuthenticateWithCredentials =
   compose<RenderProps, AuthenticateWithCredentialsProps>(
