@@ -23,12 +23,14 @@
 import {
   dismissNotificationAction,
   displayNotificationAction,
-  NotificationActionTypes,
-  NotificationData,
-  NotificationType
+  NotificationActionTypes
 } from "providers/store/notification"
 
-import { mockStore } from "_/mocks/providers"
+import {
+  mockNotificationDataWithError,
+  mockNotificationDataWithSuccess,
+  mockStore
+} from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -50,10 +52,7 @@ describe("providers/store/notification", () => {
 
     /* Test: should create a notification to indicate success */
     it("should create a notification to indicate success", () => {
-      const data: NotificationData = {
-        type: NotificationType.SUCCESS,
-        message: "__MESSAGE__"
-      }
+      const data = mockNotificationDataWithSuccess()
       store.dispatch(displayNotificationAction(data))
       expect(store.getActions().pop()).toEqual({
         type: NotificationActionTypes.DISPLAY,
@@ -63,10 +62,7 @@ describe("providers/store/notification", () => {
 
     /* Test: should create a notification to indicate an error */
     it("should create a notification to indicate an error", () => {
-      const data: NotificationData = {
-        type: NotificationType.ERROR,
-        message: "__MESSAGE__"
-      }
+      const data = mockNotificationDataWithError()
       store.dispatch(displayNotificationAction(data))
       expect(store.getActions().pop()).toEqual({
         type: NotificationActionTypes.DISPLAY,

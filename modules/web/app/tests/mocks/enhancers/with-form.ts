@@ -21,11 +21,12 @@
  * IN THE SOFTWARE.
  */
 
-import { withProps } from "recompose"
+import {
+  compose,
+  withProps
+} from "recompose"
 
 import * as _ from "enhancers"
-
-import { mockWithFormSubmit } from "_/mocks/enhancers"
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -37,25 +38,19 @@ import { mockWithFormSubmit } from "_/mocks/enhancers"
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  *
- * @param options - Form options
- * @param form - Form submission properties
- *
- * @return Component enhancer properties
+ * @return Component enhancer
  */
 export function mockWithForm<
   TRequest extends {} = any, TResponse = void
->(
-  request: TRequest,
-  form: _.WithFormSubmit<TRequest, TResponse> = mockWithFormSubmit()
-) {
-  const props: _.WithForm<TRequest, TResponse> = {
-    ...form,
-    request,
-    setRequest: jest.fn(),
-    handleChange: jest.fn(),
-    handleSubmit: jest.fn()
-  }
-  spyOn(_, "withFormSubmit")
-    .and.callFake(() => withProps(props))
-  return props
+>() {
+  return spyOn(_, "withForm")
+    .and.callFake(({ initial, ...options }: _.WithFormOptions) => compose(
+      _.withFormSubmit<TRequest, TResponse>(options),
+      withProps({
+        initial,
+        setRequest: jest.fn(),
+        handleChange: jest.fn(),
+        handleSubmit: jest.fn()
+      })
+    ))
 }

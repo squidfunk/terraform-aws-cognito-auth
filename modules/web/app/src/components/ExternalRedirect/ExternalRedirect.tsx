@@ -49,14 +49,6 @@ export interface ExternalRedirectProps {
 type LifecycleProps =
   & ExternalRedirectProps
 
-/* ------------------------------------------------------------------------- */
-
-/**
- * Render properties
- */
-export type RenderProps =
-  & ExternalRedirectProps
-
 /* ----------------------------------------------------------------------------
  * Presentational component
  * ------------------------------------------------------------------------- */
@@ -68,7 +60,7 @@ export type RenderProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.SFC =
   () => <Loading />
 
 /* ----------------------------------------------------------------------------
@@ -81,7 +73,7 @@ export const Render: React.SFC<RenderProps> =
  * @return Component enhancer
  */
 export function enhance() {
-  return compose<RenderProps, ExternalRedirectProps>(
+  return compose<{}, ExternalRedirectProps>(
     lifecycle<LifecycleProps, {}>({
       componentDidMount() {
         const { href } = this.props
@@ -94,6 +86,6 @@ export function enhance() {
 }
 
 /**
- * External redirect
+ * External redirect component
  */
 export const ExternalRedirect = enhance()(Render)

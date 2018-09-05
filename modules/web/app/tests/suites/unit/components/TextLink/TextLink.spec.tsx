@@ -20,114 +20,103 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  mount,
-  shallow,
-  StatelessComponent
-} from "enzyme"
+import { mount, shallow } from "enzyme"
 import * as React from "react"
-import { MemoryRouter } from "react-router"
+import { compose } from "recompose"
 
 import {
+  enhance,
   Render,
-  RenderProps,
-  TextLink
+  RenderProps
 } from "components/TextLink/TextLink"
+import { withNotification } from "enhancers"
 
-import { search } from "_/helpers"
-import { mockStore } from "_/mocks/providers"
+import { chance, find } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
+import { mockWithNotification } from "_/mocks/enhancers"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Text link component */
+/* Text link components */
 describe("components/TextLink", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Default props */
+    /* Render properties */
     const props: RenderProps = {
-      to: "__TO__",
       classes: {
-        root: "__ROOT__"
+        root: chance.string()
       },
+      to: chance.string(),
       handleClickCapture: jest.fn()
     }
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(
-        <Render {...props}>
-          __CHILDREN__
-        </Render>
-      )
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render link */
+    it("should render link", () => {
+      const wrapper = shallow(<Render {...props} />)
+      const link = find(wrapper, "Link")
+      expect(link.exists()).toBe(true)
     })
 
-    /* Test: should render with additional link props */
-    it("should render with additional link props", () => {
-      const wrapper = shallow(
-        <Render {...props} onBlur={jest.fn()}>
-          __CHILDREN__
-        </Render>
-      )
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render input with click capture handler */
+    it("should render input with click capture handler", () => {
+      const wrapper = shallow(<Render {...props} />)
+      const link = find(wrapper, "Link")
+      expect(link.prop("onClickCapture")).toEqual(props.handleClickCapture)
+    })
+
+    /* Test: should render children */
+    it("should render children", () => {
+      const wrapper = shallow(<Render {...props}>__CHILDREN__</Render>)
+      const link = find(wrapper, "Link")
+      expect(link.children().length).toEqual(1)
     })
   })
 
-  /* Enhanced component */
+  /* Text link component */
   describe("TextLink", () => {
 
-    /* Initialize store */
-    const store = mockStore()
+    /* Mount placeholder wrapped with enhancer */
+    function mountPlaceholder() {
+      const Component = compose<RenderProps, {}>(
+        withNotification(),
+        enhance()
+      )(Placeholder)
+      return mount(<Component />)
+    }
 
-    /* Clear store */
+    /* Mock enhancers */
     beforeEach(() => {
-      store.clearActions()
+      mockWithNotification()
     })
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(
-        <MemoryRouter>
-          <TextLink to="__TO__">
-            __CHILDREN__
-          </TextLink>
-        </MemoryRouter>, {
-          context: { store }
-        }
-      )
-      expect(search(wrapper, Render)).toMatchSnapshot()
+    /* Test: should render with styles */
+    it("should render with styles", () => {
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).prop("classes"))
+        .toBeDefined()
+    })
+
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("TextLink")
     })
 
     /* { handleClickCapture } */
     describe("{ handleClickCapture }", () => {
 
-      /* Mount component inside router */
-      const wrapper = mount(
-        <MemoryRouter>
-          <TextLink to="__TO__">
-            __CHILDREN__
-          </TextLink>
-        </MemoryRouter>, {
-          context: { store },
-          childContextTypes: {
-            store: () => null
-          }
-        }
-      )
-
-      /* Link click capture handler */
-      const handleClickCapture = wrapper
-        .find(Render as StatelessComponent<RenderProps>)
-        .prop("handleClickCapture")
-
-      /* Test: should dismiss notification */
-      it("should dismiss notification", () => {
+      /* Test: should toggle remember me */
+      it("should invoke change handler", () => {
+        const wrapper = mountPlaceholder()
+        const handleClickCapture =
+          wrapper.find(Placeholder).prop("handleClickCapture")
         handleClickCapture()
-        expect(store.getActions()).toMatchSnapshot()
+        wrapper.update()
       })
     })
   })

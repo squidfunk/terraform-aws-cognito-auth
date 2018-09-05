@@ -20,52 +20,74 @@
  * IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme"
+import { mount, shallow } from "enzyme"
 import * as React from "react"
 
-import { search } from "_/helpers"
 import {
-  Header,
+  enhance,
+  HeaderProps,
   Render,
   RenderProps
 } from "components/Header/Header"
+
+import { chance, find } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Header component */
+/* Header components */
 describe("components/Header", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Default props */
+    /* Render properties */
     const props: RenderProps = {
       classes: {
-        root: "__ROOT__",
-        text: "__TEXT__"
+        root: chance.string(),
+        text: chance.string()
       },
-      primary: "__PRIMARY__",
-      secondary: "__SECONDARY__"
+      primary: chance.string(),
+      secondary: chance.string()
     }
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
+    /* Test: should render text */
+    it("should render text", () => {
       const wrapper = shallow(<Render {...props} />)
-      expect(wrapper).toMatchSnapshot()
+      const text = find(wrapper, "Typography")
+      expect(text.exists()).toBe(true)
     })
   })
 
-  /* Enhanced component */
-  describe("Header", () => {
+  /* Header component */
+  describe("<Header />", () => {
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(
-        <Header primary="__PRIMARY__" secondary="__SECONDARY__" />
-      )
-      expect(search(wrapper, Render)).toMatchSnapshot()
+    /* Mount placeholder wrapped with enhancer */
+    function mountPlaceholder(_: HeaderProps) {
+      const Component = enhance()(Placeholder)
+      return mount(<Component {..._} />)
+    }
+
+    /* Component properties */
+    const props: HeaderProps = {
+      primary: chance.string(),
+      secondary: chance.string()
+    }
+
+    /* Test: should render with styles */
+    it("should render with styles", () => {
+      const wrapper = mountPlaceholder(props)
+      expect(wrapper.find(Placeholder).prop("classes"))
+        .toBeDefined()
+    })
+
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      const wrapper = mountPlaceholder(props)
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("Header")
     })
   })
 })

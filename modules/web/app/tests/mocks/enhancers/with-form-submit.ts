@@ -26,6 +26,8 @@ import { withProps } from "recompose"
 
 import * as _ from "enhancers"
 
+import { mockAxiosError } from "_/mocks/vendor/axios"
+
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
@@ -36,22 +38,20 @@ import * as _ from "enhancers"
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  *
- * @return Component enhancer properties
+ * @return Component enhancer
  */
 export function mockWithFormSubmit<
   TRequest extends {} = any, TResponse = void
 >() {
-  const props: _.WithFormSubmit<TRequest, TResponse> = {
-    form: {
-      pending: false,
-      success: false
-    },
-    setForm: jest.fn(),
-    submit: jest.fn()
-  }
-  spyOn(_, "withFormSubmit")
-    .and.callFake(() => withProps(props))
-  return props
+  return spyOn(_, "withFormSubmit")
+    .and.callFake(() => withProps<_.WithFormSubmit<TRequest, TResponse>, {}>({
+      form: {
+        pending: false,
+        success: false
+      },
+      setForm: jest.fn(),
+      submit: jest.fn()
+    }))
 }
 
 /**
@@ -60,22 +60,20 @@ export function mockWithFormSubmit<
  * @template TRequest - Form request type
  * @template TResponse - Form response type
  *
- * @return Component enhancer properties
+ * @return Component enhancer
  */
 export function mockWithFormSubmitWithPending<
   TRequest extends {} = any, TResponse = void
 >() {
-  const props: _.WithFormSubmit<TRequest, TResponse> = {
-    form: {
-      pending: true,
-      success: false
-    },
-    setForm: jest.fn(),
-    submit: jest.fn()
-  }
-  spyOn(_, "withFormSubmit")
-    .and.callFake(() => withProps(props))
-  return props
+  return spyOn(_, "withFormSubmit")
+    .and.callFake(() => withProps<_.WithFormSubmit<TRequest, TResponse>, {}>({
+      form: {
+        pending: true,
+        success: false
+      },
+      setForm: jest.fn(),
+      submit: jest.fn()
+    }))
 }
 
 /**
@@ -86,23 +84,21 @@ export function mockWithFormSubmitWithPending<
  *
  * @param response - Form submission result
  *
- * @return Component enhancer properties
+ * @return Component enhancer
  */
 export function mockWithFormSubmitWithResult<
   TRequest extends {} = any, TResponse = void
 >(response?: TResponse) {
-  const props: _.WithFormSubmit<TRequest, TResponse> = {
-    form: {
-      pending: false,
-      success: true,
-      response
-    },
-    setForm: jest.fn(),
-    submit: jest.fn()
-  }
-  spyOn(_, "withFormSubmit")
-    .and.callFake(() => withProps(props))
-  return props
+  return spyOn(_, "withFormSubmit")
+    .and.callFake(() => withProps<_.WithFormSubmit<TRequest, TResponse>, {}>({
+      form: {
+        pending: false,
+        success: true,
+        response
+      },
+      setForm: jest.fn(),
+      submit: jest.fn()
+    }))
 }
 
 /**
@@ -113,21 +109,19 @@ export function mockWithFormSubmitWithResult<
  *
  * @param err - Form submission error
  *
- * @return Component enhancer properties
+ * @return Component enhancer
  */
 export function mockWithFormSubmitWithError<
   TRequest extends {} = any, TResponse = void
->(err?: AxiosError) {
-  const props: _.WithFormSubmit<TRequest, TResponse> = {
-    form: {
-      pending: false,
-      success: true,
-      err
-    },
-    setForm: jest.fn(),
-    submit: jest.fn()
-  }
-  spyOn(_, "withFormSubmit")
-    .and.callFake(() => withProps(props))
-  return props
+>(err: AxiosError = mockAxiosError()) {
+  return spyOn(_, "withFormSubmit")
+    .and.callFake(() => withProps<_.WithFormSubmit<TRequest, TResponse>, {}>({
+      form: {
+        pending: false,
+        success: false,
+        err
+      },
+      setForm: jest.fn(),
+      submit: jest.fn()
+    }))
 }

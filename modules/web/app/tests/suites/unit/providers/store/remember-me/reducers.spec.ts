@@ -62,8 +62,8 @@ describe("providers/store/remember-me", () => {
           .toEqual(jasmine.objectContaining({ active: false }))
       })
 
-      /* Test: should preserve authentication result */
-      it("should preserve authentication result", () => {
+      /* Test: should preserve re-authentication result */
+      it("should preserve re-authentication result", () => {
         const action = setRememberMeAction(true)
         expect(remember({ active: false, result: false }, action))
           .toEqual({ active: true, result: false })
@@ -73,15 +73,15 @@ describe("providers/store/remember-me", () => {
     /* with REMEMBER_ME_SET_RESULT */
     describe("with REMEMBER_ME_SET_RESULT", () => {
 
-      /* Test: should indicate a successful authentication attempt */
-      it("should indicate a successful authentication attempt", () => {
+      /* Test: should indicate a successful re-authentication attempt */
+      it("should indicate a successful re-authentication attempt", () => {
         const action = setRememberMeResultAction(true)
         expect(remember(undefined, action))
           .toEqual(jasmine.objectContaining({ result: true }))
       })
 
-      /* Test: should indicate a failed authentication attempt */
-      it("should indicate a failed authentication attempt", () => {
+      /* Test: should indicate a failed re-authentication attempt */
+      it("should indicate a failed re-authentication attempt", () => {
         const action = setRememberMeResultAction(false)
         expect(remember(undefined, action))
           .toEqual(jasmine.objectContaining({ result: false }))

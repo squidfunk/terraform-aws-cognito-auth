@@ -21,15 +21,16 @@
  */
 
 import { shallow } from "enzyme"
-import { prop } from "ramda"
 import * as React from "react"
+import { MockStoreEnhanced } from "redux-mock-store"
 
 import {
-  withRememberMe,
-  WithRememberMe
+  WithRememberMe,
+  withRememberMe
 } from "enhancers"
+import { State } from "providers/store"
 
-import { placeholder } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
 import {
   mockSetRememberMeAction,
   mockSetRememberMeResultAction,
@@ -43,51 +44,54 @@ import {
 /* Remember me enhancer */
 describe("enhancers/with-remember-me", () => {
 
-  /* Initialize store */
-  const store = mockStore({
-    remember: { active: false }
-  })
-
-  /* Clear store */
-  beforeEach(() => {
-    store.clearActions()
-  })
+  /* Shallow-render placeholder wrapped with enhancer */
+  function shallowPlaceholder(
+    store: MockStoreEnhanced<Partial<State>>
+  ) {
+    const Component = withRememberMe()(Placeholder)
+    return shallow<WithRememberMe>(<Component />, {
+      context: { store }
+    })
+  }
 
   /* withRememberMe */
   describe("withRememberMe", () => {
 
-    /* Apply enhancer to placeholder component */
-    const Placeholder = placeholder<WithRememberMe>()
-    const Component = withRememberMe()(Placeholder)
-    const wrapper = shallow<WithRememberMe>(<Component />, {
-      context: { store }
+    /* Initialize store */
+    const store = mockStore({
+      remember: { active: false }
+    })
+
+    /* Clear store */
+    beforeEach(() => {
+      store.clearActions()
     })
 
     /* { remember } */
     describe("{ remember }", () => {
 
-      /* Remember me */
-      const remember = wrapper.prop("remember")
-
       /* Test: should map state to props */
       it("should map state to props", () => {
-        expect(prop("remember", store.getState())).toBe(remember)
+        const wrapper = shallowPlaceholder(store)
+        const { remember } = store.getState()
+        expect(wrapper.prop("remember")).toBe(remember)
       })
     })
 
     /* { setRememberMe } */
     describe("{ setRememberMe }", () => {
 
-      /* Remember me toggle dispatcher */
-      const setRememberMe = wrapper.prop("setRememberMe")
-
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {
-        expect(setRememberMe).toEqual(jasmine.any(Function))
+        const wrapper = shallowPlaceholder(store)
+        expect(wrapper.prop("setRememberMe"))
+          .toEqual(jasmine.any(Function))
       })
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        const wrapper = shallowPlaceholder(store)
+        const setRememberMe = wrapper.prop("setRememberMe")
         mockSetRememberMeAction()
         setRememberMe(true)
         expect(store.getActions().length).toEqual(1)
@@ -95,6 +99,8 @@ describe("enhancers/with-remember-me", () => {
 
       /* Test: should invoke action creator */
       it("should invoke action creator", () => {
+        const wrapper = shallowPlaceholder(store)
+        const setRememberMe = wrapper.prop("setRememberMe")
         const setRememberMeActionMock = mockSetRememberMeAction()
         setRememberMe(true)
         expect(setRememberMeActionMock)
@@ -105,16 +111,17 @@ describe("enhancers/with-remember-me", () => {
     /* { setRememberMeResult } */
     describe("{ setRememberMeResult }", () => {
 
-      /* Authentication result dispatcher */
-      const setRememberMeResult = wrapper.prop("setRememberMeResult")
-
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {
-        expect(setRememberMeResult).toEqual(jasmine.any(Function))
+        const wrapper = shallowPlaceholder(store)
+        expect(wrapper.prop("setRememberMeResult"))
+          .toEqual(jasmine.any(Function))
       })
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        const wrapper = shallowPlaceholder(store)
+        const setRememberMeResult = wrapper.prop("setRememberMeResult")
         mockSetRememberMeResultAction()
         setRememberMeResult(true)
         expect(store.getActions().length).toEqual(1)
@@ -122,6 +129,8 @@ describe("enhancers/with-remember-me", () => {
 
       /* Test: should invoke action creator */
       it("should invoke action creator", () => {
+        const wrapper = shallowPlaceholder(store)
+        const setRememberMeResult = wrapper.prop("setRememberMeResult")
         const setRememberMeResultActionMock = mockSetRememberMeResultAction()
         setRememberMeResult(true)
         expect(setRememberMeResultActionMock)

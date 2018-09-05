@@ -21,15 +21,16 @@
  */
 
 import { shallow } from "enzyme"
-import { prop } from "ramda"
 import * as React from "react"
+import { MockStoreEnhanced } from "redux-mock-store"
 
 import {
-  withNotification,
-  WithNotification
+  WithNotification,
+  withNotification
 } from "enhancers"
+import { State } from "providers/store"
 
-import { placeholder } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
 import {
   mockDismissNotificationAction,
   mockDisplayNotificationAction,
@@ -45,51 +46,54 @@ import {
 /* Notification enhancer */
 describe("enhancers/with-notification", () => {
 
-  /* Initialize store */
-  const store = mockStore({
-    notification: { show: false }
-  })
-
-  /* Clear store */
-  beforeEach(() => {
-    store.clearActions()
-  })
+  /* Shallow-render placeholder wrapped with enhancer */
+  function shallowPlaceholder(
+    store: MockStoreEnhanced<Partial<State>>
+  ) {
+    const Component = withNotification()(Placeholder)
+    return shallow<WithNotification>(<Component />, {
+      context: { store }
+    })
+  }
 
   /* withNotification */
   describe("withNotification", () => {
 
-    /* Apply enhancer to placeholder component */
-    const Placeholder = placeholder<WithNotification>()
-    const Component = withNotification()(Placeholder)
-    const wrapper = shallow<WithNotification>(<Component />, {
-      context: { store }
+    /* Initialize store */
+    const store = mockStore({
+      notification: { show: false }
+    })
+
+    /* Clear store */
+    beforeEach(() => {
+      store.clearActions()
     })
 
     /* { notification } */
     describe("{ notification }", () => {
 
-      /* Notification */
-      const notification = wrapper.prop("notification")
-
       /* Test: should map state to props */
       it("should map state to props", () => {
-        expect(prop("notification", store.getState())).toBe(notification)
+        const wrapper = shallowPlaceholder(store)
+        const { notification } = store.getState()
+        expect(wrapper.prop("notification")).toBe(notification)
       })
     })
 
     /* { displayNotification } */
     describe("{ displayNotification }", () => {
 
-      /* Display notification dispatcher */
-      const displayNotification = wrapper.prop("displayNotification")
-
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {
-        expect(displayNotification).toEqual(jasmine.any(Function))
+        const wrapper = shallowPlaceholder(store)
+        expect(wrapper.prop("displayNotification"))
+          .toEqual(jasmine.any(Function))
       })
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        const wrapper = shallowPlaceholder(store)
+        const displayNotification = wrapper.prop("displayNotification")
         mockDisplayNotificationAction()
         displayNotification(mockNotificationDataWithSuccess())
         expect(store.getActions().length).toEqual(1)
@@ -97,6 +101,8 @@ describe("enhancers/with-notification", () => {
 
       /* Test: should invoke action creator */
       it("should invoke action creator", () => {
+        const wrapper = shallowPlaceholder(store)
+        const displayNotification = wrapper.prop("displayNotification")
         const displayNotificationActionMock = mockDisplayNotificationAction()
         const data = mockNotificationDataWithError()
         displayNotification(data)
@@ -108,16 +114,17 @@ describe("enhancers/with-notification", () => {
     /* { dismissNotification } */
     describe("{ dismissNotification }", () => {
 
-      /* Dismiss notification dispatcher */
-      const dismissNotification = wrapper.prop("dismissNotification")
-
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {
-        expect(dismissNotification).toEqual(jasmine.any(Function))
+        const wrapper = shallowPlaceholder(store)
+        expect(wrapper.prop("dismissNotification"))
+          .toEqual(jasmine.any(Function))
       })
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        const wrapper = shallowPlaceholder(store)
+        const dismissNotification = wrapper.prop("dismissNotification")
         mockDismissNotificationAction()
         dismissNotification()
         expect(store.getActions().length).toEqual(1)
@@ -125,6 +132,8 @@ describe("enhancers/with-notification", () => {
 
       /* Test: should invoke action creator */
       it("should invoke action creator", () => {
+        const wrapper = shallowPlaceholder(store)
+        const dismissNotification = wrapper.prop("dismissNotification")
         const dismissNotificationActionMock = mockDismissNotificationAction()
         dismissNotification()
         expect(dismissNotificationActionMock)

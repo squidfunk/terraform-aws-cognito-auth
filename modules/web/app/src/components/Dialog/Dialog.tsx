@@ -79,6 +79,6 @@ export function enhance() {
 }
 
 /**
- * Dialog
+ * Dialog component
  */
 export const Dialog = enhance()(Render)

@@ -20,111 +20,91 @@
  * IN THE SOFTWARE.
  */
 
-import {
-  mount,
-  shallow,
-  StatelessComponent
-} from "enzyme"
+import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  FormRememberMe,
+  enhance,
+  FormRememberMeProps,
   Render,
   RenderProps
 } from "components/FormRememberMe/FormRememberMe"
-import { setRememberMeAction } from "providers/store/remember-me"
 
-import { chance, search } from "_/helpers"
-import { mockStore } from "_/mocks/providers"
-import {
-  mockChangeEventForCheckboxInput
-} from "_/mocks/vendor/browser/events"
+import { chance, find } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
+import { mockWithRememberMe } from "_/mocks/enhancers"
+import { mockChangeEventForCheckboxInput } from "_/mocks/vendor/browser/events"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Form remember me component */
+/* Form remember me components */
 describe("components/FormRememberMe", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Default props */
+    /* Render properties */
     const props: RenderProps = {
       onChange: jest.fn(),
       handleChange: jest.fn()
     }
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(
-        <Render {...props}>
-          __CHILDREN__
-        </Render>
-      )
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render checkbox */
+    it("should render checkbox", () => {
+      const wrapper = shallow(<Render {...props} />)
+      const input = find(wrapper, "Checkbox")
+      expect(input.exists()).toBe(true)
     })
 
-    /* Test: should render with additional checkbox props */
-    it("should render with additional checkbox props", () => {
-      const wrapper = shallow(
-        <Render {...props} onBlur={jest.fn()}>
-          __CHILDREN__
-        </Render>
-      )
-      expect(wrapper).toMatchSnapshot()
+    /* Test: should render checkbox with change handler */
+    it("should render checkbox with change handler", () => {
+      const wrapper = shallow(<Render {...props} />)
+      const input = find(wrapper, "Checkbox")
+      expect(input.prop("onChange")).toEqual(props.handleChange)
     })
   })
 
-  /* Enhanced component */
-  describe("FormRememberMe", () => {
+  /* Form remember me component */
+  describe("<FormRememberMe />", () => {
 
-    /* Initialize store */
-    const store = mockStore({
-      remember: {
-        active: false
-      }
-    })
+    /* Mount placeholder wrapped with enhancer */
+    function mountPlaceholder(_: FormRememberMeProps) {
+      const Component = enhance()(Placeholder)
+      return mount(<Component {..._} />)
+    }
 
-    /* Clear store */
+    /* Component properties */
+    const props: FormRememberMeProps = {
+      onChange: jest.fn()
+    }
+
+    /* Mock enhancers */
     beforeEach(() => {
-      store.clearActions()
+      mockWithRememberMe()
     })
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(<FormRememberMe onChange={jest.fn()} />, {
-        context: { store }
-      })
-      expect(search(wrapper, Render)).toMatchSnapshot()
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      const wrapper = mountPlaceholder(props)
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("FormRememberMe")
     })
 
     /* { handleChange } */
     describe("{ handleChange }", () => {
 
-      /* Mount component inside router */
-      const wrapper = mount(
-        <FormRememberMe onChange={jest.fn()} />, {
-          context: { store }
-        }
-      )
-
-      /* Form change handler */
-      const handleChange = wrapper
-        .find(Render as StatelessComponent<RenderProps>)
-        .prop("handleChange")
-
       /* Test: should toggle remember me */
-      it("should toggle remember me", () => {
-        const options = {
-          name: chance.string(),
-          checked: true
-        }
-        handleChange(mockChangeEventForCheckboxInput(options), true)
-        expect(store.getActions().length).toEqual(1)
-        expect(store.getActions()[0])
-          .toEqual(setRememberMeAction(true))
+      it("should invoke change handler", () => {
+        const wrapper = mountPlaceholder(props)
+        const handleChange = wrapper.find(Placeholder).prop("handleChange")
+        const options = { name: chance.string(), checked: chance.bool() }
+        const ev = mockChangeEventForCheckboxInput(options)
+        handleChange(ev, options.checked)
+        wrapper.update()
+        expect(wrapper.find(Placeholder).prop("onChange"))
+          .toHaveBeenCalledWith(ev, options.checked)
       })
     })
   })

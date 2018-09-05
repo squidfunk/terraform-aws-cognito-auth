@@ -20,78 +20,60 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import { Redirect } from "react-router-dom"
-import {
-  compose,
-  lifecycle,
-  pure,
-  setDisplayName
-} from "recompose"
-
-import { LeaveRequest } from "common"
-import {
-  WithFormSubmit,
-  withNotification,
-  WithNotificationDispatch
-} from "enhancers"
+import { Chance } from "chance"
+import { ShallowWrapper } from "enzyme"
 
 /* ----------------------------------------------------------------------------
- * Types
+ * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Sign out success properties
+ * Chance.js instance to generate random values
  */
-export type LeaveSuccessProps =
-  & WithFormSubmit<LeaveRequest>
-
-/* ------------------------------------------------------------------------- */
-
-/**
- * Lifecycle properties
- */
-type LifecycleProps =
-  & LeaveSuccessProps
-  & WithNotificationDispatch
+export const chance = new Chance()
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Render component
+ * Wait the given number of milliseconds
  *
- * @return JSX element
- */
-export const Render: React.SFC =
-  () => <Redirect to="/" />
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Enhance component
+ * @param interval - Interval in milliseconds
  *
- * @return Component enhancer
+ * @return Promise resolving with no result
  */
-export function enhance() {
-  return compose<{}, LeaveSuccessProps>(
-    withNotification(),
-    lifecycle<LifecycleProps, {}>({
-      componentWillMount() {
-        const { form, dismissNotification } = this.props
-        if (form.err)
-          dismissNotification()
-      }
-    }),
-    pure,
-    setDisplayName("LeaveSuccess")
-  )
+export function wait(interval: number) {
+  return new Promise<void>(resolve => setTimeout(resolve, interval))
 }
 
 /**
- * Sign out success component
+ * Find a component inside a shallow-wrapped component
+ *
+ * This is a "simple" wrapper function to ease testing using shallow wrapped
+ * components because Enzyme doesn't support it out-of-the-box.
+ *
+ * @template TProps - Component properties type
+ *
+ * @param wrapper - Component wrapper
+ * @param selector - Selector
+ *
+ * @return Stateless component
  */
-export const LeaveSuccess = enhance()(Render)
+export function find<TProps extends {}>(
+  wrapper: ShallowWrapper<TProps>, selector: any
+): ShallowWrapper<TProps> {
+  const component = wrapper.find<TProps>(selector)
+  if (component.exists()) {
+    return component
+  } else {
+    try {
+      return find(wrapper.dive(), selector)
+    } catch (err) {
+      return wrapper.children()
+        .reduce<ShallowWrapper<TProps>>((current, child) => {
+          return current || find(child, selector)
+        }, undefined)
+    }
+  }
+}

@@ -99,10 +99,12 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form remember me
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const FormRememberMe =
-  compose<RenderProps, FormRememberMeProps>(
+export function enhance() {
+  return compose<RenderProps, FormRememberMeProps>(
     withRememberMe(),
     withHandlers<HandlerCallbackProps, HandlerProps>({
 
@@ -119,4 +121,10 @@ export const FormRememberMe =
     ])),
     pure,
     setDisplayName("FormRememberMe")
-  )(Render)
+  )
+}
+
+/**
+ * Form remember me component
+ */
+export const FormRememberMe = enhance()(Render)

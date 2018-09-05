@@ -29,35 +29,18 @@ import {
   WithFormOptions
 } from "enhancers"
 
-import { chance, placeholder } from "_/helpers"
-import { mockWithFormSubmit } from "_/mocks/enhancers"
+import { chance } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
+import {
+  mockWithFormSubmit,
+  mockWithNotification,
+  mockWithSession
+} from "_/mocks/enhancers"
 import {
   mockChangeEventForCheckboxInput,
   mockChangeEventForTextInput,
   mockSubmitEvent
 } from "_/mocks/vendor/browser/events"
-
-/* ----------------------------------------------------------------------------
- * Helpers
- * ------------------------------------------------------------------------- */
-
-/**
- * Wrap placeholder component with form enhancer
- *
- * @param options - Form options
- *
- * @return Stateless component
- */
-function wrapWithForm(options: WithFormOptions) {
-  const Placeholder = placeholder<WithForm>()
-  const Component = withForm(options)(Placeholder)
-  const wrapper = mount(<Component />)
-  return {
-    Placeholder,
-    Component,
-    wrapper
-  }
-}
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -66,39 +49,44 @@ function wrapWithForm(options: WithFormOptions) {
 /* Form enhancer */
 describe("enhancers/with-form", () => {
 
+  /* Mount placeholder wrapped with enhancer */
+  function mountPlaceholder(
+    options: WithFormOptions
+  ) {
+    const Component = withForm(options)(Placeholder)
+    return mount<WithForm>(<Component />)
+  }
+
   /* withForm */
   describe("withForm", () => {
 
     /* Initial form state */
     const initial = { [chance.string()]: chance.string() }
 
+    /* Mock enhancers */
+    beforeEach(() => {
+      mockWithNotification()
+      mockWithSession()
+      mockWithFormSubmit()
+    })
+
     /* { request } */
     describe("{ request }", () => {
 
-      /* Mock enhancers */
-      beforeEach(() => {
-        mockWithFormSubmit()
-      })
-
       /* Test: should initialize form state */
       it("should initialize form state", () => {
-        const { wrapper, Placeholder } = wrapWithForm({ initial })
-        const request = wrapper.find(Placeholder).prop("request")
-        expect(request).toEqual(initial)
+        const wrapper = mountPlaceholder({ initial })
+        expect(wrapper.find(Placeholder).prop("request"))
+          .toEqual(initial)
       })
     })
 
     /* { setRequest } */
     describe("{ setRequest }", () => {
 
-      /* Mock enhancers */
-      beforeEach(() => {
-        mockWithFormSubmit()
-      })
-
       /* Test: should update form state */
       it("should update form state", () => {
-        const { wrapper, Placeholder } = wrapWithForm({ initial })
+        const wrapper = mountPlaceholder({ initial })
         const setRequest = wrapper.find(Placeholder).prop("setRequest")
         const request = { [chance.string()]: chance.string() }
         setRequest(request)
@@ -111,14 +99,9 @@ describe("enhancers/with-form", () => {
     /* { handleChange } */
     describe("{ handleChange }", () => {
 
-      /* Mock enhancers */
-      beforeEach(() => {
-        mockWithFormSubmit()
-      })
-
       /* Test: should update form state for text input */
       it("should update form state for text input", () => {
-        const { wrapper, Placeholder } = wrapWithForm({ initial })
+        const wrapper = mountPlaceholder({ initial })
         const handleChange = wrapper.find(Placeholder).prop("handleChange")
         const options = { name: chance.string(), value: chance.string() }
         handleChange(mockChangeEventForTextInput(options))
@@ -131,7 +114,7 @@ describe("enhancers/with-form", () => {
 
       /* Test: should update form state for checkbox input */
       it("should update form state for checkbox input", () => {
-        const { wrapper, Placeholder } = wrapWithForm({ initial })
+        const wrapper = mountPlaceholder({ initial })
         const handleChange = wrapper.find(Placeholder).prop("handleChange")
         const options = { name: chance.string(), checked: chance.bool() }
         handleChange(mockChangeEventForCheckboxInput(options))
@@ -146,14 +129,9 @@ describe("enhancers/with-form", () => {
     /* { handleSubmit } */
     describe("{ handleSubmit }", () => {
 
-      /* Mock enhancers */
-      beforeEach(() => {
-        mockWithFormSubmit()
-      })
-
       /* Test: should submit form */
       it("should submit form", () => {
-        const { wrapper, Placeholder } = wrapWithForm({ initial })
+        const wrapper = mountPlaceholder({ initial })
         const handleSubmit = wrapper.find(Placeholder).prop("handleSubmit")
         const ev = mockSubmitEvent()
         handleSubmit(ev)

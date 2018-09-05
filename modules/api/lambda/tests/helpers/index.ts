@@ -33,6 +33,19 @@ import * as supertest from "supertest"
 export const chance = new Chance()
 
 /**
+ * HTTP client for acceptance tests
+ */
+export const request = supertest(`${
+  process.env.API_INVOKE_URL!
+}/${
+  process.env.API_BASE_PATH!
+}`)
+
+/* ----------------------------------------------------------------------------
+ * Functions
+ * ------------------------------------------------------------------------- */
+
+/**
  * Busy-wait the given number of milliseconds
  *
  * @param interval - Interval in milliseconds
@@ -50,12 +63,3 @@ export function wait(interval: number) {
     }
   })
 }
-
-/**
- * HTTP client for acceptance tests
- */
-export const request = supertest(`${
-  process.env.API_INVOKE_URL!
-}/${
-  process.env.API_BASE_PATH!
-}`)

@@ -20,43 +20,18 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
-import { Redirect } from "react-router-dom"
-import {
-  compose,
-  pure,
-  setDisplayName
-} from "recompose"
+import * as _ from "recompose"
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Render component
+ * Mock recompose's renderComponent
  *
- * @return JSX element
+ * @return Jasmine spy
  */
-export const Render: React.SFC =
-  () => <Redirect to="/" />
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Enhance component
- *
- * @return Component enhancer
- */
-export function enhance() {
-  return compose(
-    pure,
-    setDisplayName("NotFound")
-  )
+export function mockRenderComponent(): jasmine.Spy {
+  return spyOn(_, "renderComponent")
+    .and.callFake(() => _.renderNothing)
 }
-
-/**
- * Page not found component
- */
-export const NotFound = enhance()(Render)

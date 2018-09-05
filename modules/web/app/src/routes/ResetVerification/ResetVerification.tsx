@@ -30,7 +30,8 @@ import {
   branch,
   compose,
   pure,
-  renderComponent
+  renderComponent,
+  setDisplayName
 } from "recompose"
 
 import { ResetVerificationRequest } from "common"
@@ -109,10 +110,12 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset verification
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const ResetVerification =
-  compose<RenderProps, {}>(
+export function enhance() {
+  return compose<RenderProps, {}>(
     withStyles(styles),
     withForm<ResetVerificationRequest>({
       message: "You have successfully changed your password. Use your " +
@@ -125,5 +128,12 @@ export const ResetVerification =
       ({ form }) => form.success,
       renderComponent(ResetVerificationSuccess)
     ),
-    pure
-  )(Render)
+    pure,
+    setDisplayName("ResetVerification")
+  )
+}
+
+/**
+ * Password reset verification component
+ */
+export const ResetVerification = enhance()(Render)

@@ -28,6 +28,7 @@ import {
   lifecycle,
   pure,
   renderComponent,
+  setDisplayName,
   withProps
 } from "recompose"
 
@@ -110,10 +111,12 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication success
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const AuthenticateSuccess =
-  compose<RenderProps, AuthenticateSuccessProps>(
+export function enhance() {
+  return compose<RenderProps, AuthenticateSuccessProps>(
     withSession(),
     withProps<InnerProps, RenderProps>(() => {
       const { redirect } = parse(location.search)
@@ -135,5 +138,12 @@ export const AuthenticateSuccess =
       ({ session }) => !(session && session.renewed),
       renderComponent(() => <Loading />)
     ),
-    pure
-  )(Render)
+    pure,
+    setDisplayName("AuthenticateSuccess")
+  )
+}
+
+/**
+ * Authentication success component
+ */
+export const AuthenticateSuccess = enhance()(Render)

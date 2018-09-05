@@ -100,10 +100,12 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Text link
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const TextLink =
-  compose<RenderProps, TextLinkProps>(
+export function enhance() {
+  return compose<RenderProps, TextLinkProps>(
     withStyles(styles),
     withNotification(),
     withHandlers<HandlerCallbackProps, HandlerProps>({
@@ -116,4 +118,10 @@ export const TextLink =
     ])),
     pure,
     setDisplayName("TextLink")
-  )(Render)
+  )
+}
+
+/**
+ * Text link component
+ */
+export const TextLink = enhance()(Render)

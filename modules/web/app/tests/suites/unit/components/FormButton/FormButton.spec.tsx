@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme"
+import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
@@ -29,80 +29,83 @@ import {
   RenderProps
 } from "components/FormButton/FormButton"
 
-import { chance, search } from "_/helpers"
+import { chance, find } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Form button component */
+/* Form button components */
 describe("components/FormButton", () => {
 
   /* Render component */
   describe("<Render />", () => {
 
-    /* Shallow-render component */
-    const wrapper = shallow(
-      <Render classes={{ root: chance.string() }}>
-        __CHILDREN__
-      </Render>
-    )
+    /* Render properties */
+    const props: RenderProps = {
+      classes: {
+        root: chance.string()
+      }
+    }
 
-    /* Test: should render button */
-    it("should render button", () => {
-      const button = search(wrapper, "Button")
+    /* Test: should render form */
+    it("should render form", () => {
+      const wrapper = shallow(<Render {...props} />)
+      const button = find(wrapper, "Button")
       expect(button.exists()).toBe(true)
     })
 
     /* Test: should render button with default type */
     it("should render button with default type", () => {
-      const button = search(wrapper, "Button")
-      expect(button.prop<RenderProps>("type")).toEqual("submit")
+      const wrapper = shallow(<Render {...props} />)
+      const button = find(wrapper, "Button")
+      expect(button.prop("type")).toEqual("submit")
     })
 
     /* Test: should render button with default variant */
     it("should render button with default variant", () => {
-      const button = search(wrapper, "Button")
-      expect(button.prop<RenderProps>("variant")).toEqual("contained")
+      const wrapper = shallow(<Render {...props} />)
+      const button = find(wrapper, "Button")
+      expect(button.prop("variant")).toEqual("contained")
     })
 
     /* Test: should render button with default color */
     it("should render button with default color", () => {
-      const button = search(wrapper, "Button")
-      expect(button.prop<RenderProps>("color")).toEqual("primary")
+      const wrapper = shallow(<Render {...props} />)
+      const button = find(wrapper, "Button")
+      expect(button.prop("color")).toEqual("primary")
     })
 
     /* Test: should render button with full width */
     it("should render button with full width", () => {
-      const button = search(wrapper, "Button")
-      expect(button.prop<RenderProps>("fullWidth")).toBe(true)
-    })
-
-    /* Test: should render children */
-    it("should render children", () => {
-      const paper = search(wrapper, "Button")
-      expect(paper.children().length).toEqual(1)
+      const wrapper = shallow(<Render {...props} />)
+      const button = find(wrapper, "Button")
+      expect(button.prop("fullWidth")).toBe(true)
     })
   })
 
-  /* Form button */
+  /* Form button component */
   describe("<FormButton />", () => {
 
-    /* Enhance component */
-    const FormButton = enhance()(Render)
+    /* Mount placeholder wrapped with enhancer */
+    function mountPlaceholder() {
+      const Component = enhance()(Placeholder)
+      return mount(<Component />)
+    }
 
     /* Test: should render with styles */
     it("should render with styles", () => {
-      const wrapper = shallow(<FormButton />)
-      const component = search(wrapper, Render)
-      expect(component.prop<RenderProps>("classes")).toBeDefined()
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).prop("classes"))
+        .toBeDefined()
     })
 
     /* Test: should render with display name */
     it("should render with display name", () => {
-      const wrapper = shallow(<FormButton />)
-      const component = search(wrapper, Render)
-      expect(component.name()).toEqual("FormButton")
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("FormButton")
     })
   })
 })

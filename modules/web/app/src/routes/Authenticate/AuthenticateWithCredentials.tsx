@@ -33,7 +33,8 @@ import {
   compose,
   lifecycle,
   pure,
-  renderComponent
+  renderComponent,
+  setDisplayName
 } from "recompose"
 
 import {
@@ -75,14 +76,14 @@ export type AuthenticateWithCredentialsProps =
 /**
  * Lifecycle properties
  */
-type LifecycleProps =
+export type LifecycleProps =
   & AuthenticateWithCredentialsProps
   & WithForm<AuthenticateRequest, Session<string>>
 
 /**
  * Branch properties
  */
-type BranchProps =
+export type BranchProps =
   & WithForm<AuthenticateRequest, Session<string>>
 
 /* ------------------------------------------------------------------------- */
@@ -153,10 +154,12 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication with credentials
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const AuthenticateWithCredentials =
-  compose<RenderProps, AuthenticateWithCredentialsProps>(
+export function enhance() {
+  return compose<RenderProps, AuthenticateWithCredentialsProps>(
     withStyles(styles),
     withForm<AuthenticateRequest, Session<string>>({
       target: "/authenticate",
@@ -181,5 +184,12 @@ export const AuthenticateWithCredentials =
       ({ form }) => form.success && Boolean(form.response),
       renderComponent(AuthenticateSuccess)
     ),
-    pure
-  )(Render)
+    pure,
+    setDisplayName("AuthenticateWithCredentials")
+  )
+}
+
+/**
+ * Authentication with credentials component
+ */
+export const AuthenticateWithCredentials = enhance()(Render)

@@ -82,11 +82,19 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Header
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const Header =
-  compose<RenderProps, HeaderProps>(
+export function enhance() {
+  return compose<RenderProps, HeaderProps>(
     withStyles(styles),
     pure,
     setDisplayName("Header")
-  )(Render)
+  )
+}
+
+/**
+ * Header component
+ */
+export const Header = enhance()(Render)

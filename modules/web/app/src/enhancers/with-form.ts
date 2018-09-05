@@ -45,7 +45,7 @@ import {
 export interface WithFormOptions<
   TRequest extends {} = any
 > extends WithFormSubmitOptions {
-  initial: Readonly<TRequest>          /* Initial form request */
+  initial: Readonly<TRequest>          /* Initial form state */
 }
 
 /* ------------------------------------------------------------------------- */

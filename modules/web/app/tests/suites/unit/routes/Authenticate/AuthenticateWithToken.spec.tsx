@@ -22,12 +22,16 @@
 
 import { mount, shallow } from "enzyme"
 import * as React from "react"
+import { compose } from "recompose"
 
+import { withRememberMe } from "enhancers"
+import {
+  AuthenticateSuccess
+} from "routes/Authenticate/AuthenticateSuccess"
 import {
   enhance,
   Render
-} from "routes/Leave/Leave"
-import { LeaveSuccess } from "routes/Leave/LeaveSuccess"
+} from "routes/Authenticate/AuthenticateWithToken"
 
 import { find, wait } from "_/helpers"
 import {
@@ -38,8 +42,8 @@ import {
   mockWithFormSubmit,
   mockWithFormSubmitWithError,
   mockWithFormSubmitWithResult,
-  mockWithRememberMe,
-  mockWithSession
+  mockWithNotification,
+  mockWithRememberMe
 } from "_/mocks/enhancers"
 import { mockRenderComponent } from "_/mocks/vendor/recompose"
 
@@ -47,8 +51,8 @@ import { mockRenderComponent } from "_/mocks/vendor/recompose"
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Sign out components */
-describe("routes/Leave", () => {
+/* Authenticate with refresh token components */
+describe("routes/AuthenticateWithToken", () => {
 
   /* Render component */
   describe("<Render />", () => {
@@ -66,57 +70,42 @@ describe("routes/Leave", () => {
     })
   })
 
-  /* Sign out component */
-  describe("<Leave />", () => {
+  /* Authenticate with refresh token component */
+  describe("<AuthenticateWithToken />", () => {
 
     /* Mount placeholder wrapped with enhancer */
     function mountPlaceholder() {
-      const Component = enhance()(Placeholder)
+      const Component = compose(
+        withRememberMe(),
+        enhance()
+      )(Placeholder)
       return mount(<Component />)
     }
 
     /* Mock enhancers */
     beforeEach(() => {
-      mockWithSession()
       mockWithRememberMe()
+      mockWithNotification()
     })
 
-    /* Test: should not set request target URL */
-    it("should not set request target URL", () => {
+    /* Test: should set request target URL */
+    it("should set request target URL", () => {
+      const withFormSubmitMock = mockWithFormSubmit()
+      mountPlaceholder()
+      expect(withFormSubmitMock).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          target: "/authenticate"
+        }))
+    })
+
+    /* Test: should not set request authorization flag */
+    it("should not set request authorization flag", () => {
       const withFormSubmitMock = mockWithFormSubmit()
       mountPlaceholder()
       expect(withFormSubmitMock).not.toHaveBeenCalledWith(
         jasmine.objectContaining({
-          target: jasmine.any(String)
-        }))
-    })
-
-    /* Test: should set request success message */
-    it("should set request success message", () => {
-      const withFormSubmitMock = mockWithFormSubmit()
-      mountPlaceholder()
-      expect(withFormSubmitMock).toHaveBeenCalledWith(
-        jasmine.objectContaining({
-          message: jasmine.any(String)
-        }))
-    })
-
-    /* Test: should set request authorization flag */
-    it("should set request authorization flag", () => {
-      const withFormSubmitMock = mockWithFormSubmit()
-      mountPlaceholder()
-      expect(withFormSubmitMock).toHaveBeenCalledWith(
-        jasmine.objectContaining({
           authorize: true
         }))
-    })
-
-    /* Test: should prevent re-authentication */
-    it("should prevent re-authentication", () => {
-      mockWithFormSubmit()
-      const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).prop("setRememberMeResult"))
-        .toHaveBeenCalledWith(false)
     })
 
     /* Test: should submit request after mount */
@@ -127,11 +116,21 @@ describe("routes/Leave", () => {
         .toHaveBeenCalledWith()
     })
 
+    /* Test: should dismiss notification */
+    it("should dismiss notification", async () => {
+      mockWithFormSubmit()
+      const wrapper = mountPlaceholder()
+      await wait(250)
+      expect(wrapper.find(Placeholder).prop("dismissNotification"))
+        .toHaveBeenCalledWith()
+    })
+
     /* Test: should render with display name */
     it("should render with display name", () => {
       mockWithFormSubmit()
       const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).name()).toEqual("Leave")
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("AuthenticateWithToken")
     })
 
     /* with successful request */
@@ -142,22 +141,13 @@ describe("routes/Leave", () => {
         mockWithFormSubmitWithResult()
       })
 
-      /* Test: should terminate session */
-      it("should terminate session", async () => {
-        mockRenderComponent()
-        const wrapper = mountPlaceholder()
-        await wait(250)
-        expect(wrapper.find("Nothing").prop("terminateSession"))
-          .toHaveBeenCalledWith()
-      })
-
-      /* Test: should render <LeaveSuccess /> */
-      it("should render <LeaveSuccess />", async () => {
+      /* Test: should render <AuthenticateSuccess /> */
+      it("should render <AuthenticateSuccess />", async () => {
         const renderComponentMock = mockRenderComponent()
         mountPlaceholder()
         await wait(250)
         expect(renderComponentMock)
-          .toHaveBeenCalledWith(LeaveSuccess)
+          .toHaveBeenCalledWith(AuthenticateSuccess)
       })
     })
 
@@ -169,22 +159,12 @@ describe("routes/Leave", () => {
         mockWithFormSubmitWithError()
       })
 
-      /* Test: should terminate session */
-      it("should terminate session", async () => {
-        mockRenderComponent()
+      /* Test: should indicate failed re-authentication */
+      it("should indicate failed re-authentication", async () => {
         const wrapper = mountPlaceholder()
         await wait(250)
-        expect(wrapper.find("Nothing").prop("terminateSession"))
-          .toHaveBeenCalledWith()
-      })
-
-      /* Test: should render <LeaveSuccess /> */
-      it("should render <LeaveSuccess />", async () => {
-        const renderComponentMock = mockRenderComponent()
-        mountPlaceholder()
-        await wait(250)
-        expect(renderComponentMock)
-          .toHaveBeenCalledWith(LeaveSuccess)
+        expect(wrapper.find(Placeholder).prop("setRememberMeResult"))
+          .toHaveBeenCalledWith(false)
       })
     })
   })

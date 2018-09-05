@@ -20,9 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme"
+import { mount, shallow } from "enzyme"
 import * as React from "react"
-import { RouteProps } from "react-router-dom"
 
 import {
   enhance,
@@ -39,179 +38,182 @@ import {
   ResetVerification
 } from "routes"
 
-import { chance, search } from "_/helpers"
+import { chance, find } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* App component */
+/* Application components */
 describe("components/App", () => {
 
   /* Render component */
   describe("<Render />", () => {
 
-    /* Shallow-render component */
-    const wrapper = shallow(<Render classes={{ root: chance.string() }} />)
+    /* Render properties */
+    const props: RenderProps = {
+      classes: {
+        root: chance.string()
+      }
+    }
 
     /* Test: should render switch */
     it("should render switch", () => {
-      expect(search(wrapper, "Switch").exists()).toBe(true)
+      const wrapper = shallow(<Render {...props} />)
+      const switch0 = find(wrapper, "Switch")
+      expect(switch0.exists()).toBe(true)
     })
 
-    /* with path / */
-    describe("with path /", () => {
-
-      /* Route and props */
-      const route = search(wrapper, `[path="/"]`)
-      const props: RouteProps = route.props()
+    /* with path '/' */
+    describe("with path '/'", () => {
 
       /* Test: should render exact route */
       it("should render exact route", () => {
-        expect(route.is("Route")).toBe(true)
-        expect(props.exact).toBe(true)
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/']")
+        expect(route.prop("exact")).toBe(true)
       })
 
-      /* Test: should link to authentication / */
-      it("should link to authentication", () => {
-        expect(props.component).toEqual(Authenticate)
+      /* Test: should render <Authenticate /> / */
+      it("should render <Authenticate />", () => {
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/']")
+        expect(route.prop("component")).toEqual(Authenticate)
       })
     })
 
-    /* with path / */
-    describe("with path /leave", () => {
-
-      /* Route and props */
-      const route = search(wrapper, `[path="/leave"]`)
-      const props: RouteProps = route.props()
+    /* with path '/leave' */
+    describe("with path '/leave'", () => {
 
       /* Test: should render exact route */
       it("should render exact route", () => {
-        expect(route.is("Route")).toBe(true)
-        expect(props.exact).toBe(true)
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/leave']")
+        expect(route.prop("exact")).toBe(true)
       })
 
-      /* Test: should link to sign out / */
-      it("should link to sign out", () => {
-        expect(props.component).toEqual(Leave)
+      /* Test: should render <Leave /> */
+      it("should render <Leave />", () => {
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/leave']")
+        expect(route.prop("component")).toEqual(Leave)
       })
     })
 
-    /* with path /register */
-    describe("with path /register", () => {
-
-      /* Route and props */
-      const route = search(wrapper, `[path="/register"]`)
-      const props: RouteProps = route.props()
+    /* with path '/register' */
+    describe("with path '/register'", () => {
 
       /* Test: should render exact route */
       it("should render exact route", () => {
-        expect(route.is("Route")).toBe(true)
-        expect(props.exact).toBe(true)
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/register']")
+        expect(route.prop("exact")).toBe(true)
       })
 
-      /* Test: should link to registration / */
-      it("should link to registration", () => {
-        expect(props.component).toEqual(Register)
+      /* Test: should render <Register /> */
+      it("should render <Register />", () => {
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/register']")
+        expect(route.prop("component")).toEqual(Register)
       })
     })
 
-    /* with path /register/:code */
-    describe("with path /register/:code", () => {
+    /* with path '/register/:code' */
+    describe("with path '/register/:code'", () => {
 
-      /* Route and props */
-      const route = search(wrapper, `[path="/register/:code+"]`)
-      const props: RouteProps = route.props()
-
-      /* Test: should render wildcard route */
+      /* Test: should render exact route */
       it("should render wildcard route", () => {
-        expect(route.is("Route")).toBe(true)
-        expect(props.exact).toBeFalsy()
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/register/:code+']")
+        expect(route.prop("exact")).toBeUndefined()
       })
 
-      /* Test: should link to registration / */
-      it("should link to registration verification", () => {
-        expect(props.component).toEqual(RegisterVerification)
+      /* Test: should render <RegisterVerification /> */
+      it("should render <RegisterVerification />", () => {
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/register/:code+']")
+        expect(route.prop("component")).toEqual(RegisterVerification)
       })
     })
 
-    /* with path /reset */
-    describe("with path /reset", () => {
-
-      /* Route and props */
-      const route = search(wrapper, `[path="/reset"]`)
-      const props: RouteProps = route.props()
+    /* with path '/reset' */
+    describe("with path '/reset'", () => {
 
       /* Test: should render exact route */
       it("should render exact route", () => {
-        expect(route.is("Route")).toBe(true)
-        expect(props.exact).toBe(true)
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/reset']")
+        expect(route.prop("exact")).toBe(true)
       })
 
-      /* Test: should link to password reset / */
-      it("should link to password reset", () => {
-        expect(props.component).toEqual(Reset)
+      /* Test: should render <Reset /> */
+      it("should render <Reset />", () => {
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/reset']")
+        expect(route.prop("component")).toEqual(Reset)
       })
     })
 
-    /* with path /reset/:code */
-    describe("with path /reset/:code", () => {
+    /* with path '/reset/:code' */
+    describe("with path '/reset/:code'", () => {
 
-      /* Route and props */
-      const route = search(wrapper, `[path="/reset/:code+"]`)
-      const props: RouteProps = route.props()
-
-      /* Test: should render wildcard route */
+      /* Test: should render exact route */
       it("should render wildcard route", () => {
-        expect(route.is("Route")).toBe(true)
-        expect(props.exact).toBeFalsy()
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/reset/:code+']")
+        expect(route.prop("exact")).toBeUndefined()
       })
 
-      /* Test: should link to password reset / */
-      it("should link to password reset verification", () => {
-        expect(props.component).toEqual(ResetVerification)
+      /* Test: should render <ResetVerification /> */
+      it("should render <ResetVerification />", () => {
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "[path='/reset/:code+']")
+        expect(route.prop("component")).toEqual(ResetVerification)
       })
     })
 
     /* with catch all (not found) */
     describe("with catch all (not found)", () => {
 
-      /* Route and props */
-      const route = search(wrapper, "Route").last()
-      const props: RouteProps = route.props()
-
-      /* Test: should render catch-all route */
+      /* Test: should render exact route */
       it("should render catch-all route", () => {
-        expect(route.is("Route")).toBe(true)
-        expect(props.path).toBeFalsy()
-        expect(props.exact).toBeFalsy()
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "Route").last()
+        expect(route.prop("path")).toBeUndefined()
+        expect(route.prop("exact")).toBeUndefined()
       })
 
-      /* Test: should link to page not found / */
-      it("should link to page not found", () => {
-        expect(props.component).toEqual(NotFound)
+      /* Test: should render <NotFound /> */
+      it("should render <NotFound />", () => {
+        const wrapper = shallow(<Render {...props} />)
+        const route = find(wrapper, "Route").last()
+        expect(route.prop("component")).toEqual(NotFound)
       })
     })
   })
 
-  /* Application */
+  /* Application component */
   describe("<App />", () => {
 
-    /* Enhance component */
-    const App = enhance()(Render)
+    /* Mount placeholder wrapped with enhancer */
+    function mountPlaceholder() {
+      const Component = enhance()(Placeholder)
+      return mount<RenderProps>(<Component />)
+    }
 
     /* Test: should render with styles */
     it("should render with styles", () => {
-      const wrapper = shallow(<App />)
-      const component = search(wrapper, Render)
-      expect(component.prop<RenderProps>("classes")).toBeDefined()
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).prop("classes"))
+        .toBeDefined()
     })
 
     /* Test: should render with display name */
     it("should render with display name", () => {
-      const wrapper = shallow(<App />)
-      const component = search(wrapper, Render)
-      expect(component.name()).toEqual("App")
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("App")
     })
   })
 })

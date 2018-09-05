@@ -26,8 +26,10 @@ import * as React from "react"
 import {
   enhance,
   Render
-} from "routes/Leave/Leave"
-import { LeaveSuccess } from "routes/Leave/LeaveSuccess"
+} from "routes/RegisterVerification/RegisterVerification"
+import {
+  RegisterVerificationSuccess
+} from "routes/RegisterVerification/RegisterVerificationSuccess"
 
 import { find, wait } from "_/helpers"
 import {
@@ -36,10 +38,7 @@ import {
 } from "_/mocks/components"
 import {
   mockWithFormSubmit,
-  mockWithFormSubmitWithError,
-  mockWithFormSubmitWithResult,
-  mockWithRememberMe,
-  mockWithSession
+  mockWithFormSubmitWithResult
 } from "_/mocks/enhancers"
 import { mockRenderComponent } from "_/mocks/vendor/recompose"
 
@@ -47,8 +46,8 @@ import { mockRenderComponent } from "_/mocks/vendor/recompose"
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Sign out components */
-describe("routes/Leave", () => {
+/* Registration verification components */
+describe("routes/RegisterVerification", () => {
 
   /* Render component */
   describe("<Render />", () => {
@@ -66,8 +65,8 @@ describe("routes/Leave", () => {
     })
   })
 
-  /* Sign out component */
-  describe("<Leave />", () => {
+  /* Registration verification component */
+  describe("<RegisterVerification />", () => {
 
     /* Mount placeholder wrapped with enhancer */
     function mountPlaceholder() {
@@ -75,13 +74,7 @@ describe("routes/Leave", () => {
       return mount(<Component />)
     }
 
-    /* Mock enhancers */
-    beforeEach(() => {
-      mockWithSession()
-      mockWithRememberMe()
-    })
-
-    /* Test: should not set request target URL */
+    /* Test: should set request target URL */
     it("should not set request target URL", () => {
       const withFormSubmitMock = mockWithFormSubmit()
       mountPlaceholder()
@@ -101,22 +94,14 @@ describe("routes/Leave", () => {
         }))
     })
 
-    /* Test: should set request authorization flag */
-    it("should set request authorization flag", () => {
+    /* Test: should not set request authorization flag */
+    it("should not set request authorization flag", () => {
       const withFormSubmitMock = mockWithFormSubmit()
       mountPlaceholder()
-      expect(withFormSubmitMock).toHaveBeenCalledWith(
+      expect(withFormSubmitMock).not.toHaveBeenCalledWith(
         jasmine.objectContaining({
           authorize: true
         }))
-    })
-
-    /* Test: should prevent re-authentication */
-    it("should prevent re-authentication", () => {
-      mockWithFormSubmit()
-      const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).prop("setRememberMeResult"))
-        .toHaveBeenCalledWith(false)
     })
 
     /* Test: should submit request after mount */
@@ -131,7 +116,8 @@ describe("routes/Leave", () => {
     it("should render with display name", () => {
       mockWithFormSubmit()
       const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).name()).toEqual("Leave")
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("RegisterVerification")
     })
 
     /* with successful request */
@@ -142,49 +128,13 @@ describe("routes/Leave", () => {
         mockWithFormSubmitWithResult()
       })
 
-      /* Test: should terminate session */
-      it("should terminate session", async () => {
-        mockRenderComponent()
-        const wrapper = mountPlaceholder()
-        await wait(250)
-        expect(wrapper.find("Nothing").prop("terminateSession"))
-          .toHaveBeenCalledWith()
-      })
-
-      /* Test: should render <LeaveSuccess /> */
-      it("should render <LeaveSuccess />", async () => {
+      /* Test: should render <RegisterVerificationSuccess /> */
+      it("should render <RegisterVerificationSuccess />", async () => {
         const renderComponentMock = mockRenderComponent()
         mountPlaceholder()
         await wait(250)
         expect(renderComponentMock)
-          .toHaveBeenCalledWith(LeaveSuccess)
-      })
-    })
-
-    /* with failed request */
-    describe("with failed request", () => {
-
-      /* Mock enhancers */
-      beforeEach(() => {
-        mockWithFormSubmitWithError()
-      })
-
-      /* Test: should terminate session */
-      it("should terminate session", async () => {
-        mockRenderComponent()
-        const wrapper = mountPlaceholder()
-        await wait(250)
-        expect(wrapper.find("Nothing").prop("terminateSession"))
-          .toHaveBeenCalledWith()
-      })
-
-      /* Test: should render <LeaveSuccess /> */
-      it("should render <LeaveSuccess />", async () => {
-        const renderComponentMock = mockRenderComponent()
-        mountPlaceholder()
-        await wait(250)
-        expect(renderComponentMock)
-          .toHaveBeenCalledWith(LeaveSuccess)
+          .toHaveBeenCalledWith(RegisterVerificationSuccess)
       })
     })
   })

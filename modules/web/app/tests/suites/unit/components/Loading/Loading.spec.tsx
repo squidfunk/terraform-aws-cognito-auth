@@ -20,38 +20,49 @@
  * IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme"
+import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  Loading,
+  enhance,
   Render
 } from "components/Loading/Loading"
+
+import { find } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Loading component */
+/* Loading indicator components */
 describe("components/Loading", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
+    /* Test: should render progress indicator */
+    it("should render progress indicator", () => {
       const wrapper = shallow(<Render />)
-      expect(wrapper).toMatchSnapshot()
+      const progress = find(wrapper, "CircularProgress")
+      expect(progress.exists()).toBe(true)
     })
   })
 
-  /* Enhanced component */
-  describe("Loading", () => {
+  /* Loading indicator component */
+  describe("<Loading />", () => {
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(<Loading />)
-      expect(wrapper).toMatchSnapshot()
+    /* Mount placeholder wrapped with enhancer */
+    function mountPlaceholder() {
+      const Component = enhance()(Placeholder)
+      return mount(<Component />)
+    }
+
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("Loading")
     })
   })
 })

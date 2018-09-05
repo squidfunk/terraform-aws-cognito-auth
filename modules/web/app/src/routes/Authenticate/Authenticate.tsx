@@ -24,7 +24,8 @@ import {
   branch,
   compose,
   pure,
-  renderComponent
+  renderComponent,
+  setDisplayName
 } from "recompose"
 
 import {
@@ -71,10 +72,12 @@ export const Render = AuthenticateWithCredentials
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const Authenticate =
-  compose<RenderProps, {}>(
+export function enhance() {
+  return compose<RenderProps, {}>(
     withRememberMe(),
     branch<BranchProps>(
       ({ remember: { active, result } }) => {
@@ -82,5 +85,12 @@ export const Authenticate =
       },
       renderComponent(AuthenticateWithToken)
     ),
-    pure
-  )(Render)
+    pure,
+    setDisplayName("Authenticate")
+  )
+}
+
+/**
+ * Authentication component
+ */
+export const Authenticate = enhance()(Render)

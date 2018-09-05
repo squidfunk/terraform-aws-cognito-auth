@@ -20,108 +20,118 @@
  * IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme"
+import { mount, shallow } from "enzyme"
 import * as React from "react"
+import { compose } from "recompose"
 
 import {
-  Notification,
+  enhance,
   Render,
   RenderProps
 } from "components/Notification/Notification"
-import {
-  NotificationData,
-  NotificationType
-} from "providers/store/notification"
+import { withNotification } from "enhancers"
 
-import { search } from "_/helpers"
-import { mockStore } from "_/mocks/providers"
+import { chance, find } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
+import { mockWithNotification } from "_/mocks/enhancers"
+import { mockNotificationDataWithSuccess } from "_/mocks/providers"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Notification component */
+/* Notification components */
 describe("components/Notification", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Default props */
+    /* Render properties */
     const props: RenderProps = {
       classes: {
-        root: "__ROOT__",
-        success: "__SUCCESS__",
-        error: "__ERROR__"
+        root: chance.string(),
+        success: chance.string(),
+        error: chance.string()
       },
       notification: {
         show: false
       }
     }
 
-    /* Test: should render collapsed if not visible */
-    it("should render collapsed if not visible", () => {
+    /* Test: should render collapsed */
+    it("should render collapsed", () => {
       const wrapper = shallow(<Render {...props} />)
-      expect(wrapper).toMatchSnapshot()
+      const collapse = find(wrapper, "Collapse")
+      expect(collapse.prop("in")).toBe(false)
     })
 
-    /* Test: should render collapsed if message is missing */
-    it("should render collapsed if message is missing", () => {
-      const wrapper = shallow(
-        <Render {...props} notification={{ show: true }} />
-      )
-      expect(wrapper).toMatchSnapshot()
-    })
+    /* with visibility */
+    describe("with visibilility", () => {
 
-    /* Test: should render expanded for success message */
-    it("should render expanded for success message", () => {
-      const data: NotificationData = {
-        type: NotificationType.SUCCESS,
-        message: "__MESSAGE__"
+      /* Additional render properties */
+      const addon: Partial<RenderProps> = {
+        notification: {
+          show: true
+        }
       }
-      const wrapper = shallow(
-        <Render {...props} notification={{ ...props.notification, data }} />
-      )
-      expect(wrapper).toMatchSnapshot()
+
+      /* Test: should render collapsed */
+      it("should render collapsed", () => {
+        const wrapper = shallow(<Render {...props} {...addon} />)
+        expect(find(wrapper, "Fade")).toBeUndefined()
+        expect(find(wrapper, "Typography")).toBeUndefined()
+      })
     })
 
-    /* Test: should render expanded for error message */
-    it("should render expanded for error message", () => {
-      const data: NotificationData = {
-        type: NotificationType.ERROR,
-        message: "__MESSAGE__"
+    /* with visibility and message */
+    describe("with visibilility and message", () => {
+
+      /* Additional render properties */
+      const addon: Partial<RenderProps> = {
+        notification: {
+          show: true,
+          data: mockNotificationDataWithSuccess()
+        }
       }
-      const wrapper = shallow(
-        <Render {...props} notification={{ ...props.notification, data }} />
-      )
-      expect(wrapper).toMatchSnapshot()
+
+      /* Test: should render expanded */
+      it("should render expanded", () => {
+        const wrapper = shallow(<Render {...props} {...addon} />)
+        const fade = find(wrapper, "Fade")
+        expect(fade.exists()).toBe(true)
+      })
     })
   })
 
-  /* Enhanced component */
-  describe("Notification", () => {
+  /* Notification component */
+  describe("<Notification />", () => {
 
-    /* Initialize store */
-    const store = mockStore({
-      notification: {
-        data: {
-          type: NotificationType.ERROR,
-          message: "__MESSAGE__"
-        },
-        show: true
-      }
-    })
+    /* Mount placeholder wrapped with enhancer */
+    function mountPlaceholder() {
+      const Component = compose(
+        withNotification(),
+        enhance()
+      )(Placeholder)
+      return mount(<Component />)
+    }
 
-    /* Clear store */
+    /* Mock enhancers */
     beforeEach(() => {
-      store.clearActions()
+      mockWithNotification()
     })
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
-      const wrapper = shallow(<Notification />, {
-        context: { store }
-      })
-      expect(search(wrapper, Render)).toMatchSnapshot()
+    /* Test: should render with styles */
+    it("should render with styles", () => {
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).prop("classes"))
+        .toBeDefined()
+    })
+
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("Notification")
     })
   })
 })

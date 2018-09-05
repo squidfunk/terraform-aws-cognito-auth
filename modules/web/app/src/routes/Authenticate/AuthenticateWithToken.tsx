@@ -26,7 +26,8 @@ import {
   compose,
   lifecycle,
   pure,
-  renderComponent
+  renderComponent,
+  setDisplayName
 } from "recompose"
 
 import {
@@ -87,10 +88,12 @@ export const Render: React.SFC =
  * ------------------------------------------------------------------------- */
 
 /**
- * Authentication with refresh token
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const AuthenticateWithToken =
-  compose<{}, AuthenticateWithTokenProps>(
+export function enhance() {
+  return compose<{}, AuthenticateWithTokenProps>(
     withNotification(),
     withFormSubmit<AuthenticateRequest>({
       target: "/authenticate"
@@ -109,5 +112,12 @@ export const AuthenticateWithToken =
       ({ form }) => form.success && Boolean(form.response),
       renderComponent(AuthenticateSuccess)
     ),
-    pure
-  )(Render)
+    pure,
+    setDisplayName("AuthenticateWithToken")
+  )
+}
+
+/**
+ * Authentication with refresh token component
+ */
+export const AuthenticateWithToken = enhance()(Render)

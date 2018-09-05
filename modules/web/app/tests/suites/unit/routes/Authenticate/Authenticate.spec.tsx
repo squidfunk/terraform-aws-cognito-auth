@@ -20,61 +20,78 @@
  * IN THE SOFTWARE.
  */
 
-import { mount, shallow } from "enzyme"
+import { mount } from "enzyme"
 import * as React from "react"
-import { MemoryRouter } from "react-router"
-import { RedirectProps } from "react-router-dom"
 
 import {
   enhance,
   Render
-} from "routes/NotFound/NotFound"
+} from "routes/Authenticate/Authenticate"
+import {
+  AuthenticateWithCredentials
+} from "routes/Authenticate/AuthenticateWithCredentials"
+import {
+  AuthenticateWithToken
+} from "routes/Authenticate/AuthenticateWithToken"
 
-import { find } from "_/helpers"
 import { Placeholder } from "_/mocks/components"
+import { mockWithRememberMe } from "_/mocks/enhancers"
+import { mockRenderComponent } from "_/mocks/vendor/recompose"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Page not found components */
-describe("routes/NotFound", () => {
+/* Authentication components */
+describe("routes/Authenticate", () => {
 
   /* Render component */
   describe("<Render />", () => {
 
-    /* Test: should render redirect */
-    it("should render redirect", () => {
-      const wrapper = shallow(<Render />)
-      const loading = find<RedirectProps>(wrapper, "Redirect")
-      expect(loading.exists()).toBe(true)
-    })
-
-    /* Test: should redirect to '/' */
-    it("should redirect to '/'", () => {
-      const wrapper = shallow(<Render />)
-      const loading = find<RedirectProps>(wrapper, "Redirect")
-      expect(loading.prop("to")).toEqual("/")
+    /* Test: should render <AuthenticateWithCredentials /> */
+    it("should render <AuthenticateWithCredentials />", () => {
+      expect(Render).toBe(AuthenticateWithCredentials)
     })
   })
 
-  /* Page not found component */
-  describe("<NotFound />", () => {
+  /* Authentication component */
+  describe("<Authenticate />", () => {
 
     /* Mount placeholder wrapped with enhancer */
     function mountPlaceholder() {
       const Component = enhance()(Placeholder)
-      return mount(
-        <MemoryRouter>
-          <Component />
-        </MemoryRouter>
-      )
+      return mount(<Component />)
     }
 
-    /* Test: should render with display name */
-    it("should render with display name", () => {
+    /* Test: should render <Render /> */
+    it("should render <Render />", () => {
+      mockWithRememberMe()
       const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).name()).toEqual("NotFound")
+      expect(wrapper.find(Placeholder).exists()).toBe(true)
+    })
+
+    /* with remember me */
+    describe("with remember me", () => {
+
+      /* Test: should render <AuthenticateWithToken /> */
+      it("should render <AuthenticateWithToken />", () => {
+        mockWithRememberMe({ active: false })
+        const renderComponentMock = mockRenderComponent()
+        mountPlaceholder()
+        expect(renderComponentMock)
+          .toHaveBeenCalledWith(AuthenticateWithToken)
+      })
+    })
+
+    /* with failed re-authentication */
+    describe("with failed re-authentication", () => {
+
+      /* Test: should render <Render /> */
+      it("should render <Render />", () => {
+        mockWithRememberMe({ active: true, result: false })
+        const wrapper = mountPlaceholder()
+        expect(wrapper.find(Placeholder).exists()).toBe(true)
+      })
     })
   })
 })

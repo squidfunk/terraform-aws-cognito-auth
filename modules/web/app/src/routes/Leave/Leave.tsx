@@ -25,7 +25,6 @@ import {
   branch,
   compose,
   lifecycle,
-  mapProps,
   pure,
   renderComponent,
   setDisplayName
@@ -79,10 +78,12 @@ export const Render: React.SFC =
  * ------------------------------------------------------------------------- */
 
 /**
- * Sign out
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const Leave =
-  compose(
+export function enhance() {
+  return compose(
     withSession(),
     withRememberMe(),
     withFormSubmit<LeaveRequest>({
@@ -104,7 +105,12 @@ export const Leave =
       ({ form }) => form.success || Boolean(form.err),
       renderComponent(LeaveSuccess)
     ),
-    mapProps(() => {}), // tslint:disable-line no-empty
     pure,
     setDisplayName("Leave")
-  )(Render)
+  )
+}
+
+/**
+ * Sign out component
+ */
+export const Leave = enhance()(Render)

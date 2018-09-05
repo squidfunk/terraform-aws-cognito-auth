@@ -82,12 +82,20 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Notification
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const Notification =
-  compose<RenderProps, {}>(
+export function enhance() {
+  return compose<RenderProps, {}>(
     withStyles(styles),
     withNotification(),
     pure,
     setDisplayName("Notification")
-  )(Render)
+  )
+}
+
+/**
+ * Notification component
+ */
+export const Notification = enhance()(Render)

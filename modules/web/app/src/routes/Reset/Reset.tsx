@@ -28,7 +28,8 @@ import {
 import * as React from "react"
 import {
   compose,
-  pure
+  pure,
+  setDisplayName
 } from "recompose"
 
 import { ResetRequest } from "common"
@@ -104,10 +105,12 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const Reset =
-  compose<RenderProps, {}>(
+export function enhance() {
+  return compose<RenderProps, {}>(
     withStyles(styles),
     withForm<ResetRequest>({
       message: "We just sent a verification link to your email address. " +
@@ -116,5 +119,12 @@ export const Reset =
         username: ""
       }
     }),
-    pure
-  )(Render)
+    pure,
+    setDisplayName("Reset")
+  )
+}
+
+/**
+ * Password reset component
+ */
+export const Reset = enhance()(Render)

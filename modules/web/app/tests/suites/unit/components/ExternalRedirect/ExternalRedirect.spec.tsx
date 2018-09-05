@@ -20,61 +20,81 @@
  * IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme"
+import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
   enhance,
-  Render,
-  RenderProps
+  ExternalRedirectProps,
+  Render
 } from "components/ExternalRedirect/ExternalRedirect"
 
-import { chance, search } from "_/helpers"
+import { chance, find } from "_/helpers"
+import {
+  mockComponent,
+  Placeholder
+} from "_/mocks/components"
 import { mockLocationAssign } from "_/mocks/vendor/browser/location"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* External redirect component */
+/* External redirect components */
 describe("components/ExternalRedirect", () => {
 
   /* Render component */
   describe("<Render />", () => {
 
-    /* Shallow-render component */
-    const wrapper = shallow(<Render href={chance.string()} />)
+    /* Mock components */
+    beforeEach(() => {
+      mockComponent("Loading")
+    })
 
     /* Test: should render loading indicator */
     it("should render loading indicator", () => {
-      const loading = search(wrapper, "Loading")
+      const wrapper = shallow(<Render />)
+      const loading = find(wrapper, "Loading")
       expect(loading.exists()).toBe(true)
-      expect(loading.props()).toEqual({})
     })
   })
 
-  /* External redirect */
+  /* External redirect component */
   describe("<ExternalRedirect />", () => {
 
-    /* Enhance component */
-    const ExternalRedirect = enhance()(Render)
+    /* Mount placeholder wrapped with enhancer */
+    function mountPlaceholder(_: ExternalRedirectProps) {
+      const Component = enhance()(Placeholder)
+      return mount(<Component {..._} />)
+    }
 
-    /* Target URL */
-    const href = chance.url()
+    /* Component properties */
+    const props: ExternalRedirectProps = {
+      href: chance.url()
+    }
 
     /* Test: should render with target URL */
     it("should render with target URL", () => {
       mockLocationAssign()
-      const wrapper = shallow(<ExternalRedirect href={href} />)
-      const component = search(wrapper, Render)
-      expect(component.prop<RenderProps>("href")).toEqual(href)
+      const wrapper = mountPlaceholder(props)
+      expect(wrapper.find(Placeholder).prop("href"))
+        .toEqual(props.href)
     })
 
     /* Test: should redirect after mount */
     it("should redirect after mount", () => {
       const assignMock = mockLocationAssign()
-      shallow(<ExternalRedirect href={href} />)
-      expect(assignMock).toHaveBeenCalled()
+      mountPlaceholder(props)
+      expect(assignMock)
+        .toHaveBeenCalledWith(props.href)
+    })
+
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      mockLocationAssign()
+      const wrapper = mountPlaceholder(props)
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("ExternalRedirect")
     })
   })
 })

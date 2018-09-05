@@ -28,7 +28,8 @@ import {
 import * as React from "react"
 import {
   compose,
-  pure
+  pure,
+  setDisplayName
 } from "recompose"
 
 import { RegisterRequest } from "common"
@@ -106,10 +107,12 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const Register =
-  compose<RenderProps, {}>(
+export function enhance() {
+  return compose<RenderProps, {}>(
     withStyles(styles),
     withForm<RegisterRequest>({
       message: "We just sent a verification link to your email address. " +
@@ -119,5 +122,12 @@ export const Register =
         password: ""
       }
     }),
-    pure
-  )(Render)
+    pure,
+    setDisplayName("Register")
+  )
+}
+
+/**
+ * Registration component
+ */
+export const Register = enhance()(Render)

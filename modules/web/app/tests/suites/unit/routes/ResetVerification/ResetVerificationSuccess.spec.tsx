@@ -28,7 +28,7 @@ import { RedirectProps } from "react-router-dom"
 import {
   enhance,
   Render
-} from "routes/NotFound/NotFound"
+} from "routes/ResetVerification/ResetVerificationSuccess"
 
 import { find } from "_/helpers"
 import { Placeholder } from "_/mocks/components"
@@ -37,8 +37,8 @@ import { Placeholder } from "_/mocks/components"
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Page not found components */
-describe("routes/NotFound", () => {
+/* Password reset verification success components */
+describe("routes/ResetVerificationSuccess", () => {
 
   /* Render component */
   describe("<Render />", () => {
@@ -58,8 +58,8 @@ describe("routes/NotFound", () => {
     })
   })
 
-  /* Page not found component */
-  describe("<NotFound />", () => {
+  /* Password reset verification success component */
+  describe("<ResetVerificationSuccess />", () => {
 
     /* Mount placeholder wrapped with enhancer */
     function mountPlaceholder() {
@@ -74,7 +74,8 @@ describe("routes/NotFound", () => {
     /* Test: should render with display name */
     it("should render with display name", () => {
       const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).name()).toEqual("NotFound")
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("ResetVerificationSuccess")
     })
   })
 })

@@ -72,7 +72,7 @@ describe("POST /leave", () => {
       const { body } =  await request.post("/authenticate")
         .set("Content-Type", "application/json")
         .send({ username: email, password })
-      wait(2000) // busy-wait synchronization
+      wait(2000) // busy-wait for synchronization
       return request.post("/leave")
         .set("Authorization", `Bearer ${body.access.token}`)
         .expect(204, "")

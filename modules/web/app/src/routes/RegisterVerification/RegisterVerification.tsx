@@ -26,7 +26,8 @@ import {
   compose,
   lifecycle,
   pure,
-  renderComponent
+  renderComponent,
+  setDisplayName
 } from "recompose"
 
 import { RegisterVerificationRequest } from "common"
@@ -69,10 +70,12 @@ export const Render: React.SFC =
  * ------------------------------------------------------------------------- */
 
 /**
- * Registration verification
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const RegisterVerification =
-  compose(
+export function enhance() {
+  return compose(
     withFormSubmit<RegisterVerificationRequest>({
       message: "You have successfully verified your email address. " +
                "Use your email address and password to sign in to your account"
@@ -87,5 +90,12 @@ export const RegisterVerification =
       ({ form }) => form.success || Boolean(form.err),
       renderComponent(RegisterVerificationSuccess)
     ),
-    pure
-  )(Render)
+    pure,
+    setDisplayName("RegisterVerification")
+  )
+}
+
+/**
+ * Registration verification component
+ */
+export const RegisterVerification = enhance()(Render)

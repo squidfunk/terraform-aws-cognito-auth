@@ -21,16 +21,17 @@
  */
 
 import { shallow } from "enzyme"
-import { prop } from "ramda"
 import * as React from "react"
+import { MockStoreEnhanced } from "redux-mock-store"
 
 import {
-  withSession,
-  WithSession
+  WithSession,
+  withSession
 } from "enhancers"
+import { State } from "providers/store"
 
-import { placeholder } from "_/helpers"
 import { mockSession } from "_/mocks/common"
+import { Placeholder } from "_/mocks/components"
 import {
   mockInitSessionAction,
   mockStore,
@@ -44,51 +45,54 @@ import {
 /* Session enhancer */
 describe("enhancers/with-session", () => {
 
-  /* Initialize store */
-  const store = mockStore({
-    session: mockSession()
-  })
-
-  /* Clear store */
-  beforeEach(() => {
-    store.clearActions()
-  })
+  /* Shallow-render placeholder wrapped with enhancer */
+  function shallowPlaceholder(
+    store: MockStoreEnhanced<Partial<State>>
+  ) {
+    const Component = withSession()(Placeholder)
+    return shallow<WithSession>(<Component />, {
+      context: { store }
+    })
+  }
 
   /* withSession */
   describe("withSession", () => {
 
-    /* Apply enhancer to placeholder component */
-    const Placeholder = placeholder<WithSession>()
-    const Component = withSession()(Placeholder)
-    const wrapper = shallow<WithSession>(<Component />, {
-      context: { store }
+    /* Initialize store */
+    const store = mockStore({
+      session: mockSession()
+    })
+
+    /* Clear store */
+    beforeEach(() => {
+      store.clearActions()
     })
 
     /* { session } */
     describe("{ session }", () => {
 
-      /* Session */
-      const session = wrapper.prop("session")
-
       /* Test: should map state to props */
       it("should map state to props", () => {
-        expect(prop("session", store.getState())).toBe(session)
+        const wrapper = shallowPlaceholder(store)
+        const { session } = store.getState()
+        expect(wrapper.prop("session")).toBe(session)
       })
     })
 
     /* { initSession } */
     describe("{ initSession }", () => {
 
-      /* Initialize session dispatcher */
-      const initSession = wrapper.prop("initSession")
-
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {
-        expect(initSession).toEqual(jasmine.any(Function))
+        const wrapper = shallowPlaceholder(store)
+        expect(wrapper.prop("initSession"))
+          .toEqual(jasmine.any(Function))
       })
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        const wrapper = shallowPlaceholder(store)
+        const initSession = wrapper.prop("initSession")
         mockInitSessionAction()
         initSession(mockSession())
         expect(store.getActions().length).toEqual(1)
@@ -96,6 +100,8 @@ describe("enhancers/with-session", () => {
 
       /* Test: should invoke action creator */
       it("should invoke action creator", () => {
+        const wrapper = shallowPlaceholder(store)
+        const initSession = wrapper.prop("initSession")
         const initSessionActionMock = mockInitSessionAction()
         const session = mockSession()
         initSession(session)
@@ -107,16 +113,17 @@ describe("enhancers/with-session", () => {
     /* { terminateSession } */
     describe("{ terminateSession }", () => {
 
-      /* Terminate session dispatcher */
-      const terminateSession = wrapper.prop("terminateSession")
-
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {
-        expect(terminateSession).toEqual(jasmine.any(Function))
+        const wrapper = shallowPlaceholder(store)
+        expect(wrapper.prop("terminateSession"))
+          .toEqual(jasmine.any(Function))
       })
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
+        const wrapper = shallowPlaceholder(store)
+        const terminateSession = wrapper.prop("terminateSession")
         mockTerminateSessionAction()
         terminateSession()
         expect(store.getActions().length).toEqual(1)
@@ -124,6 +131,8 @@ describe("enhancers/with-session", () => {
 
       /* Test: should invoke action creator */
       it("should invoke action creator", () => {
+        const wrapper = shallowPlaceholder(store)
+        const terminateSession = wrapper.prop("terminateSession")
         const terminateSessionActionMock = mockTerminateSessionAction()
         terminateSession()
         expect(terminateSessionActionMock)

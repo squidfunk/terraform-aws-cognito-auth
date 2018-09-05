@@ -73,7 +73,7 @@ describe("handlers/register", () => {
           "contain a number, " +
           "and contain a special character"
       }))
-      expect(registerMock).not.toHaveBeenCalledWith()
+      expect(registerMock).not.toHaveBeenCalled()
     })
 
     /* Test: should resolve with authentication client error */

@@ -142,10 +142,12 @@ export const Render: React.SFC<RenderProps> =
  * ------------------------------------------------------------------------- */
 
 /**
- * Form password
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const FormPassword =
-  compose<RenderProps, FormPasswordProps>(
+export function enhance() {
+  return compose<RenderProps, FormPasswordProps>(
     withStyles(styles),
     withState("visibility", "setVisibility", (): boolean => false),
     withHandlers<HandlerCallbackProps, HandlerProps>({
@@ -162,4 +164,10 @@ export const FormPassword =
     }),
     pure,
     setDisplayName("FormPassword")
-  )(Render)
+  )
+}
+
+/**
+ * Form password component
+ */
+export const FormPassword = enhance()(Render)

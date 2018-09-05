@@ -45,10 +45,18 @@ export const Render: React.SFC =
  * ------------------------------------------------------------------------- */
 
 /**
- * Loading indicator
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const Loading =
-  compose(
+export function enhance() {
+  return compose(
     pure,
     setDisplayName("Loading")
-  )(Render)
+  )
+}
+
+/**
+ * Loading indicator component
+ */
+export const Loading = enhance()(Render)

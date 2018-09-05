@@ -22,6 +22,11 @@
 
 import * as React from "react"
 import { Redirect } from "react-router-dom"
+import {
+  compose,
+  pure,
+  setDisplayName
+} from "recompose"
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -40,6 +45,18 @@ export const Render: React.SFC =
  * ------------------------------------------------------------------------- */
 
 /**
- * Password reset verification success
+ * Enhance component
+ *
+ * @return Component enhancer
  */
-export const ResetVerificationSuccess = Render
+export function enhance() {
+  return compose(
+    pure,
+    setDisplayName("ResetVerificationSuccess")
+  )
+}
+
+/**
+ * Password reset verification success component
+ */
+export const ResetVerificationSuccess = enhance()(Render)

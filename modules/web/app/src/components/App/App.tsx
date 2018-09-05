@@ -95,6 +95,6 @@ export function enhance() {
 }
 
 /**
- * Application
+ * Application component
  */
 export const App = enhance()(Render)

@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme"
+import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
@@ -29,56 +29,62 @@ import {
   RenderProps
 } from "components/Dialog/Dialog"
 
-import { chance, search } from "_/helpers"
+import { chance, find } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Dialog component */
+/* Dialog components */
 describe("components/Dialog", () => {
 
   /* Render component */
   describe("<Render />", () => {
 
-    /* Shallow-render component */
-    const wrapper = shallow(
-      <Render classes={{ root: chance.string() }}>
-        __CHILDREN__
-      </Render>
-    )
+    /* Render properties */
+    const props: RenderProps = {
+      classes: {
+        root: chance.string()
+      }
+    }
 
     /* Test: should render paper */
     it("should render paper", () => {
-      const paper = search(wrapper, "Paper")
+      const wrapper = shallow(<Render {...props} />)
+      const paper = find(wrapper, "Paper")
       expect(paper.exists()).toBe(true)
     })
 
     /* Test: should render children */
     it("should render children", () => {
-      const paper = search(wrapper, "Paper")
+      const wrapper = shallow(<Render {...props}>__CHILDREN__</Render>)
+      const paper = find(wrapper, "Paper")
       expect(paper.children().length).toEqual(1)
     })
   })
 
-  /* Dialog */
+  /* Dialog component */
   describe("<Dialog />", () => {
 
-    /* Enhance component */
-    const Dialog = enhance()(Render)
+    /* Mount placeholder wrapped with enhancer */
+    function mountPlaceholder() {
+      const Component = enhance()(Placeholder)
+      return mount<RenderProps>(<Component />)
+    }
 
     /* Test: should render with styles */
     it("should render with styles", () => {
-      const wrapper = shallow(<Dialog />)
-      const component = search(wrapper, Render)
-      expect(component.prop<RenderProps>("classes")).toBeDefined()
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).prop("classes"))
+        .toBeDefined()
     })
 
     /* Test: should render with display name */
     it("should render with display name", () => {
-      const wrapper = shallow(<Dialog />)
-      const component = search(wrapper, Render)
-      expect(component.name()).toEqual("Dialog")
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("Dialog")
     })
   })
 })

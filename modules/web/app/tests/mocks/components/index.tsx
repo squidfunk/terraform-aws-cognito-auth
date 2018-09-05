@@ -20,56 +20,40 @@
  * IN THE SOFTWARE.
  */
 
-import { Chance } from "chance"
-import {
-  ShallowWrapper,
-  StatelessComponent
-} from "enzyme"
 import * as React from "react"
+import { setDisplayName } from "recompose"
+
+import * as _ from "components"
 
 /* ----------------------------------------------------------------------------
  * Data
  * ------------------------------------------------------------------------- */
 
 /**
- * Chance.js instance to generate random values
+ * Placeholder component
+ *
+ * @param props - Properties
+ *
+ * @return JSX element
  */
-export const chance = new Chance()
+export const Placeholder: React.ComponentType<any> =
+  ({ children }) => <div>{children}</div>
 
 /* ----------------------------------------------------------------------------
  * Functions
  * ------------------------------------------------------------------------- */
 
 /**
- * Create a placeholder component accepting the given properties
+ * Mock component with placeholder
  *
- * @return Stateless component
+ * @template TProps - Properties type
+ *
+ * @return Component
  */
-export function placeholder<T>(): StatelessComponent<T> {
-  return () => <div />
-}
-
-/**
- * Deep-dive to find a stateless component inside a shallow-wrapped component
- *
- * This is a simple wrapper function to ease testing using shallow wrapped
- * components because Enzyme doesn't support it out-of-the-box.
- *
- * @template TProps - Component properties type
- *
- * @param wrapper - Component wrapper
- * @param selector - Selector
- *
- * @return Stateless component
- */
-export function search<TProps extends {}>(
-  wrapper: ShallowWrapper<TProps>,
-  selector: React.SFC<TProps> | string
-): ShallowWrapper<TProps> {
-  const component = wrapper.find<TProps>(
-    selector as StatelessComponent<TProps>
-  )
-  return !component.exists()
-    ? search(wrapper.dive(), selector)
-    : component
+export function mockComponent<TProps extends {}>(name: keyof typeof _) {
+  return spyOn(_, name)
+    .and.callFake((props: TProps) => {
+      const Component = setDisplayName(name)(Placeholder)
+      return <Component {...props} />
+    })
 }

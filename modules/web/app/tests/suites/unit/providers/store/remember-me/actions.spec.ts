@@ -68,8 +68,8 @@ describe("providers/store/remember-me", () => {
   /* setRememberMeResultAction */
   describe("setRememberMeResultAction", () => {
 
-    /* Test: should indicate a successful authentication attempt */
-    it("should indicate a successful authentication attempt", () => {
+    /* Test: should indicate a successful re-authentication attempt */
+    it("should indicate a successful re-authentication attempt", () => {
       store.dispatch(setRememberMeResultAction(true))
       expect(store.getActions().pop()).toEqual({
         type: RememberMeActionTypes.SET_RESULT,
@@ -77,8 +77,8 @@ describe("providers/store/remember-me", () => {
       })
     })
 
-    /* Test: should indicate a failed authentication attempt */
-    it("should indicate a failed authentication attempt", () => {
+    /* Test: should indicate a failed re-authentication attempt */
+    it("should indicate a failed re-authentication attempt", () => {
       store.dispatch(setRememberMeResultAction(false))
       expect(store.getActions().pop()).toEqual({
         type: RememberMeActionTypes.SET_RESULT,

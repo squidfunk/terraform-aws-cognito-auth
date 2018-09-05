@@ -89,6 +89,6 @@ export function enhance() {
 }
 
 /**
- * Form button
+ * Form button component
  */
 export const FormButton = enhance()(Render)

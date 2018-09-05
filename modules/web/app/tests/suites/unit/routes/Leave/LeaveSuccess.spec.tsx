@@ -20,68 +20,110 @@
  * IN THE SOFTWARE.
  */
 
-import { shallow } from "enzyme"
+import { mount, shallow } from "enzyme"
 import * as React from "react"
-// import { MemoryRouter } from "react-router"
+import { MemoryRouter } from "react-router"
+import { RedirectProps } from "react-router-dom"
+import { compose } from "recompose"
 
-// import { setRememberMeResultAction } from "providers/store/remember-me"
+import { withFormSubmit } from "enhancers"
 import {
-  // LeaveSuccess,
+  enhance,
   Render
 } from "routes/Leave/LeaveSuccess"
 
-// import {
-//   mockFormSubmitPropsWithError,
-//   mockFormSubmitPropsWithSuccess
-// } from "_/mocks/enhancers"
-// import { mockStore } from "_/mocks/providers"
+import { find } from "_/helpers"
+import { Placeholder } from "_/mocks/components"
+import {
+  mockWithFormSubmit,
+  mockWithFormSubmitWithError,
+  mockWithFormSubmitWithResult,
+  mockWithNotification
+} from "_/mocks/enhancers"
 
 /* ----------------------------------------------------------------------------
  * Tests
  * ------------------------------------------------------------------------- */
 
-/* Sign out success component */
-describe("components/LeaveSuccess", () => {
+/* Sign out success components */
+describe("routes/LeaveSuccess", () => {
 
   /* Render component */
-  describe("Render", () => {
+  describe("<Render />", () => {
 
-    /* Test: should render with default props */
-    it("should render with default props", () => {
+    /* Test: should render redirect */
+    it("should render redirect", () => {
       const wrapper = shallow(<Render />)
-      expect(wrapper).toMatchSnapshot()
+      const loading = find<RedirectProps>(wrapper, "Redirect")
+      expect(loading.exists()).toBe(true)
+    })
+
+    /* Test: should redirect to '/' */
+    it("should redirect to '/'", () => {
+      const wrapper = shallow(<Render />)
+      const loading = find<RedirectProps>(wrapper, "Redirect")
+      expect(loading.prop("to")).toEqual("/")
     })
   })
 
-  // /* Enhanced component */
-  // describe("LeaveSuccess", () => {
+  /* Sign out success component */
+  describe("<LeaveSuccess />", () => {
 
-  //   /* Initialize store */
-  //   const store = mockStore()
+    /* Mount placeholder wrapped with enhancer */
+    function mountPlaceholder() {
+      const Component = compose(
+        withFormSubmit(),
+        enhance()
+      )(Placeholder)
+      return mount(
+        <MemoryRouter>
+          <Component />
+        </MemoryRouter>
+      )
+    }
 
-  //   /* Clear store */
-  //   beforeEach(() => {
-  //     store.clearActions()
-  //   })
+    /* Mock enhancers */
+    beforeEach(() => {
+      mockWithNotification()
+    })
 
-  //   // TODO: should dismiss notification in case of error
+    /* Test: should render with display name */
+    it("should render with display name", () => {
+      mockWithFormSubmit()
+      const wrapper = mountPlaceholder()
+      expect(wrapper.find(Placeholder).name()).toEqual("LeaveSuccess")
+    })
 
-  //   /* Test: should render with default props */
-  //   it("should render with default props", () => {
-  //     const props = mockFormSubmitPropsWithSuccess()
-  //     mount(
-  //       <MemoryRouter>
-  //         <LeaveSuccess {...props} />
-  //       </MemoryRouter>, {
-  //         context: { store },
-  //         childContextTypes: {
-  //           store: () => null
-  //         }
-  //       }
-  //     )
-  //     // expect(store.getActions().length).toEqual(2)
-  //     // expect(store.getActions()[0])
-  //     //   .toEqual(setRememberMeResultAction(false))
-  //   })
-  // })
+    /* with successful request */
+    describe("with successful request", () => {
+
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithFormSubmitWithResult()
+      })
+
+      /* Test: should dismiss notification */
+      it("should not dismiss notification", async () => {
+        const wrapper = mountPlaceholder()
+        expect(wrapper.find(Placeholder).prop("dismissNotification"))
+          .not.toHaveBeenCalled()
+      })
+    })
+
+    /* with failed request */
+    describe("with failed request", () => {
+
+      /* Mock enhancers */
+      beforeEach(() => {
+        mockWithFormSubmitWithError()
+      })
+
+      /* Test: should dismiss notification */
+      it("should dismiss notification", async () => {
+        const wrapper = mountPlaceholder()
+        expect(wrapper.find(Placeholder).prop("dismissNotification"))
+          .toHaveBeenCalledWith()
+      })
+    })
+  })
 })
