@@ -46,7 +46,8 @@ describe("components/FormButton", () => {
     const props: RenderProps = {
       classes: {
         root: chance.string()
-      }
+      },
+      children: chance.string()
     }
 
     /* Test: should render form */
