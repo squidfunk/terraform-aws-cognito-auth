@@ -34,7 +34,7 @@ as a Service (AaaS) provider in front of API Gateway using AWS Cognito.
 * Serverless, extremely scalable and [cost effective][4]
 
   [1]: #email
-  [2]: #hosted-ui
+  [2]: #hosted-ui-1
   [3]: https://observatory.mozilla.org/
   [4]: #cost
 
