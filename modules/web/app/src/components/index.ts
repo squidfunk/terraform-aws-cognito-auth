@@ -24,7 +24,6 @@
  * Re-exports
  * ------------------------------------------------------------------------- */
 
-export * from "./App"
 export * from "./Dialog"
 export * from "./ExternalRedirect"
 export * from "./Form"

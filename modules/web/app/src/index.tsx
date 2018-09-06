@@ -26,7 +26,7 @@ import { render } from "react-dom"
 import { Provider as StateProvider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 
-import { App } from "components"
+import { App } from "components/App"
 import { store, theme } from "providers"
 
 /* ----------------------------------------------------------------------------

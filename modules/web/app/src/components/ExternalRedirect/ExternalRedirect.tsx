@@ -28,7 +28,7 @@ import {
   setDisplayName
 } from "recompose"
 
-import { Loading } from "components"
+import { Loading } from "../Loading"
 
 /* ----------------------------------------------------------------------------
  * Types

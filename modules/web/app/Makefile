@@ -56,8 +56,8 @@ clean:
 
 # Lint source files
 lint: node_modules
-	$(shell npm bin)/tslint -p tsconfig.json "src/**/*.ts"
-	$(shell npm bin)/tslint -p tests/tsconfig.json "tests/**/*.ts"
+	$(shell npm bin)/tslint -p tsconfig.json "src/**/*.ts*"
+	$(shell npm bin)/tslint -p tests/tsconfig.json "tests/**/*.ts*"
 
 # Start API server and webpack development server
 start: node_modules
