@@ -54,7 +54,7 @@ export function mockVerificationCode(
   context: VerificationContext = mockVerificationContext()
 ): VerificationCode {
   return {
-    id: chance.string({ pool: "0123456789abcdef", length: 32 }),
+    id: chance.hash({ length: 32 }),
     context,
     subject: chance.guid(),
     expires: Math.floor(chance.date().getTime() / 1000)

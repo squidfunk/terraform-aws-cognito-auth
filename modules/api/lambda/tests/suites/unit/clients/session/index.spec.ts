@@ -43,7 +43,7 @@ describe("clients/session", () => {
     describe("#signOut", () => {
 
       /* Access token */
-      const token = chance.string({ length: 128 })
+      const token = chance.hash({ length: 128 })
 
       /* Restore AWS mocks */
       afterEach(() => {

@@ -56,9 +56,9 @@ export function mockCognitoInitiateAuthWithCredentials(): jasmine.Spy {
     jasmine.createSpy("initiateAuth")
       .and.returnValue({
         AuthenticationResult: {
-          AccessToken: chance.string({ length: 128 }),
-          IdToken: chance.string({ length: 128 }),
-          RefreshToken: chance.string({ length: 128 })
+          AccessToken: chance.hash({ length: 128 }),
+          IdToken: chance.hash({ length: 128 }),
+          RefreshToken: chance.hash({ length: 128 })
         }
       }))
 }
@@ -73,8 +73,8 @@ export function mockCognitoInitiateAuthWithToken(): jasmine.Spy {
     jasmine.createSpy("initiateAuth")
       .and.returnValue({
         AuthenticationResult: {
-          AccessToken: chance.string({ length: 128 }),
-          IdToken: chance.string({ length: 128 })
+          AccessToken: chance.hash({ length: 128 }),
+          IdToken: chance.hash({ length: 128 })
         }
       }))
 }

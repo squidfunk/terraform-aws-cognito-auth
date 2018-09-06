@@ -38,17 +38,17 @@ import { chance } from "_/helpers"
 export function mockSession(refresh: boolean = false): Session<string> {
   return {
     id: {
-      token: chance.string({ length: 128 }),
+      token: chance.hash({ length: 128 }),
       expires: chance.date().toISOString()
     },
     access: {
-      token: chance.string({ length: 128 }),
+      token: chance.hash({ length: 128 }),
       expires: chance.date().toISOString()
     },
     ...(refresh
       ? {
         refresh: {
-          token: chance.string({ length: 128 }),
+          token: chance.hash({ length: 128 }),
           expires: chance.date().toISOString()
         }
       }

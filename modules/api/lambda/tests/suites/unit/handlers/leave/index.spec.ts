@@ -41,7 +41,7 @@ describe("handlers/leave", () => {
   describe("post", () => {
 
     /* Access token and event */
-    const token = chance.string({ length: 128 })
+    const token = chance.hash({ length: 128 })
     const event = mockAPIGatewayProxyEvent<{}, LeaveRequest>({
       headers: {
         Authorization: `Bearer ${token}`
