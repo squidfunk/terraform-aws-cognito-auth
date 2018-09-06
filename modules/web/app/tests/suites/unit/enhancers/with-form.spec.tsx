@@ -25,7 +25,6 @@ import * as React from "react"
 
 import {
   withForm,
-  WithForm,
   WithFormOptions
 } from "enhancers"
 
@@ -54,7 +53,7 @@ describe("enhancers/with-form", () => {
     options: WithFormOptions
   ) {
     const Component = withForm(options)(Placeholder)
-    return mount<WithForm>(<Component />)
+    return mount(<Component />)
   }
 
   /* withForm */

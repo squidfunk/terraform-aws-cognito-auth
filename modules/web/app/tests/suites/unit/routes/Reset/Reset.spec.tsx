@@ -225,7 +225,7 @@ describe("routes/Reset", () => {
     /* Mount placeholder wrapped with enhancer */
     function mountPlaceholder() {
       const Component = enhance()(Placeholder)
-      return mount<RenderProps>(<Component />)
+      return mount(<Component />)
     }
 
     /* Test: should not set request target URL */

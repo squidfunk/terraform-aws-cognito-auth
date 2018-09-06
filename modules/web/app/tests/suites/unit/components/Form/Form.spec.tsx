@@ -77,9 +77,9 @@ describe("components/Form", () => {
   describe("<Form />", () => {
 
     /* Mount placeholder wrapped with enhancer */
-    function mountPlaceholder(_: FormProps) {
+    function mountPlaceholder(componentProps: FormProps) {
       const Component = enhance()(Placeholder)
-      return mount(<Component {..._} />)
+      return mount(<Component {...componentProps} />)
     }
 
     /* Component properties */

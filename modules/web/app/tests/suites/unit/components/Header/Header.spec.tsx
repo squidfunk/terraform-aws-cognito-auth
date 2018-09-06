@@ -65,9 +65,9 @@ describe("components/Header", () => {
   describe("<Header />", () => {
 
     /* Mount placeholder wrapped with enhancer */
-    function mountPlaceholder(_: HeaderProps) {
+    function mountPlaceholder(componentProps: HeaderProps) {
       const Component = enhance()(Placeholder)
-      return mount(<Component {..._} />)
+      return mount(<Component {...componentProps} />)
     }
 
     /* Component properties */

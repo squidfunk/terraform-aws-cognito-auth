@@ -63,9 +63,9 @@ describe("components/ExternalRedirect", () => {
   describe("<ExternalRedirect />", () => {
 
     /* Mount placeholder wrapped with enhancer */
-    function mountPlaceholder(_: ExternalRedirectProps) {
+    function mountPlaceholder(componentProps: ExternalRedirectProps) {
       const Component = enhance()(Placeholder)
-      return mount(<Component {..._} />)
+      return mount(<Component {...componentProps} />)
     }
 
     /* Component properties */

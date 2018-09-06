@@ -21,6 +21,11 @@
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
   },
+  "globals": {
+    "ts-jest": {
+      "tsConfigFile": "<rootDir>/tests/tsconfig.json"
+    }
+  },
   "coveragePathIgnorePatterns": [
     "tests"
   ],

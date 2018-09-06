@@ -70,9 +70,9 @@ describe("components/FormRememberMe", () => {
   describe("<FormRememberMe />", () => {
 
     /* Mount placeholder wrapped with enhancer */
-    function mountPlaceholder(_: FormRememberMeProps) {
+    function mountPlaceholder(componentProps: FormRememberMeProps) {
       const Component = enhance()(Placeholder)
-      return mount(<Component {..._} />)
+      return mount(<Component {...componentProps} />)
     }
 
     /* Component properties */

@@ -24,10 +24,7 @@ import { shallow } from "enzyme"
 import * as React from "react"
 import { MockStoreEnhanced } from "redux-mock-store"
 
-import {
-  WithNotification,
-  withNotification
-} from "enhancers"
+import { withNotification } from "enhancers"
 import { State } from "providers/store"
 
 import { Placeholder } from "_/mocks/components"
@@ -51,7 +48,7 @@ describe("enhancers/with-notification", () => {
     store: MockStoreEnhanced<Partial<State>>
   ) {
     const Component = withNotification()(Placeholder)
-    return shallow<WithNotification>(<Component />, {
+    return shallow(<Component />, {
       context: { store }
     })
   }

@@ -24,10 +24,7 @@ import { shallow } from "enzyme"
 import * as React from "react"
 import { MockStoreEnhanced } from "redux-mock-store"
 
-import {
-  WithSession,
-  withSession
-} from "enhancers"
+import { withSession } from "enhancers"
 import { State } from "providers/store"
 
 import { mockSession } from "_/mocks/common"
@@ -50,7 +47,7 @@ describe("enhancers/with-session", () => {
     store: MockStoreEnhanced<Partial<State>>
   ) {
     const Component = withSession()(Placeholder)
-    return shallow<WithSession>(<Component />, {
+    return shallow(<Component />, {
       context: { store }
     })
   }

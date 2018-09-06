@@ -70,7 +70,7 @@ describe("components/Dialog", () => {
     /* Mount placeholder wrapped with enhancer */
     function mountPlaceholder() {
       const Component = enhance()(Placeholder)
-      return mount<RenderProps>(<Component />)
+      return mount(<Component />)
     }
 
     /* Test: should render with styles */

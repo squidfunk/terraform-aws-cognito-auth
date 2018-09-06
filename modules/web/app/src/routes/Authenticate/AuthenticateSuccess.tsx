@@ -136,7 +136,7 @@ export function enhance() {
     }),
     branch<BranchProps>(
       ({ session }) => !(session && session.renewed),
-      renderComponent(() => <Loading />)
+      renderComponent(Loading)
     ),
     pure,
     setDisplayName("AuthenticateSuccess")

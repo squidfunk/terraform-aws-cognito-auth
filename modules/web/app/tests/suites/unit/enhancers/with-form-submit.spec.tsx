@@ -25,7 +25,6 @@ import * as React from "react"
 
 import {
   withFormSubmit,
-  WithFormSubmit,
   WithFormSubmitOptions
 } from "enhancers"
 import { NotificationType } from "providers/store/notification"
@@ -55,7 +54,7 @@ describe("enhancers/with-form-submit", () => {
     options?: WithFormSubmitOptions
   ) {
     const Component = withFormSubmit(options)(Placeholder)
-    return mount<WithFormSubmit>(<Component />)
+    return mount(<Component />)
   }
 
   /* withFormSubmit */

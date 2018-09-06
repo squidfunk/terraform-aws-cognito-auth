@@ -24,6 +24,7 @@ import { mount, shallow } from "enzyme"
 import * as React from "react"
 import { compose } from "recompose"
 
+import { Loading } from "components"
 import {
   withFormSubmit,
   withRememberMe
@@ -34,7 +35,7 @@ import {
   RenderProps
 } from "routes/Authenticate/AuthenticateSuccess"
 
-import { chance, find } from "_/helpers"
+import { chance, find, wait } from "_/helpers"
 import { mockSession } from "_/mocks/common"
 import {
   mockComponent,
@@ -45,6 +46,7 @@ import {
   mockWithRememberMe,
   mockWithSession
 } from "_/mocks/enhancers"
+import { mockRenderComponent } from "_/mocks/vendor/recompose"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -151,7 +153,8 @@ describe("routes/AuthenticateSuccess", () => {
       mockWithFormSubmitWithResult(session)
       mockWithSession({ ...session, renewed: true })
       const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).name()).toEqual("AuthenticateSuccess")
+      expect(wrapper.find(Placeholder).name())
+        .toEqual("AuthenticateSuccess")
     })
 
     /* with remember me */
@@ -167,8 +170,8 @@ describe("routes/AuthenticateSuccess", () => {
       })
     })
 
-    /* with empty response */
-    describe("with empty response", () => {
+    /* with corrupted session */
+    describe("with corrupted session", () => {
 
       /* Test: should not initialize session */
       it("should not initialize session", async () => {
@@ -177,6 +180,21 @@ describe("routes/AuthenticateSuccess", () => {
         const wrapper = mountPlaceholder()
         expect(wrapper.find(Placeholder).prop("initSession"))
           .not.toHaveBeenCalled()
+      })
+    })
+
+    /* with pending session renewal */
+    describe("with pending session renewal", () => {
+
+      /* Test: should render <Loading /> */
+      it("should render <Loading />", async () => {
+        mockWithFormSubmitWithResult(session)
+        mockWithSession()
+        const renderComponentMock = mockRenderComponent()
+        mountPlaceholder()
+        await wait(250)
+        expect(renderComponentMock)
+          .toHaveBeenCalledWith(Loading)
       })
     })
   })
