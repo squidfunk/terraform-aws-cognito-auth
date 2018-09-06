@@ -96,4 +96,6 @@ export const reducers = combineReducers<State>({
  * Redux store
  */
 export const store = createStore(reducers, rehydrate())
-store.subscribe(() => dehydrate(store.getState()))
+store.subscribe(/* istanbul ignore next */ () => {
+  dehydrate(store.getState())
+})
