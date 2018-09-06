@@ -99,7 +99,10 @@ the authentication provider should be deployed, i.e. it should be equal to
 needs to be verified for delivery. Contact AWS to [exit sandboxed mode][7] for
 production use.
 
+Also see this [example][8] configuration.
+
   [7]: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
+  [8]: #example
 
 ## Configuration
 
@@ -134,13 +137,6 @@ The following variables can be configured:
 
 ### Optional
 
-#### Email delivery
-
-##### `ses_sender_address`
-
-- __Description__: SES sender email address
-- __Default__: `""`
-
 #### Hosted UI
 
 ##### `app_hosted_zone_id`
@@ -171,6 +167,36 @@ The following variables can be configured:
 
 - __Description__: S3 bucket name to store static files
 - __Default__: `"${var.namespace}"` (equal to namespace)
+
+#### Email delivery
+
+##### `ses_sender_address`
+
+- __Description__: SES sender email address
+- __Default__: `""`
+
+## Example
+
+``` hcl
+module "cognito-auth" {
+  source  = "github.com/squidfunk/terraform-aws-cognito-auth"
+  version = "0.1.0"
+
+  namespace                      = "example-auth"
+  region                         = "us-east-1"
+  cognito_identity_pool_name     = "Example Auth"
+  cognito_identity_pool_provider = "login.example.com"
+
+  # Optional: Hosted UI
+  app_hosted_zone_id             = "Z*************"
+  app_certificate_arn            = "arn:aws:acm:us-east-1:..."
+  app_domain                     = "login.example.com"
+  app_origin                     = "example.com"
+
+  # Optional: Email delivery
+  ses_sender_address             = "accounts@example.com"
+}
+```
 
 ## Screenshots
 
