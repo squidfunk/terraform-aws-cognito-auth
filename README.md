@@ -25,6 +25,14 @@ as a Service (AaaS) provider in front of API Gateway using AWS Cognito.
 
   [1]: assets/architecture.png
 
+## Screenshots
+
+<img src="assets/screenshots/authenticate.png" width="440" />
+<img src="assets/screenshots/register-error.png" width="440" />
+<img src="assets/screenshots/register-success.png" width="440" />
+<img src="assets/screenshots/reset.png" width="440" />
+<img src="assets/screenshots/mail.png" width="440" />
+
 ## License
 
 **MIT License**
