@@ -63,5 +63,5 @@ script:
 
 # Upload coverage report
 after_success:
-  - pip install --user codecov
+  - npm install -g codecov
   - codecov
