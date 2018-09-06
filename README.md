@@ -45,8 +45,8 @@ as a Service (AaaS) provider in front of API Gateway using AWS Cognito.
   [5]: assets/architecture.png
 
 This module creates a REST API using AWS API Gateway, Lambda and Cognito to
-enable registration, authentication and account recovery without the need for
-complex OAuth authentication flows. Account registration and recovery emit
+enable registration, authentication and account recovery without the necessity
+for complex OAuth authentication flows. Account registration and recovery emit
 verification events to an AWS SNS topic which can be hooked up to a Lambda
 function handling delivery via AWS SES using default multi-part email templates.
 Furthermore, a beautiful and mobile-friendly hosted UI can be deployed to a
@@ -54,22 +54,18 @@ custom subdomain within your hosted zone.
 
 ### Cost
 
-AWS Cognito is [free for up to 50.000 monthly active users][5]. After that,
-pricing starts at __$ 0,0055 per monthly active user__. Additionally, the bulk
-of the cost will be attributed to AWS Lambda, API Gateway and CloudFront but
-it should be quite low compared what other AaaS providers like Auth0 charge.
-While this module does not provide all features offered by other AaaS providers,
-it should be absolutely sufficient for Single Page Applications.
+AWS Cognito is [free for up to 50.000 monthly active users][6]. After that,
+pricing starts at __$ 0,0055 per monthly active user__. Additional cost will be
+attributed to AWS Lambda, API Gateway and CloudFront but it should be very
+reasonable compared to what AaaS providers like Auth0 charge. While this module
+does not provide all features offered by other providers, it should be quite
+sufficient for securing a Single Page Application.
 
   [6]: https://aws.amazon.com/de/cognito/pricing/
 
 ## Usage
 
-### Prerequisites
-
-TBD
-
-### Setup
+Add the following module to your Terraform configuration and apply it:
 
 ``` hcl
 module "cognito-auth" {
@@ -81,26 +77,60 @@ module "cognito-auth" {
   cognito_identity_pool_name     = "<pool-name>"
   cognito_identity_pool_provider = "<pool-provider>"
 
-  # Necessary for hosted UI
+  # Optional: Hosted UI
   app_hosted_zone_id             = "<hosted-zone-id>"
   app_certificate_arn            = "<certificate-arn>"
   app_domain                     = "<domain>"
   app_origin                     = "<origin-domain>"
 
-  # Optional: email delivery
+  # Optional: Email delivery
   ses_sender_address             = "<email>"
 }
 ```
 
+All resources are prefixed with the value specified as `namespace`. If the S3
+bucket name (see below) is not explicitly set, it's set to the given `namespace`
+which means there must not already exist an S3 bucket with the same name. This
+is a common source of error.
+
+The `cognito_identity_pool_provider` should match the domain name under which
+the authentication provider should be deployed, i.e. it should be equal to
+`app_domain`. Also note that SES is sandboxed by default, so every email address
+needs to be verified for delivery. Contact AWS to [exit sandboxed mode][7] for
+production use.
+
+  [7]: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
+
 ## Configuration
+
+The following variables can be configured:
 
 ### Required
 
 #### `namespace`
+
+- __Description__: AWS resource namespace/prefix (lowercase alphanumeric)
+- __Default__: `none`
+
 #### `region`
+
+- __Description__: AWS region
+- __Default__: `none`
+
 #### `api_stage`
+
+- __Description__: API deployment stage
+- __Default__: `"production"`
+
 #### `cognito_identity_pool_name`
+
+- __Description__: Cognito identity pool name
+- __Default__: `none`
+
 #### `cognito_identity_pool_provider`
+
+- __Description__: Cognito identity pool provider
+- __Default__: `none`
 
 ### Optional
 
@@ -108,16 +138,39 @@ module "cognito-auth" {
 
 ##### `ses_sender_address`
 
-#### Web application
+- __Description__: SES sender email address
+- __Default__: `""`
+
+#### Hosted UI
 
 ##### `app_hosted_zone_id`
+
+- __Description__: Application hosted zone identifier
+- __Implies__: `app_certificate_arn`, `app_domain` and `app_origin`
+- __Default__: `""`
+
 ##### `app_certificate_arn`
+
+- __Description__: Application domain certificate ARN
+- __Implies__: `app_hosted_zone_id`, `app_domain` and `app_origin`
+- __Default__: `""`
+
 ##### `app_domain`
+
+- __Description__: Application domain
+- __Implies__: `app_hosted_zone_id`, `app_certificate_arn` and `app_origin`
+- __Default__: `""`
+
 ##### `app_origin`
 
-## Outputs
+- __Description__: Application origin domain (target domain)
+- __Implies__: `app_hosted_zone_id`, `app_certificate_arn` and `app_domain`
+- __Default__: `""`
 
-TBD
+##### `bucket`
+
+- __Description__: S3 bucket name to store static files
+- __Default__: `"${var.namespace}"` (equal to namespace)
 
 ## Screenshots
 
@@ -131,11 +184,20 @@ TBD
 
 ## Limitations
 
-TBD
+By default, AWS Cognito does only allow minor customizations of the whole
+authentication flow - specifically multi-part emails are not supported; welcome
+to the 21st century. To work around these restrictions registration and password
+reset were decoupled using the Cognito Identity Service Provider admin APIs.
+Verification is implemented with custom verification codes and email delivery.
+However, as Cognito currently does not support setting the password for a user
+through the admin API, the user is deleted and recreated with the exact same
+identifier (a UUID). This is heavily tested with acceptance tests and just
+works, but it's not ideal. Hopefully AWS will address these issues in the
+future.
 
 ## License
 
-**MIT License**
+__MIT License__
 
 Copyright (c) 2018 Martin Donath
 
