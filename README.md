@@ -12,18 +12,113 @@
   [github-image]: https://img.shields.io/github/release/squidfunk/terraform-aws-cognito-auth.svg
   [github-link]: https://github.com/squidfunk/terraform-aws-cognito-auth/releases
 
-**WIP - NOT YET READY FOR PRODUCTION**
-
 # Terraform AWS Cognito Auth
 
 A Terraform module to setup a serverless and easily customizable Authentication
-as a Service (AaaS) provider in front of API Gateway using AWS Cognito.
+as a Service (AaaS) provider in front of API Gateway using AWS Cognito. Take
+full control of the authentication flow including fully customizable email
+templates and a hosted authentication UI.
+
+## Features
+
+* Authentication using email and password or refresh token
+* Registration, password reset and verification
+* Completely customizable transactional emails
+* Optional default multi-part (text and HTML) email templates
+* Optional beautiful and mobile-friendly hosted UI (see [screenshots][1])
+* Federated identities using Cognito identity and user pools
+* __A+__ security rating on [Mozilla Observatory][1] (CSP, HSTS, etc.)
+* Excessively tested with automated unit and acceptance tests
+* Serverless, extremely scalable and cost effective
+
+  [1]: https://observatory.mozilla.org/
+  [2]: #screenshots
+
 
 ## Architecture
 
-![Architecture][1]
+![Architecture][3]
 
-  [1]: assets/architecture.png
+  [3]: assets/architecture.png
+
+This module creates a REST API using AWS API Gateway, Lambda and Cognito to
+enable registration, authentication and account recovery without the need for
+complex OAuth authentication flows. Account registration and recovery emit
+verification events to an AWS SNS topic which can be hooked up to a Lambda
+function handling delivery via AWS SES using default multi-part email templates.
+Furthermore, a beautiful and mobile-friendly hosted UI can be deployed.
+Everything except the API is completely customizable and optional.
+
+### Cost
+
+AWS Cognito is [free for up to 50.000 monthly active users][4]. After that,
+pricing starts at __$ 0,0055 per monthly active user__. Additionally, the bulk
+of the cost will be attributed to AWS Lambda, API Gateway and CloudFront but
+it should be quite low compared what other AaaS providers like Auth0 charge.
+While this module does not provide all features offered by other AaaS providers,
+it should be absolutely sufficient for Single Page Applications (SPA).
+
+  [4]: https://aws.amazon.com/de/cognito/pricing/
+
+## Usage
+
+### Prerequisites
+
+TBD
+
+### Setup
+
+``` hcl
+module "cognito-auth" {
+  source  = "github.com/squidfunk/terraform-aws-cognito-auth"
+  version = "0.1.0"
+
+  namespace                      = "<namespace>"
+  region                         = "<region>"
+  cognito_identity_pool_name     = "<pool-name>"
+  cognito_identity_pool_provider = "<pool-provider>"
+
+  # Necessary for hosted UI
+  app_hosted_zone_id             = "<hosted-zone-id>"
+  app_certificate_arn            = "<certificate-arn>"
+  app_domain                     = "<domain>"
+  app_origin                     = "<origin-domain>"
+
+  # Optional: email delivery
+  ses_sender_address             = "<email>"
+}
+```
+
+## Configuration
+
+### Required
+
+#### `namespace`
+#### `region`
+#### `api_stage`
+#### `cognito_identity_pool_name`
+#### `cognito_identity_pool_provider`
+
+### Optional
+
+#### Email delivery
+
+##### `ses_sender_address`
+
+#### Web application
+
+##### `app_hosted_zone_id`
+##### `app_certificate_arn`
+##### `app_domain`
+##### `app_origin`
+
+## Outputs
+
+TBD
+
+## Limitations
+
+TBD
 
 ## License
 
