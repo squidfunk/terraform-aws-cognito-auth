@@ -14,51 +14,54 @@
 
 # Terraform AWS Cognito Auth
 
+> Add authentication to your Single Page Application (SPA) within minutes and
+> take full control of the authentication flow including customizable email
+> templates and a beautiful hosted UI.
+
 A Terraform module to setup a serverless and easily customizable Authentication
-as a Service (AaaS) provider in front of API Gateway using AWS Cognito. Take
-full control of the authentication flow including fully customizable email
-templates and a hosted authentication UI.
+as a Service (AaaS) provider in front of API Gateway using AWS Cognito.
 
 ## Features
 
 * Authentication using email and password or refresh token
 * Registration, password reset and verification
 * Completely customizable transactional emails
-* Optional default multi-part (text and HTML) email templates
-* Optional beautiful and mobile-friendly hosted UI (see [screenshots][1])
+* Optional default multi-part email templates (see [screenshots][1])
+* Optional beautiful and mobile-friendly hosted UI (see [screenshots][2])
 * Federated identities using Cognito identity and user pools
-* __A+__ security rating on [Mozilla Observatory][1] (CSP, HSTS, etc.)
+* __A+__ security rating on [Mozilla Observatory][3] (CSP, HSTS, etc.)
 * Excessively tested with automated unit and acceptance tests
-* Serverless, extremely scalable and cost effective
+* Serverless, extremely scalable and [cost effective][4]
 
-  [1]: https://observatory.mozilla.org/
-  [2]: #screenshots
-
+  [1]: #email
+  [2]: #hosted-ui
+  [3]: https://observatory.mozilla.org/
+  [4]: #cost
 
 ## Architecture
 
-![Architecture][3]
+![Architecture][5]
 
-  [3]: assets/architecture.png
+  [5]: assets/architecture.png
 
 This module creates a REST API using AWS API Gateway, Lambda and Cognito to
 enable registration, authentication and account recovery without the need for
 complex OAuth authentication flows. Account registration and recovery emit
 verification events to an AWS SNS topic which can be hooked up to a Lambda
 function handling delivery via AWS SES using default multi-part email templates.
-Furthermore, a beautiful and mobile-friendly hosted UI can be deployed.
-Everything except the API is completely customizable and optional.
+Furthermore, a beautiful and mobile-friendly hosted UI can be deployed to a
+custom subdomain within your hosted zone.
 
 ### Cost
 
-AWS Cognito is [free for up to 50.000 monthly active users][4]. After that,
+AWS Cognito is [free for up to 50.000 monthly active users][5]. After that,
 pricing starts at __$ 0,0055 per monthly active user__. Additionally, the bulk
 of the cost will be attributed to AWS Lambda, API Gateway and CloudFront but
 it should be quite low compared what other AaaS providers like Auth0 charge.
 While this module does not provide all features offered by other AaaS providers,
-it should be absolutely sufficient for Single Page Applications (SPA).
+it should be absolutely sufficient for Single Page Applications.
 
-  [4]: https://aws.amazon.com/de/cognito/pricing/
+  [6]: https://aws.amazon.com/de/cognito/pricing/
 
 ## Usage
 
@@ -116,17 +119,19 @@ module "cognito-auth" {
 
 TBD
 
+## Screenshots
+
+### Hosted UI
+
+<img src="assets/screenshots/authenticate.png" width="45%" /> <img src="assets/screenshots/register-error.png" width="45%" /> <img src="assets/screenshots/register-success.png" width="45%" /> <img src="assets/screenshots/reset.png" width="45%" />
+
+### Email
+
+<img src="assets/screenshots/mail.png" width="45%" />
+
 ## Limitations
 
 TBD
-
-## Screenshots
-
-<img src="assets/screenshots/authenticate.png" width="440" />
-<img src="assets/screenshots/register-error.png" width="440" />
-<img src="assets/screenshots/register-success.png" width="440" />
-<img src="assets/screenshots/reset.png" width="440" />
-<img src="assets/screenshots/mail.png" width="440" />
 
 ## License
 
