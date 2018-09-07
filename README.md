@@ -110,10 +110,6 @@ the authentication provider should be deployed, i.e. it should be equal to
 needs to be verified for delivery. Contact AWS to [exit sandboxed mode][9] for
 production use.
 
-Refresh tokens TODO
-
-<!-- If the user clicks "Authorize Application", the service redirects the user-agent to the application redirect URI, and includes a URI fragment containing the identity token. It would look something like this: -->
-
 Also see the [example][10] configuration.
 
   [9]: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
