@@ -121,7 +121,7 @@ export function enhance() {
     withProps<InnerProps, RenderProps>(() => {
       const { redirect } = parse(location.search)
       return {
-        path: redirect || ""
+        path: redirect.replace(/^\//, "") || ""
       }
     }),
     lifecycle<LifecycleProps, {}>({

@@ -29,7 +29,7 @@ Pools.
 * Completely customizable transactional emails
 * Optional multi-part default email templates (see [screenshots][1])
 * Optional beautiful and mobile-friendly default UI (see [screenshots][2])
-* Federated identities using Cognito identity and user pools
+* Federated identities using Cognito Identity Pools and User Pools
 * A+ security rating on [Mozilla Observatory][3] (CSP, HSTS, etc.)
 * Excessively tested with automated unit and acceptance tests
 * Serverless, extremely scalable and [cost effective][4]
