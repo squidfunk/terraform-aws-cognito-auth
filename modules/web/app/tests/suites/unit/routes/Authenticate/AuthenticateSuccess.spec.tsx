@@ -97,7 +97,7 @@ describe("routes/AuthenticateSuccess", () => {
       const wrapper = shallow(<Render {...props} />)
       const redirect = find(wrapper, "ExternalRedirect")
       expect(redirect.prop("href"))
-        .toContain(`#${props.session!.id.token}`)
+        .toContain(`#token=${props.session!.id.token}`)
     })
   })
 

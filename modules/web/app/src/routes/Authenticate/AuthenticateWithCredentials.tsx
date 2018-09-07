@@ -76,14 +76,14 @@ export type AuthenticateWithCredentialsProps =
 /**
  * Lifecycle properties
  */
-export type LifecycleProps =
+type LifecycleProps =
   & AuthenticateWithCredentialsProps
   & WithForm<AuthenticateRequest, Session<string>>
 
 /**
  * Branch properties
  */
-export type BranchProps =
+type BranchProps =
   & WithForm<AuthenticateRequest, Session<string>>
 
 /* ------------------------------------------------------------------------- */

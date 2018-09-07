@@ -103,7 +103,7 @@ export type RenderProps =
 export const Render: React.SFC<RenderProps> =
   ({ path, session }) =>
     <ExternalRedirect href={
-      `//${window.env.APP_ORIGIN}/${path}#${session!.id.token}`
+      `//${window.env.APP_ORIGIN}/${path}#token=${session!.id.token}`
     } />
 
 /* ----------------------------------------------------------------------------
