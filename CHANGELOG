@@ -1,3 +1,7 @@
+terraform-aws-cognito-auth-0.2.0 (2018-09-07)
+
+  * Changed authentication success redirect to query-string format
+
 terraform-aws-cognito-auth-0.1.0 (2018-09-06)
 
   * Initial release
