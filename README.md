@@ -223,7 +223,7 @@ https://login.example.com/?redirect=dashboard
 
 After successful authentication, the default UI will redirect to the URL
 specified in `app_origin` appending the path part specified in the `redirect`
-parameter appending the identity token in an URI fragment:
+parameter and the identity token in an URI fragment:
 
 ```
 https://admin.example.com/dashboard#token=<token>
@@ -236,13 +236,13 @@ can repeat the request including the identity token as an authorization header:
 Authorization: Bearer <token>
 ```
 
-If the user checks the <input type="checkbox" /> __Remember me__ checkbox during
-the authentication process, a refresh token that is valid for 30 days is issued
-and sent to the client as a secure HTTP-only cookie. When the access token
-expires after 1 hour, the client is again redirected to the default UI which
-will immediately perform a password-less authentication using the refresh token.
-In order to sign out, the application must redirect the user to the following
-URL:
+If the user checks the __Remember me__ checkbox during the authentication
+process, a refresh token that is valid for 30 days is issued and sent to the
+client as a secure HTTP-only cookie. When the access token expires after 1 hour,
+the client is again redirected to the default UI which will immediately perform
+a password-less authentication using the refresh token.
+
+To sign out, the application must redirect the user to the following URL:
 
 ```
 https://login.example.com/leave
