@@ -35,7 +35,7 @@ Pools.
 * Serverless, extremely scalable and [cost effective][4]
 * However, there are some [limitations][5]
 
-  [1]: #email
+  [1]: #emails
   [2]: #default-ui-1
   [3]: https://observatory.mozilla.org/
   [4]: #cost
@@ -257,7 +257,7 @@ secure HTTP-only cookie.
 
 <img src="assets/screenshots/authenticate.png" width="45%" /> <img src="assets/screenshots/register-error.png" width="45%" /> <img src="assets/screenshots/register-success.png" width="45%" /> <img src="assets/screenshots/reset.png" width="45%" />
 
-### Email
+### Emails
 
 <img src="assets/screenshots/mail-activate.png" width="45%" /> <img src="assets/screenshots/mail-unlock.png" width="45%" />
 
