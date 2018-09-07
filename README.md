@@ -16,52 +16,63 @@
 
 > Add authentication to your Single Page Application (SPA) within minutes and
 > take full control of the authentication flow including customizable email
-> templates and a beautiful hosted UI.
+> templates and a beautiful default UI.
 
 A Terraform module to setup a serverless and easily customizable Authentication
-as a Service (AaaS) provider in front of API Gateway using AWS Cognito.
+as a Service (AaaS) provider in front of API Gateway using AWS Cognito User
+Pools.
 
 ## Features
 
 * Authentication using email and password or refresh token
 * Registration, password reset and verification
 * Completely customizable transactional emails
-* Optional default multi-part email templates (see [screenshots][1])
-* Optional beautiful and mobile-friendly hosted UI (see [screenshots][2])
+* Optional multi-part default email templates (see [screenshots][1])
+* Optional beautiful and mobile-friendly default UI (see [screenshots][2])
 * Federated identities using Cognito identity and user pools
-* __A+__ security rating on [Mozilla Observatory][3] (CSP, HSTS, etc.)
+* A+ security rating on [Mozilla Observatory][3] (CSP, HSTS, etc.)
 * Excessively tested with automated unit and acceptance tests
 * Serverless, extremely scalable and [cost effective][4]
+* However, there are some [limitations][5]
 
   [1]: #email
-  [2]: #hosted-ui-1
+  [2]: #default-ui-1
   [3]: https://observatory.mozilla.org/
   [4]: #cost
+  [5]: #limitations
 
 ## Architecture
 
-![Architecture][5]
+![Architecture][6]
 
-  [5]: assets/architecture.png
+  [6]: assets/architecture.png
 
-This module creates a REST API using AWS API Gateway, Lambda and Cognito to
-enable registration, authentication and account recovery without the necessity
-for complex OAuth authentication flows. Account registration and recovery emit
-verification events to an AWS SNS topic which can be hooked up to a Lambda
-function handling delivery via AWS SES using default multi-part email templates.
-Furthermore, a beautiful and mobile-friendly hosted UI can be deployed to a
-custom subdomain within your hosted zone.
+This module creates a REST API using AWS API Gateway, Lambda and Cognito User
+Pools to enable registration, authentication and account recovery without the
+necessity for the implementation of complex OAuth authentication flows. It was
+originally inspired by [LambdAuth][7] but uses User Pools in favor of Identity
+Pools because exposing (even temporary) AWS credentials is a security threat.
+
+Account registration and recovery circumvent Cognito's default verification
+logic and emit verification codes to an SNS topic which can be hooked up to a
+Lambda function handling delivery via SES using default multi-part email
+templates. This behavior is optional and can be customized by implementing a
+custom Lambda function handling email delivery. Furthermore, a beautiful and
+mobile-friendly default UI can be deployed to a custom subdomain within
+your hosted zone.
+
+  [7]: https://github.com/danilop/LambdAuth
 
 ### Cost
 
-AWS Cognito is [free for up to 50.000 monthly active users][6]. After that,
+AWS Cognito is [free for up to 50.000 monthly active users][8]. After that,
 pricing starts at __$ 0,0055 per monthly active user__. Additional cost will be
 attributed to AWS Lambda, API Gateway and CloudFront but it should be very
 reasonable compared to what AaaS providers like Auth0 charge. While this module
 does not provide all features offered by other providers, it should be quite
 sufficient for securing a Single Page Application.
 
-  [6]: https://aws.amazon.com/de/cognito/pricing/
+  [8]: https://aws.amazon.com/de/cognito/pricing/
 
 ## Usage
 
@@ -77,7 +88,7 @@ module "cognito-auth" {
   cognito_identity_pool_name     = "<pool-name>"
   cognito_identity_pool_provider = "<pool-provider>"
 
-  # Optional: Hosted UI
+  # Optional: Default UI
   app_hosted_zone_id             = "<hosted-zone-id>"
   app_certificate_arn            = "<certificate-arn>"
   app_domain                     = "<domain>"
@@ -96,13 +107,17 @@ is a common source of error.
 The `cognito_identity_pool_provider` should match the domain name under which
 the authentication provider should be deployed, i.e. it should be equal to
 `app_domain`. Also note that SES is sandboxed by default, so every email address
-needs to be verified for delivery. Contact AWS to [exit sandboxed mode][7] for
+needs to be verified for delivery. Contact AWS to [exit sandboxed mode][9] for
 production use.
 
-Also see this [example][8] configuration.
+Refresh tokens TODO
 
-  [7]: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
-  [8]: #example
+<!-- If the user clicks "Authorize Application", the service redirects the user-agent to the application redirect URI, and includes a URI fragment containing the identity token. It would look something like this: -->
+
+Also see the [example][10] configuration.
+
+  [9]: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
+  [10]: #example
 
 ## Configuration
 
@@ -137,7 +152,7 @@ The following variables can be configured:
 
 ### Optional
 
-#### Hosted UI
+#### Default UI
 
 ##### `app_hosted_zone_id`
 
@@ -177,6 +192,10 @@ The following variables can be configured:
 
 ## Example
 
+Let's say we want to secure an application hosted under `admin.example.com`
+using the default UI. First, add the following lines to your Terraform
+configuration and apply it:
+
 ``` hcl
 module "cognito-auth" {
   source  = "github.com/squidfunk/terraform-aws-cognito-auth"
@@ -184,29 +203,67 @@ module "cognito-auth" {
 
   namespace                      = "example-auth"
   region                         = "us-east-1"
-  cognito_identity_pool_name     = "Example Auth"
+  cognito_identity_pool_name     = "Example Admin"
   cognito_identity_pool_provider = "login.example.com"
 
-  # Optional: Hosted UI
+  # Optional: Default UI
   app_hosted_zone_id             = "Z*************"
   app_certificate_arn            = "arn:aws:acm:us-east-1:..."
   app_domain                     = "login.example.com"
-  app_origin                     = "example.com"
+  app_origin                     = "admin.example.com"
 
   # Optional: Email delivery
   ses_sender_address             = "accounts@example.com"
 }
 ```
 
+Now, when the user visits `admin.example.com/dashboard`, the initial API request
+should detect a `401 Unauthorized` response for an invalid or expired identity
+token and redirect to the default UI:
+
+```
+https://login.example.com/?redirect=dashboard
+```
+
+After successful authentication, the default UI will redirect to the URL
+specified in `app_origin` appending the path part specified in the `redirect`
+parameter appending the identity token in an URI fragment:
+
+```
+https://admin.example.com/dashboard#token=<token>
+```
+
+Then, after parsing the URI fragment and extracting the token, the application
+can repeat the request including the identity token as an authorization header:
+
+```
+Authorization: Bearer <token>
+```
+
+If the user checks the <input type="checkbox" /> __Remember me__ checkbox during
+the authentication process, a refresh token that is valid for 30 days is issued
+and sent to the client as a secure HTTP-only cookie. When the access token
+expires after 1 hour, the client is again redirected to the default UI which
+will immediately perform a password-less authentication using the refresh token.
+In order to sign out, the application must redirect the user to the following
+URL:
+
+```
+https://login.example.com/leave
+```
+
+This will invalidate all tokens including the refresh token stored in the
+secure HTTP-only cookie.
+
 ## Screenshots
 
-### Hosted UI
+### Default UI
 
 <img src="assets/screenshots/authenticate.png" width="45%" /> <img src="assets/screenshots/register-error.png" width="45%" /> <img src="assets/screenshots/register-success.png" width="45%" /> <img src="assets/screenshots/reset.png" width="45%" />
 
 ### Email
 
-<img src="assets/screenshots/mail.png" width="45%" />
+<img src="assets/screenshots/mail-activate.png" width="45%" /> <img src="assets/screenshots/mail-unlock.png" width="45%" />
 
 ## Limitations
 
