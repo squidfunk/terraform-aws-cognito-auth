@@ -274,6 +274,13 @@ identifier (a UUID). This is heavily tested with acceptance tests and just
 works, but it's not ideal. Hopefully AWS will address these issues in the
 future.
 
+## Need support?
+
+Having trouble getting this to work? I'm happy to help. I'm a freelancer with
+12 years of experience in Full-Stack engineering and Cloud Architecture with a
+focus on Serverless application architectures, testing and usability and
+available for hire.
+
 ## License
 
 __MIT License__
