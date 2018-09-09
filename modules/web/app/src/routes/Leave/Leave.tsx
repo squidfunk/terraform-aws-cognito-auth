@@ -102,7 +102,7 @@ export function enhance() {
       }
     }),
     branch<BranchProps>(
-      ({ form }) => form.success || Boolean(form.err),
+      ({ form }) => Boolean(form.success || form.err),
       renderComponent(LeaveSuccess)
     ),
     pure,

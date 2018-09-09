@@ -20,8 +20,17 @@
  * IN THE SOFTWARE.
  */
 
+import * as express from "express"
+import * as morgan from "morgan"
+
 /* ----------------------------------------------------------------------------
- * Re-exports
+ * Application
  * ------------------------------------------------------------------------- */
 
-export { ExternalRedirect } from "./ExternalRedirect"
+/* Initialize and start Express server */
+const app = express()
+app.use(morgan("dev"))
+app.use(express.static("tools/silent"))
+app.listen(8082, () => {
+  console.log(`Silent refresh server listening on http://localhost:8082`)
+})

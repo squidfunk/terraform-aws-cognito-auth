@@ -134,22 +134,9 @@ resource "aws_api_gateway_deployment" "_" {
 
   depends_on = [
     "module.authenticate",
-    "module.check",
     "module.leave",
     "module.register",
     "module.reset",
-  ]
-}
-
-# aws_api_gateway_authorizer._
-resource "aws_api_gateway_authorizer" "_" {
-  rest_api_id = "${aws_api_gateway_rest_api._.id}"
-
-  name = "${var.namespace}"
-  type = "COGNITO_USER_POOLS"
-
-  provider_arns = [
-    "${var.cognito_user_pool_arn}",
   ]
 }
 
@@ -177,20 +164,6 @@ module "authenticate" {
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
-}
-
-# module.check
-module "check" {
-  source = "./modules/check"
-
-  namespace = "${var.namespace}"
-  region    = "${var.region}"
-
-  api_id            = "${aws_api_gateway_rest_api._.id}"
-  api_resource_id   = "${aws_api_gateway_resource._.id}"
-  api_authorizer_id = "${aws_api_gateway_authorizer._.id}"
-
-  cognito_identity_pool_provider = "${var.cognito_identity_pool_provider}"
 }
 
 # module.leave

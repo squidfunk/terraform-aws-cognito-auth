@@ -33,6 +33,7 @@ import {
   WithRememberMe
 } from "enhancers"
 
+import { AuthenticateSilently } from "./AuthenticateSilently"
 import { AuthenticateWithCredentials } from "./AuthenticateWithCredentials"
 import { AuthenticateWithToken } from "./AuthenticateWithToken"
 
@@ -79,6 +80,10 @@ export const Render = AuthenticateWithCredentials
 export function enhance() {
   return compose<RenderProps, {}>(
     withRememberMe(),
+    branch<BranchProps>(
+      () => location !== parent.location,
+      renderComponent(AuthenticateSilently)
+    ),
     branch<BranchProps>(
       ({ remember: { active, result } }) => {
         return active && typeof result === "undefined"

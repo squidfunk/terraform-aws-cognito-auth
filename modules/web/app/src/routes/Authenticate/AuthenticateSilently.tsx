@@ -22,24 +22,32 @@
 
 import * as React from "react"
 import {
+  branch,
   compose,
   lifecycle,
   pure,
+  renderComponent,
   setDisplayName
 } from "recompose"
 
-import { Loading } from "../Loading"
+import { Loading } from "components"
+import {
+  WithRememberMe,
+  withSession,
+  WithSessionState
+} from "enhancers"
+
+import { AuthenticateWithToken } from "./AuthenticateWithToken"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * External redirect properties
+ * Silent refresh properties
  */
-export interface ExternalRedirectProps {
-  href: string                         /* Target URL */
-}
+export type AuthenticateSilentlyProps =
+  & WithRememberMe
 
 /* ------------------------------------------------------------------------- */
 
@@ -47,7 +55,14 @@ export interface ExternalRedirectProps {
  * Lifecycle properties
  */
 type LifecycleProps =
-  & ExternalRedirectProps
+  & AuthenticateSilentlyProps
+  & WithSessionState
+
+/**
+ * Branch properties
+ */
+type BranchProps =
+  & AuthenticateSilentlyProps
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -55,8 +70,6 @@ type LifecycleProps =
 
 /**
  * Render component
- *
- * @param props - Properties
  *
  * @return JSX element
  */
@@ -73,19 +86,28 @@ export const Render: React.SFC =
  * @return Component enhancer
  */
 export function enhance() {
-  return compose<{}, ExternalRedirectProps>(
+  return compose<{}, AuthenticateSilentlyProps>(
+    withSession(),
+    branch<BranchProps>(
+      ({ remember: { active, result } }) => {
+        return active && typeof result === "undefined"
+      },
+      renderComponent(AuthenticateWithToken)
+    ),
     lifecycle<LifecycleProps, {}>({
       componentDidMount() {
-        const { href } = this.props
-        location.assign(href)
+        const { session } = this.props
+        session && session.renewed
+          ? parent.postMessage(session.access, "*")
+          : parent.postMessage(undefined, "*")
       }
     }),
     pure,
-    setDisplayName("ExternalRedirect")
+    setDisplayName("AuthenticateSilently")
   )
 }
 
 /**
- * External redirect component
+ * Silent refresh component
  */
-export const ExternalRedirect = enhance()(Render)
+export const AuthenticateSilently = enhance()(Render)

@@ -63,6 +63,10 @@ lint: node_modules
 start: node_modules
 	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
 	make -C ../../api/lambda start &
+	@ NODE_ENV=development $(shell npm bin)/nodemon --quiet \
+		--watch tools --ext html,ts --exec \
+		$(shell npm bin)/ts-node -r tsconfig-paths/register \
+			--project tools/tsconfig.json --files tools/silent &
 	$(shell npm bin)/webpack-dev-server --mode development --hot --open
 
 # Execute unit tests

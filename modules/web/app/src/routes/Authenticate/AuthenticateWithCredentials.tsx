@@ -170,7 +170,7 @@ export function enhance() {
       }
     }),
     lifecycle<LifecycleProps, {}>({
-      async componentWillMount() {
+      async componentDidMount() {
         const { remember, setRememberMeResult } = this.props
         const { request, setRequest } = this.props
         setRequest({
@@ -181,7 +181,7 @@ export function enhance() {
       }
     }),
     branch<BranchProps>(
-      ({ form }) => form.success && Boolean(form.response),
+      ({ form }) => Boolean(form.success && form.response),
       renderComponent(AuthenticateSuccess)
     ),
     pure,
