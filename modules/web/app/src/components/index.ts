@@ -25,7 +25,6 @@
  * ------------------------------------------------------------------------- */
 
 export * from "./Dialog"
-export * from "./ExternalRedirect"
 export * from "./Form"
 export * from "./FormButton"
 export * from "./FormInput"

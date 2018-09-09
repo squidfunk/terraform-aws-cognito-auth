@@ -20,72 +20,61 @@
  * IN THE SOFTWARE.
  */
 
-import * as React from "react"
+import { parse } from "query-string"
+import { keysIn } from "ramda"
 import {
   compose,
-  lifecycle,
-  pure,
-  setDisplayName
+  withHandlers
 } from "recompose"
 
-import { Loading } from "../Loading"
+import { SessionToken } from "common"
 
 /* ----------------------------------------------------------------------------
  * Types
  * ------------------------------------------------------------------------- */
 
 /**
- * External redirect properties
+ * Handler properties
  */
-export interface ExternalRedirectProps {
-  href: string                         /* Target URL */
+interface HandlerProps {
+  callback(
+    id: SessionToken<string>
+  ): void                              /* Callback */
 }
 
 /* ------------------------------------------------------------------------- */
 
 /**
- * Lifecycle properties
+ * Callback enhancer
  */
-type LifecycleProps =
-  & ExternalRedirectProps
+export type WithCallback =
+  & HandlerProps
 
 /* ----------------------------------------------------------------------------
- * Presentational component
+ * Enhancer
  * ------------------------------------------------------------------------- */
 
 /**
- * Render component
- *
- * @param props - Properties
- *
- * @return JSX element
- */
-export const Render: React.SFC =
-  () => <Loading />
-
-/* ----------------------------------------------------------------------------
- * Enhanced component
- * ------------------------------------------------------------------------- */
-
-/**
- * Enhance component
+ * Enhance component with callback handlers
  *
  * @return Component enhancer
  */
-export function enhance() {
-  return compose<{}, ExternalRedirectProps>(
-    lifecycle<LifecycleProps, {}>({
-      componentDidMount() {
-        const { href } = this.props
-        location.assign(href)
-      }
-    }),
-    pure,
-    setDisplayName("ExternalRedirect")
-  )
-}
+export const withCallback = () =>
+  compose<WithCallback, {}>(
+    withHandlers<{}, HandlerProps>({
 
-/**
- * External redirect component
- */
-export const ExternalRedirect = enhance()(Render)
+      /* Invoke callback with identity token */
+      callback: () => id => {
+        const { redirect } = parse(location.search)
+        const path: string = (redirect || "").replace(/^\//, "")
+
+        /* Build hash fragment from identity token */
+        const hash = keysIn(id)
+          .map(key => `${key}=${id[key as keyof SessionToken]}`)
+          .join("&")
+
+        /* Redirect to location with has fragment */
+        location.assign(`//${window.env.APP_ORIGIN}/${path}#${hash}`)
+      }
+    })
+  )

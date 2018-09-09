@@ -24,29 +24,27 @@ import { mount, shallow } from "enzyme"
 import * as React from "react"
 import { compose } from "recompose"
 
-import { Loading } from "components"
 import {
   withFormSubmit,
   withRememberMe
 } from "enhancers"
 import {
   enhance,
-  Render,
-  RenderProps
+  Render
 } from "routes/Authenticate/AuthenticateSuccess"
 
-import { chance, find, wait } from "_/helpers"
+import { find } from "_/helpers"
 import { mockSession } from "_/mocks/common"
 import {
   mockComponent,
   Placeholder
 } from "_/mocks/components"
 import {
+  mockWithCallback,
   mockWithFormSubmitWithResult,
   mockWithRememberMe,
   mockWithSession
 } from "_/mocks/enhancers"
-import { mockRenderComponent } from "_/mocks/vendor/recompose"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -58,46 +56,16 @@ describe("routes/AuthenticateSuccess", () => {
   /* Render component */
   describe("<Render />", () => {
 
-    /* Render properties */
-    const props: RenderProps = {
-      session: mockSession(),
-      initSession: jest.fn(),
-      terminateSession: jest.fn(),
-      path: chance.string()
-    }
-
     /* Mock components */
     beforeEach(() => {
-      mockComponent("ExternalRedirect")
+      mockComponent("Loading")
     })
 
-    /* Test: should render external redirect */
-    it("should render external redirect", () => {
-      const wrapper = shallow(<Render {...props} />)
-      const redirect = find(wrapper, "ExternalRedirect")
-      expect(redirect.exists()).toBe(true)
-    })
-
-    /* Test: should render external redirect with application origin */
-    it("should render external redirect with application origin", () => {
-      const wrapper = shallow(<Render {...props} />)
-      const redirect = find(wrapper, "ExternalRedirect")
-      expect(redirect.prop("href")).toContain(`//${window.env.APP_ORIGIN}/`)
-    })
-
-    /* Test: should render external redirect with target URL */
-    it("should render external redirect with target URL", () => {
-      const wrapper = shallow(<Render {...props} />)
-      const redirect = find(wrapper, "ExternalRedirect")
-      expect(redirect.prop("href")).toContain(`/${props.path}#`)
-    })
-
-    /* Test: should render external redirect with identity token */
-    it("should render external redirect with identity token", () => {
-      const wrapper = shallow(<Render {...props} />)
-      const redirect = find(wrapper, "ExternalRedirect")
-      expect(redirect.prop("href"))
-        .toContain(`#token=${props.session!.id.token}`)
+    /* Test: should render loading indicator */
+    it("should render loading indicator", () => {
+      const wrapper = shallow(<Render />)
+      const loading = find(wrapper, "Loading")
+      expect(loading.exists()).toBe(true)
     })
   })
 
@@ -120,14 +88,7 @@ describe("routes/AuthenticateSuccess", () => {
     /* Mock enhancers */
     beforeEach(() => {
       mockWithRememberMe()
-    })
-
-    /* Test: should set redirect path */
-    it("should set redirect path", () => {
-      mockWithFormSubmitWithResult(session)
-      mockWithSession({ ...session, renewed: true })
-      const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).prop("path")).toEqual("")
+      mockWithCallback()
     })
 
     /* Test: should initialize session */
@@ -146,6 +107,16 @@ describe("routes/AuthenticateSuccess", () => {
       const wrapper = mountPlaceholder()
       expect(wrapper.find(Placeholder).prop("setRememberMeResult"))
         .not.toHaveBeenCalled()
+    })
+
+    /* Test: should invoke callback with identity token */
+    it("should invoke callback with identity token", () => {
+      mockWithFormSubmitWithResult(session)
+      mockWithSession({ ...session, renewed: true })
+      const wrapper = mountPlaceholder()
+      wrapper.setProps({})
+      expect(wrapper.find(Placeholder).prop("callback"))
+        .toHaveBeenCalledWith(session.id)
     })
 
     /* Test: should render with display name */
@@ -181,20 +152,15 @@ describe("routes/AuthenticateSuccess", () => {
         expect(wrapper.find(Placeholder).prop("initSession"))
           .not.toHaveBeenCalled()
       })
-    })
 
-    /* with pending session renewal */
-    describe("with pending session renewal", () => {
-
-      /* Test: should render <Loading /> */
-      it("should render <Loading />", async () => {
+      /* Test: should not invoke callback */
+      it("should not invoke callback", () => {
         mockWithFormSubmitWithResult(session)
-        mockWithSession()
-        const renderComponentMock = mockRenderComponent()
-        mountPlaceholder()
-        await wait(250)
-        expect(renderComponentMock)
-          .toHaveBeenCalledWith(Loading)
+        mockWithSession(session)
+        const wrapper = mountPlaceholder()
+        wrapper.setProps({})
+        expect(wrapper.find(Placeholder).prop("callback"))
+          .not.toHaveBeenCalled()
       })
     })
   })

@@ -20,27 +20,22 @@
  * IN THE SOFTWARE.
  */
 
-import { parse } from "query-string"
 import * as React from "react"
 import {
-  branch,
   compose,
   lifecycle,
   pure,
-  renderComponent,
-  setDisplayName,
-  withProps
+  setDisplayName
 } from "recompose"
 
 import {
   AuthenticateRequest,
   Session
 } from "common"
+import { Loading } from "components"
 import {
-  ExternalRedirect,
-  Loading
-} from "components"
-import {
+  withCallback,
+  WithCallback,
   WithFormSubmit,
   WithRememberMe,
   withSession,
@@ -61,33 +56,12 @@ export type AuthenticateSuccessProps =
 /* ------------------------------------------------------------------------- */
 
 /**
- * Inner properties
- */
-interface InnerProps {
-  path: string                         /* Redirect path */
-}
-
-/**
  * Lifecycle properties
  */
 type LifecycleProps =
   & AuthenticateSuccessProps
   & WithSession
-
-/**
- * Branch properties
- */
-type BranchProps =
-  & WithSession
-
-/* ------------------------------------------------------------------------- */
-
-/**
- * Render properties
- */
-export type RenderProps =
-  & WithSession
-  & InnerProps
+  & WithCallback
 
 /* ----------------------------------------------------------------------------
  * Presentational component
@@ -96,15 +70,10 @@ export type RenderProps =
 /**
  * Render component
  *
- * @param props - Properties
- *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
-  ({ path, session }) =>
-    <ExternalRedirect href={
-      `//${window.env.APP_ORIGIN}/${path}#token=${session!.id.token}`
-    } />
+export const Render: React.SFC =
+  () => <Loading />
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -116,14 +85,9 @@ export const Render: React.SFC<RenderProps> =
  * @return Component enhancer
  */
 export function enhance() {
-  return compose<RenderProps, AuthenticateSuccessProps>(
+  return compose<{}, AuthenticateSuccessProps>(
     withSession(),
-    withProps<InnerProps, RenderProps>(() => {
-      const { redirect } = parse(location.search)
-      return {
-        path: (redirect || "").replace(/^\//, "")
-      }
-    }),
+    withCallback(),
     lifecycle<LifecycleProps, {}>({
       componentDidMount() {
         const { form, initSession, setRememberMeResult } = this.props
@@ -132,12 +96,13 @@ export function enhance() {
           if (form.response.refresh)
             setRememberMeResult(true)
         }
+      },
+      componentDidUpdate() {
+        const { session, callback } = this.props
+        if (session && session.renewed)
+          callback(session.id)
       }
     }),
-    branch<BranchProps>(
-      ({ session }) => !(session && session.renewed),
-      renderComponent(Loading)
-    ),
     pure,
     setDisplayName("AuthenticateSuccess")
   )

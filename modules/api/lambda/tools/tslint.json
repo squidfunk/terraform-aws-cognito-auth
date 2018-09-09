@@ -3,7 +3,6 @@
     "../tslint.json"
   ],
   "rules": {
-    "no-console": false,
-    "no-duplicate-imports": false
+    "no-console": false
   }
 }

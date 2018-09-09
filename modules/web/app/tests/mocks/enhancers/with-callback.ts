@@ -20,8 +20,22 @@
  * IN THE SOFTWARE.
  */
 
+import { withProps } from "recompose"
+
+import * as _ from "enhancers"
+
 /* ----------------------------------------------------------------------------
- * Re-exports
+ * Functions
  * ------------------------------------------------------------------------- */
 
-export { ExternalRedirect } from "./ExternalRedirect"
+/**
+ * Mock callback component enhancer
+ *
+ * @return Component enhancer
+ */
+export function mockWithCallback() {
+  return spyOn(_, "withCallback")
+    .and.callFake(() => withProps<_.WithCallback, {}>({
+      callback: jest.fn()
+    }))
+}

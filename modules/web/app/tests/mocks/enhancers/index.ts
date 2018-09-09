@@ -24,6 +24,7 @@
  * Re-exports
  * ------------------------------------------------------------------------- */
 
+export * from "./with-callback"
 export * from "./with-form-submit"
 export * from "./with-form"
 export * from "./with-notification"
