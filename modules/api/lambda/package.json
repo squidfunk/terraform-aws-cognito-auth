@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "cookie": "^0.3.1",
+    "email-validator": "^2.0.4",
     "jsonschema": "^1.2.4",
     "password-rules": "0.0.3",
     "uuid": "^3.2.1"

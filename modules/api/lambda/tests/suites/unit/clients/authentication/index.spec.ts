@@ -162,6 +162,20 @@ describe("clients/authentication", () => {
           }))
       })
 
+      /* Test: should reject on invalid email address */
+      it("should reject on invalid email address", async done => {
+        mockCognitoSignUpWithSuccess()
+        mockVerificationIssueWithResult()
+        try {
+          const auth = new AuthenticationClient()
+          await auth.register(chance.string(), password)
+          done.fail()
+        } catch (err) {
+          expect(err).toEqual(new Error("Invalid email address"))
+          done()
+        }
+      })
+
       /* Test: should reject on verification error */
       it("should reject on verification error", async done => {
         const errMock = new Error()

@@ -21,6 +21,7 @@
  */
 
 import { AWSError } from "aws-sdk"
+import { validate } from "email-validator"
 import * as uuid from "uuid/v4"
 
 import { Client } from "clients"
@@ -105,6 +106,10 @@ export class AuthenticationClient extends Client {
     email: string, password: string
   ): Promise<VerificationCode> {
     const username = uuid()
+
+    /* Check if email address is valid */
+    if (!validate(email))
+      throw new Error("Invalid email address")
 
     /* Register user with Cognito */
     await this.cognito.signUp({
