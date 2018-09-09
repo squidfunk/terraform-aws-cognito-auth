@@ -270,9 +270,7 @@ The target domain is `localhost:8000`, so you can start a local development
 server on that port in order to receive the identity token after a successful
 authentication attempt.
 
-  [12]: https://d1f4hmll02rbbt.cloudfront.net/
-
-<!-- https://terraform-aws-cognito-auth.play.squidfunk.com/ -->
+  [12]: https://terraform-aws-cognito-auth.play.squidfunk.com/
 
 ### Screenshots
 
