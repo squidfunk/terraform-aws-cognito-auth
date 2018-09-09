@@ -56,7 +56,7 @@ export const styles = ({ palette, breakpoints }: Theme) =>
       [breakpoints.down("xs")]: {
         height: "auto",
         alignItems: "initial",
-        minHeight: "initial",
+        minHeight: "100%",
         backgroundColor: palette.common.white
       }
     }
