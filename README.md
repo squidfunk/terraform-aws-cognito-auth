@@ -16,7 +16,9 @@
 
 > Add authentication to your Single Page Application (SPA) within minutes and
 > take full control of the authentication flow including customizable email
-> templates and a beautiful default UI.
+> templates and a beautiful default UI. See the [live demo][1].
+
+  [1]: #live-demo
 
 A Terraform module to setup a serverless and easily customizable Authentication
 as a Service (AaaS) provider in front of API Gateway using AWS Cognito User
@@ -27,30 +29,30 @@ Pools.
 * Authentication using email and password or refresh token
 * Registration, password reset and verification
 * Completely customizable transactional emails
-* Optional multi-part default email templates (see [screenshots][1])
-* Optional beautiful and mobile-friendly default UI (see [screenshots][2])
+* Optional multi-part default email templates (see [screenshots][2])
+* Optional beautiful and mobile-friendly default UI (see [screenshots][3])
 * Federated identities using Cognito Identity Pools and User Pools
-* A+ security rating on [Mozilla Observatory][3] (CSP, HSTS, etc.)
+* A+ security rating on [Mozilla Observatory][4] (CSP, HSTS, etc.)
 * Excessively tested with automated unit and acceptance tests
-* Serverless, extremely scalable and [cost effective][4]
-* However, there are some [limitations][5]
+* Serverless, extremely scalable and [cost effective][5]
+* However, there are some [limitations][6]
 
-  [1]: #emails
-  [2]: #default-ui-1
-  [3]: https://observatory.mozilla.org/
-  [4]: #cost
-  [5]: #limitations
+  [2]: #emails
+  [3]: #default-ui-1
+  [4]: https://observatory.mozilla.org/
+  [5]: #cost
+  [6]: #limitations
 
 ## Architecture
 
-![Architecture][6]
+![Architecture][7]
 
-  [6]: assets/architecture.png
+  [7]: assets/architecture.png
 
 This module creates a REST API using AWS API Gateway, Lambda and Cognito User
 Pools to enable registration, authentication and account recovery without the
 necessity for the implementation of complex OAuth authentication flows. It was
-originally inspired by [LambdAuth][7] but uses User Pools in favor of Identity
+originally inspired by [LambdAuth][8] but uses User Pools in favor of Identity
 Pools because exposing (even temporary) AWS credentials is a security threat.
 
 Account registration and recovery circumvent Cognito's default verification
@@ -61,18 +63,18 @@ custom Lambda function handling email delivery. Furthermore, a beautiful and
 mobile-friendly default UI can be deployed to a custom subdomain within
 your hosted zone.
 
-  [7]: https://github.com/danilop/LambdAuth
+  [8]: https://github.com/danilop/LambdAuth
 
 ### Cost
 
-AWS Cognito is [free for up to 50.000 monthly active users][8]. After that,
+AWS Cognito is [free for up to 50.000 monthly active users][9]. After that,
 pricing starts at __$ 0,0055 per monthly active user__. Additional cost will be
 attributed to AWS Lambda, API Gateway and CloudFront but it should be very
 reasonable compared to what AaaS providers like Auth0 charge. While this module
 does not provide all features offered by other providers, it should be quite
 sufficient for securing a Single Page Application.
 
-  [8]: https://aws.amazon.com/de/cognito/pricing/
+  [9]: https://aws.amazon.com/de/cognito/pricing/
 
 ## Usage
 
@@ -107,13 +109,13 @@ is a common source of error.
 The `cognito_identity_pool_provider` should match the domain name under which
 the authentication provider should be deployed, i.e. it should be equal to
 `app_domain`. Also note that SES is sandboxed by default, so every email address
-needs to be verified for delivery. Contact AWS to [exit sandboxed mode][9] for
+needs to be verified for delivery. Contact AWS to [exit sandboxed mode][10] for
 production use.
 
-Also see the [example][10] configuration.
+Also see the [example][11] configuration and the [live demo][1].
 
-  [9]: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
-  [10]: #example
+  [10]: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
+  [11]: #example
 
 ## Configuration
 
@@ -251,13 +253,32 @@ https://login.example.com/leave
 This will invalidate all tokens including the refresh token stored in the
 secure HTTP-only cookie.
 
-## Screenshots
+## Demo
 
-### Default UI
+### Live demo
+
+A live demo of this project can be found [here][12]. Please note that emails
+are configured to remain undelivered due to security reasons. If you want to
+try authentication, you may use the following credentials:
+
+```
+Username: jane.doe@example.com
+Password: depl0y&D3STROY
+```
+
+The target domain is `localhost:8000`, so you can start a local development
+server on that port in order to receive the identity token after a successful
+authentication attempt.
+
+  [12]: https://terraform-aws-cognito-auth.play.squidfunk.com/
+
+### Screenshots
+
+#### Default UI
 
 <img src="assets/screenshots/authenticate.png" width="45%" /> <img src="assets/screenshots/register-error.png" width="45%" /> <img src="assets/screenshots/register-success.png" width="45%" /> <img src="assets/screenshots/reset.png" width="45%" />
 
-### Emails
+#### Emails
 
 <img src="assets/screenshots/mail-activate.png" width="45%" /> <img src="assets/screenshots/mail-unlock.png" width="45%" />
 

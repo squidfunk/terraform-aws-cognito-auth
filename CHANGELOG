@@ -1,6 +1,6 @@
 terraform-aws-cognito-auth-0.3.0 (2018-09-09)
 
-  * Added identity token expires timestamp to redirect
+  * Added identity token expires timestamp to hash fragment
   * Refactored external redirect component into enhancer
   * Fixed double slash on redirect to application origin
   * Fixed rendering for small screens
