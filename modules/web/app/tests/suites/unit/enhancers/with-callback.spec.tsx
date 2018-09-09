@@ -70,7 +70,7 @@ describe("enhancers/with-focallbackrm", () => {
         callback(session.id)
         expect(assignMock).toHaveBeenCalledWith(
           jasmine.stringMatching(
-            `token=${session.id.token}&expires=${session.id.expires}`
+            `#token=${session.id.token}&expires=${session.id.expires}`
           ))
       })
     })

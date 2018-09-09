@@ -47,13 +47,16 @@ export const styles = ({ palette, breakpoints }: Theme) =>
     root: {
       display: "flex",
       height: "100%",
+      minHeight: 600,
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: palette.background.default,
 
       /* Remove shadow and border for smaller screens */
       [breakpoints.down("xs")]: {
+        height: "auto",
         alignItems: "initial",
+        minHeight: "initial",
         backgroundColor: palette.common.white
       }
     }

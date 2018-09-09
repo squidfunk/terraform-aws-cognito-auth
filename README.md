@@ -226,7 +226,7 @@ specified in `app_origin` appending the path part specified in the `redirect`
 parameter and the identity token in an URI fragment:
 
 ```
-https://admin.example.com/dashboard#token=<token>
+https://admin.example.com/dashboard#token=<token>&expires=<timestamp>
 ```
 
 Then, after parsing the URI fragment and extracting the token, the application
