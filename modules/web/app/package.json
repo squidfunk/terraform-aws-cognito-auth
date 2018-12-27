@@ -49,7 +49,7 @@
     "@types/http-proxy-middleware": "^0.17.5",
     "@types/jest": "^23.3.1",
     "@types/query-string": "^6.1.0",
-    "@types/ramda": "^0.25.36",
+    "@types/ramda": "^0.25.45",
     "@types/react": "^16.4.11",
     "@types/react-dom": "^16.0.7",
     "@types/react-redux": "^6.0.6",
