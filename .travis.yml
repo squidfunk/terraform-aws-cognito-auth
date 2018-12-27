@@ -36,6 +36,7 @@ cache:
     - modules/identity/lambda/node_modules
     - modules/message/lambda/node_modules
     - modules/web/app/node_modules
+    - modules/web/lambda/node_modules
 
 # Empty environment variable for unit tests
 env:
@@ -56,6 +57,7 @@ install:
   - npm install --prefix modules/identity/lambda
   - npm install --prefix modules/message/lambda
   - npm install --prefix modules/web/app
+  - npm install --prefix modules/web/lambda
 
 # Perform build and release
 script:
