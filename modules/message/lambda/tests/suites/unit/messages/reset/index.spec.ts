@@ -20,17 +20,12 @@
  * IN THE SOFTWARE.
  */
 
-// tslint:disable no-commented-code
-
-// import * as fs from "fs"
-// import * as path from "path"
+import { decode as unquote } from "quoted-printable"
 
 import {
   ResetMessage,
   ResetMessageData
 } from "messages/reset"
-
-// import { printMimeMessage } from "_/helpers"
 
 /* ----------------------------------------------------------------------------
  * Tests
@@ -41,9 +36,6 @@ describe("messages/reset", () => {
 
   /* ResetMessage */
   describe("ResetMessage", () => {
-
-    // /* Fixture base path */
-    // const base = path.resolve(__dirname, "../../../../fixtures/message")
 
     /* Message data (reproducible for fixtures) */
     const data: ResetMessageData = {
@@ -66,14 +58,34 @@ describe("messages/reset", () => {
     /* #compose */
     describe("#compose", () => {
 
-      /* Test: should return raw message */
-      it("should return raw message", async () => {
+      /* Test: should return composed message */
+      it("should return composed message", async () => {
         const message = new ResetMessage(data)
-        const raw = (await message.compose()).toString()
-        expect(raw.length).toBeGreaterThan(7000) // TODO: just for now
-        // expect(printMimeMessage(raw).trim()).toEqual(
-        //   fs.readFileSync(path.resolve(base, "reset.raw"), "utf8").trim()
-        // )
+        const payload = unquote((await message.compose()).toString())
+        for (const match of [
+
+          /* Message entity */
+          "Content-Type: multipart/mixed;boundary",
+          "Subject: Unlock your Example account",
+
+          /* Entity containing plain text and HTML entities */
+          "Content-Type: multipart/alternative;boundary",
+
+          /* Plain text entity */
+          "Content-Type: text/plain; charset=UTF-8",
+          "Content-Transfer-Encoding: quoted-printable",
+
+          /* HTML entity */
+          "Content-Type: text/html; charset=UTF-8",
+          "Content-Transfer-Encoding: quoted-printable",
+
+          /* Attachments */
+          "Content-Type: image/png",
+          "Content-Transfer-Encoding: base64",
+          "Content-Disposition: inline",
+          "Content-ID: <unlock.png>"
+        ])
+          expect(payload).toEqual(jasmine.stringMatching(match))
       })
     })
   })
