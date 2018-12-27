@@ -30,7 +30,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock CognitoIdentityServiceProvider.adminUpdateUserAttributes
+ * Mock `CognitoIdentityServiceProvider.adminUpdateUserAttributes`
  *
  * @param spy - Spy/fake to mock Cognito
  *
@@ -47,7 +47,7 @@ function mockCognitoAdminUpdateUserAttributes(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminUpdateUserAttributes with success
+ * Mock `CognitoIdentityServiceProvider.adminUpdateUserAttributes` with success
  *
  * @param username - Username
  *
@@ -64,7 +64,7 @@ export function mockCognitoAdminUpdateUserAttributesWithSuccess(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminUpdateUserAttributes with error
+ * Mock `CognitoIdentityServiceProvider.adminUpdateUserAttributes` with error
  *
  * @param err - Error to be thrown
  *
@@ -79,7 +79,7 @@ export function mockCognitoAdminUpdateUserAttributesWithError(
 }
 
 /**
- * Restore CognitoIdentityServiceProvider.adminUpdateUserAttributes
+ * Restore `CognitoIdentityServiceProvider.adminUpdateUserAttributes`
  */
 export function restoreCognitoAdminUpdateUserAttributes() {
   restore("CognitoIdentityServiceProvider", "adminUpdateUserAttributes")

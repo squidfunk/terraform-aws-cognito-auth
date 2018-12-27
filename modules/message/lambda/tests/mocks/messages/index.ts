@@ -29,7 +29,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock Message.compose
+ * Mock `Message.compose`
  *
  * @param promise - Promise returned by message
  *
@@ -43,7 +43,7 @@ function mockMessageCompose<T>(
 }
 
 /**
- * Mock Message.compose returning with result
+ * Mock `Message.compose` returning with result
  *
  * @param result - Mime entity
  *
@@ -56,7 +56,7 @@ export function mockMessageComposeWithResult(
 }
 
 /**
- * Mock Message.compose throwing an error
+ * Mock `Message.compose` throwing an error
  *
  * @param err - Error to be thrown
  *

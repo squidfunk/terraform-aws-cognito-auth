@@ -30,7 +30,7 @@ import { mockSession } from "_/mocks/common"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock AuthenticationClient.authenticateWithCredentials
+ * Mock `AuthenticationClient.authenticateWithCredentials`
  *
  * @param promise - Promise returned by authentication client
  *
@@ -44,7 +44,7 @@ function mockAuthenticationClientAuthenticateWithCredentials<T>(
 }
 
 /**
- * Mock AuthenticationClient.authenticateWithCredentials returning with result
+ * Mock `AuthenticationClient.authenticateWithCredentials` returning with result
  *
  * @param session - Session
  *
@@ -59,7 +59,7 @@ export function mockAuthenticationClientAuthenticateWithCredentialsWithResult(
 }
 
 /**
- * Mock AuthenticationClient.authenticateWithCredentials throwing an error
+ * Mock `AuthenticationClient.authenticateWithCredentials` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -76,7 +76,7 @@ export function mockAuthenticationClientAuthenticateWithCredentialsWithError(
 /* ------------------------------------------------------------------------- */
 
 /**
- * Mock AuthenticationClient.authenticateWithToken
+ * Mock `AuthenticationClient.authenticateWithToken`
  *
  * @param promise - Promise returned by authentication client
  *
@@ -90,7 +90,7 @@ function mockAuthenticationClientAuthenticateWithToken<T>(
 }
 
 /**
- * Mock AuthenticationClient.authenticateWithToken returning with result
+ * Mock `AuthenticationClient.authenticateWithToken` returning with result
  *
  * @param session - Session
  *
@@ -105,7 +105,7 @@ export function mockAuthenticationClientAuthenticateWithTokenWithResult(
 }
 
 /**
- * Mock AuthenticationClient.authenticateWithToken throwing an error
+ * Mock `AuthenticationClient.authenticateWithToken` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -122,7 +122,7 @@ export function mockAuthenticationClientAuthenticateWithTokenWithError(
 /* ------------------------------------------------------------------------- */
 
 /**
- * Mock AuthenticationClient.register
+ * Mock `AuthenticationClient.register`
  *
  * @param promise - Promise returned by authentication client
  *
@@ -136,7 +136,7 @@ function mockAuthenticationClientRegister<T>(
 }
 
 /**
- * Mock AuthenticationClient.register returning with success
+ * Mock `AuthenticationClient.register` returning with success
  *
  * @return Jasmine spy
  */
@@ -145,7 +145,7 @@ export function mockAuthenticationClientRegisterWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock AuthenticationClient.register throwing an error
+ * Mock `AuthenticationClient.register` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -160,7 +160,7 @@ export function mockAuthenticationClientRegisterWithError(
 /* ------------------------------------------------------------------------- */
 
 /**
- * Mock AuthenticationClient.forgotPassword
+ * Mock `AuthenticationClient.forgotPassword`
  *
  * @param promise - Promise returned by authentication client
  *
@@ -174,7 +174,7 @@ function mockAuthenticationClientForgotPassword<T>(
 }
 
 /**
- * Mock AuthenticationClient.forgotPassword returning with success
+ * Mock `AuthenticationClient.forgotPassword` returning with success
  *
  * @return Jasmine spy
  */
@@ -183,7 +183,7 @@ export function mockAuthenticationClientForgotPasswordWithSuccess() {
 }
 
 /**
- * Mock AuthenticationClient.forgotPassword throwing an error
+ * Mock `AuthenticationClient.forgotPassword` throwing an error
  *
  * @param err - Error to be thrown
  *

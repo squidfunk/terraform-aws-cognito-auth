@@ -30,7 +30,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock CognitoIdentityServiceProvider.initiateAuth
+ * Mock `CognitoIdentityServiceProvider.initiateAuth`
  *
  * @param spy - Spy/fake to mock Cognito
  *
@@ -47,7 +47,7 @@ function mockCognitoInitiateAuth(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.initiateAuth with credentials
+ * Mock `CognitoIdentityServiceProvider.initiateAuth` with credentials
  *
  * @return Jasmine spy
  */
@@ -64,7 +64,7 @@ export function mockCognitoInitiateAuthWithCredentials(): jasmine.Spy {
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.initiateAuth with token
+ * Mock `CognitoIdentityServiceProvider.initiateAuth` with token
  *
  * @return Jasmine spy
  */
@@ -80,7 +80,7 @@ export function mockCognitoInitiateAuthWithToken(): jasmine.Spy {
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.initiateAuth returning with challenge
+ * Mock `CognitoIdentityServiceProvider.initiateAuth` returning with challenge
  *
  * @param challenge - Challenge name
  *
@@ -97,7 +97,7 @@ export function mockCognitoInitiateAuthWithChallenge(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.initiateAuth throwing an error
+ * Mock `CognitoIdentityServiceProvider.initiateAuth` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -112,7 +112,7 @@ export function mockCognitoInitiateAuthWithError(
 }
 
 /**
- * Restore CognitoIdentityServiceProvider.initiateAuth
+ * Restore `CognitoIdentityServiceProvider.initiateAuth`
  */
 export function restoreCognitoInitiateAuth() {
   restore("CognitoIdentityServiceProvider", "initiateAuth")

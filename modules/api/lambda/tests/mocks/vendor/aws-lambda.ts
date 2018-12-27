@@ -51,7 +51,7 @@ interface APIGatewayProxyEventOptions<
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock API Gateway event path parameters
+ * Mock path parameters for `APIGatewayProxyEvent`
  *
  * @param number - Number of path parameters
  *
@@ -66,7 +66,7 @@ export function mockAPIGatewayProxyEventPathParameters(
 }
 
 /**
- * Mock API Gateway event options
+ * Mock `APIGatewayProxyEventOptions`
  *
  * @template TParameters - Event path parameter type
  * @template TEvent - Event body type
@@ -96,7 +96,7 @@ export function mockAPIGatewayProxyEventOptions<
 }
 
 /**
- * Mock API Gateway event
+ * Mock `APIGatewayProxyEvent`
  *
  * @template TParameters - Event path parameter type
  * @template TEvent - Event body type

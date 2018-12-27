@@ -29,7 +29,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock CloudFront origin response event
+ * Mock `CloudFrontResponseEvent`
  *
  * @return CloudFront origin response event
  */

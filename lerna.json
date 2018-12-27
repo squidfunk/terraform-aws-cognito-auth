@@ -1,7 +1,0 @@
-{
-  "packages": [
-    "modules/**/lambda",
-    "modules/**/app"
-  ],
-  "version": "independent"
-}

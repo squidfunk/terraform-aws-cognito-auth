@@ -27,7 +27,7 @@ import { SessionClient } from "clients/session"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SessionClient.signOut
+ * Mock `SessionClient.signOut`
  *
  * @param promise - Promise returned by authentication client
  *
@@ -41,7 +41,7 @@ function mockSessionClientSignOut<T>(
 }
 
 /**
- * Mock SessionClient.signOut returning with success
+ * Mock `SessionClient.signOut` returning with success
  *
  * @return Jasmine spy
  */
@@ -50,7 +50,7 @@ export function mockSessionClientSignOutWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock SessionClient.signOut throwing an error
+ * Mock `SessionClient.signOut` throwing an error
  *
  * @param err - Error to be thrown
  *

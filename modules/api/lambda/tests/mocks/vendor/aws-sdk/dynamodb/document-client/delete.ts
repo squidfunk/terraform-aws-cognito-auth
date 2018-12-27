@@ -32,7 +32,7 @@ import { mockVerificationCode } from "_/mocks/verification"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock DynamoDB.DocumentClient.delete
+ * Mock `DynamoDB.DocumentClient.delete`
  *
  * @param spy - Spy/fake to mock DynamoDB
  *
@@ -48,7 +48,7 @@ function mockDynamoDBDocumentClientDelete(
 }
 
 /**
- * Mock DynamoDB.DocumentClient.delete returning with result
+ * Mock `DynamoDB.DocumentClient.delete` returning with result
  *
  * @param code - Verification code
  *
@@ -65,7 +65,7 @@ export function mockDynamoDBDocumentClientDeleteWithResult(
 }
 
 /**
- * Mock DynamoDB.DocumentClient.delete returning with no result
+ * Mock `DynamoDB.DocumentClient.delete` returning with no result
  *
  * @return Jasmine spy
  */
@@ -76,7 +76,7 @@ export function mockDynamoDBDocumentClientDeleteWithoutResult(): jasmine.Spy {
 }
 
 /**
- * Mock DynamoDB.DocumentClient.delete throwing an error
+ * Mock `DynamoDB.DocumentClient.delete` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -91,7 +91,7 @@ export function mockDynamoDBDocumentClientDeleteWithError(
 }
 
 /**
- * Restore DynamoDB.DocumentClient.delete
+ * Restore `DynamoDB.DocumentClient.delete`
  */
 export function restoreDynamoDBDocumentClientDelete() {
   restore("DynamoDB.DocumentClient", "delete")

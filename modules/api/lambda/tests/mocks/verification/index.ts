@@ -33,7 +33,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock verification context
+ * Mock `VerificationContext`
  *
  * @return Verification context
  */
@@ -45,7 +45,7 @@ export function mockVerificationContext(): VerificationContext {
 }
 
 /**
- * Mock verification code
+ * Mock `VerificationCode`
  *
  * @param context - Verification context
  *
@@ -67,7 +67,7 @@ export function mockVerificationCode(
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock Verification.issue
+ * Mock `Verification.issue`
  *
  * @param promise - Promise returned by verification
  *
@@ -81,7 +81,7 @@ export function mockVerificationIssue<T>(
 }
 
 /**
- * Mock Verification.issue returning with result
+ * Mock `Verification.issue` returning with result
  *
  * @param code - Verification code
  *
@@ -94,7 +94,7 @@ export function mockVerificationIssueWithResult(
 }
 
 /**
- * Mock Verification.issue throwing an error
+ * Mock `Verification.issue` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -109,7 +109,7 @@ export function mockVerificationIssueWithError(
 /* ------------------------------------------------------------------------- */
 
 /**
- * Mock Verification.claim
+ * Mock `Verification.claim`
  *
  * @param promise - Promise returned by verification
  *
@@ -123,7 +123,7 @@ export function mockVerificationClaim<T>(
 }
 
 /**
- * Mock Verification.claim returning with result
+ * Mock `Verification.claim` returning with result
  *
  * @param code - Verification code
  *
@@ -136,7 +136,7 @@ export function mockVerificationClaimWithResult(
 }
 
 /**
- * Mock Verification.claim throwing an error
+ * Mock `Verification.claim` throwing an error
  *
  * @param err - Error to be thrown
  *

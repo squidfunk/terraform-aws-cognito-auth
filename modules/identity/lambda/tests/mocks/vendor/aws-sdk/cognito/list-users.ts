@@ -30,7 +30,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock CognitoIdentityServiceProvider.listUsers
+ * Mock `CognitoIdentityServiceProvider.listUsers`
  *
  * @param spy - Spy/fake to mock Cognito
  *
@@ -45,7 +45,7 @@ function mockCognitoListUsers(spy: jasmine.Spy) {
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.listUsers returning with result
+ * Mock `CognitoIdentityServiceProvider.listUsers` returning with result
  *
  * @return Jasmine spy
  */
@@ -80,7 +80,7 @@ export function mockCognitoListUsersWithResult() {
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.listUsers returning with no result
+ * Mock `CognitoIdentityServiceProvider.listUsers` returning with no result
  *
  * @return Jasmine spy
  */
@@ -93,7 +93,7 @@ export function mockCognitoListUsersWithoutResult() {
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.listUsers throwing an error
+ * Mock `CognitoIdentityServiceProvider.listUsers` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -108,7 +108,7 @@ export function mockCognitoListUsersWithError(
 }
 
 /**
- * Restore CognitoIdentityServiceProvider.listUsers
+ * Restore `CognitoIdentityServiceProvider.listUsers`
  */
 export function restoreCognitoListUsers() {
   restore("CognitoIdentityServiceProvider", "listUsers")

@@ -30,7 +30,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SES.sendRawEmail
+ * Mock `SES.sendRawEmail`
  *
  * @param spy - Spy/fake to mock SNS
  *
@@ -45,7 +45,7 @@ function mockSESSendRawEmail(spy: jasmine.Spy): jasmine.Spy {
 }
 
 /**
- * Mock SES.sendRawEmail returning with success
+ * Mock `SES.sendRawEmail` returning with success
  *
  * @return Jasmine spy
  */
@@ -58,7 +58,7 @@ export function mockSESSendRawEmailWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock SES.sendRawEmail throwing an error
+ * Mock `SES.sendRawEmail` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -73,7 +73,7 @@ export function mockSESSendRawEmailWithError(
 }
 
 /**
- * Restore SES.sendRawEmail
+ * Restore `SES.sendRawEmail`
  */
 export function restoreSESSendRawEmail() {
   restore("SES", "sendRawEmail")

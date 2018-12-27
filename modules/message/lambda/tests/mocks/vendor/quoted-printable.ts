@@ -29,7 +29,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock QuotedPrintable.encode
+ * Mock `quoted-printable.encode`
  *
  * @param cb - Fake callback
  *
@@ -43,7 +43,7 @@ function mockQuotedPrintableEncode(
 }
 
 /**
- * Mock QuotedPrintable.encode returning with success
+ * Mock `quoted-printable.encode` returning with success
  *
  * @return Jasmine spy
  */
@@ -52,7 +52,7 @@ export function mockQuotedPrintableEncodeWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock QuotedPrintable.encode throwing an error
+ * Mock `quoted-printable.encode` throwing an error
  *
  * @param err - Error to be thrown
  *

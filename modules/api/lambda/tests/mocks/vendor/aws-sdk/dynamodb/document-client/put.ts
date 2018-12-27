@@ -28,7 +28,7 @@ import { mock, restore } from "aws-sdk-mock"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock DynamoDB.DocumentClient.put
+ * Mock `DynamoDB.DocumentClient.put`
  *
  * @param spy - Spy/fake to mock DynamoDB
  *
@@ -44,7 +44,7 @@ function mockDynamoDBDocumentClientPut(
 }
 
 /**
- * Mock DynamoDB.DocumentClient.put returning with success
+ * Mock `DynamoDB.DocumentClient.put` returning with success
  *
  * @return Jasmine spy
  */
@@ -54,7 +54,7 @@ export function mockDynamoDBDocumentClientPutWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock DynamoDB.DocumentClient.put throwing an error
+ * Mock `DynamoDB.DocumentClient.put` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -69,7 +69,7 @@ export function mockDynamoDBDocumentClientPutWithError(
 }
 
 /**
- * Restore DynamoDB.DocumentClient.put
+ * Restore `DynamoDB.DocumentClient.put`
  */
 export function restoreDynamoDBDocumentClientPut() {
   restore("DynamoDB.DocumentClient", "put")

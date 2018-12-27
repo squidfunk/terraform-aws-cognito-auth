@@ -32,7 +32,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock verification context
+ * Mock `VerificationContext`
  *
  * @return Verification context
  */
@@ -44,7 +44,7 @@ export function mockVerificationContext(): VerificationContext {
 }
 
 /**
- * Mock verification code
+ * Mock `VerificationCode`
  *
  * @param context - Verification context
  *

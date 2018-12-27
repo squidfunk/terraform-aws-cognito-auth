@@ -28,7 +28,7 @@ import { mock, restore } from "aws-sdk-mock"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock CognitoIdentityServiceProvider.globalSignOut
+ * Mock `CognitoIdentityServiceProvider.globalSignOut`
  *
  * @param spy - Spy/fake to mock Cognito
  *
@@ -45,7 +45,7 @@ function mockCognitoGlobalSignOut(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.globalSignOut returning with success
+ * Mock `CognitoIdentityServiceProvider.globalSignOut` returning with success
  *
  * @return Jasmine spy
  */
@@ -55,7 +55,7 @@ export function mockCognitoGlobalSignOutWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.globalSignOut throwing an error
+ * Mock `CognitoIdentityServiceProvider.globalSignOut` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -70,7 +70,7 @@ export function mockCognitoGlobalSignOutWithError(
 }
 
 /**
- * Restore CognitoIdentityServiceProvider.globalSignOut
+ * Restore `CognitoIdentityServiceProvider.globalSignOut`
  */
 export function restoreCognitoGlobalSignOut() {
   restore("CognitoIdentityServiceProvider", "globalSignOut")
