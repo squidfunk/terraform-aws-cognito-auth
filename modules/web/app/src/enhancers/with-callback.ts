@@ -66,7 +66,7 @@ export const withCallback = () =>
       /* Invoke callback with identity token */
       callback: () => id => {
         const { redirect } = parse(location.search)
-        const path: string = (redirect || "").replace(/^\//, "")
+        const path: string = (redirect as string || "").replace(/^\//, "")
 
         /* Build hash fragment from identity token */
         const hash = keysIn(id)

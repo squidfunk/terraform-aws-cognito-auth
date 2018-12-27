@@ -23,7 +23,7 @@
   },
   "globals": {
     "ts-jest": {
-      "tsConfigFile": "<rootDir>/tests/tsconfig.json"
+      "tsConfig": "<rootDir>/tests/tsconfig.json"
     }
   },
   "coveragePathIgnorePatterns": [

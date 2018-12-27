@@ -137,7 +137,6 @@ export function mockAPIGatewayProxyEvent<
       requestTimeEpoch: chance.timestamp() * 1000 + chance.millisecond(),
       resourceId: chance.string(),
       resourcePath: "/",
-      stage: chance.string(),
       identity: {
         accountId: null,
         apiKey: chance.string(),
@@ -152,8 +151,12 @@ export function mockAPIGatewayProxyEvent<
         user: null,
         userAgent: chance.string(),
         userArn: null
-      }
+      },
+      path: options.path,
+      stage: chance.string()
     },
+    multiValueHeaders: {},
+    multiValueQueryStringParameters: null,
     stageVariables: null,
     body,
     isBase64Encoded: chance.bool()

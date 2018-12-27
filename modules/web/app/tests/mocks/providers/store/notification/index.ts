@@ -23,7 +23,8 @@
 import * as _ from "providers/store/notification"
 
 import { chance } from "_/helpers"
-import { mockAction } from "_/mocks/providers"
+
+import { mockAction } from ".."
 
 /* ----------------------------------------------------------------------------
  * Data

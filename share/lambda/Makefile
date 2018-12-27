@@ -46,7 +46,7 @@ clean-post_:
 
 # Distribution files
 dist: $(shell find src) tsconfig.json
-	$(shell npm bin)/tsc -p tsconfig.json
+	$(shell npm bin --prefix ${ROOT})/tsc -p tsconfig.json
 
 # Archive for distribution
 dist.zip: $(shell find src) | dist-pre dist dist-post
@@ -78,22 +78,26 @@ clean: | clean-pre clean_ clean-post
 
 # Lint source files
 lint: node_modules
-	$(shell npm bin)/tslint -p tsconfig.json "src/**/*.ts"
-	$(shell npm bin)/tslint -p tests/tsconfig.json "tests/**/*.ts"
+	$(shell npm bin --prefix ${ROOT})/tslint \
+		-p tsconfig.json "src/**/*.ts"
+	$(shell npm bin --prefix ${ROOT})/tslint \
+		-p tests/tsconfig.json "tests/**/*.ts"
 
 # Execute unit tests
 test: node_modules | dist-pre
 	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
-	@ NODE_ENV=test $(shell npm bin)/nyc \
-		$(shell npm bin)/ts-node -r tsconfig-paths/register \
+	@ NODE_ENV=test $(shell npm bin --prefix ${ROOT})/nyc \
+		$(shell npm bin --prefix ${ROOT})/ts-node \
+			-r tsconfig-paths/register \
 			--project tests/tsconfig.json --files tests \
 				"suites/unit/**/*.spec.ts"
 
 # Execute unit tests in watch mode
 watch: node_modules
-	@ NODE_ENV=development $(shell npm bin)/nodemon --quiet \
-		--watch src --watch tests --ext json,ts --exec \
-		$(shell npm bin)/ts-node -r tsconfig-paths/register \
+	@ NODE_ENV=development $(shell npm bin --prefix ${ROOT})/nodemon \
+		--quiet --watch src --watch tests --ext json,ts --exec \
+		$(shell npm bin --prefix ${ROOT})/ts-node \
+			-r tsconfig-paths/register \
 			--project tests/tsconfig.json --files tests \
 				"suites/unit/**/*.spec.ts"
 

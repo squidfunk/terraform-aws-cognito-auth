@@ -50,7 +50,7 @@ export function mockMimeMessageEntity(): jasmine.SpyObj<_.Entity> {
  * @return Jasmine spy
  */
 export function mockMimeMessageFactoryWithResult(
-  entity: _.Entity = mockMimeMessageEntity()
+  entity: jasmine.SpyObj<_.Entity> = mockMimeMessageEntity()
 ): jasmine.Spy {
   return spyOn(_, "factory")
     .and.returnValue(entity)

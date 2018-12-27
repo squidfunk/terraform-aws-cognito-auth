@@ -21,6 +21,10 @@
 # macOS internals
 .DS_Store
 
+# NPM-related
+node_modules
+npm-debug.log*
+
 # Terraform runtime
 .terraform
 .terraform.tfstate.lock.info

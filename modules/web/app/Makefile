@@ -56,8 +56,10 @@ clean:
 
 # Lint source files
 lint: node_modules
-	$(shell npm bin)/tslint -p tsconfig.json "src/**/*.ts*"
-	$(shell npm bin)/tslint -p tests/tsconfig.json "tests/**/*.ts*"
+	$(shell npm bin --prefix ${ROOT})/tslint \
+		-p tsconfig.json "src/**/*.ts*"
+	$(shell npm bin --prefix ${ROOT})/tslint \
+		-p tests/tsconfig.json "tests/**/*.ts*"
 
 # Start API server and webpack development server
 start: node_modules
@@ -71,8 +73,7 @@ test: node_modules
 	$(shell npm bin)/jest \
 		--config tests/jest.json \
 		--collectCoverage \
-		--no-verbose \
-		$(CI:true=--runInBand)
+		--no-verbose $(CI:true=--runInBand)
 
 # Execute unit tests in watch mode
 watch: node_modules
