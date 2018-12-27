@@ -69,11 +69,12 @@ describe("messages/register", () => {
         const message = new RegisterMessage(data)
         const raw = (await message.compose()).toString()
         console.log(printMimeMessage(raw).trim(), printMimeMessage(raw).trim().length)
+        const x = fs.readFileSync(path.resolve(base, "register.raw"), "utf8").trim()
+        console.log(x, x.length)
         expect(printMimeMessage(raw).trim()).toEqual(
           fs.readFileSync(path.resolve(base, "register.raw"), "utf8").trim()
         )
-        const x = fs.readFileSync(path.resolve(base, "register.raw"), "utf8").trim()
-        console.log(x, x.length)
+
       })
     })
   })
