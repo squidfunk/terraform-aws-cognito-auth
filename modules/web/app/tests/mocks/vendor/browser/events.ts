@@ -27,7 +27,7 @@ import * as React from "react"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock change event for text input
+ * Mock `React.ChangeEvent<HTMLInputElement>` for text input
  *
  * @param options - Options
  *
@@ -42,7 +42,7 @@ export function mockChangeEventForTextInput(
 }
 
 /**
- * Mock change event for checkbox input
+ * Mock `React.ChangeEvent<HTMLInputElement>` for checkbox input
  *
  * @param options - Options
  *
@@ -57,7 +57,7 @@ export function mockChangeEventForCheckboxInput(
 }
 
 /**
- * Mock submit event
+ * Mock `React.ChangeEvent<HTMLFormElement>`
  *
  * @return Submit event
  */
@@ -68,7 +68,7 @@ export function mockSubmitEvent(): React.ChangeEvent<HTMLFormElement> {
 }
 
 /**
- * Mock mouse down event
+ * Mock `React.MouseEvent<HTMLButtonElement>`
  *
  * @return Mouse down event
  */

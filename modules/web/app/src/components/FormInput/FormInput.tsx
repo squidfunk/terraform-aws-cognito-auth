@@ -57,7 +57,7 @@ export type RenderProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.FunctionComponent<RenderProps> =
   props =>
     <TextField
       type="text" margin="dense" InputLabelProps={{ required: false }}

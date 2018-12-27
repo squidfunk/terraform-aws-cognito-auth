@@ -64,7 +64,7 @@ export type RenderProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.FunctionComponent<RenderProps> =
   ({ classes, ...props }) =>
     <Button
       type="submit" variant="contained" color="primary"

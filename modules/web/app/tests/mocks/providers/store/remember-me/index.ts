@@ -29,7 +29,7 @@ import { mockAction } from ".."
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock set remember me flag action creator
+ * Mock `setRememberMeAction`
  *
  * @return Jasmine spy
  */
@@ -39,7 +39,7 @@ export function mockSetRememberMeAction(): jasmine.Spy {
 }
 
 /**
- * Mock set authentication result action creator
+ * Mock `setRememberMeResultAction`
  *
  * @return Jasmine spy
  */

@@ -90,7 +90,7 @@ export type RenderProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.FunctionComponent<RenderProps> =
   ({ handleChange, ...props }) =>
     <Checkbox {...props} onChange={handleChange} />
 

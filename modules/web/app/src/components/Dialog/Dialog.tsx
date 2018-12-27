@@ -55,7 +55,7 @@ export type RenderProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.FunctionComponent<RenderProps> =
   ({ classes, children }) =>
     <Paper elevation={1} className={classes.root}>
       {children}

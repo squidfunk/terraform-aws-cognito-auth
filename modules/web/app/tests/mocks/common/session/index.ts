@@ -29,7 +29,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock session
+ * Mock `Session`
  *
  * @param refresh - Whether to return a refresh token
  *

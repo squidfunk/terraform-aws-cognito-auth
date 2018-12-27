@@ -27,7 +27,7 @@ import * as _ from "recompose"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock recompose's renderComponent
+ * Mock `recompose.renderComponent`
  *
  * @return Jasmine spy
  */

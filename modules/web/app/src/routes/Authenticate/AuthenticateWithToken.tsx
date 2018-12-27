@@ -80,7 +80,7 @@ type BranchProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC =
+export const Render: React.FunctionComponent =
   () => <Loading />
 
 /* ----------------------------------------------------------------------------

@@ -25,7 +25,7 @@
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock location.assign
+ * Mock `location.assign`
  *
  * @return Jasmine spy
  */

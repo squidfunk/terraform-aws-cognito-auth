@@ -30,7 +30,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock an Axios error
+ * Mock `AxiosError`
  *
  * @param message - Error message
  *
@@ -50,7 +50,7 @@ export function mockAxiosError(
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock Axios.post
+ * Mock `axios.post`
  *
  * @param promise - Promise returned by Axios
  *
@@ -64,7 +64,7 @@ function mockAxiosPost<T>(
 }
 
 /**
- * Mock Axios.post returning with result
+ * Mock `axios.post` returning with result
  *
  * @template T - Response type
  *
@@ -79,7 +79,7 @@ export function mockAxiosPostWithResult<T = void>(
 }
 
 /**
- * Mock Axios.post throwing an error
+ * Mock `axios.post` throwing an error
  *
  * @param err - Error to be thrown
  * @param message - Error message

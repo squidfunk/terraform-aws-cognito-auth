@@ -64,7 +64,7 @@ type LifecycleProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC =
+export const Render: React.FunctionComponent =
   () => <Redirect to="/" />
 
 /* ----------------------------------------------------------------------------

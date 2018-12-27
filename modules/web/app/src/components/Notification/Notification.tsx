@@ -63,7 +63,7 @@ export type RenderProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.FunctionComponent<RenderProps> =
   ({ classes, notification: { data, show } }) =>
     <Collapse in={show}>
       {data &&

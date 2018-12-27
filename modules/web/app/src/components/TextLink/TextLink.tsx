@@ -87,7 +87,7 @@ export type RenderProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.FunctionComponent<RenderProps> =
   ({ classes, children, handleClickCapture, ...props }) =>
     <Link
       className={classes.root} onClickCapture={handleClickCapture} {...props}

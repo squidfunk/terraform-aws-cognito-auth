@@ -31,7 +31,7 @@ import { mockAction } from ".."
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock notification data with success
+ * Mock `NotificationData` with success
  *
  * @return Notification data
  */
@@ -43,7 +43,7 @@ export function mockNotificationDataWithSuccess(): _.NotificationData {
 }
 
 /**
- * Mock notification data with error
+ * Mock `NotificationData` with error
  *
  * @return Notification data
  */
@@ -59,7 +59,7 @@ export function mockNotificationDataWithError(): _.NotificationData {
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock display notification action creator
+ * Mock `displayNotificationAction`
  *
  * @return Jasmine spy
  */
@@ -69,7 +69,7 @@ export function mockDisplayNotificationAction(): jasmine.Spy {
 }
 
 /**
- * Mock dismiss notification action creator
+ * Mock `dismissNotificationAction`
  *
  * @return Jasmine spy
  */

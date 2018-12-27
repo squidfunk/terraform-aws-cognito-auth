@@ -62,7 +62,7 @@ type BranchProps =
 /**
  * Render component
  */
-export const Render: React.SFC =
+export const Render: React.FunctionComponent =
   () => <Loading />
 
 /* ----------------------------------------------------------------------------

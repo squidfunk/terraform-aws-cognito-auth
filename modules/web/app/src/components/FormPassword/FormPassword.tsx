@@ -106,7 +106,7 @@ export type RenderProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.FunctionComponent<RenderProps> =
   ({
     classes, name, label, required, InputProps, value, onChange, autoComplete,
     disabled, error, helperText, visibility, handleClick, handleMouseDown

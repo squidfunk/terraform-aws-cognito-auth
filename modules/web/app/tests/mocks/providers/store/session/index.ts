@@ -29,7 +29,7 @@ import { mockAction } from ".."
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock initialize session action creator
+ * Mock `initSessionAction`
  *
  * @return Jasmine spy
  */
@@ -39,7 +39,7 @@ export function mockInitSessionAction(): jasmine.Spy {
 }
 
 /**
- * Mock terminate session action creator
+ * Mock `terminateSessionAction`
  *
  * @return Jasmine spy
  */

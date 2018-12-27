@@ -72,7 +72,7 @@ export type RenderProps =
  *
  * @return JSX element
  */
-export const Render: React.SFC<RenderProps> =
+export const Render: React.FunctionComponent<RenderProps> =
   ({ classes, form, request, handleChange, handleSubmit }) =>
     <Dialog>
       <Header
