@@ -52,12 +52,12 @@ env:
 
 # Install dependencies
 install:
-  - npm install
-  - npm install --prefix modules/api/lambda
-  - npm install --prefix modules/identity/lambda
-  - npm install --prefix modules/message/lambda
-  - npm install --prefix modules/web/app
-  - npm install --prefix modules/web/lambda
+  - npm install --no-audit
+  - npm install --no-audit --prefix modules/api/lambda
+  - npm install --no-audit --prefix modules/identity/lambda
+  - npm install --no-audit --prefix modules/message/lambda
+  - npm install --no-audit --prefix modules/web/app
+  - npm install --no-audit --prefix modules/web/lambda
 
 # Perform build and release
 script:
