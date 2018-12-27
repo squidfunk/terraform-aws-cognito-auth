@@ -45,7 +45,7 @@
     "@types/supertest": "^2.0.4",
     "@types/uuid": "^3.4.3",
     "aws-sdk": "^2.220.1",
-    "aws-sdk-mock": "^2.0.0",
+    "aws-sdk-mock": "^4.3.0",
     "chance": "^1.0.13",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
