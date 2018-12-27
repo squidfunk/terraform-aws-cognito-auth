@@ -55,7 +55,7 @@
     "jasmine": "^3.1.0",
     "jasmine-spec-reporter": "^4.2.1",
     "morgan": "^1.9.0",
-    "nodemon": "^1.17.3",
+    "nodemon": "^1.18.9",
     "nyc": "^11.6.0",
     "supertest": "^3.1.0",
     "ts-node": "^7.0.0",
