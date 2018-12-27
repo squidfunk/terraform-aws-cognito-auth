@@ -31,6 +31,7 @@ git:
 # Cache dependencies
 cache:
   directories:
+    - node_modules
     - modules/api/lambda/node_modules
     - modules/identity/lambda/node_modules
     - modules/message/lambda/node_modules
@@ -50,6 +51,7 @@ env:
 
 # Install dependencies
 install:
+  - npm install
   - npm install --prefix modules/api/lambda
   - npm install --prefix modules/identity/lambda
   - npm install --prefix modules/message/lambda
