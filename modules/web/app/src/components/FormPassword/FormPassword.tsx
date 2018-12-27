@@ -51,7 +51,10 @@ import { styles, Styles } from "./FormPassword.styles"
 /**
  * Form password properties
  */
-export type FormPasswordProps = StandardTextFieldProps
+export type FormPasswordProps = Pick<
+  StandardTextFieldProps,
+  Exclude<keyof StandardTextFieldProps, "classes">
+>
 
 /* ------------------------------------------------------------------------- */
 

@@ -87,14 +87,14 @@ describe("components/FormPassword", () => {
     it("should render form helper text", () => {
       const helperText = chance.string()
       const wrapper = shallow(<Render {...props} helperText={helperText} />)
-      const helper = find(wrapper, "FormHelperText")
+      const helper = find(wrapper, "WithFormControlContext(FormHelperText)")
       expect(helper.exists()).toBe(true)
     })
 
     /* Test: should render input label */
     it("should render input label", () => {
       const wrapper = shallow(<Render {...props} />)
-      const label = find(wrapper, "InputLabel")
+      const label = find(wrapper, "WithFormControlContext(InputLabel)")
       expect(label.exists()).toBe(true)
     })
 
@@ -102,14 +102,14 @@ describe("components/FormPassword", () => {
     it("should render input label with input link", () => {
       const name = chance.string()
       const wrapper = shallow(<Render {...props} name={name} />)
-      const label = find(wrapper, "InputLabel")
+      const label = find(wrapper, "WithFormControlContext(InputLabel)")
       expect(label.prop("htmlFor")).toEqual(name)
     })
 
     /* Test: should render input label without asterisk */
     it("should render input label without asterisk", () => {
       const wrapper = shallow(<Render {...props} />)
-      const label = find(wrapper, "InputLabel")
+      const label = find(wrapper, "WithFormControlContext(InputLabel)")
       expect(label.prop("required")).toBe(false)
     })
 

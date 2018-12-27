@@ -20,6 +20,8 @@
  * IN THE SOFTWARE.
  */
 
+// tslint:disable no-commented-code
+
 // import * as fs from "fs"
 // import * as path from "path"
 
