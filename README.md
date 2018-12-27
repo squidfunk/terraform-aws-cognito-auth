@@ -201,7 +201,7 @@ module "cognito-auth" {
 
   namespace                      = "example-auth"
   region                         = "us-east-1"
-  cognito_identity_pool_name     = "Example Admin"
+  cognito_identity_pool_name     = "Example Auth"
   cognito_identity_pool_provider = "login.example.com"
 
   # Optional: Default UI
