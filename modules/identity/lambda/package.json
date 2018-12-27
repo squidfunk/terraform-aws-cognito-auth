@@ -28,7 +28,7 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.2",
     "@types/chance": "^1.0.0",
-    "@types/jasmine": "^2.8.6",
+    "@types/jasmine": "^3.3.5",
     "@types/node": "^9.6.2",
     "aws-sdk": "^2.220.1",
     "aws-sdk-mock": "^2.0.0",
