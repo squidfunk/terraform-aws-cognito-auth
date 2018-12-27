@@ -32,7 +32,7 @@ import { mockVerificationCode } from "_/mocks/verification"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SNS event
+ * Mock `SNSEvent`
  *
  * @param code - Verification code
  *

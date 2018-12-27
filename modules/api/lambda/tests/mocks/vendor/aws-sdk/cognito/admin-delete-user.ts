@@ -28,7 +28,7 @@ import { mock, restore } from "aws-sdk-mock"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock CognitoIdentityServiceProvider.adminDeleteUser
+ * Mock `CognitoIdentityServiceProvider.adminDeleteUser`
  *
  * @param spy - Spy/fake to mock Cognito
  *
@@ -45,7 +45,7 @@ function mockCognitoAdminDeleteUser(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminDeleteUser returning with success
+ * Mock `CognitoIdentityServiceProvider.adminDeleteUser` returning with success
  *
  * @return Jasmine spy
  */
@@ -55,7 +55,7 @@ export function mockCognitoAdminDeleteUserWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminDeleteUser throwing an error
+ * Mock `CognitoIdentityServiceProvider.adminDeleteUser` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -70,7 +70,7 @@ export function mockCognitoAdminDeleteUserWithError(
 }
 
 /**
- * Restore CognitoIdentityServiceProvider.adminDeleteUser
+ * Restore `CognitoIdentityServiceProvider.adminDeleteUser`
  */
 export function restoreCognitoAdminDeleteUser() {
   restore("CognitoIdentityServiceProvider", "adminDeleteUser")

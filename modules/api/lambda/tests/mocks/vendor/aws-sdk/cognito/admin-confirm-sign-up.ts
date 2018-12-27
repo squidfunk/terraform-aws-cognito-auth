@@ -28,7 +28,7 @@ import { mock, restore } from "aws-sdk-mock"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock CognitoIdentityServiceProvider.adminConfirmSignUp
+ * Mock `CognitoIdentityServiceProvider.adminConfirmSignUp`
  *
  * @param spy - Spy/fake to mock Cognito
  *
@@ -45,7 +45,7 @@ function mockCognitoAdminConfirmSignUp(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminConfirmSignUp returning with success
+ * Mock `CognitoIdentityServiceProvider.adminConfirmSignUp` with success
  *
  * @return Jasmine spy
  */
@@ -55,7 +55,7 @@ export function mockCognitoAdminConfirmSignUpWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminConfirmSignUp throwing an error
+ * Mock `CognitoIdentityServiceProvider.adminConfirmSignUp` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -70,7 +70,7 @@ export function mockCognitoAdminConfirmSignUpWithError(
 }
 
 /**
- * Restore CognitoIdentityServiceProvider.adminConfirmSignUp
+ * Restore `CognitoIdentityServiceProvider.adminConfirmSignUp`
  */
 export function restoreCognitoAdminConfirmSignUp() {
   restore("CognitoIdentityServiceProvider", "adminConfirmSignUp")

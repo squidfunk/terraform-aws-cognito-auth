@@ -18,6 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
+include ../../../share/env/Makefile
 include ../../../share/lambda/Makefile
 
 # -----------------------------------------------------------------------------
@@ -69,7 +70,7 @@ src/%.png: src/%.svg
 
 # Verification code typings
 src/verification/index.d.ts: ../../api/lambda/src/verification/index.ts
-	$(shell npm bin)/tsc -d \
+	$(shell npm bin --prefix ${ROOT})/tsc -d \
 		--declarationDir $(dir $@) \
 		--emitDeclarationOnly \
 		--moduleResolution node \

@@ -30,7 +30,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock CognitoIdentityServiceProvider.adminGetUser
+ * Mock `CognitoIdentityServiceProvider.adminGetUser`
  *
  * @param spy - Spy/fake to mock Cognito
  *
@@ -47,7 +47,7 @@ function mockCognitoAdminGetUser(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminGetUser returning with result
+ * Mock `CognitoIdentityServiceProvider.adminGetUser` returning with result
  *
  * @param username - Username
  * @param email - Email address
@@ -84,7 +84,7 @@ export function mockCognitoAdminGetUserWithResult(
 }
 
 /**
- * Mock CognitoIdentityServiceProvider.adminGetUser throwing an error
+ * Mock `CognitoIdentityServiceProvider.adminGetUser` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -99,7 +99,7 @@ export function mockCognitoAdminGetUserWithError(
 }
 
 /**
- * Restore CognitoIdentityServiceProvider.adminGetUser
+ * Restore `CognitoIdentityServiceProvider.adminGetUser`
  */
 export function restoreCognitoAdminGetUser() {
   restore("CognitoIdentityServiceProvider", "adminGetUser")

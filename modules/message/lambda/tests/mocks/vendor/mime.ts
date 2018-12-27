@@ -27,7 +27,7 @@ import * as _ from "mime"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock Mime.getType
+ * Mock `mime.getType`
  *
  * @param cb - Fake callback
  *
@@ -41,7 +41,7 @@ function mockMimeGetType(
 }
 
 /**
- * Mock Mime.getType returning with result
+ * Mock `mime.getType` returning with result
  *
  * @param type - Returned type
  *
@@ -54,7 +54,7 @@ export function mockMimeGetTypeWithResult(
 }
 
 /**
- * Mock Mime.getType throwing an error
+ * Mock `mime.getType` throwing an error
  *
  * @param err - Error to be thrown
  *

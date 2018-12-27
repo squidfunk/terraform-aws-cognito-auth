@@ -28,7 +28,7 @@ import { mock, restore } from "aws-sdk-mock"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock SNS.publish
+ * Mock `SNS.publish`
  *
  * @param spy - Spy/fake to mock SNS
  *
@@ -42,7 +42,7 @@ function mockSNSPublish(spy: jasmine.Spy): jasmine.Spy {
 }
 
 /**
- * Mock SNS.publish returning with success
+ * Mock `SNS.publish` returning with success
  *
  * @return Jasmine spy
  */
@@ -52,7 +52,7 @@ export function mockSNSPublishWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock SNS.publish throwing an error
+ * Mock `SNS.publish` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -67,7 +67,7 @@ export function mockSNSPublishWithError(
 }
 
 /**
- * Restore SNS.publish
+ * Restore `SNS.publish`
  */
 export function restoreSNSPublish() {
   restore("SNS", "publish")

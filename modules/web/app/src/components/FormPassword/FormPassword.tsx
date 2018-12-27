@@ -30,7 +30,7 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core"
-import { TextFieldProps } from "@material-ui/core/TextField"
+import { StandardTextFieldProps } from "@material-ui/core/TextField"
 import Visibility from "@material-ui/icons/Visibility"
 import VisibilityOff from "@material-ui/icons/VisibilityOff"
 import * as React from "react"
@@ -51,8 +51,10 @@ import { styles, Styles } from "./FormPassword.styles"
 /**
  * Form password properties
  */
-export type FormPasswordProps =
-  Pick<TextFieldProps, Exclude<keyof TextFieldProps, "classes">>
+export type FormPasswordProps = Pick<
+  StandardTextFieldProps,
+  Exclude<keyof StandardTextFieldProps, "classes">
+>
 
 /* ------------------------------------------------------------------------- */
 

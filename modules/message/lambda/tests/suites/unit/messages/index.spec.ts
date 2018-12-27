@@ -252,10 +252,10 @@ describe("messages", () => {
       /* Test: should resolve with composed mime entity */
       it("should resolve with composed mime entity", async () => {
         const entity = mockMimeMessageEntity()
-        mockMimeMessageFactoryWithResult(entity)
+        mockMimeMessageFactoryWithResult(entity as any)
         mockQuotedPrintableEncodeWithSuccess()
         const message = new TestMessage(data)
-        expect(await message.compose()).toEqual(entity)
+        expect(await message.compose()).toEqual(entity as any)
       })
 
       /* Test: should contain a multipart/mixed mime entity */
@@ -338,7 +338,7 @@ describe("messages", () => {
       /* Test: should set content disposition header */
       it("should set content disposition header", async () => {
         const entity = mockMimeMessageEntity()
-        mockMimeMessageFactoryWithResult(entity)
+        mockMimeMessageFactoryWithResult(entity as any)
         mockQuotedPrintableEncodeWithSuccess()
         const message = new TestMessage(data)
         await message.compose()
@@ -350,7 +350,7 @@ describe("messages", () => {
       /* Test: should set content disposition header */
       it("should set content disposition header", async () => {
         const entity = mockMimeMessageEntity()
-        mockMimeMessageFactoryWithResult(entity)
+        mockMimeMessageFactoryWithResult(entity as any)
         mockQuotedPrintableEncodeWithSuccess()
         const message = new TestMessage(data)
         await message.compose()
@@ -362,7 +362,7 @@ describe("messages", () => {
       /* Test: should set content disposition header */
       it("should set content disposition header", async () => {
         const entity = mockMimeMessageEntity()
-        mockMimeMessageFactoryWithResult(entity)
+        mockMimeMessageFactoryWithResult(entity as any)
         mockQuotedPrintableEncodeWithSuccess()
         const message = new TestMessage(data)
         await message.compose()

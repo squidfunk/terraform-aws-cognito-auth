@@ -36,7 +36,7 @@ import * as _ from "components"
  *
  * @return JSX element
  */
-export const Placeholder: React.SFC<any> =
+export const Placeholder: React.FunctionComponent<any> =
   ({ children }) => <div>{children}</div>
 
 /* ----------------------------------------------------------------------------
@@ -53,7 +53,7 @@ export const Placeholder: React.SFC<any> =
 export function mockComponent<TProps extends {}>(name: keyof typeof _) {
   return spyOn(_, name)
     .and.callFake((props: TProps) => {
-      const Component = setDisplayName<TProps>(name)(Placeholder)
+      const Component = setDisplayName(name)(Placeholder)
       return <Component {...props} />
     })
 }

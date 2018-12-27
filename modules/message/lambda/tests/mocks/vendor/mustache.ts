@@ -29,7 +29,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock Mustache.render
+ * Mock `mustache.render`
  *
  * @param cb - Fake callback
  *
@@ -43,7 +43,7 @@ function mockMustacheRender(
 }
 
 /**
- * Mock Mustache.render returning with result
+ * Mock `mustache.render` returning with result
  *
  * @param result - Rendered string
  *
@@ -56,7 +56,7 @@ export function mockMustacheRenderWithResult(
 }
 
 /**
- * Mock Mustache.render throwing an error
+ * Mock `mustache.render` throwing an error
  *
  * @param err - Error to be thrown
  *

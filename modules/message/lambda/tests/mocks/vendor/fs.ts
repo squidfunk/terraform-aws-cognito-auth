@@ -29,7 +29,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock fs.readFile
+ * Mock `fs.readFile`
  *
  * @param cb - Fake callback
  *
@@ -43,7 +43,7 @@ function mockFsReadFile(
 }
 
 /**
- * Mock fs.readFile returning with result
+ * Mock `fs.readFile` returning with result
  *
  * @param data - File contents
  *
@@ -58,7 +58,7 @@ export function mockFsReadFileWithResult(
 }
 
 /**
- * Mock fs.readFile throwing an error
+ * Mock `fs.readFile` throwing an error
  *
  * @param data - File contents
  *
@@ -75,7 +75,7 @@ export function mockFsReadFileWithError(
 /* ------------------------------------------------------------------------- */
 
 /**
- * Mock fs.readdir
+ * Mock `fs.readdir`
  *
  * @param cb - Fake callback
  *
@@ -89,7 +89,7 @@ function mockFsReaddir(
 }
 
 /**
- * Mock fs.readdir returning with result
+ * Mock `fs.readdir` returning with result
  *
  * @param files - File list
  *
@@ -102,7 +102,7 @@ export function mockFsReaddirWithResult(
 }
 
 /**
- * Mock fs.readdir throwing an error
+ * Mock `fs.readdir` throwing an error
  *
  * @param data - File contents
  *

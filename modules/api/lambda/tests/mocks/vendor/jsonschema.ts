@@ -29,7 +29,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock schema validation
+ * Mock `jsonschema.validate`
  *
  * @param result - Validation result
  *
@@ -43,7 +43,7 @@ function mockValidate(
 }
 
 /**
- * Mock schema validation with success
+ * Mock `jsonschema.validate` returning with success
  *
  * @return Jasmine spy
  */
@@ -55,7 +55,7 @@ export function mockValidateWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock schema validation with error
+ * Mock `jsonschema.validate` returning with error
  *
  * @return Jasmine spy
  */

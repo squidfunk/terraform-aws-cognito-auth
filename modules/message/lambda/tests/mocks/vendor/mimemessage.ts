@@ -27,7 +27,7 @@ import * as _ from "mimemessage"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock a mime message entity
+ * Mock `Entity`
  *
  * @return Mime message entity
  */
@@ -43,21 +43,21 @@ export function mockMimeMessageEntity(): jasmine.SpyObj<_.Entity> {
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock MimeMessage.factory
+ * Mock `mimemessage.factory`
  *
  * @param entity - Mime entity
  *
  * @return Jasmine spy
  */
 export function mockMimeMessageFactoryWithResult(
-  entity: _.Entity = mockMimeMessageEntity()
+  entity: jasmine.SpyObj<_.Entity> = mockMimeMessageEntity()
 ): jasmine.Spy {
   return spyOn(_, "factory")
     .and.returnValue(entity)
 }
 
 /**
- * Mock MimeMessage.factory throwing an error
+ * Mock `mimemessage.factory` throwing an error
  *
  * @param err - Error to be thrown
  *

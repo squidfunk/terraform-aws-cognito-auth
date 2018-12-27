@@ -22,7 +22,7 @@
 
 import * as _ from "providers/store/session"
 
-import { mockAction } from "_/mocks/providers"
+import { mockAction } from ".."
 
 /* ----------------------------------------------------------------------------
  * Functions

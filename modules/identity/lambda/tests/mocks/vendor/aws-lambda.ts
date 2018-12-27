@@ -29,7 +29,7 @@ import { chance } from "_/helpers"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock Cognito User Pool trigger event
+ * Mock `CognitoUserPoolTriggerEvent`
  *
  * @return Cognito User Pool trigger event
  */

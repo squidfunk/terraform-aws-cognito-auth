@@ -27,7 +27,7 @@ import { ManagementClient } from "clients/management"
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock ManagementClient.verifyUser
+ * Mock `ManagementClient.verifyUser`
  *
  * @param promise - Promise returned by management client
  *
@@ -41,7 +41,7 @@ function mockManagementClientVerifyUser<T>(
 }
 
 /**
- * Mock ManagementClient.verifyUser returning with success
+ * Mock `ManagementClient.verifyUser` returning with success
  *
  * @return Jasmine spy
  */
@@ -50,7 +50,7 @@ export function mockManagementClientVerifyUserWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock ManagementClient.verifyUser throwing an error
+ * Mock `ManagementClient.verifyUser` throwing an error
  *
  * @param err - Error to be thrown
  *
@@ -65,7 +65,7 @@ export function mockManagementClientVerifyUserWithError(
 /* ------------------------------------------------------------------------- */
 
 /**
- * Mock ManagementClient.changePassword
+ * Mock `ManagementClient.changePassword`
  *
  * @param promise - Promise returned by management client
  *
@@ -79,7 +79,7 @@ function mockManagementClientChangePassword<T>(
 }
 
 /**
- * Mock ManagementClient.changePassword returning with success
+ * Mock `ManagementClient.changePassword` returning with success
  *
  * @return Jasmine spy
  */
@@ -88,7 +88,7 @@ export function mockManagementClientChangePasswordWithSuccess(): jasmine.Spy {
 }
 
 /**
- * Mock ManagementClient.changePassword throwing an error
+ * Mock `ManagementClient.changePassword` throwing an error
  *
  * @param err - Error to be thrown
  *
