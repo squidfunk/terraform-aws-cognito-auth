@@ -42,7 +42,7 @@
     "aws-sdk-mock": "^2.0.0",
     "browser-sync": "^2.24.4",
     "chance": "^1.0.13",
-    "dotenv": "^5.0.1",
+    "dotenv": "^6.2.0",
     "html-minifier": "^3.5.16",
     "imageoptim": "^0.5.0",
     "jasmine": "^3.1.0",
