@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.2",
-    "@types/chance": "^1.0.0",
+    "@types/chance": "^1.0.1",
     "@types/jasmine": "^2.8.6",
     "@types/mime": "^2.0.0",
     "@types/mustache": "^0.8.30",
