@@ -102,8 +102,8 @@ describe("POST /register", () => {
       .set("Content-Type", "application/json")
       .send(mockRegisterRequestWithInvalidEmail())
       .expect(400, {
-        type: "InvalidParameterException",
-        message: "Invalid email address format"
+        type: "Error",
+        message: "Invalid email address"
       })
   })
 
