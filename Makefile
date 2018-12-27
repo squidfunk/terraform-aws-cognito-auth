@@ -21,6 +21,14 @@
 all: lint | build
 
 # -----------------------------------------------------------------------------
+# Prerequisites
+# -----------------------------------------------------------------------------
+
+# Install dependencies
+node_modules:
+	npm install
+
+# -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------
 
@@ -38,7 +46,7 @@ init: .git/hooks/pre-commit
 # -----------------------------------------------------------------------------
 
 # Build distribution files
-build:
+build: node_modules
 	make -C modules/api/lambda build
 	make -C modules/identity/lambda build
 	make -C modules/message/lambda build
@@ -54,7 +62,7 @@ clean:
 	make -C modules/web/lambda clean
 
 # Lint source files
-lint:
+lint: node_modules
 	make -C modules/api/lambda lint
 	make -C modules/identity/lambda lint
 	make -C modules/message/lambda lint
@@ -62,7 +70,7 @@ lint:
 	make -C modules/web/lambda lint
 
 # Execute unit tests
-test:
+test: node_modules
 	make -C modules/api/lambda test
 	make -C modules/identity/lambda test
 	make -C modules/message/lambda test

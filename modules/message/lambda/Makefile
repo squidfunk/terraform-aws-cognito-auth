@@ -70,7 +70,7 @@ src/%.png: src/%.svg
 
 # Verification code typings
 src/verification/index.d.ts: ../../api/lambda/src/verification/index.ts
-	$(shell npm bin)/tsc -d \
+	$(shell npm bin --prefix ${ROOT})/tsc -d \
 		--declarationDir $(dir $@) \
 		--emitDeclarationOnly \
 		--moduleResolution node \
