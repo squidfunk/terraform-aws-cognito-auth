@@ -36,7 +36,7 @@ describe("handler", () => {
 
   /* Test: should set 'Content-Security-Policy' header */
   it("should set 'Content-Security-Policy' header", async () => {
-    const { headers } = handler(event)
+    const { headers } = await handler(event)
     expect(headers["Content-Security-Policy"]).toBeDefined()
     expect(headers["Content-Security-Policy"][0]).toEqual({
       key: "Content-Security-Policy",
@@ -46,7 +46,7 @@ describe("handler", () => {
 
   /* Test: should set 'Strict-Transport-Security' header */
   it("should set 'Strict-Transport-Security' header", async () => {
-    const { headers } = handler(event)
+    const { headers } = await handler(event)
     expect(headers["Strict-Transport-Security"]).toBeDefined()
     expect(headers["Strict-Transport-Security"][0]).toEqual({
       key: "Strict-Transport-Security",
@@ -56,7 +56,7 @@ describe("handler", () => {
 
   /* Test: should set 'Referrer-Policy' header */
   it("should set 'Referrer-Policy' header", async () => {
-    const { headers } = handler(event)
+    const { headers } = await handler(event)
     expect(headers["Referrer-Policy"]).toBeDefined()
     expect(headers["Referrer-Policy"][0]).toEqual({
       key: "Referrer-Policy",
@@ -66,7 +66,7 @@ describe("handler", () => {
 
   /* Test: should set 'X-Content-Type-Options' header */
   it("should set 'X-Content-Type-Options' header", async () => {
-    const { headers } = handler(event)
+    const { headers } = await handler(event)
     expect(headers["X-Content-Type-Options"]).toBeDefined()
     expect(headers["X-Content-Type-Options"][0]).toEqual({
       key: "X-Content-Type-Options",
@@ -76,7 +76,7 @@ describe("handler", () => {
 
   /* Test: should set 'X-Frame-Options' header */
   it("should set 'X-Frame-Options' header", async () => {
-    const { headers } = handler(event)
+    const { headers } = await handler(event)
     expect(headers["X-Frame-Options"]).toBeDefined()
     expect(headers["X-Frame-Options"][0]).toEqual({
       key: "X-Frame-Options",
@@ -86,7 +86,7 @@ describe("handler", () => {
 
   /* Test: should set 'X-XSS-Protection' header */
   it("should set 'X-XSS-Protection' header", async () => {
-    const { headers } = handler(event)
+    const { headers } = await handler(event)
     expect(headers["X-XSS-Protection"]).toBeDefined()
     expect(headers["X-XSS-Protection"][0]).toEqual({
       key: "X-XSS-Protection",
