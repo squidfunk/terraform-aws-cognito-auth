@@ -1,3 +1,9 @@
+terraform-aws-cognito-auth-0.3.2 (2018-12-27)
+
+  * Updated all dependencies to fix security vulnerabilities
+  * Moved common dependencies to top-level for faster builds
+  * Fixed error with CloudFront Lambda@Edge function
+
 terraform-aws-cognito-auth-0.3.1 (2018-09-10)
 
   * Fixed registration error for empty email address

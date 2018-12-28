@@ -38,9 +38,9 @@ import {
  *
  * @return Promise resolving with modified response
  */
-export function handler(
+export async function handler(
   event: CloudFrontResponseEvent
-): CloudFrontResponse {
+): Promise<CloudFrontResponse> {
   const response = event.Records[0].cf.response
 
   /* Define security headers */
