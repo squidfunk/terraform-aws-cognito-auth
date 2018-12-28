@@ -1,4 +1,4 @@
-terraform-aws-cognito-auth-0.3.2 (2018-12-27)
+terraform-aws-cognito-auth-0.3.2 (2018-12-28)
 
   * Updated all dependencies to fix security vulnerabilities
   * Moved common dependencies to top-level for faster builds
