@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2018 Martin Donath <martin.donath@squidfunk.com>
+ * Copyright (c) 2018-2019 Martin Donath <martin.donath@squidfunk.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
