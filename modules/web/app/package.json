@@ -50,7 +50,7 @@
     "@types/html-webpack-plugin": "^3.2.0",
     "@types/http-proxy-middleware": "^0.19.1",
     "@types/jest": "^23.3.11",
-    "@types/query-string": "^6.1.1",
+    "@types/query-string": "^6.2.0",
     "@types/ramda": "^0.25.46",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
