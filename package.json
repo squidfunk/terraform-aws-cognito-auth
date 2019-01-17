@@ -37,6 +37,6 @@
     "tsconfig-paths": "^3.7.0",
     "tslint": "^5.12.1",
     "tslint-sonarts": "^1.8.0",
-    "typescript": "^3.2.2"
+    "typescript": "^3.2.4"
   }
 }
