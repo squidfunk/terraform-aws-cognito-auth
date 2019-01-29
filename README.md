@@ -42,7 +42,7 @@ Pools.
 
   [2]: #emails
   [3]: #default-ui-1
-  [4]: https://observatory.mozilla.org/
+  [4]: https://observatory.mozilla.org/analyze/terraform-aws-cognito-auth.play.squidfunk.com
   [5]: #cost
   [6]: #limitations
 
