@@ -34,7 +34,7 @@
     "nodemon": "^1.18.9",
     "nyc": "^13.2.0",
     "ts-node": "^8.0.2",
-    "tsconfig-paths": "^3.7.0",
+    "tsconfig-paths": "^3.8.0",
     "tslint": "^5.12.1",
     "tslint-sonarts": "^1.9.0",
     "typescript": "^3.3.1"
