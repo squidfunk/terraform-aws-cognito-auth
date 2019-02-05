@@ -32,7 +32,7 @@
     "jasmine": "^3.3.1",
     "jasmine-spec-reporter": "^4.2.1",
     "nodemon": "^1.18.9",
-    "nyc": "^13.1.0",
+    "nyc": "^13.2.0",
     "ts-node": "^8.0.2",
     "tsconfig-paths": "^3.7.0",
     "tslint": "^5.12.1",
