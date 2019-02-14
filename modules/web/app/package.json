@@ -32,7 +32,7 @@
     "query-string": "^6.2.0",
     "ramda": "^0.26.1",
     "react": "^16.8.1",
-    "react-dom": "^16.8.1",
+    "react-dom": "^16.8.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "recompose": "^0.30.0",
