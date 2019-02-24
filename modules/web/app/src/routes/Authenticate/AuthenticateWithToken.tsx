@@ -100,12 +100,17 @@ export function enhance() {
     }),
     lifecycle<LifecycleProps, {}>({
       async componentDidMount() {
-        const { submit, dismissNotification } = this.props
-        const { form, setRememberMeResult } = this.props
+        const { submit } = this.props
         await submit()
+      },
+      shouldComponentUpdate({ form }) {
+        return this.props.form.pending !== form.pending
+      },
+      componentDidUpdate() {
+        const { form, dismissNotification, setRememberMeFailed } = this.props
         dismissNotification()
-        if (!form.success)
-          setRememberMeResult(false)
+        if (form.err)
+          setRememberMeFailed()
       }
     }),
     branch<BranchProps>(

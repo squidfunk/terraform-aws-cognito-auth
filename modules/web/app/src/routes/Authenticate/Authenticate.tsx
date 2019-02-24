@@ -80,9 +80,7 @@ export function enhance() {
   return compose<RenderProps, {}>(
     withRememberMe(),
     branch<BranchProps>(
-      ({ remember: { active, result } }) => {
-        return active && typeof result === "undefined"
-      },
+      ({ remember: { active, failed } }) => active && !failed,
       renderComponent(AuthenticateWithToken)
     ),
     pure,

@@ -27,7 +27,7 @@
 export {
   RememberMeActions,
   RememberMeActionTypes,
-  setRememberMeResultAction,
+  setRememberMeFailedAction,
   setRememberMeAction
 } from "./actions"
 export {

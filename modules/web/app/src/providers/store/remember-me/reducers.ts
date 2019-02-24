@@ -40,12 +40,11 @@ import {
  *   so the user doesn't have to re-check it everytime the refresh token expires
  *   and he has to authenticate again.
  *
- * - The `result` flag denotes whether authentication was tried, so it is not
- *   retried when the route is re-rendered.
+ * - The `failed` flag denotes whether re-authentication failed
  */
 export interface RememberMeState {
   active: boolean                      /* Whether to remember the user */
-  result?: boolean                     /* Authentication result */
+  failed?: true                        /* Whether re-authentication failed */
 }
 
 /* ----------------------------------------------------------------------------
@@ -65,8 +64,8 @@ export function remember(
   switch (action.type) {
     case RememberMeActionTypes.SET:
       return { ...state, active: action.active }
-    case RememberMeActionTypes.SET_RESULT:
-      return { ...state, result: action.result }
+    case RememberMeActionTypes.SET_FAILED:
+      return { ...state, failed: true }
     default:
       return state
   }

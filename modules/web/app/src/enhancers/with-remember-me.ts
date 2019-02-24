@@ -28,7 +28,7 @@ import {
   RememberMeActions,
   RememberMeState,
   setRememberMeAction,
-  setRememberMeResultAction
+  setRememberMeFailedAction
 } from "providers/store/remember-me"
 
 /* ----------------------------------------------------------------------------
@@ -47,9 +47,7 @@ export interface WithRememberMeState {
  */
 export interface WithRememberMeDispatch {
   setRememberMe(active: boolean): void /* Set whether to remember the user */
-  setRememberMeResult(
-    result: boolean
-  ): void                              /* Set authentication result */
+  setRememberMeFailed(): void          /* Set re-authentication failure  */
 }
 
 /**
@@ -73,6 +71,6 @@ export const withRememberMe = () =>
     ({ remember }: State) => ({ remember }),
     (dispatch: Dispatch<RememberMeActions>) => ({
       setRememberMe: active => dispatch(setRememberMeAction(active)),
-      setRememberMeResult: result => dispatch(setRememberMeResultAction(result))
+      setRememberMeFailed: () => dispatch(setRememberMeFailedAction())
     })
   )
