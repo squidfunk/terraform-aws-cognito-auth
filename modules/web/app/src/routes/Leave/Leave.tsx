@@ -92,8 +92,8 @@ export function enhance() {
     }),
     lifecycle<LifecycleProps, {}>({
       componentWillMount() {
-        const { setRememberMeResult } = this.props
-        setRememberMeResult(false) // avoid re-authentication
+        const { setRememberMeFailed } = this.props
+        setRememberMeFailed() // avoid re-authentication
       },
       async componentDidMount() {
         const { submit, terminateSession } = this.props

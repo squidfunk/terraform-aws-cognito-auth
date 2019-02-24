@@ -73,7 +73,7 @@ type LifecycleProps =
  * @return JSX element
  */
 export const Render: React.FunctionComponent =
-  () => <Loading />
+  () => <div></div>
 
 /* ----------------------------------------------------------------------------
  * Enhanced component
@@ -90,12 +90,9 @@ export function enhance() {
     withCallback(),
     lifecycle<LifecycleProps, {}>({
       componentDidMount() {
-        const { form, initSession, setRememberMeResult } = this.props
-        if (form.response) {
+        const { form, initSession } = this.props
+        if (form.response)
           initSession(form.response)
-          if (form.response.refresh)
-            setRememberMeResult(true)
-        }
       },
       componentDidUpdate() {
         const { session, callback } = this.props

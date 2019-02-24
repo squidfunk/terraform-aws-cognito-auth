@@ -170,14 +170,14 @@ export function enhance() {
       }
     }),
     lifecycle<LifecycleProps, {}>({
-      async componentWillMount() {
-        const { remember, setRememberMeResult } = this.props
+      componentWillMount() {
+        const { remember, setRememberMeFailed } = this.props
         const { request, setRequest } = this.props
+        setRememberMeFailed()
         setRequest({
           ...request,
           remember: remember.active
         })
-        setRememberMeResult(false)
       }
     }),
     branch<BranchProps>(

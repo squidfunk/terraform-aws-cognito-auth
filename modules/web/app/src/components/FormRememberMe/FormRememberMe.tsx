@@ -117,7 +117,7 @@ export function enhance() {
     mapProps(omit([
       "remember",
       "setRememberMe",
-      "setRememberMeResult"
+      "setRememberMeFailed"
     ])),
     pure,
     setDisplayName("FormRememberMe")
