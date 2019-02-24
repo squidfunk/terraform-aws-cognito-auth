@@ -23,7 +23,7 @@
 import {
   RememberMeActionTypes,
   setRememberMeAction,
-  setRememberMeResultAction
+  setRememberMeFailedAction
 } from "providers/store/remember-me"
 
 import { mockStore } from "_/mocks/providers"
@@ -65,24 +65,14 @@ describe("providers/store/remember-me", () => {
     })
   })
 
-  /* setRememberMeResultAction */
-  describe("setRememberMeResultAction", () => {
-
-    /* Test: should indicate a successful re-authentication attempt */
-    it("should indicate a successful re-authentication attempt", () => {
-      store.dispatch(setRememberMeResultAction(true))
-      expect(store.getActions().pop()).toEqual({
-        type: RememberMeActionTypes.SET_RESULT,
-        result: true
-      })
-    })
+  /* setRememberMeFailedAction */
+  describe("setRememberMeFailedAction", () => {
 
     /* Test: should indicate a failed re-authentication attempt */
     it("should indicate a failed re-authentication attempt", () => {
-      store.dispatch(setRememberMeResultAction(false))
+      store.dispatch(setRememberMeFailedAction())
       expect(store.getActions().pop()).toEqual({
-        type: RememberMeActionTypes.SET_RESULT,
-        result: false
+        type: RememberMeActionTypes.SET_FAILED
       })
     })
   })

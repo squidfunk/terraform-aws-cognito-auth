@@ -394,8 +394,8 @@ describe("routes/AuthenticateWithCredentials", () => {
       mockWithFormSubmit()
       mockWithForm()
       const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).prop("setRememberMeResult"))
-        .toHaveBeenCalledWith(false)
+      expect(wrapper.find(Placeholder).prop("setRememberMeFailed"))
+        .toHaveBeenCalledWith()
     })
 
     /* Test: should render with styles */

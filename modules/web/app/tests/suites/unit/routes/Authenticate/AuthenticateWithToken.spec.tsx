@@ -33,7 +33,7 @@ import {
   Render
 } from "routes/Authenticate/AuthenticateWithToken"
 
-import { find, wait } from "_/helpers"
+import { find } from "_/helpers"
 import {
   mockComponent,
   Placeholder
@@ -41,6 +41,7 @@ import {
 import {
   mockWithFormSubmit,
   mockWithFormSubmitWithError,
+  mockWithFormSubmitWithPending,
   mockWithFormSubmitWithResult,
   mockWithNotification,
   mockWithRememberMe
@@ -118,9 +119,20 @@ describe("routes/AuthenticateWithToken", () => {
 
     /* Test: should dismiss notification */
     it("should dismiss notification", async () => {
-      mockWithFormSubmit()
+      mockWithFormSubmitWithPending()
       const wrapper = mountPlaceholder()
-      await wait(250)
+      const {
+        componentDidUpdate,
+        shouldComponentUpdate
+      } = wrapper.find("Lifecycle").instance()
+      for (const pending of [true, false])
+        expect(shouldComponentUpdate!.bind({
+          props: wrapper.find(Placeholder).props()
+        })({ form: { pending }}, {}, {}))
+          .toEqual(!pending)
+      componentDidUpdate!.bind({
+        props: wrapper.find(Placeholder).props()
+      })({}, {})
       expect(wrapper.find(Placeholder).prop("dismissNotification"))
         .toHaveBeenCalledWith()
     })
@@ -136,16 +148,11 @@ describe("routes/AuthenticateWithToken", () => {
     /* with successful request */
     describe("with successful request", () => {
 
-      /* Mock enhancers */
-      beforeEach(() => {
-        mockWithFormSubmitWithResult()
-      })
-
       /* Test: should render <AuthenticateSuccess /> */
       it("should render <AuthenticateSuccess />", async () => {
+        mockWithFormSubmitWithResult()
         const renderComponentMock = mockRenderComponent()
         mountPlaceholder()
-        await wait(250)
         expect(renderComponentMock)
           .toHaveBeenCalledWith(AuthenticateSuccess)
       })
@@ -154,17 +161,16 @@ describe("routes/AuthenticateWithToken", () => {
     /* with failed request */
     describe("with failed request", () => {
 
-      /* Mock enhancers */
-      beforeEach(() => {
-        mockWithFormSubmitWithError()
-      })
-
       /* Test: should indicate failed re-authentication */
       it("should indicate failed re-authentication", async () => {
+        mockWithFormSubmitWithError()
         const wrapper = mountPlaceholder()
-        await wait(250)
-        expect(wrapper.find(Placeholder).prop("setRememberMeResult"))
-          .toHaveBeenCalledWith(false)
+        const { componentDidUpdate } = wrapper.find("Lifecycle").instance()
+        componentDidUpdate!.bind({
+          props: wrapper.find(Placeholder).props()
+        })({}, {})
+        expect(wrapper.find(Placeholder).prop("setRememberMeFailed"))
+          .toHaveBeenCalled()
       })
     })
   })

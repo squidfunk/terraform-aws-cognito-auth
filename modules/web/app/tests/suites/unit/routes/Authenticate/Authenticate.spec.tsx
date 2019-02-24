@@ -88,7 +88,7 @@ describe("routes/Authenticate", () => {
 
       /* Test: should render <Render /> */
       it("should render <Render />", () => {
-        mockWithRememberMe({ active: true, result: false })
+        mockWithRememberMe({ active: true, failed: true })
         const wrapper = mountPlaceholder()
         expect(wrapper.find(Placeholder).exists()).toBe(true)
       })

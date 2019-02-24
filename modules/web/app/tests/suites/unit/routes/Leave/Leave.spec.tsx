@@ -115,8 +115,8 @@ describe("routes/Leave", () => {
     it("should prevent re-authentication", () => {
       mockWithFormSubmit()
       const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).prop("setRememberMeResult"))
-        .toHaveBeenCalledWith(false)
+      expect(wrapper.find(Placeholder).prop("setRememberMeFailed"))
+        .toHaveBeenCalledWith()
     })
 
     /* Test: should submit request after mount */
@@ -146,7 +146,7 @@ describe("routes/Leave", () => {
       it("should terminate session", async () => {
         mockRenderComponent()
         const wrapper = mountPlaceholder()
-        await wait(250)
+        await wait(1)
         expect(wrapper.find("Nothing").prop("terminateSession"))
           .toHaveBeenCalledWith()
       })
@@ -155,7 +155,6 @@ describe("routes/Leave", () => {
       it("should render <LeaveSuccess />", async () => {
         const renderComponentMock = mockRenderComponent()
         mountPlaceholder()
-        await wait(250)
         expect(renderComponentMock)
           .toHaveBeenCalledWith(LeaveSuccess)
       })
@@ -173,7 +172,7 @@ describe("routes/Leave", () => {
       it("should terminate session", async () => {
         mockRenderComponent()
         const wrapper = mountPlaceholder()
-        await wait(250)
+        await wait(1)
         expect(wrapper.find("Nothing").prop("terminateSession"))
           .toHaveBeenCalledWith()
       })
@@ -182,7 +181,6 @@ describe("routes/Leave", () => {
       it("should render <LeaveSuccess />", async () => {
         const renderComponentMock = mockRenderComponent()
         mountPlaceholder()
-        await wait(250)
         expect(renderComponentMock)
           .toHaveBeenCalledWith(LeaveSuccess)
       })

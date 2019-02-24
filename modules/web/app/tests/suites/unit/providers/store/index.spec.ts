@@ -48,7 +48,7 @@ describe("providers/store", () => {
     /* Redux store state */
     const state: State = {
       notification: { show: false },
-      remember: { active: false, result: false },
+      remember: { active: false, failed: true },
       session: mockSession(true)
     }
 

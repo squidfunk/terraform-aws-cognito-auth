@@ -98,6 +98,7 @@ export function enhance() {
     withFormSubmit<AuthenticateRequest>({
       target: "/authenticate"
     }),
+    setDisplayName("Lifecycle"), // Necessary for testing
     lifecycle<LifecycleProps, {}>({
       async componentDidMount() {
         const { submit } = this.props

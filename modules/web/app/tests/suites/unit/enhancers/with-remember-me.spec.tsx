@@ -30,7 +30,7 @@ import { State } from "providers/store"
 import { Placeholder } from "_/mocks/components"
 import {
   mockSetRememberMeAction,
-  mockSetRememberMeResultAction,
+  mockSetRememberMeFailedAction,
   mockStore
 } from "_/mocks/providers"
 
@@ -105,33 +105,33 @@ describe("enhancers/with-remember-me", () => {
       })
     })
 
-    /* { setRememberMeResult } */
-    describe("{ setRememberMeResult }", () => {
+    /* { setRememberMeFailed } */
+    describe("{ setRememberMeFailed }", () => {
 
       /* Test: should map dispatch to props */
       it("should map dispatch to props", () => {
         const wrapper = shallowPlaceholder(store)
-        expect(wrapper.prop("setRememberMeResult"))
+        expect(wrapper.prop("setRememberMeFailed"))
           .toEqual(jasmine.any(Function))
       })
 
       /* Test: should dispatch action */
       it("should dispatch action", () => {
         const wrapper = shallowPlaceholder(store)
-        const setRememberMeResult = wrapper.prop("setRememberMeResult")
-        mockSetRememberMeResultAction()
-        setRememberMeResult(true)
+        const setRememberMeFailed = wrapper.prop("setRememberMeFailed")
+        mockSetRememberMeFailedAction()
+        setRememberMeFailed()
         expect(store.getActions().length).toEqual(1)
       })
 
       /* Test: should invoke action creator */
       it("should invoke action creator", () => {
         const wrapper = shallowPlaceholder(store)
-        const setRememberMeResult = wrapper.prop("setRememberMeResult")
-        const setRememberMeResultActionMock = mockSetRememberMeResultAction()
-        setRememberMeResult(true)
-        expect(setRememberMeResultActionMock)
-          .toHaveBeenCalledWith(true)
+        const setRememberMeFailed = wrapper.prop("setRememberMeFailed")
+        const setRememberMeFailedActionMock = mockSetRememberMeFailedAction()
+        setRememberMeFailed()
+        expect(setRememberMeFailedActionMock)
+          .toHaveBeenCalledWith()
       })
     })
   })

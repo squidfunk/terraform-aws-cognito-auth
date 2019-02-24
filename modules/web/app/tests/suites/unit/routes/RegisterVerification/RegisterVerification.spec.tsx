@@ -31,7 +31,7 @@ import {
   RegisterVerificationSuccess
 } from "routes/RegisterVerification/RegisterVerificationSuccess"
 
-import { find, wait } from "_/helpers"
+import { find } from "_/helpers"
 import {
   mockComponent,
   Placeholder
@@ -132,7 +132,6 @@ describe("routes/RegisterVerification", () => {
       it("should render <RegisterVerificationSuccess />", async () => {
         const renderComponentMock = mockRenderComponent()
         mountPlaceholder()
-        await wait(250)
         expect(renderComponentMock)
           .toHaveBeenCalledWith(RegisterVerificationSuccess)
       })

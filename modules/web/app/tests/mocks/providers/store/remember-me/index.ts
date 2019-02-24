@@ -39,11 +39,11 @@ export function mockSetRememberMeAction(): jasmine.Spy {
 }
 
 /**
- * Mock `setRememberMeResultAction`
+ * Mock `setRememberMeFailedAction`
  *
  * @return Jasmine spy
  */
-export function mockSetRememberMeResultAction(): jasmine.Spy {
-  return spyOn(_, "setRememberMeResultAction")
+export function mockSetRememberMeFailedAction(): jasmine.Spy {
+  return spyOn(_, "setRememberMeFailedAction")
     .and.returnValue(mockAction())
 }
