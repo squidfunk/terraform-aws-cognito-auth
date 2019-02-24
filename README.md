@@ -86,7 +86,7 @@ Add the following module to your Terraform configuration and apply it:
 ``` hcl
 module "cognito-auth" {
   source  = "github.com/squidfunk/terraform-aws-cognito-auth"
-  version = "0.3.2"
+  version = "0.3.3"
 
   namespace                      = "<namespace>"
   region                         = "<region>"
@@ -200,7 +200,7 @@ configuration and apply it:
 ``` hcl
 module "cognito-auth" {
   source  = "github.com/squidfunk/terraform-aws-cognito-auth"
-  version = "0.3.2"
+  version = "0.3.3"
 
   namespace                      = "example-auth"
   region                         = "us-east-1"
