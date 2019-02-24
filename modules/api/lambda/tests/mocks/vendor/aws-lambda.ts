@@ -132,6 +132,7 @@ export function mockAPIGatewayProxyEvent<
     requestContext: {
       accountId: chance.string(),
       apiId: chance.string(),
+      connectedAt: chance.integer(),
       httpMethod: "POST",
       requestId: chance.guid(),
       requestTimeEpoch: chance.timestamp() * 1000 + chance.millisecond(),
