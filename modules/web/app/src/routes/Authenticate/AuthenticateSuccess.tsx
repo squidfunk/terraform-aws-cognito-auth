@@ -32,7 +32,6 @@ import {
   AuthenticateRequest,
   Session
 } from "common"
-import { Loading } from "components"
 import {
   withCallback,
   WithCallback,

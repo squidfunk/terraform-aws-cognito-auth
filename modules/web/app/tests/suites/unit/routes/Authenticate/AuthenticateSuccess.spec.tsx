@@ -61,11 +61,10 @@ describe("routes/AuthenticateSuccess", () => {
       mockComponent("Loading")
     })
 
-    /* Test: should render loading indicator */
-    it("should render loading indicator", () => {
+    /* Test: should not render loading indicator (again) */
+    it("should not render loading indicator (again)", () => {
       const wrapper = shallow(<Render />)
-      const loading = find(wrapper, "Loading")
-      expect(loading.exists()).toBe(true)
+      expect(find(wrapper, "Loading")).toBeUndefined()
     })
   })
 
@@ -105,7 +104,7 @@ describe("routes/AuthenticateSuccess", () => {
       mockWithFormSubmitWithResult(session)
       mockWithSession({ ...session, renewed: true })
       const wrapper = mountPlaceholder()
-      expect(wrapper.find(Placeholder).prop("setRememberMeResult"))
+      expect(wrapper.find(Placeholder).prop("setRememberMeFailed"))
         .not.toHaveBeenCalled()
     })
 
@@ -136,8 +135,8 @@ describe("routes/AuthenticateSuccess", () => {
         mockWithFormSubmitWithResult(mockSession(true))
         mockWithSession({ ...session, renewed: true })
         const wrapper = mountPlaceholder()
-        expect(wrapper.find(Placeholder).prop("setRememberMeResult"))
-          .toHaveBeenCalledWith(true)
+        expect(wrapper.find(Placeholder).prop("setRememberMeFailed"))
+          .not.toHaveBeenCalled()
       })
     })
 

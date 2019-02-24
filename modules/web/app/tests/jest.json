@@ -13,7 +13,9 @@
     "jsx",
     "json"
   ],
-  "setupTestFrameworkScriptFile": "<rootDir>/tests/index.ts",
+  "setupFilesAfterEnv": [
+    "<rootDir>/tests/index.ts"
+  ],
   "snapshotSerializers": [
     "enzyme-to-json/serializer"
   ],

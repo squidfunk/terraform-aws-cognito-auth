@@ -32,7 +32,7 @@ import {
   ResetVerificationSuccess
 } from "routes/ResetVerification/ResetVerificationSuccess"
 
-import { chance, find, wait } from "_/helpers"
+import { chance, find } from "_/helpers"
 import {
   mockComponent,
   Placeholder
@@ -309,7 +309,6 @@ describe("routes/ResetVerification", () => {
       it("should render <ResetVerificationSuccess />", async () => {
         const renderComponentMock = mockRenderComponent()
         mountPlaceholder()
-        await wait(250)
         expect(renderComponentMock)
           .toHaveBeenCalledWith(ResetVerificationSuccess)
       })

@@ -23,7 +23,7 @@
 import {
   remember,
   setRememberMeAction,
-  setRememberMeResultAction
+  setRememberMeFailedAction
 } from "providers/store/remember-me"
 
 import { mockAction } from "_/mocks/providers"
@@ -65,33 +65,26 @@ describe("providers/store/remember-me", () => {
       /* Test: should preserve re-authentication result */
       it("should preserve re-authentication result", () => {
         const action = setRememberMeAction(true)
-        expect(remember({ active: false, result: false }, action))
-          .toEqual({ active: true, result: false })
+        expect(remember({ active: false, failed: true }, action))
+          .toEqual({ active: true, failed: true })
       })
     })
 
-    /* with REMEMBER_ME_SET_RESULT */
-    describe("with REMEMBER_ME_SET_RESULT", () => {
-
-      /* Test: should indicate a successful re-authentication attempt */
-      it("should indicate a successful re-authentication attempt", () => {
-        const action = setRememberMeResultAction(true)
-        expect(remember(undefined, action))
-          .toEqual(jasmine.objectContaining({ result: true }))
-      })
+    /* with REMEMBER_ME_SET_FAILED */
+    describe("with REMEMBER_ME_SET_FAILED", () => {
 
       /* Test: should indicate a failed re-authentication attempt */
       it("should indicate a failed re-authentication attempt", () => {
-        const action = setRememberMeResultAction(false)
+        const action = setRememberMeFailedAction()
         expect(remember(undefined, action))
-          .toEqual(jasmine.objectContaining({ result: false }))
+          .toEqual(jasmine.objectContaining({ failed: true }))
       })
 
       /* Test: should preserve active flag */
       it("should preserve active flag", () => {
-        const action = setRememberMeResultAction(true)
+        const action = setRememberMeFailedAction()
         expect(remember(undefined, action))
-          .toEqual({ active: false, result: true })
+          .toEqual({ active: false, failed: true })
       })
     })
   })

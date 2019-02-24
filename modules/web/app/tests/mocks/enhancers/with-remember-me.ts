@@ -43,6 +43,6 @@ export function mockWithRememberMe(
     .and.callFake(() => withProps<_.WithRememberMe, {}>({
       remember,
       setRememberMe: jest.fn(),
-      setRememberMeResult: jest.fn()
+      setRememberMeFailed: jest.fn()
     }))
 }
