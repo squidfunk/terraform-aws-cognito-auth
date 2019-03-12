@@ -69,7 +69,7 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "http-proxy-middleware": "^0.19.1",
-    "jest": "^24.4.0",
+    "jest": "^24.5.0",
     "redux-mock-store": "^1.5.3",
     "string-replace-loader": "^2.1.1",
     "ts-jest": "^24.0.0",
