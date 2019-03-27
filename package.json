@@ -25,7 +25,7 @@
     "@types/dotenv": "^6.1.0",
     "@types/jasmine": "^3.3.11",
     "@types/node": "^11.12.0",
-    "aws-sdk": "^2.429.0",
+    "aws-sdk": "^2.430.0",
     "aws-sdk-mock": "^4.3.1",
     "chance": "^1.0.18",
     "dotenv": "^7.0.0",
