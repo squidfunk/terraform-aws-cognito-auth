@@ -20,7 +20,7 @@
   "scripts": {},
   "dependencies": {},
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.23",
+    "@types/aws-lambda": "^8.10.24",
     "@types/chance": "^1.0.1",
     "@types/dotenv": "^6.1.1",
     "@types/jasmine": "^3.3.11",
