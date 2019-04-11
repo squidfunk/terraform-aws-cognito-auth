@@ -52,6 +52,8 @@ export function mockAxiosError(
 /**
  * Mock `axios.post`
  *
+ * @template T - Response type
+ *
  * @param promise - Promise returned by Axios
  *
  * @return Jasmine spy

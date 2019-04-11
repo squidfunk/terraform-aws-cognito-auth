@@ -22,6 +22,8 @@
 
 import * as _ from "mimemessage"
 
+import { chance } from "_/helpers"
+
 /* ----------------------------------------------------------------------------
  * Data
  * ------------------------------------------------------------------------- */
@@ -32,10 +34,12 @@ import * as _ from "mimemessage"
  * @return Mime message entity
  */
 export function mockMimeMessageEntity(): jasmine.SpyObj<_.Entity> {
-  return jasmine.createSpyObj("Entity", [
+  const entity = jasmine.createSpyObj("Entity", [
     "header",
     "toString"
   ])
+  entity.toString.and.returnValue(chance.string())
+  return entity
 }
 
 /* ----------------------------------------------------------------------------

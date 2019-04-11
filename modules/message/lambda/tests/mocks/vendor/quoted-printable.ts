@@ -36,7 +36,7 @@ import { chance } from "_/helpers"
  * @return Jasmine spy
  */
 function mockQuotedPrintableEncode(
-  cb: () => void
+  cb: () => string
 ): jasmine.Spy {
   return spyOn(_, "encode")
     .and.callFake(cb)

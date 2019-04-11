@@ -36,7 +36,7 @@ import { chance } from "_/helpers"
  * @return Jasmine spy
  */
 function mockMustacheRender(
-  cb: () => void
+  cb: () => string
 ): jasmine.Spy {
   return spyOn(_, "render")
     .and.callFake(cb)

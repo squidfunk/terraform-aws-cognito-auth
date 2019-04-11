@@ -34,7 +34,7 @@ import * as _ from "mime"
  * @return Jasmine spy
  */
 function mockMimeGetType(
-  cb: () => void
+  cb: () => string | null
 ): jasmine.Spy {
   return spyOn(_, "getType")
     .and.callFake(cb)

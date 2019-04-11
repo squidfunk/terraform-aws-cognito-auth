@@ -39,7 +39,7 @@ function mockValidate(
   result: Partial<_.ValidatorResult>
 ): jasmine.Spy {
   return spyOn(_, "validate")
-    .and.returnValue(result)
+    .and.returnValue(result as _.ValidatorResult)
 }
 
 /**

@@ -33,8 +33,8 @@ import { SessionClient } from "clients/session"
  *
  * @return Jasmine spy
  */
-function mockSessionClientSignOut<T>(
-  promise: () => Promise<T>
+function mockSessionClientSignOut(
+  promise: () => Promise<void>
 ): jasmine.Spy {
   return spyOn(SessionClient.prototype, "signOut")
     .and.callFake(promise)

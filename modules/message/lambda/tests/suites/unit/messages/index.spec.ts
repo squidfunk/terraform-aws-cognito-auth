@@ -252,10 +252,10 @@ describe("messages", () => {
       /* Test: should resolve with composed mime entity */
       it("should resolve with composed mime entity", async () => {
         const entity = mockMimeMessageEntity()
-        mockMimeMessageFactoryWithResult(entity as any)
+        mockMimeMessageFactoryWithResult(entity)
         mockQuotedPrintableEncodeWithSuccess()
         const message = new TestMessage(data)
-        expect(await message.compose()).toEqual(entity as any)
+        expect(await message.compose()).toEqual(entity)
       })
 
       /* Test: should contain a multipart/mixed mime entity */
@@ -338,31 +338,31 @@ describe("messages", () => {
       /* Test: should set content disposition header */
       it("should set content disposition header", async () => {
         const entity = mockMimeMessageEntity()
-        mockMimeMessageFactoryWithResult(entity as any)
+        mockMimeMessageFactoryWithResult(entity)
         mockQuotedPrintableEncodeWithSuccess()
         const message = new TestMessage(data)
         await message.compose()
         expect(entity.header.calls.count()).toEqual(3)
         expect(entity.header.calls.all()[2].args)
-          .toEqual(["Subject", jasmine.any(String)])
+          .toEqual(["Subject", jasmine.any(String) as any])
       })
 
       /* Test: should set content disposition header */
       it("should set content disposition header", async () => {
         const entity = mockMimeMessageEntity()
-        mockMimeMessageFactoryWithResult(entity as any)
+        mockMimeMessageFactoryWithResult(entity)
         mockQuotedPrintableEncodeWithSuccess()
         const message = new TestMessage(data)
         await message.compose()
         expect(entity.header.calls.count()).toEqual(3)
         expect(entity.header.calls.all()[1].args)
-          .toEqual(["Content-ID", jasmine.stringMatching(/^<.*>$/)])
+          .toEqual(["Content-ID", jasmine.stringMatching(/^<.*>$/) as any])
       })
 
       /* Test: should set content disposition header */
       it("should set content disposition header", async () => {
         const entity = mockMimeMessageEntity()
-        mockMimeMessageFactoryWithResult(entity as any)
+        mockMimeMessageFactoryWithResult(entity)
         mockQuotedPrintableEncodeWithSuccess()
         const message = new TestMessage(data)
         await message.compose()

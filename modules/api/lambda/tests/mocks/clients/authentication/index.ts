@@ -22,8 +22,10 @@
 
 import { AuthenticationClient } from "clients/authentication"
 import { Session } from "common"
+import { VerificationCode } from "verification"
 
 import { mockSession } from "_/mocks/common"
+import { mockVerificationCode } from "_/mocks/verification"
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -36,8 +38,8 @@ import { mockSession } from "_/mocks/common"
  *
  * @return Jasmine spy
  */
-function mockAuthenticationClientAuthenticateWithCredentials<T>(
-  promise: () => Promise<T>
+function mockAuthenticationClientAuthenticateWithCredentials(
+  promise: () => Promise<Session<Date>>
 ): jasmine.Spy {
   return spyOn(AuthenticationClient.prototype, "authenticateWithCredentials")
     .and.callFake(promise)
@@ -82,8 +84,8 @@ export function mockAuthenticationClientAuthenticateWithCredentialsWithError(
  *
  * @return Jasmine spy
  */
-function mockAuthenticationClientAuthenticateWithToken<T>(
-  promise: () => Promise<T>
+function mockAuthenticationClientAuthenticateWithToken(
+  promise: () => Promise<Session<Date>>
 ): jasmine.Spy {
   return spyOn(AuthenticationClient.prototype, "authenticateWithToken")
     .and.callFake(promise)
@@ -128,8 +130,8 @@ export function mockAuthenticationClientAuthenticateWithTokenWithError(
  *
  * @return Jasmine spy
  */
-function mockAuthenticationClientRegister<T>(
-  promise: () => Promise<T>
+function mockAuthenticationClientRegister(
+  promise: () => Promise<VerificationCode>
 ): jasmine.Spy {
   return spyOn(AuthenticationClient.prototype, "register")
     .and.callFake(promise)
@@ -141,7 +143,9 @@ function mockAuthenticationClientRegister<T>(
  * @return Jasmine spy
  */
 export function mockAuthenticationClientRegisterWithSuccess(): jasmine.Spy {
-  return mockAuthenticationClientRegister(() => Promise.resolve())
+  return mockAuthenticationClientRegister(() =>
+    Promise.resolve(mockVerificationCode())
+  )
 }
 
 /**
@@ -166,8 +170,8 @@ export function mockAuthenticationClientRegisterWithError(
  *
  * @return Jasmine spy
  */
-function mockAuthenticationClientForgotPassword<T>(
-  promise: () => Promise<T>
+function mockAuthenticationClientForgotPassword(
+  promise: () => Promise<VerificationCode>
 ): jasmine.Spy {
   return spyOn(AuthenticationClient.prototype, "forgotPassword")
     .and.callFake(promise)
@@ -179,7 +183,9 @@ function mockAuthenticationClientForgotPassword<T>(
  * @return Jasmine spy
  */
 export function mockAuthenticationClientForgotPasswordWithSuccess() {
-  return mockAuthenticationClientForgotPassword(() => Promise.resolve())
+  return mockAuthenticationClientForgotPassword(() =>
+    Promise.resolve(mockVerificationCode())
+  )
 }
 
 /**

@@ -33,8 +33,8 @@ import { ManagementClient } from "clients/management"
  *
  * @return Jasmine spy
  */
-function mockManagementClientVerifyUser<T>(
-  promise: () => Promise<T>
+function mockManagementClientVerifyUser(
+  promise: () => Promise<void>
 ): jasmine.Spy {
   return spyOn(ManagementClient.prototype, "verifyUser")
     .and.callFake(promise)
@@ -71,8 +71,8 @@ export function mockManagementClientVerifyUserWithError(
  *
  * @return Jasmine spy
  */
-function mockManagementClientChangePassword<T>(
-  promise: () => Promise<T>
+function mockManagementClientChangePassword(
+  promise: () => Promise<void>
 ): jasmine.Spy {
   return spyOn(ManagementClient.prototype, "changePassword")
     .and.callFake(promise)

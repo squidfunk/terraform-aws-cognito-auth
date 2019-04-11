@@ -39,7 +39,7 @@ function mockFsReadFile(
   cb: (path: string, encoding: any, cb: (...args: any[]) => void) => void
 ): jasmine.Spy {
   return spyOn(_, "readFile")
-    .and.callFake(cb)
+    .and.callFake(cb as any)
 }
 
 /**
@@ -85,7 +85,7 @@ function mockFsReaddir(
   cb: (path: string, cb: (...args: any[]) => void) => void
 ): jasmine.Spy {
   return spyOn(_, "readdir")
-    .and.callFake(cb)
+    .and.callFake(cb as any)
 }
 
 /**

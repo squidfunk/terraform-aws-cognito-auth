@@ -73,8 +73,8 @@ export function mockVerificationCode(
  *
  * @return Jasmine spy
  */
-export function mockVerificationIssue<T>(
-  promise: () => Promise<T>
+export function mockVerificationIssue(
+  promise: () => Promise<VerificationCode>
 ): jasmine.Spy {
   return spyOn(Verification.prototype, "issue")
     .and.callFake(promise)
@@ -115,8 +115,8 @@ export function mockVerificationIssueWithError(
  *
  * @return Jasmine spy
  */
-export function mockVerificationClaim<T>(
-  promise: () => Promise<T>
+export function mockVerificationClaim(
+  promise: () => Promise<VerificationCode>
 ): jasmine.Spy {
   return spyOn(Verification.prototype, "claim")
     .and.callFake(promise)

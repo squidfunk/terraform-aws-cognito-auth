@@ -20,9 +20,11 @@
  * IN THE SOFTWARE.
  */
 
+import { Entity } from "mimemessage"
+
 import { Message } from "messages"
 
-import { chance } from "_/helpers"
+import { mockMimeMessageEntity } from "../vendor/mimemessage"
 
 /* ----------------------------------------------------------------------------
  * Functions
@@ -35,8 +37,8 @@ import { chance } from "_/helpers"
  *
  * @return Jasmine spy
  */
-function mockMessageCompose<T>(
-  promise: () => Promise<T>
+function mockMessageCompose(
+  promise: () => Promise<Entity>
 ): jasmine.Spy {
   return spyOn(Message.prototype, "compose")
     .and.callFake(promise)
@@ -45,14 +47,14 @@ function mockMessageCompose<T>(
 /**
  * Mock `Message.compose` returning with result
  *
- * @param result - Mime entity
+ * @param entity - Mime entity
  *
  * @return Jasmine spy
  */
 export function mockMessageComposeWithResult(
-  result: string = chance.string()
+  entity: Entity = mockMimeMessageEntity()
 ): jasmine.Spy {
-  return mockMessageCompose(() => Promise.resolve(result))
+  return mockMessageCompose(() => Promise.resolve(entity))
 }
 
 /**
