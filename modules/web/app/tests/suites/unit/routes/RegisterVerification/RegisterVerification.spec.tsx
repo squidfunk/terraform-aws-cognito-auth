@@ -22,7 +22,9 @@
 
 import { mount, shallow } from "enzyme"
 import * as React from "react"
+import { compose } from "recompose"
 
+import { withRememberMe } from "enhancers"
 import {
   enhance,
   Render
@@ -38,7 +40,8 @@ import {
 } from "_/mocks/components"
 import {
   mockWithFormSubmit,
-  mockWithFormSubmitWithResult
+  mockWithFormSubmitWithResult,
+  mockWithRememberMe
 } from "_/mocks/enhancers"
 import { mockRenderComponent } from "_/mocks/vendor/recompose"
 
@@ -70,9 +73,17 @@ describe("routes/RegisterVerification", () => {
 
     /* Mount placeholder wrapped with enhancer */
     function mountPlaceholder() {
-      const Component = enhance()(Placeholder)
+      const Component = compose(
+        withRememberMe(),
+        enhance()
+      )(Placeholder)
       return mount(<Component />)
     }
+
+    /* Mock enhancers */
+    beforeEach(() => {
+      mockWithRememberMe()
+    })
 
     /* Test: should set request target URL */
     it("should not set request target URL", () => {
