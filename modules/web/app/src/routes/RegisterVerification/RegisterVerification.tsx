@@ -34,7 +34,9 @@ import { RegisterVerificationRequest } from "common"
 import { Loading } from "components"
 import {
   withFormSubmit,
-  WithFormSubmit
+  WithFormSubmit,
+  withRememberMe,
+  WithRememberMe
 } from "enhancers"
 
 import { RegisterVerificationSuccess } from "./RegisterVerificationSuccess"
@@ -47,6 +49,7 @@ import { RegisterVerificationSuccess } from "./RegisterVerificationSuccess"
  * Lifecycle properties
  */
 type LifecycleProps =
+  & WithRememberMe
   & WithFormSubmit<RegisterVerificationRequest>
 
 /**
@@ -76,13 +79,15 @@ export const Render: React.FunctionComponent =
  */
 export function enhance() {
   return compose(
+    withRememberMe(),
     withFormSubmit<RegisterVerificationRequest>({
       message: "You have successfully verified your email address. " +
                "Use your email address and password to sign in to your account"
     }),
     lifecycle<LifecycleProps, {}>({
       componentDidMount() {
-        const { submit } = this.props
+        const { submit, setRememberMeFailed } = this.props
+        setRememberMeFailed()
         return submit()
       }
     }),
