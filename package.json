@@ -35,7 +35,7 @@
     "nyc": "^14.0.0",
     "ts-node": "^8.1.0",
     "tsconfig-paths": "^3.8.0",
-    "tslint": "^5.15.0",
+    "tslint": "^5.16.0",
     "tslint-sonarts": "^1.9.0",
     "typescript": "^3.4.3"
   }
