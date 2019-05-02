@@ -28,7 +28,7 @@
     "aws-sdk": "^2.448.0",
     "aws-sdk-mock": "^4.4.0",
     "chance": "^1.0.18",
-    "dotenv": "^7.0.0",
+    "dotenv": "^8.0.0",
     "jasmine": "^3.4.0",
     "jasmine-spec-reporter": "^4.2.1",
     "nodemon": "^1.19.0",
