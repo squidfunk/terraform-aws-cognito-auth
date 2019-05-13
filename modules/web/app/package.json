@@ -62,7 +62,7 @@
     "@types/redux-mock-store": "^1.0.1",
     "@types/webpack": "^4.4.30",
     "@types/webpack-dev-server": "^3.1.5",
-    "babel-loader": "^8.0.5",
+    "babel-loader": "^8.0.6",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.0",
     "enzyme-to-json": "^3.3.5",
