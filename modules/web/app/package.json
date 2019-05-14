@@ -54,7 +54,7 @@
     "@types/ramda": "^0.26.8",
     "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
-    "@types/react-redux": "^7.0.8",
+    "@types/react-redux": "^7.0.9",
     "@types/react-router-dom": "^4.3.3",
     "@types/react-test-renderer": "^16.8.1",
     "@types/recompose": "^0.30.6",
