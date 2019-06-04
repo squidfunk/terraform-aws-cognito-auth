@@ -63,7 +63,7 @@
     "@types/webpack": "^4.4.32",
     "@types/webpack-dev-server": "^3.1.6",
     "babel-loader": "^8.0.6",
-    "enzyme": "^3.9.0",
+    "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.3.5",
     "html-loader": "^0.5.5",
