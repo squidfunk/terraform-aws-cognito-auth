@@ -44,8 +44,6 @@ dist: $(shell find src) webpack.config.ts
 # -----------------------------------------------------------------------------
 # Rules
 # -----------------------------------------------------------------------------
-foo:
-	echo ${TEST_ARGS}
 
 # Build distribution files
 build: node_modules | dist
