@@ -1,3 +1,7 @@
+terraform-aws-cognito-auth-0.4.0 (2019-06-06)
+
+  * Upgraded to terraform-0.12.x and terraform-provider-aws-2.x
+
 terraform-aws-cognito-auth-0.3.4 (2019-04-15)
 
   * Fixed swallowed notification when remember me was set before registration

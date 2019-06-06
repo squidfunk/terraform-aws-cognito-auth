@@ -86,7 +86,7 @@ Add the following module to your Terraform configuration and apply it:
 ``` hcl
 module "cognito-auth" {
   source  = "github.com/squidfunk/terraform-aws-cognito-auth"
-  version = "0.3.4"
+  version = "0.4.0"
 
   namespace                      = "<namespace>"
   region                         = "<region>"
@@ -193,14 +193,14 @@ The following variables can be configured:
 
 ## Example
 
-Let's say we want to secure an application hosted under `admin.example.com`
-using the default UI. First, add the following lines to your Terraform
-configuration and apply it:
+Let's say we want to secure an application hosted on `admin.example.com` using
+the default UI. First, add the following lines to your Terraform configuration
+and apply it:
 
 ``` hcl
 module "cognito-auth" {
   source  = "github.com/squidfunk/terraform-aws-cognito-auth"
-  version = "0.3.4"
+  version = "0.4.0"
 
   namespace                      = "example-auth"
   region                         = "us-east-1"
@@ -242,7 +242,7 @@ Authorization: Bearer <token>
 ```
 
 If the user checks the __Remember me__ checkbox during the authentication
-process, a refresh token that is valid for 30 days is issued and sent to the
+process, a refresh token which is valid for 30 days is issued and sent to the
 client as a secure HTTP-only cookie. When the access token expires after 1 hour,
 the client is again redirected to the default UI which will immediately perform
 a password-less authentication using the refresh token.
