@@ -26,7 +26,7 @@
 data "template_file" "lambda_iam_policy" {
   template = "${file("${path.module}/iam/policies/lambda.json")}"
 
-  vars {
+  vars = {
     cognito_user_pool_arn = "${var.cognito_user_pool_arn}"
     dynamodb_table_arn    = "${aws_dynamodb_table._.arn}"
     sns_topic_arn         = "${aws_sns_topic._.arn}"
@@ -124,7 +124,7 @@ resource "aws_api_gateway_deployment" "_" {
   # Hack: force deployment on source code hash change
   variables = {
     "source_code_hash" = "${
-      sha256(file("${path.module}/lambda/dist.zip"))
+      base64sha256(filebase64("${path.module}/lambda/dist.zip"))
     }"
   }
 

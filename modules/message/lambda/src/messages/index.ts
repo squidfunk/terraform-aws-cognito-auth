@@ -70,7 +70,7 @@ export abstract class Message<TData> {
    * Initialize message
    *
    * @param template - Template
-   * @param data - Message date
+   * @param data - Message data
    */
   public constructor(
     protected template: string,

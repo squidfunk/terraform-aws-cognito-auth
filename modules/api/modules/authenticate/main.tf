@@ -54,10 +54,10 @@ resource "aws_api_gateway_integration" "_" {
   type                    = "AWS_PROXY"
 
   uri = "arn:aws:apigateway:${
-      var.region
+    var.region
     }:lambda:path/2015-03-31/functions/${
-      aws_lambda_function._.arn
-    }/invocations"
+    aws_lambda_function._.arn
+  }/invocations"
 }
 
 # -----------------------------------------------------------------------------
@@ -75,7 +75,7 @@ resource "aws_lambda_function" "_" {
   memory_size   = 512
 
   source_code_hash = "${
-    base64sha256(file("${var.lambda_filename}"))
+    base64sha256(filebase64("${var.lambda_filename}"))
   }"
 
   environment {
@@ -97,14 +97,14 @@ resource "aws_lambda_permission" "_" {
   function_name = "${aws_lambda_function._.arn}"
 
   source_arn = "arn:aws:execute-api:${
-      var.region
+    var.region
     }:${
-      data.aws_caller_identity._.account_id
+    data.aws_caller_identity._.account_id
     }:${
-      var.api_id
+    var.api_id
     }/*/${
-      aws_api_gateway_method._.http_method
+    aws_api_gateway_method._.http_method
     }${
-      aws_api_gateway_resource._.path
-    }"
+    aws_api_gateway_resource._.path
+  }"
 }

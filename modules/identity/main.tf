@@ -28,7 +28,7 @@ data "template_file" "cognito_iam_assume_role_policy" {
     file("${path.module}/iam/policies/assume-role/cognito-identity.json")
   }"
 
-  vars {
+  vars = {
     cognito_identity_pool_id = "${aws_cognito_identity_pool._.id}"
   }
 }
@@ -39,7 +39,7 @@ data "template_file" "cognito_iam_assume_role_policy" {
 data "template_file" "lambda_iam_policy" {
   template = "${file("${path.module}/iam/policies/lambda.json")}"
 
-  vars {
+  vars = {
     cognito_user_pool_arn = "${aws_cognito_user_pool._.arn}"
   }
 }
@@ -149,10 +149,10 @@ resource "aws_cognito_identity_pool" "_" {
     server_side_token_check = true
 
     provider_name = "cognito-idp.${
-        var.region
+      var.region
       }.amazonaws.com/${
-        aws_cognito_user_pool._.id
-      }"
+      aws_cognito_user_pool._.id
+    }"
   }
 }
 
@@ -160,7 +160,7 @@ resource "aws_cognito_identity_pool" "_" {
 resource "aws_cognito_identity_pool_roles_attachment" "_" {
   identity_pool_id = "${aws_cognito_identity_pool._.id}"
 
-  roles {
+  roles = {
     "authenticated" = "${aws_iam_role.cognito.arn}"
   }
 }
@@ -180,7 +180,7 @@ resource "aws_lambda_function" "_" {
   memory_size   = 512
 
   source_code_hash = "${
-    base64sha256(file("${path.module}/lambda/dist.zip"))
+    base64sha256(filebase64("${path.module}/lambda/dist.zip"))
   }"
 }
 
