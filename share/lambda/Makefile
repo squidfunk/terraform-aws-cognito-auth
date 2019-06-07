@@ -21,6 +21,16 @@
 all: lint clean | build test
 
 # -----------------------------------------------------------------------------
+# Constants
+# -----------------------------------------------------------------------------
+
+# Build-time dependency location
+NPM_BIN = $(shell npm bin --prefix ${ROOT})
+
+# Test suite (default: all)
+SUITE ?= unit
+
+# -----------------------------------------------------------------------------
 # Prerequisites
 # -----------------------------------------------------------------------------
 
@@ -46,7 +56,7 @@ clean-post_:
 
 # Distribution files
 dist: $(shell find src) tsconfig.json
-	$(shell npm bin --prefix ${ROOT})/tsc -p tsconfig.json
+	${NPM_BIN}/tsc -p tsconfig.json
 
 # Archive for distribution
 dist.zip: $(shell find src) | dist-pre dist dist-post
@@ -78,28 +88,26 @@ clean: | clean-pre clean_ clean-post
 
 # Lint source files
 lint: node_modules
-	$(shell npm bin --prefix ${ROOT})/tslint \
-		-p tsconfig.json "src/**/*.ts"
-	$(shell npm bin --prefix ${ROOT})/tslint \
-		-p tests/tsconfig.json "tests/**/*.ts"
+	${NPM_BIN}/tslint -p tsconfig.json "src/**/*.ts"
+	${NPM_BIN}/tslint -p tests/tsconfig.json "tests/**/*.ts"
 
-# Execute unit tests
+# Execute tests
 test: node_modules | dist-pre
 	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
-	@ NODE_ENV=test $(shell npm bin --prefix ${ROOT})/nyc \
-		$(shell npm bin --prefix ${ROOT})/ts-node \
+	@ NODE_ENV=test ${NPM_BIN}/nyc \
+		${NPM_BIN}/ts-node \
 			-r tsconfig-paths/register \
-			--project tests/tsconfig.json --files tests \
-				"suites/unit/**/*.spec.ts"
+			--project tests/tsconfig.json \
+			--files tests "suites/${SUITE}/**/*.spec.ts"
 
-# Execute unit tests in watch mode
+# Execute tests in watch mode
 watch: node_modules
-	@ NODE_ENV=development $(shell npm bin --prefix ${ROOT})/nodemon \
-		--quiet --watch src --watch tests --ext json,ts --exec \
-		$(shell npm bin --prefix ${ROOT})/ts-node \
+	@ NODE_ENV=development ${NPM_BIN}/nodemon \
+		--quiet --watch src --watch tests --ext json,ts \
+		--exec ${NPM_BIN}/ts-node \
 			-r tsconfig-paths/register \
-			--project tests/tsconfig.json --files tests \
-				"suites/unit/**/*.spec.ts"
+			--project tests/tsconfig.json \
+			--files tests "suites/${SUITE}/**/*.spec.ts"
 
 # -----------------------------------------------------------------------------
 

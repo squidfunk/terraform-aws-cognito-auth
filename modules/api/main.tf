@@ -124,7 +124,7 @@ resource "aws_api_gateway_deployment" "_" {
   # Hack: force deployment on source code hash change
   variables = {
     "source_code_hash" = "${
-      base64sha256(filebase64("${path.module}/lambda/dist.zip"))
+      sha256(filebase64("${path.module}/lambda/dist.zip"))
     }"
   }
 

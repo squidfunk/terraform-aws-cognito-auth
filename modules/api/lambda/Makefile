@@ -55,16 +55,9 @@ src/%.json: src/%.ts
 # Start development server
 start: node_modules
 	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
-	@ NODE_ENV=development $(shell npm bin --prefix ${ROOT})/nodemon \
-		--quiet --watch src --watch tools --ext json,ts --exec \
-		$(shell npm bin --prefix ${ROOT})/ts-node \
+	@ NODE_ENV=development ${NPM_BIN}/nodemon \
+		--quiet --watch src --watch tools --ext json,ts \
+		--exec ${NPM_BIN}/ts-node \
 			-r tsconfig-paths/register \
-			--project tools/tsconfig.json --files tools/server
-
-# Execute acceptance tests
-test-acceptance: node_modules
-	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
-	@ NODE_ENV=test $(shell npm bin --prefix ${ROOT})/ts-node \
-		-r tsconfig-paths/register \
-		--project tests/tsconfig.json --files tests \
-			"suites/acceptance/**/*.spec.ts"
+			--project tools/tsconfig.json \
+			--files tools/server

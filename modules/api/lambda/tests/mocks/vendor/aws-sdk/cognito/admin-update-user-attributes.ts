@@ -58,9 +58,9 @@ export function mockCognitoAdminUpdateUserAttributesWithSuccess(
 ): jasmine.Spy {
   return mockCognitoAdminUpdateUserAttributes(
     jasmine.createSpy("adminUpdateUserAttributes")
-    .and.returnValue({
-      Username: username
-    }))
+      .and.returnValue({
+        Username: username
+      }))
 }
 
 /**

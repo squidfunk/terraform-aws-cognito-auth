@@ -60,27 +60,27 @@ export function mockCognitoAdminGetUserWithResult(
 ): jasmine.Spy {
   return mockCognitoAdminGetUser(
     jasmine.createSpy("adminGetUser")
-    .and.returnValue({
-      Username: username,
-      UserAttributes: [
-        {
-          Name: "sub",
-          Value: chance.guid()
-        },
-        {
-          Name: "email_verified",
-          Value: chance.bool()
-        },
-        {
-          Name: "email",
-          Value: email
-        }
-      ],
-      UserCreateDate: chance.date().getTime(),
-      UserLastModifiedDate: chance.date().getTime(),
-      Enabled: chance.bool(),
-      UserStatus: "CONFIRMED"
-    }))
+      .and.returnValue({
+        Username: username,
+        UserAttributes: [
+          {
+            Name: "sub",
+            Value: chance.guid()
+          },
+          {
+            Name: "email_verified",
+            Value: chance.bool()
+          },
+          {
+            Name: "email",
+            Value: email
+          }
+        ],
+        UserCreateDate: chance.date().getTime(),
+        UserLastModifiedDate: chance.date().getTime(),
+        Enabled: chance.bool(),
+        UserStatus: "CONFIRMED"
+      }))
 }
 
 /**
