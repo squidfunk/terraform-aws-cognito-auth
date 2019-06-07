@@ -54,7 +54,7 @@ dist.zip: $(shell find src) | dist-pre dist dist-post
 		&& cd dist \
 		&& cp ../package*.json . \
 		&& npm install --production \
-		&& rm -rf package*.json node_modules/aws-sdk etc \
+		&& rm -rf package*.json etc \
 		&& zip -rq ../$@ * \
 		&& rm -rf node_modules)
 

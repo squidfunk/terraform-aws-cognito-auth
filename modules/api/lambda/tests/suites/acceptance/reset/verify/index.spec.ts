@@ -91,7 +91,7 @@ describe("POST /reset/:code", () => {
 
     /* Delete user */
     afterAll(async () => {
-      await mgmt.deleteUser(email)
+      // await mgmt.deleteUser(email)
     })
 
     /* Test: should return empty body */
@@ -105,15 +105,13 @@ describe("POST /reset/:code", () => {
 
     /* Test: should set new password */
     it("should set new password", async () => {
-      const { id, subject } = await auth.forgotPassword(email)
+      const { id } = await auth.forgotPassword(email)
       const { password: value } = mockResetVerifyRequest()
       await request.post(`/reset/${id}`)
         .set("Content-Type", "application/json")
         .send({ password: value })
-        .expect(204)
-      expect(async () => {
-        await auth.authenticateWithCredentials(subject, value)
-      }).not.toThrow()
+        .expect(204, "")
+      return auth.authenticateWithCredentials(email, value)
     })
   })
 })

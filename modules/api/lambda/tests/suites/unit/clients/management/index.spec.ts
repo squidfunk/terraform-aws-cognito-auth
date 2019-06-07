@@ -29,17 +29,14 @@ import {
   mockCognitoAdminConfirmSignUpWithSuccess,
   mockCognitoAdminDeleteUserWithError,
   mockCognitoAdminDeleteUserWithSuccess,
-  mockCognitoAdminGetUserWithError,
-  mockCognitoAdminGetUserWithResult,
+  mockCognitoAdminSetUserPasswordWithError,
+  mockCognitoAdminSetUserPasswordWithSuccess,
   mockCognitoAdminUpdateUserAttributesWithError,
   mockCognitoAdminUpdateUserAttributesWithSuccess,
-  mockCognitoSignUpWithError,
-  mockCognitoSignUpWithSuccess,
   restoreCognitoAdminConfirmSignUp,
   restoreCognitoAdminDeleteUser,
-  restoreCognitoAdminGetUser,
-  restoreCognitoAdminUpdateUserAttributes,
-  restoreCognitoSignUp
+  restoreCognitoAdminSetUserPassword,
+  restoreCognitoAdminUpdateUserAttributes
 } from "_/mocks/vendor/aws-sdk"
 
 /* ----------------------------------------------------------------------------
@@ -191,181 +188,46 @@ describe("clients/management", () => {
 
       /* Restore AWS mocks */
       afterEach(() => {
-        restoreCognitoAdminGetUser()
-        restoreCognitoAdminDeleteUser()
-        restoreCognitoSignUp()
-        restoreCognitoAdminConfirmSignUp()
-        restoreCognitoAdminUpdateUserAttributes()
+        restoreCognitoAdminSetUserPassword()
       })
 
       /* Test: should resolve with no result */
       it("should resolve with no result", async () => {
-        mockCognitoAdminGetUserWithResult()
-        mockCognitoAdminDeleteUserWithSuccess()
-        mockCognitoSignUpWithSuccess()
-        mockCognitoAdminConfirmSignUpWithSuccess()
-        mockCognitoAdminUpdateUserAttributesWithSuccess()
+        mockCognitoAdminSetUserPasswordWithSuccess()
         const mgmt = new ManagementClient()
         expect(await mgmt.changePassword(username, password))
           .toBeUndefined()
       })
 
-      /* Test: should retrieve and delete old user */
-      it("should retrieve and delete old user", async () => {
-        const adminGetUserMock = mockCognitoAdminGetUserWithResult(username)
-        const adminDeleteUserMock = mockCognitoAdminDeleteUserWithSuccess()
-        mockCognitoSignUpWithSuccess()
-        mockCognitoAdminConfirmSignUpWithSuccess()
-        mockCognitoAdminUpdateUserAttributesWithSuccess()
+      /* Test: should set new user password */
+      it("should set new user password", async () => {
+        const adminSetUserPasswordMock =
+          mockCognitoAdminSetUserPasswordWithSuccess()
         const mgmt = new ManagementClient()
         await mgmt.changePassword(username, password)
-        expect(adminGetUserMock).toHaveBeenCalledWith(
-          jasmine.objectContaining({
-            Username: username
-          }))
-        expect(adminDeleteUserMock).toHaveBeenCalledWith(
-          jasmine.objectContaining({
-            Username: username
-          }))
-      })
-
-      /* Test: should register and verify new user */
-      it("should register and verify new user", async () => {
-        mockCognitoAdminGetUserWithResult(username)
-        mockCognitoAdminDeleteUserWithSuccess()
-        const signUpMock = mockCognitoSignUpWithSuccess()
-        const adminConfirmSignUpMock =
-          mockCognitoAdminConfirmSignUpWithSuccess()
-        const adminUpdateUserAttributesMock =
-          mockCognitoAdminUpdateUserAttributesWithSuccess()
-        const mgmt = new ManagementClient()
-        await mgmt.changePassword(username, password)
-        expect(signUpMock).toHaveBeenCalledWith(
+        expect(adminSetUserPasswordMock).toHaveBeenCalledWith(
           jasmine.objectContaining({
             Username: username,
             Password: password,
-            UserAttributes: [
-              {
-                Name: "email",
-                Value: jasmine.any(String)
-              }
-            ]
-          }))
-        expect(adminConfirmSignUpMock).toHaveBeenCalledWith(
-          jasmine.objectContaining({
-            Username: username
-          }))
-        expect(adminUpdateUserAttributesMock).toHaveBeenCalledWith(
-          jasmine.objectContaining({
-            Username: username,
-            UserAttributes: [
-              {
-                Name: "email_verified",
-                Value: "true"
-              }
-            ]
+            Permanent: true
           }))
       })
 
       /* Test: should reject on AWS Cognito error (get user) */
       it("should reject on AWS Cognito error (get user)", async done => {
         const errMock = new Error()
-        const adminGetUserMock = mockCognitoAdminGetUserWithError(errMock)
-        mockCognitoAdminDeleteUserWithSuccess()
-        mockCognitoSignUpWithSuccess()
-        mockCognitoAdminConfirmSignUpWithSuccess()
-        mockCognitoAdminUpdateUserAttributesWithSuccess()
+        const adminSetUserPasswordMock =
+          mockCognitoAdminSetUserPasswordWithError(errMock)
         try {
           const mgmt = new ManagementClient()
           await mgmt.changePassword(username, password)
           done.fail()
         } catch (err) {
-          expect(adminGetUserMock).toHaveBeenCalled()
+          expect(adminSetUserPasswordMock).toHaveBeenCalled()
           expect(err).toBe(errMock)
           done()
         }
       })
-
-      /* Test: should reject on AWS Cognito error (delete user) */
-      it("should reject on AWS Cognito error (delete user)", async done => {
-        const errMock = new Error()
-        mockCognitoAdminGetUserWithResult()
-        const adminDeleteUserMock =
-          mockCognitoAdminDeleteUserWithError(errMock)
-        mockCognitoSignUpWithSuccess()
-        mockCognitoAdminConfirmSignUpWithSuccess()
-        mockCognitoAdminUpdateUserAttributesWithSuccess()
-        try {
-          const mgmt = new ManagementClient()
-          await mgmt.changePassword(username, password)
-          done.fail()
-        } catch (err) {
-          expect(adminDeleteUserMock).toHaveBeenCalled()
-          expect(err).toBe(errMock)
-          done()
-        }
-      })
-
-      /* Test: should reject on AWS Cognito error (sign up) */
-      it("should reject on AWS Cognito error (sign up)", async done => {
-        const errMock = new Error()
-        mockCognitoAdminGetUserWithResult()
-        mockCognitoAdminDeleteUserWithSuccess()
-        const signUpMock = mockCognitoSignUpWithError(errMock)
-        mockCognitoAdminConfirmSignUpWithSuccess()
-        mockCognitoAdminUpdateUserAttributesWithSuccess()
-        try {
-          const mgmt = new ManagementClient()
-          await mgmt.changePassword(username, password)
-          done.fail()
-        } catch (err) {
-          expect(signUpMock).toHaveBeenCalled()
-          expect(err).toBe(errMock)
-          done()
-        }
-      })
-
-      /* Test: should reject on AWS Cognito error (confirm sign up) */
-      it("should reject on AWS Cognito error (confirm sign up)",
-        async done => {
-          const errMock = new Error()
-          mockCognitoAdminGetUserWithResult()
-          mockCognitoAdminDeleteUserWithSuccess()
-          mockCognitoSignUpWithSuccess()
-          const adminConfirmSignUpMock =
-            mockCognitoAdminConfirmSignUpWithError(errMock)
-          mockCognitoAdminUpdateUserAttributesWithSuccess()
-          try {
-            const mgmt = new ManagementClient()
-            await mgmt.changePassword(username, password)
-            done.fail()
-          } catch (err) {
-            expect(adminConfirmSignUpMock).toHaveBeenCalled()
-            expect(err).toBe(errMock)
-            done()
-          }
-        })
-
-      /* Test: should reject on AWS Cognito error (update attributes) */
-      it("should reject on AWS Cognito error (update attributes)",
-        async done => {
-          const errMock = new Error()
-          mockCognitoAdminGetUserWithResult()
-          mockCognitoAdminDeleteUserWithSuccess()
-          mockCognitoSignUpWithSuccess()
-          mockCognitoAdminConfirmSignUpWithSuccess()
-          const adminUpdateUserAttributesMock =
-            mockCognitoAdminUpdateUserAttributesWithError(errMock)
-          try {
-            const mgmt = new ManagementClient()
-            await mgmt.changePassword(username, password)
-            done.fail()
-          } catch (err) {
-            expect(adminUpdateUserAttributesMock).toHaveBeenCalled()
-            expect(err).toBe(errMock)
-            done()
-          }
-        })
     })
   })
 })
