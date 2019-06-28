@@ -57,6 +57,7 @@ describe("components/Header", () => {
     it("should render text", () => {
       const wrapper = shallow(<Render {...props} />)
       const text = find(wrapper, "Typography")
+      console.log(wrapper.debug())
       expect(text.exists()).toBe(true)
     })
   })

@@ -61,6 +61,9 @@ describe("components/Notification", () => {
     /* Test: should render collapsed */
     it("should render collapsed", () => {
       const wrapper = shallow(<Render {...props} />)
+      // console.log(wrapper.dive().debug())
+      // TODO: the problem is, that ForwardRef(Collapse) is not matched
+      // however, some components contain forward refs, some don't.
       const collapse = find(wrapper, "Collapse")
       expect(collapse.prop("in")).toBe(false)
     })

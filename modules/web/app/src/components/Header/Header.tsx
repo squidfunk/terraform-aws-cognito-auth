@@ -69,7 +69,7 @@ export type RenderProps =
 export const Render: React.FunctionComponent<RenderProps> =
   ({ classes, primary, secondary }) =>
     <div className={classes.root}>
-      <Typography variant="headline" className={classes.text}>
+      <Typography variant="h1" className={classes.text}>
         {primary}
       </Typography>
       <Typography className={classes.text}>

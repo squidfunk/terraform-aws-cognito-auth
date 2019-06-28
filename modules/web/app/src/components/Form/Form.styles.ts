@@ -45,6 +45,6 @@ export type Styles = typeof styles
 export const styles = ({ spacing }: Theme) =>
   createStyles({
     root: {
-      padding: spacing.unit * 4
+      padding: spacing(4)
     }
   })

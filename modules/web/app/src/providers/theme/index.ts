@@ -36,5 +36,16 @@ export const theme = createMuiTheme({
     error: {
       main: colors.red.A200
     }
+  },
+  typography: {
+    body1: {
+      fontSize: "0.875rem"
+    },
+    h1: {
+      fontSize: "1.5rem",
+      fontWeight: 400,
+      lineHeight: 1.4,
+      letterSpacing: 0
+    }
   }
 })

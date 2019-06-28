@@ -52,7 +52,7 @@ export const styles = ({ palette, spacing }: Theme) =>
     /* Header */
     root: {
       background: colors.blueGrey[900],
-      padding: spacing.unit * 4
+      padding: spacing(4)
     },
 
     /* Header text */

@@ -48,7 +48,7 @@ export const styles = ({ palette, spacing }: Theme) =>
     /* Authenticate link container */
     authenticate: {
       color: palette.text.hint,
-      marginTop: spacing.unit * 2,
+      marginTop: spacing(2),
       textAlign: "center"
     },
 
@@ -56,6 +56,6 @@ export const styles = ({ palette, spacing }: Theme) =>
     button: {
       borderRadius: 2,
       fontSmoothing: "antialiased",
-      marginTop: spacing.unit * 4
+      marginTop: spacing(4)
     }
   })

@@ -54,10 +54,7 @@ export const styles = ({ palette, spacing }: Theme) =>
       color: palette.common.white,
       fontSmoothing: "antialiased",
       fontWeight: 700,
-      paddingTop: spacing.unit * 2,
-      paddingRight: spacing.unit * 4,
-      paddingBottom: spacing.unit * 2,
-      paddingLeft: spacing.unit * 4,
+      padding: spacing(2, 4, 2, 4),
       transition: "background-color .25s"
     },
 

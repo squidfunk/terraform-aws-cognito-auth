@@ -47,6 +47,6 @@ export const styles = ({ spacing }: Theme) =>
     root: {
       borderRadius: 2,
       fontSmoothing: "antialiased",
-      marginTop: spacing.unit * 2
+      marginTop: spacing(2)
     }
   })

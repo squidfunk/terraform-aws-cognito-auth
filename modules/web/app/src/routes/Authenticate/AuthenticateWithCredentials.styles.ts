@@ -60,7 +60,7 @@ export const styles = ({ palette, spacing }: Theme) =>
     /* Register link container */
     register: {
       color: palette.text.hint,
-      marginTop: spacing.unit * 2,
+      marginTop: spacing(2),
       textAlign: "center"
     }
   })
