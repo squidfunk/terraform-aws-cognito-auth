@@ -22,7 +22,7 @@ language: node_js
 sudo: false
 
 # Node.js version
-node_js: 8
+node_js: 10
 
 # Limit clone depth to 5, to speed up build
 git:
