@@ -25,6 +25,9 @@
 # Project root
 ROOT = $(shell git rev-parse --show-toplevel)
 
+# Build-time dependency location
+NPM_BIN = $(shell npm bin --prefix ${ROOT})
+
 # -----------------------------------------------------------------------------
 # Targets
 # -----------------------------------------------------------------------------

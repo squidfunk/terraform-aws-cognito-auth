@@ -24,9 +24,6 @@ all: lint clean | build test
 # Constants
 # -----------------------------------------------------------------------------
 
-# Build-time dependency location
-NPM_BIN = $(shell npm bin --prefix ${ROOT})
-
 # Test suite (default: all)
 SUITE ?= unit
 
