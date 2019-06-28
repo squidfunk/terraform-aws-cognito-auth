@@ -41,7 +41,7 @@
     "@types/supertest": "^2.0.7",
     "@types/uuid": "^3.4.4",
     "express": "^4.17.1",
-    "generate-password": "^1.4.1",
+    "generate-password": "^1.4.2",
     "glob": "^7.1.4",
     "header-case-normalizer": "^1.0.3",
     "morgan": "^1.9.1",
