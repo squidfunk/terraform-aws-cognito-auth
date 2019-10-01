@@ -34,7 +34,7 @@
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
     "react-redux": "^5.0.7",
-    "react-router-dom": "^5.1.1",
+    "react-router-dom": "^5.1.2",
     "recompose": "^0.30.0",
     "redux": "^4.0.4"
   },
