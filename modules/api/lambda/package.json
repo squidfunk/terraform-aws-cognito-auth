@@ -42,7 +42,7 @@
     "@types/uuid": "^3.4.5",
     "express": "^4.17.1",
     "generate-password": "^1.4.2",
-    "glob": "^7.1.4",
+    "glob": "^7.1.5",
     "header-case-normalizer": "^1.0.3",
     "morgan": "^1.9.1",
     "supertest": "^4.0.2",
