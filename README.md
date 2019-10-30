@@ -86,7 +86,7 @@ Add the following module to your Terraform configuration and apply it:
 ``` hcl
 module "cognito-auth" {
   source  = "squidfunk/cognito-auth/aws"
-  version = "0.4.1"
+  version = "0.4.2"
 
   namespace                      = "<namespace>"
   region                         = "<region>"
@@ -200,7 +200,7 @@ and apply it:
 ``` hcl
 module "cognito-auth" {
   source  = "squidfunk/cognito-auth/aws"
-  version = "0.4.1"
+  version = "0.4.2"
 
   namespace                      = "example-auth"
   region                         = "us-east-1"

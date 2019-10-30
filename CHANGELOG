@@ -1,3 +1,11 @@
+terraform-aws-cognito-auth-0.4.2 (2019-10-30)
+
+  * Upgraded Lambda Node.js runtime to 10.x due to EOL of 8.10
+
+terraform-aws-cognito-auth-0.4.1 (2019-06-28)
+
+  * Updated all dependencies to fix security vulnerabilities
+
 terraform-aws-cognito-auth-0.4.0 (2019-06-06)
 
   * Upgraded to terraform-0.12.x and terraform-provider-aws-2.x
