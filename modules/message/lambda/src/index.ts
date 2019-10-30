@@ -23,9 +23,8 @@
 import { SNSEvent } from "aws-lambda"
 import { CognitoIdentityServiceProvider, SES } from "aws-sdk"
 
-import { RegisterMessage } from "messages/register"
-import { ResetMessage } from "messages/reset"
-import { VerificationCode } from "verification"
+import { RegisterMessage, ResetMessage } from "./messages"
+import { VerificationCode } from "./verification"
 
 /* ----------------------------------------------------------------------------
  * Functions

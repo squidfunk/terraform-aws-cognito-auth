@@ -22,7 +22,7 @@
 
 import { render } from "mustache"
 
-import { Message } from "messages"
+import { Message } from "../_"
 
 /* ----------------------------------------------------------------------------
  * Types
