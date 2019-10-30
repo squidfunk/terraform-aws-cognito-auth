@@ -20,15 +20,15 @@
  * IN THE SOFTWARE.
  */
 
-import { ManagementClient } from "clients/management"
+import { ManagementClient } from "../../../clients"
 import {
   RegisterVerificationParameters as Parameters,
   RegisterVerificationRequest as Request
-} from "common"
-import { handler } from "handlers"
-import { Verification } from "verification"
+} from "../../../common"
+import { Verification } from "../../../verification"
+import { handler } from "../../_"
 
-import schema = require("common/events/register/verify/index.json")
+import schema = require("../../../common/events/register/verify/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handler

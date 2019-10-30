@@ -20,11 +20,11 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "clients/authentication"
-import { ResetRequest as Request } from "common"
-import { handler } from "handlers"
+import { AuthenticationClient } from "../../clients"
+import { ResetRequest as Request } from "../../common"
+import { handler } from "../_"
 
-import schema = require("common/events/reset/index.json")
+import schema = require("../../common/events/reset/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handler

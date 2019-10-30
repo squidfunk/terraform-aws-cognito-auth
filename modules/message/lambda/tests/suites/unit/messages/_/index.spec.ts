@@ -56,7 +56,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /* Abstract message */
-describe("messages", () => {
+describe("messages/_", () => {
 
   /* Message */
   describe("Message", () => {

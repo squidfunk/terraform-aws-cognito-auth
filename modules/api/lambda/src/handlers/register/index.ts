@@ -20,12 +20,12 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "clients/authentication"
-import { RegisterRequest as Request } from "common"
-import { handler } from "handlers"
-import { throwOnPasswordPolicyViolation } from "utilities"
+import { AuthenticationClient } from "../../clients"
+import { RegisterRequest as Request } from "../../common"
+import { throwOnPasswordPolicyViolation } from "../../utilities"
+import { handler } from "../_"
 
-import schema = require("common/events/register/index.json")
+import schema = require("../../common/events/register/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handler

@@ -20,16 +20,16 @@
  * IN THE SOFTWARE.
  */
 
-import { ManagementClient } from "clients/management"
+import { ManagementClient } from "../../../clients"
 import {
   ResetVerificationParameters as Parameters,
   ResetVerificationRequest as Request
-} from "common"
-import { handler } from "handlers"
-import { throwOnPasswordPolicyViolation } from "utilities"
-import { Verification } from "verification"
+} from "../../../common"
+import { throwOnPasswordPolicyViolation } from "../../../utilities"
+import { Verification } from "../../../verification"
+import { handler } from "../../_"
 
-import schema = require("common/events/reset/verify/index.json")
+import schema = require("../../../common/events/reset/verify/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handler

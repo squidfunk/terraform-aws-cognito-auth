@@ -22,7 +22,7 @@
 
 import * as cookie from "cookie"
 
-import { SessionToken } from "common"
+import { SessionToken } from "../../common"
 
 /* ----------------------------------------------------------------------------
  * Constants

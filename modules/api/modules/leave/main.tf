@@ -68,7 +68,7 @@ resource "aws_api_gateway_integration" "_" {
 resource "aws_lambda_function" "_" {
   function_name = "${var.namespace}-api-leave"
   role          = "${var.lambda_role_arn}"
-  runtime       = "nodejs8.10"
+  runtime       = "nodejs10.x"
   filename      = "${var.lambda_filename}"
   handler       = "handlers/leave/index.post"
   timeout       = 30

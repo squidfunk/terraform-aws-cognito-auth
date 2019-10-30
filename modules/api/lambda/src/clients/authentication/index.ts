@@ -24,12 +24,12 @@ import { AWSError } from "aws-sdk"
 import { validate } from "email-validator"
 import * as uuid from "uuid/v4"
 
-import { Client } from "clients"
-import { Session } from "common"
+import { Session } from "../../common"
 import {
   Verification,
   VerificationCode
-} from "verification"
+} from "../../verification"
+import { Client } from "../_"
 
 /* ----------------------------------------------------------------------------
  * Functions

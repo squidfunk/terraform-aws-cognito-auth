@@ -27,7 +27,7 @@ import {
 import { AWSError } from "aws-sdk"
 import { validate } from "jsonschema"
 
-import { ErrorResponse } from "common"
+import { ErrorResponse } from "../../common"
 
 /* ----------------------------------------------------------------------------
  * Types

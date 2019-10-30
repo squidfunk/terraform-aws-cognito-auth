@@ -20,51 +20,25 @@
  * IN THE SOFTWARE.
  */
 
-import { HandlerCallbackResponse } from "handlers/_"
+import { CognitoIdentityServiceProvider } from "aws-sdk"
 
 /* ----------------------------------------------------------------------------
- * Functions
+ * Class
  * ------------------------------------------------------------------------- */
 
 /**
- * Mock handler callback
- *
- * @template TResponse - Callback response body type
- *
- * @param promise - Promise returned by handler callback
- *
- * @return Jasmine spy
+ * Abstract client base class
  */
-function mockHandlerCallback<TResponse extends {}>(
-  promise: () => Promise<HandlerCallbackResponse<TResponse>>
-): jasmine.Spy {
-  return jasmine.createSpy("callback")
-    .and.callFake(promise)
-}
+export abstract class Client {
 
-/**
- * Mock handler callback returning with success
- *
- * @param body - Response body
- * @param headers - Response headers
- *
- * @return Jasmine spy
- */
-export function mockHandlerCallbackWithSuccess(
-  body?: any, headers?: { [name: string]: string }
-): jasmine.Spy {
-  return mockHandlerCallback(() => Promise.resolve({ body, headers }))
-}
-
-/**
- * Mock handler callback throwing an error
- *
- * @param err - Error to be thrown
- *
- * @return Jasmine spy
- */
-export function mockHandlerCallbackWithError(
-  err: Error = new Error("callback")
-): jasmine.Spy {
-  return mockHandlerCallback(() => Promise.reject(err))
+  /**
+   * Initialize client
+   *
+   * @param cognito - Cognito client
+   */
+  public constructor(
+    protected cognito = new CognitoIdentityServiceProvider({
+      apiVersion: "2016-04-18"
+    })
+  ) {}
 }

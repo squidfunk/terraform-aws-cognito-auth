@@ -20,25 +20,10 @@
  * IN THE SOFTWARE.
  */
 
-import { CognitoIdentityServiceProvider } from "aws-sdk"
-
 /* ----------------------------------------------------------------------------
- * Class
+ * Re-exports
  * ------------------------------------------------------------------------- */
 
-/**
- * Abstract client base class
- */
-export abstract class Client {
-
-  /**
-   * Initialize client
-   *
-   * @param cognito - Cognito client
-   */
-  public constructor(
-    protected cognito = new CognitoIdentityServiceProvider({
-      apiVersion: "2016-04-18"
-    })
-  ) {}
-}
+export { AuthenticationClient } from "./authentication"
+export { ManagementClient } from "./management"
+export { SessionClient } from "./session"
