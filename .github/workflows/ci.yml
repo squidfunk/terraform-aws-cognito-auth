@@ -74,7 +74,7 @@ jobs:
         id: cache-module
         with:
           path: ${{ matrix.config.module }}/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.config.module }}/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
