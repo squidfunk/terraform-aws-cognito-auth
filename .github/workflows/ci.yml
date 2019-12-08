@@ -27,7 +27,7 @@ on:
 jobs:
 
   # Build API
-  build/api/lambda:
+  build-api-lambda:
     runs-on: ubuntu-latest
     env:
       PREFIX: modules/api/lambda
