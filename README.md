@@ -1,11 +1,11 @@
-[![Travis][travis-image]][travis-link]
+[![Github Action][action-image]][action-link]
 [![Codecov][codecov-image]][codecov-link]
 [![Gitter][gitter-image]][gitter-link]
 [![GitHub][github-image]][github-link]
 [![dependabot][dependabot-image]][dependabot-link]
 
-  [travis-image]: https://travis-ci.org/squidfunk/terraform-aws-cognito-auth.svg?branch=master
-  [travis-link]: https://travis-ci.org/squidfunk/terraform-aws-cognito-auth
+  [action-image]: https://github.com/squidfunk/terraform-aws-cognito-auth/workflows/ci/badge.svg?branch=master
+  [action-link]: https://github.com/squidfunk/terraform-aws-cognito-auth/actions
   [codecov-image]: https://img.shields.io/codecov/c/github/squidfunk/terraform-aws-cognito-auth/master.svg
   [codecov-link]: https://codecov.io/gh/squidfunk/terraform-aws-cognito-auth
   [gitter-image]: https://badges.gitter.im/squidfunk/terraform-aws-cognito-auth.svg
