@@ -37,11 +37,17 @@ env:
 # Jobs to run
 jobs:
 
-  # Build API
-  build-api-lambda:
+  # Build all modules
+  build:
     runs-on: ubuntu-latest
-    env:
-      PREFIX: modules/api/lambda
+    strategy:
+      matrix:
+        config:
+          - { module: modules/api/lambda }
+          - { module: modules/identity/lambda }
+          - { module: modules/message/lambda }
+          - { module: modules/web/app }
+          - { module: modules/web/lambda }
     steps:
 
       # Limit clone depth to speed up build
@@ -55,7 +61,7 @@ jobs:
           node-version: 10.x
 
       - uses: actions/cache@v1
-        id: cache-root
+        id: cache
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -64,25 +70,14 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - if: steps.cache-root.outputs.cache-hit != 'true'
+      - if: steps.cache.outputs.cache-hit != 'true'
         run: npm install --no-audit
 
-      - uses: actions/cache@v1
-        id: cache-module
-        with:
-          path: ${PREFIX}/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
-      - if: steps.cache-module.outputs.cache-hit != 'true'
-        run: npm install --prefix ${PREFIX} --no-audit
+      - run: npm install --prefix ${{ matrix.config.module }} --no-audit
 
       # Run linter and build distribution files
-      - run: npm run --prefix ${PREFIX} lint
-      - run: npm run --prefix ${PREFIX} build
+      - run: npm run --prefix ${{ matrix.config.module }} lint
+      - run: npm run --prefix ${{ matrix.config.module }} build
 
       # Run tests
-      - run: npm run --prefix ${PREFIX} test
+      - run: npm run --prefix ${{ matrix.config.module }} test
