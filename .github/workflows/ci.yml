@@ -23,6 +23,17 @@ on:
   - push
   - pull_request
 
+# Empty environment variable for unit tests
+env:
+  - API_BASE_PATH=
+  - COGNITO_USER_POOL_ID=
+  - COGNITO_USER_POOL_CLIENT_ID=
+  - COGNITO_IDENTITY_POOL_NAME=
+  - COGNITO_IDENTITY_POOL_PROVIDER=auth.example.com
+  - DYNAMODB_TABLE=
+  - SNS_TOPIC_ARN=
+  - SES_SENDER_ADDRESS=
+
 # Jobs to run
 jobs:
 
@@ -44,7 +55,7 @@ jobs:
           node-version: 10.x
 
       - uses: actions/cache@v1
-        id: cache
+        id: cache-root
         with:
           path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -53,7 +64,20 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - if: steps.cache.outputs.cache-hit != 'true'
+      - if: steps.cache-root.outputs.cache-hit != 'true'
+        run: npm install --no-audit
+
+      - uses: actions/cache@v1
+        id: cache-module
+        with:
+          path: ${PREFIX}/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - if: steps.cache-module.outputs.cache-hit != 'true'
         run: npm install --prefix ${PREFIX} --no-audit
 
       # Run linter and build distribution files
