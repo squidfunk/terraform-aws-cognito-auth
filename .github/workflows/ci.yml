@@ -70,21 +70,10 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - uses: actions/cache@v1
-        id: cache-module
-        with:
-          path: ${{ matrix.config.module }}/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.config.module }}/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
       - if: steps.cache-root.outputs.cache-hit != 'true'
         run: npm install --no-audit
 
-      - if: steps.cache-module.outputs.cache-hit != 'true'
-        run: npm install --prefix ${{ matrix.config.module }} --no-audit
+      - run: npm install --prefix ${{ matrix.config.module }} --no-audit
 
       # Run linter and build distribution files
       - run: npm run --prefix ${{ matrix.config.module }} lint
