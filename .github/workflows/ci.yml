@@ -53,12 +53,12 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-        - if: steps.cache.outputs.cache-hit != 'true'
-          run: npm install --prefix ${PREFIX} --no-audit
+      - if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install --prefix ${PREFIX} --no-audit
 
-        # Run linter and build distribution files
-        - run: npm run --prefix ${PREFIX} lint
-        - run: npm run --prefix ${PREFIX} build
+      # Run linter and build distribution files
+      - run: npm run --prefix ${PREFIX} lint
+      - run: npm run --prefix ${PREFIX} build
 
-        # Run tests
-        - run: npm run --prefix ${PREFIX} test
+      # Run tests
+      - run: npm run --prefix ${PREFIX} test
