@@ -38,7 +38,7 @@
     "html-minifier": "^4.0.0",
     "imageoptim": "^0.5.0",
     "mjml": "^4.5.1",
-    "svgexport": "^0.3.2",
+    "svgexport": "^0.4.0",
     "watch-cli": "^0.2.3"
   }
 }
