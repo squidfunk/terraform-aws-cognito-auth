@@ -29,7 +29,7 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^4.5.1",
     "axios": "^0.19.1",
-    "query-string": "^6.9.0",
+    "query-string": "^6.10.1",
     "ramda": "^0.26.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
