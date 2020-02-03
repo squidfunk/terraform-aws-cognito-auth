@@ -30,7 +30,7 @@
     "@material-ui/icons": "^4.9.1",
     "axios": "^0.19.2",
     "query-string": "^6.10.1",
-    "ramda": "^0.26.1",
+    "ramda": "^0.27.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^5.0.7",
