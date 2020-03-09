@@ -29,7 +29,7 @@
   "dependencies": {
     "cookie": "^0.4.0",
     "email-validator": "^2.0.4",
-    "jsonschema": "^1.2.4",
+    "jsonschema": "^1.2.5",
     "password-rules": "0.0.3",
     "uuid": "^7.0.2"
   },
