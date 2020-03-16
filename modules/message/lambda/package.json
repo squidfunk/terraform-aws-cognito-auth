@@ -27,7 +27,7 @@
   "dependencies": {
     "mime": "^2.4.4",
     "mimemessage": "^1.0.5",
-    "mustache": "^4.0.0",
+    "mustache": "^4.0.1",
     "quoted-printable": "^1.0.1"
   },
   "devDependencies": {
