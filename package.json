@@ -30,7 +30,7 @@
     "chance": "^1.1.4",
     "dotenv": "^8.2.0",
     "jasmine": "^3.5.0",
-    "jasmine-spec-reporter": "^4.2.1",
+    "jasmine-spec-reporter": "^5.0.0",
     "nodemon": "^2.0.2",
     "nyc": "^15.0.0",
     "ts-node": "^8.8.1",
