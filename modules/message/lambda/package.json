@@ -27,18 +27,18 @@
   "dependencies": {
     "mime": "^2.4.4",
     "mimemessage": "^1.0.5",
-    "mustache": "^3.1.0",
+    "mustache": "^4.0.1",
     "quoted-printable": "^1.0.1"
   },
   "devDependencies": {
     "@types/mime": "^2.0.1",
-    "@types/mustache": "^0.8.32",
+    "@types/mustache": "^4.0.0",
     "@types/quoted-printable": "^0.2.2",
     "browser-sync": "^2.26.7",
     "html-minifier": "^4.0.0",
     "imageoptim": "^0.5.0",
-    "mjml": "^4.5.1",
-    "svgexport": "^0.3.2",
+    "mjml": "^4.6.2",
+    "svgexport": "^0.4.0",
     "watch-cli": "^0.2.3"
   }
 }
