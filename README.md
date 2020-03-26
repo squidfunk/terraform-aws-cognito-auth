@@ -2,7 +2,6 @@
 [![Codecov][codecov-image]][codecov-link]
 [![Gitter][gitter-image]][gitter-link]
 [![GitHub][github-image]][github-link]
-[![dependabot][dependabot-image]][dependabot-link]
 
   [action-image]: https://github.com/squidfunk/terraform-aws-cognito-auth/workflows/ci/badge.svg?branch=master
   [action-link]: https://github.com/squidfunk/terraform-aws-cognito-auth/actions
@@ -12,8 +11,6 @@
   [gitter-link]: https://gitter.im/squidfunk/terraform-aws-cognito-auth
   [github-image]: https://img.shields.io/github/release/squidfunk/terraform-aws-cognito-auth.svg
   [github-link]: https://github.com/squidfunk/terraform-aws-cognito-auth/releases
-  [dependabot-image]: https://img.shields.io/badge/dependabot-enabled-06f.svg
-  [dependabot-link]: https://dependabot.com
 
 # Terraform AWS Cognito Auth
 
