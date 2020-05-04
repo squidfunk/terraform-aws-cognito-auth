@@ -31,7 +31,7 @@
     "email-validator": "^2.0.4",
     "jsonschema": "^1.2.4",
     "password-rules": "0.0.3",
-    "uuid": "^7.0.3"
+    "uuid": "^8.0.0"
   },
   "devDependencies": {
     "@types/cookie": "^0.3.3",
