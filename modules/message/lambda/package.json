@@ -25,7 +25,7 @@
     "watch": "make watch"
   },
   "dependencies": {
-    "mime": "^2.4.5",
+    "mime": "^2.4.6",
     "mimemessage": "^1.0.5",
     "mustache": "^4.0.1",
     "quoted-printable": "^1.0.1"
