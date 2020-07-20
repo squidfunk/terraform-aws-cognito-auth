@@ -34,7 +34,7 @@
     "@types/mime": "^2.0.2",
     "@types/mustache": "^4.0.0",
     "@types/quoted-printable": "^0.2.2",
-    "browser-sync": "^2.26.7",
+    "browser-sync": "^2.26.10",
     "html-minifier": "^4.0.0",
     "imageoptim": "^0.5.0",
     "mjml": "^4.6.3",
