@@ -100,8 +100,12 @@ resource "aws_cognito_user_pool" "_" {
     allow_admin_create_user_only = false
   }
 
+  auto_verified_attributes = [
+    "email"
+  ]
+
   password_policy {
-    minimum_length    = 8
+    minimum_length    = 16
     require_uppercase = true
     require_lowercase = true
     require_numbers   = true
@@ -117,6 +121,10 @@ resource "aws_cognito_user_pool" "_" {
 
   lambda_config {
     pre_sign_up = "${aws_lambda_function._.arn}"
+  }
+
+  verification_message_template {
+    default_email_option = "CONFIRM_WITH_CODE"
   }
 
   lifecycle {
