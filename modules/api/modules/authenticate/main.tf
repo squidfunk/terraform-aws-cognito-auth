@@ -74,7 +74,7 @@ resource "aws_lambda_function" "_" {
   timeout       = 30
   memory_size   = 512
 
-  source_code_hash = base64sha256(filebase64("${var.lambda_filename}"))
+  source_code_hash = base64sha256(filebase64(var.lambda_filename))
 
   environment {
     variables = {
