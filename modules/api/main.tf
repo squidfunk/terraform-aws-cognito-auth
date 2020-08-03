@@ -133,10 +133,10 @@ resource "aws_api_gateway_deployment" "_" {
   }
 
   depends_on = [
-    "module.authenticate",
-    "module.leave",
-    "module.register",
-    "module.reset",
+    module.authenticate,
+    module.leave,
+    module.register,
+    module.reset,
   ]
 }
 

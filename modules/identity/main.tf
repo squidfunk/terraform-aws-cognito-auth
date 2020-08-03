@@ -123,10 +123,6 @@ resource "aws_cognito_user_pool" "_" {
     pre_sign_up = "${aws_lambda_function._.arn}"
   }
 
-  verification_message_template {
-    default_email_option = "CONFIRM_WITH_CODE"
-  }
-
   lifecycle {
     ignore_changes = ["schema"]
   }
