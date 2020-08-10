@@ -39,7 +39,7 @@
     "@types/glob": "^7.1.3",
     "@types/morgan": "^1.9.1",
     "@types/supertest": "^2.0.10",
-    "@types/uuid": "^7.0.3",
+    "@types/uuid": "^8.0.1",
     "express": "^4.17.1",
     "generate-password": "^1.5.1",
     "glob": "^7.1.6",
