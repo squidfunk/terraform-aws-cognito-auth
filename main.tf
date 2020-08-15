@@ -54,6 +54,7 @@ module "identity" {
 
   cognito_identity_pool_name     = "${var.cognito_identity_pool_name}"
   cognito_identity_pool_provider = "${var.cognito_identity_pool_provider}"
+  user_group_name                = "${var.user_group_name}"
 }
 
 # module.message

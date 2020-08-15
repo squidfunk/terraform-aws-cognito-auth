@@ -13,7 +13,8 @@
     {
       "Effect": "Allow",
       "Action": [
-        "cognito-idp:ListUsers"
+        "cognito-idp:ListUsers",
+        "cognito-idp:AdminAddUserToGroup"
       ],
       "Resource": "${cognito_user_pool_arn}"
     }

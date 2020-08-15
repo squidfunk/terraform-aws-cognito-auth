@@ -103,3 +103,8 @@ variable "bucket" {
   description = "S3 bucket name"
   default     = ""
 }
+
+# var.user_group_name
+variable "user_group_name" {
+  description = "Cognito user group name"
+}

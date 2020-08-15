@@ -58,7 +58,7 @@ data "external" "dist" {
 # data.template_file.s3_bucket_policy.rendered
 data "template_file" "s3_bucket_policy" {
   count    = "${local.enabled}"
-  template = "${file("${path.module}/s3/bucket/policy.json")}"
+  template = file("${path.module}/s3/bucket/policy.json")
 
   vars = {
     bucket = "${var.bucket}"
@@ -74,7 +74,7 @@ data "template_file" "s3_bucket_policy" {
 # data.template_file.index.rendered
 data "template_file" "index" {
   count    = "${local.enabled}"
-  template = "${file("${path.module}/app/dist/index.html")}"
+  template = file("${path.module}/app/dist/index.html")
 
   vars = {
     api_base_path              = "${var.api_base_path}"
@@ -102,7 +102,7 @@ resource "aws_iam_policy" "lambda" {
   count = "${local.enabled}"
   name  = "${var.namespace}-web-lambda"
 
-  policy = "${file("${path.module}/iam/policies/lambda.json")}"
+  policy = file("${path.module}/iam/policies/lambda.json")
 }
 
 # aws_iam_policy_attachment.lambda

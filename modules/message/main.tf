@@ -34,7 +34,7 @@ locals {
 # data.template_file.lambda_iam_policy.rendered
 data "template_file" "lambda_iam_policy" {
   count    = "${local.enabled}"
-  template = "${file("${path.module}/iam/policies/lambda.json")}"
+  template = file("${path.module}/iam/policies/lambda.json")
 
   vars = {
     cognito_user_pool_arn = "${var.cognito_user_pool_arn}"

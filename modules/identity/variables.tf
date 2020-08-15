@@ -45,3 +45,8 @@ variable "cognito_identity_pool_name" {
 variable "cognito_identity_pool_provider" {
   description = "Cognito identity pool provider"
 }
+
+# var.user_group_name
+variable "user_group_name" {
+  description = "Cognito user group name"
+}

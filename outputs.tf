@@ -140,3 +140,9 @@ output "sns_topic_arn" {
 output "ses_sender_address" {
   value = "${var.ses_sender_address}"
 }
+
+
+# output.user_group_name
+output "user_group_name" {
+  value = var.user_group_name
+}

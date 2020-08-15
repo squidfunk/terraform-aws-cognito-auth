@@ -21,7 +21,8 @@
  */
 
 import { CognitoUserPoolTriggerEvent } from "aws-lambda"
-import { CognitoIdentityServiceProvider } from "aws-sdk"
+import { handler as registerHandler } from './identity'
+import { handler as postConfirmHandler } from './postConfirmation'
 
 /* ----------------------------------------------------------------------------
  * Handlers
@@ -37,17 +38,12 @@ import { CognitoIdentityServiceProvider } from "aws-sdk"
 export async function handler(
   event: CognitoUserPoolTriggerEvent
 ): Promise<CognitoUserPoolTriggerEvent> {
-  const { Users } = await new CognitoIdentityServiceProvider({
-    apiVersion: "2016-04-18"
-  }).listUsers({
-    UserPoolId: event.userPoolId,
-    Filter: `email="${event.request.userAttributes.email}"`
-  }).promise()
-
-  /* If email address is already registered, throw error */
-  if (Users!.length)
-    throw new Error("Email address already registered")
-
-  /* Otherwise just return event */
-  return event
+  switch (event.triggerSource) {
+    default:
+    case 'PreSignUp_SignUp':
+      return registerHandler(event);
+    case 'PostConfirmation_ConfirmForgotPassword':
+    case 'PostConfirmation_ConfirmSignUp':
+      return postConfirmHandler(event);
+  }
 }

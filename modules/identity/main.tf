@@ -37,7 +37,7 @@ data "template_file" "cognito_iam_assume_role_policy" {
 
 # data.template_file.lambda_iam_policy.rendered
 data "template_file" "lambda_iam_policy" {
-  template = "${file("${path.module}/iam/policies/lambda.json")}"
+  template = file("${path.module}/iam/policies/lambda.json")
 
   vars = {
     cognito_user_pool_arn = "${aws_cognito_user_pool._.arn}"
@@ -117,6 +117,7 @@ resource "aws_cognito_user_pool" "_" {
 
   lambda_config {
     pre_sign_up = "${aws_lambda_function._.arn}"
+    post_confirmation = "${aws_lambda_function._.arn}"
   }
 
   lifecycle {
@@ -178,6 +179,12 @@ resource "aws_lambda_function" "_" {
   handler       = "index.handler"
   timeout       = 30
   memory_size   = 512
+
+  environment {
+    variables = {
+      COGNITO_USER_GROUP_NAME = var.user_group_name
+    }
+  }
 
   source_code_hash = "${
     base64sha256(filebase64("${path.module}/lambda/dist.zip"))
