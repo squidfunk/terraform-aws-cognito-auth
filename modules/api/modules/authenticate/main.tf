@@ -86,6 +86,11 @@ resource "aws_lambda_function" "_" {
       COGNITO_IDENTITY_POOL_PROVIDER = "${var.cognito_identity_pool_provider}"
       DYNAMODB_TABLE                 = "${var.dynamodb_table}"
       SNS_TOPIC_ARN                  = "${var.sns_topic_arn}"
+
+      ZOHO_ID = var.zoho_id
+      ZOHO_REFRESH_TOKEN = var.zoho_refresh_token
+      ZOHO_SECRET = var.zoho_secret
+      ZOHO_TOKEN = var.zoho_token
     }
   }
 }

@@ -103,7 +103,7 @@ export class AuthenticationClient extends Client {
    * @return Promise resolving with verification code
    */
   public async register(
-    email: string, password: string
+    email: string, password: string, zohoId: string
   ): Promise<VerificationCode> {
     const username = uuid()
 
@@ -120,6 +120,10 @@ export class AuthenticationClient extends Client {
         {
           Name: "email",
           Value: email
+        },
+        {
+          Name: "zohoId",
+          Value: zohoId
         }
       ]
     }).promise()

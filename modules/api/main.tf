@@ -164,6 +164,11 @@ module "authenticate" {
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
+
+  zoho_id = var.zoho_id
+  zoho_refresh_token = var.zoho_refresh_token
+  zoho_secret = var.zoho_secret
+  zoho_token = var.zoho_token
 }
 
 # module.leave
@@ -181,6 +186,8 @@ module "leave" {
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
+
+  
 }
 
 # module.register
@@ -201,6 +208,11 @@ module "register" {
 
   lambda_role_arn = "${aws_iam_role.lambda.arn}"
   lambda_filename = "${path.module}/lambda/dist.zip"
+
+  zoho_id = var.zoho_id
+  zoho_refresh_token = var.zoho_refresh_token
+  zoho_secret = var.zoho_secret
+  zoho_token = var.zoho_token
 }
 
 # module.reset

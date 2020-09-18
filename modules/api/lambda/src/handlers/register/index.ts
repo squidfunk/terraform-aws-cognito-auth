@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "../../clients"
+import { AuthenticationClient, ZohoClient } from "../../clients"
 import { RegisterRequest as Request } from "../../common"
 import { throwOnPasswordPolicyViolation } from "../../utilities"
 import { handler } from "../_"
@@ -39,8 +39,15 @@ import schema = require("../../common/events/register/index.json")
  * @return Promise resolving with no result
  */
 export const post = handler<{}, Request>(schema,
-  async ({ body: { email, password } }) => {
+  async ({ body: { email, password, phoneNumber, firstName, lastName } }) => {
     throwOnPasswordPolicyViolation(password)
     const auth = new AuthenticationClient()
-    await auth.register(email, password)
+    try {
+      const zohoId = await ZohoClient.newLead({ email, phoneNumber, firstName, lastName })
+      await auth.register(email, password, zohoId)
+      return { body: { newLeadId: zohoId } };
+    } catch (e) {
+      console.debug('[zoho]: creation failed', email, password, phoneNumber, firstName, lastName)
+      return {}
+    }
   })

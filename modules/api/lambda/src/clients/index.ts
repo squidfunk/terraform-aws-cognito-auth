@@ -27,3 +27,4 @@
 export { AuthenticationClient } from "./authentication"
 export { ManagementClient } from "./management"
 export { SessionClient } from "./session"
+export { ZohoClient } from './zoho'

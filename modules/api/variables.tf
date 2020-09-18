@@ -64,3 +64,19 @@ variable "cognito_user_pool_client_id" {
 variable "cognito_identity_pool_provider" {
   description = "Cognito identity pool provider"
 }
+
+variable "zoho_id" {
+  description = "Zoho account id"
+}
+
+variable "zoho_refresh_token" {
+  description = "Zoho refresh token"
+}
+
+variable "zoho_secret" {
+  description = "Zoho secret"
+}
+
+variable "zoho_token" {
+  description = "Zoho token"
+}

@@ -19,7 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
-
+import * as jsonwebtoken from 'jsonwebtoken';
 import { AuthenticationClient } from "../../clients"
 import {
   AuthenticateRequestWithCredentials,
@@ -65,8 +65,9 @@ export const post = handler<{}, Request, Session>(schema,
     if (username && password) {
       const { refresh, ...body } =
         await auth.authenticateWithCredentials(username, password)
+      const zohoId = jsonwebtoken.decode(body.id.token);
       return {
-        body: remember ? { ...body, refresh } : body,
+        body: remember ? { ...body, zohoId, refresh } : { ...body, zohoId },
         ...(remember && refresh
           ? {
               headers: {
@@ -81,8 +82,9 @@ export const post = handler<{}, Request, Session>(schema,
       token = token || parseTokenCookie(headers.Cookie)
       try {
         const session = await auth.authenticateWithToken(token)
+        const zohoId = jsonwebtoken.decode(session.id.token);
         return {
-          body: session
+          body: { ...session, zohoId }
         }
       } catch (err) {
         err.code = err.code || err.name

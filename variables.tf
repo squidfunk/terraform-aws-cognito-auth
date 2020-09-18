@@ -108,3 +108,20 @@ variable "bucket" {
 variable "user_group_name" {
   description = "Cognito user group name"
 }
+
+
+variable "zoho_id" {
+  description = "Zoho account id"
+}
+
+variable "zoho_refresh_token" {
+  description = "Zoho refresh token"
+}
+
+variable "zoho_secret" {
+  description = "Zoho secret"
+}
+
+variable "zoho_token" {
+  description = "Zoho token"
+}

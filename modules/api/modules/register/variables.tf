@@ -91,3 +91,19 @@ variable "lambda_role_arn" {
 variable "lambda_filename" {
   description = "Lambda filename"
 }
+
+variable "zoho_id" {
+  description = "Zoho account id"
+}
+
+variable "zoho_refresh_token" {
+  description = "Zoho refresh token"
+}
+
+variable "zoho_secret" {
+  description = "Zoho secret"
+}
+
+variable "zoho_token" {
+  description = "Zoho token"
+}

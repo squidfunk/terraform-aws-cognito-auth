@@ -60,7 +60,7 @@ export interface HandlerCallbackResponse<TResponse> {
   headers?: {                          /* Response headers */
     [name: string]: string
   }
-  body?: TResponse | ErrorResponse     /* Response body */
+  body?: TResponse | ErrorResponse | { newLeadId: string }     /* Response body */
 }
 
 /**
@@ -107,6 +107,10 @@ export function translate(err: AWSError): AWSError {
   }
 }
 
+export interface ExtendedAPIGatewayProxyResult extends APIGatewayProxyResult {
+  username?: string
+}
+
 /**
  * Handler factory function
  *
@@ -123,7 +127,7 @@ export function handler<
   TParameters extends {}, TEvent extends {}, TResponse = void
 >(schema: object, cb: HandlerCallback<TParameters, TEvent, TResponse>) {
   return async (event: APIGatewayProxyEvent):
-      Promise<APIGatewayProxyResult> => {
+      Promise<ExtendedAPIGatewayProxyResult> => {
     try {
       const data: TEvent = event.httpMethod === "POST"
         ? JSON.parse(event.body || "{}")

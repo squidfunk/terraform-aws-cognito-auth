@@ -43,6 +43,11 @@ module "api" {
   cognito_user_pool_client_id = "${module.identity.cognito_user_pool_client_id}"
 
   cognito_identity_pool_provider = "${var.cognito_identity_pool_provider}"
+
+  zoho_id = var.zoho_id
+  zoho_refresh_token = var.zoho_refresh_token
+  zoho_secret = var.zoho_secret
+  zoho_token = var.zoho_token
 }
 
 # module.identity
