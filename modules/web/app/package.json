@@ -68,7 +68,7 @@
     "enzyme-to-json": "^3.6.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^4.5.0",
-    "http-proxy-middleware": "^0.20.0",
+    "http-proxy-middleware": "^1.0.5",
     "jest": "^24.9.0",
     "redux-mock-store": "^1.5.4",
     "string-replace-loader": "^2.3.0",
