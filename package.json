@@ -31,7 +31,7 @@
     "dotenv": "^8.2.0",
     "jasmine": "^3.6.2",
     "jasmine-spec-reporter": "^4.2.1",
-    "nodemon": "^2.0.4",
+    "nodemon": "^2.0.5",
     "nyc": "^15.1.0",
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
