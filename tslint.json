@@ -5,7 +5,7 @@
   ],
   "linterOptions": {
     "exclude": [
-      "src/**/*.d.ts"
+      "**/src/**/*.d.ts"
     ]
   },
   "rules": {

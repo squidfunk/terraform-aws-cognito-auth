@@ -28,10 +28,10 @@ import {
   TestMessageData
 } from "_/mocks/messages/test"
 import {
-  mockFsReaddirWithError,
-  mockFsReaddirWithResult,
   mockFsReadFileWithError,
-  mockFsReadFileWithResult
+  mockFsReadFileWithResult,
+  mockFsReaddirWithError,
+  mockFsReaddirWithResult
 } from "_/mocks/vendor/fs"
 import {
   mockMimeGetTypeWithError,
