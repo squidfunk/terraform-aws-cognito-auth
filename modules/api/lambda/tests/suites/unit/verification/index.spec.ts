@@ -25,8 +25,8 @@ import { Verification } from "verification"
 import { chance } from "_/helpers"
 import {
   mockDynamoDBDocumentClientDeleteWithError,
-  mockDynamoDBDocumentClientDeleteWithoutResult,
   mockDynamoDBDocumentClientDeleteWithResult,
+  mockDynamoDBDocumentClientDeleteWithoutResult,
   mockDynamoDBDocumentClientPutWithError,
   mockDynamoDBDocumentClientPutWithSuccess,
   mockSNSPublishWithError,

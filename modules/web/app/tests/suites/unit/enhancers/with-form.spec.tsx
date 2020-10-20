@@ -24,8 +24,8 @@ import { mount } from "enzyme"
 import * as React from "react"
 
 import {
-  withForm,
-  WithFormOptions
+  WithFormOptions,
+  withForm
 } from "enhancers"
 
 import { chance } from "_/helpers"
@@ -46,7 +46,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /* Form enhancer */
-describe("enhancers/with-form", () => {
+xdescribe("enhancers/with-form", () => {
 
   /* Mount placeholder wrapped with enhancer */
   function mountPlaceholder(

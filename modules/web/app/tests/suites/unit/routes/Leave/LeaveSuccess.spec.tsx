@@ -28,8 +28,8 @@ import { compose } from "recompose"
 
 import { withFormSubmit } from "enhancers"
 import {
-  enhance,
-  Render
+  Render,
+  enhance
 } from "routes/Leave/LeaveSuccess"
 
 import { find } from "_/helpers"

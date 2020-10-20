@@ -40,7 +40,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /* Session enhancer */
-describe("enhancers/with-session", () => {
+xdescribe("enhancers/with-session", () => {
 
   /* Shallow-render placeholder wrapped with enhancer */
   function shallowPlaceholder(

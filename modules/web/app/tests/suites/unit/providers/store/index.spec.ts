@@ -23,9 +23,9 @@
 import { pick } from "ramda"
 
 import {
+  State,
   dehydrate,
-  rehydrate,
-  State
+  rehydrate
 } from "providers/store"
 
 import { mockSession } from "_/mocks/common"
