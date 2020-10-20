@@ -44,6 +44,7 @@
     "no-big-function": false,
     "no-bitwise": false,
     "no-duplicate-string": false,
+    "no-empty-interface": false,
     "no-implicit-dependencies": false,
     "no-identical-functions": false,
     "no-internal-module": true,
