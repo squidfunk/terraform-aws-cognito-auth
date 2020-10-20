@@ -1,1 +1,15 @@
-../../../share/lambda/tsconfig.json
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "src",
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": [
+    "src",
+    "typings"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

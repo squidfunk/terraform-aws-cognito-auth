@@ -65,8 +65,9 @@ src/%.html: src/%.mjml
 # Image used in email templates
 src/%.png: src/%.svg
 	@ mkdir -p dist/$(dir $*)
-	$(shell npm bin)/svgexport $< $@ 4x
-	$(shell npm bin)/imageoptim $@
+	$(shell npm bin)/svgexport $< $@.tmp 4x
+	$(shell npm bin)/imagemin $@.tmp > $@
+	rm $@.tmp
 
 # Verification code typings
 src/verification/index.d.ts: ../../api/lambda/src/verification/index.ts
