@@ -24,12 +24,10 @@
 
 # data.template_file.cognito_iam_assume_role_policy.rendered
 data "template_file" "cognito_iam_assume_role_policy" {
-  template = "${
-    file("${path.module}/iam/policies/assume-role/cognito-identity.json")
-  }"
+  template = file("${path.module}/iam/policies/assume-role/cognito-identity.json")
 
   vars = {
-    cognito_identity_pool_id = "${aws_cognito_identity_pool._.id}"
+    cognito_identity_pool_id = aws_cognito_identity_pool._.id
   }
 }
 
@@ -37,10 +35,10 @@ data "template_file" "cognito_iam_assume_role_policy" {
 
 # data.template_file.lambda_iam_policy.rendered
 data "template_file" "lambda_iam_policy" {
-  template = "${file("${path.module}/iam/policies/lambda.json")}"
+  template = file("${path.module}/iam/policies/lambda.json")
 
   vars = {
-    cognito_user_pool_arn = "${aws_cognito_user_pool._.arn}"
+    cognito_user_pool_arn = aws_cognito_user_pool._.arn
   }
 }
 
@@ -52,9 +50,7 @@ data "template_file" "lambda_iam_policy" {
 resource "aws_iam_role" "cognito" {
   name = "${var.namespace}-identity"
 
-  assume_role_policy = "${
-    data.template_file.cognito_iam_assume_role_policy.rendered
-  }"
+  assume_role_policy = data.template_file.cognito_iam_assume_role_policy.rendered
 }
 
 # -----------------------------------------------------------------------------
@@ -63,24 +59,22 @@ resource "aws_iam_role" "cognito" {
 resource "aws_iam_role" "lambda" {
   name = "${var.namespace}-identity-lambda"
 
-  assume_role_policy = "${
-    file("${path.module}/iam/policies/assume-role/lambda.json")
-  }"
+  assume_role_policy = file("${path.module}/iam/policies/assume-role/lambda.json")
 }
 
 # aws_iam_policy.lambda
 resource "aws_iam_policy" "lambda" {
   name = "${var.namespace}-identity-lambda"
 
-  policy = "${data.template_file.lambda_iam_policy.rendered}"
+  policy = data.template_file.lambda_iam_policy.rendered
 }
 
 # aws_iam_policy_attachment.lambda
 resource "aws_iam_policy_attachment" "lambda" {
   name = "${var.namespace}-identity-lambda"
 
-  policy_arn = "${aws_iam_policy.lambda.arn}"
-  roles      = ["${aws_iam_role.lambda.name}"]
+  policy_arn = aws_iam_policy.lambda.arn
+  roles      = [aws_iam_role.lambda.name]
 }
 
 # -----------------------------------------------------------------------------
@@ -89,7 +83,7 @@ resource "aws_iam_policy_attachment" "lambda" {
 
 # aws_cognito_user_pool._
 resource "aws_cognito_user_pool" "_" {
-  name = "${var.namespace}"
+  name = var.namespace
 
   alias_attributes = [
     "email",
@@ -116,19 +110,19 @@ resource "aws_cognito_user_pool" "_" {
   }
 
   lambda_config {
-    pre_sign_up = "${aws_lambda_function._.arn}"
+    pre_sign_up = aws_lambda_function._.arn
   }
 
   lifecycle {
-    ignore_changes = ["schema"]
+    ignore_changes = [schema]
   }
 }
 
 # aws_cognito_user_pool_client._
 resource "aws_cognito_user_pool_client" "_" {
-  name = "${var.namespace}"
+  name = var.namespace
 
-  user_pool_id    = "${aws_cognito_user_pool._.id}"
+  user_pool_id    = aws_cognito_user_pool._.id
   generate_secret = false
 
   explicit_auth_flows = [
@@ -139,13 +133,13 @@ resource "aws_cognito_user_pool_client" "_" {
 
 # aws_cognito_identity_pool._
 resource "aws_cognito_identity_pool" "_" {
-  identity_pool_name      = "${var.cognito_identity_pool_name}"
-  developer_provider_name = "${var.cognito_identity_pool_provider}"
+  identity_pool_name      = var.cognito_identity_pool_name
+  developer_provider_name = var.cognito_identity_pool_provider
 
   allow_unauthenticated_identities = false
 
   cognito_identity_providers {
-    client_id               = "${aws_cognito_user_pool_client._.id}"
+    client_id               = aws_cognito_user_pool_client._.id
     server_side_token_check = true
 
     provider_name = "cognito-idp.${
@@ -158,10 +152,10 @@ resource "aws_cognito_identity_pool" "_" {
 
 # aws_cognito_identity_pool_roles_attachment._
 resource "aws_cognito_identity_pool_roles_attachment" "_" {
-  identity_pool_id = "${aws_cognito_identity_pool._.id}"
+  identity_pool_id = aws_cognito_identity_pool._.id
 
   roles = {
-    "authenticated" = "${aws_iam_role.cognito.arn}"
+    "authenticated" = aws_iam_role.cognito.arn
   }
 }
 
@@ -172,22 +166,20 @@ resource "aws_cognito_identity_pool_roles_attachment" "_" {
 # aws_lambda_function._
 resource "aws_lambda_function" "_" {
   function_name = "${var.namespace}-identity-register"
-  role          = "${aws_iam_role.lambda.arn}"
+  role          = aws_iam_role.lambda.arn
   runtime       = "nodejs10.x"
   filename      = "${path.module}/lambda/dist.zip"
   handler       = "index.handler"
   timeout       = 30
   memory_size   = 512
 
-  source_code_hash = "${
-    base64sha256(filebase64("${path.module}/lambda/dist.zip"))
-  }"
+  source_code_hash = base64sha256(filebase64("${path.module}/lambda/dist.zip"))
 }
 
 # aws_lambda_permission._
 resource "aws_lambda_permission" "_" {
   principal     = "cognito-idp.amazonaws.com"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function._.arn}"
-  source_arn    = "${aws_cognito_user_pool._.arn}"
+  function_name = aws_lambda_function._.arn
+  source_arn    = aws_cognito_user_pool._.arn
 }
