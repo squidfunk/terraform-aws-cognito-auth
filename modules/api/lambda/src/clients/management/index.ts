@@ -94,6 +94,7 @@ export class ManagementClient extends Client {
   public async changePassword(
     username: string, password: string
   ): Promise<void> {
+    // this.cognito.adminSetUserPassword
     const { Username: id, UserAttributes } =
       await this.cognito.adminGetUser({
         UserPoolId: process.env.COGNITO_USER_POOL_ID!,

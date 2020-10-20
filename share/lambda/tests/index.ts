@@ -20,59 +20,36 @@
  * IN THE SOFTWARE.
  */
 
-import * as _ from "jsonschema"
+import "dotenv/config"
 
-import { chance } from "_/helpers"
+import Jasmine = require("jasmine")
+import {
+  SpecReporter,
+  StacktraceOption
+} from "jasmine-spec-reporter"
 
 /* ----------------------------------------------------------------------------
- * Functions
+ * Entrypoint
  * ------------------------------------------------------------------------- */
 
-/**
- * Mock `jsonschema.validate`
- *
- * @param result - Validation result
- *
- * @return Jasmine spy
- */
-function mockValidate(
-  result: Partial<_.ValidatorResult>
-): jasmine.Spy {
-  return spyOn(_, "validate")
-    .and.returnValue(result as _.ValidatorResult)
-}
+/* Reset console in watch mode */
+if (process.env.NODE_ENV === "development")
+  process.stdout.write("\x1Bc")
 
-/**
- * Mock `jsonschema.validate` returning with success
- *
- * @return Jasmine spy
- */
-export function mockValidateWithSuccess(): jasmine.Spy {
-  return mockValidate({
-    errors: [],
-    valid: true
-  })
-}
+/* Create new test suite from config file */
+const jasmine = new Jasmine({})
+jasmine.loadConfig({
+  spec_dir: "tests",
+  spec_files: [process.argv[2] || "suites/**/*.spec.ts"],
+  stopSpecOnExpectationFailure: false,
+  random: false
+})
 
-/**
- * Mock `jsonschema.validate` returning with error
- *
- * @return Jasmine spy
- */
-export function mockValidateWithError(): jasmine.Spy {
-  return mockValidate({
-    errors: [
-      {
-        path: [chance.string()],
-        property: chance.string(),
-        message: chance.string(),
-        schema: chance.string(),
-        instance: chance.string(),
-        name: chance.string(),
-        argument: chance.string(),
-        stack: chance.string()
-      }
-    ],
-    valid: false
-  })
-}
+/* Configure reporters */
+jasmine.env.clearReporters()
+jasmine.env.addReporter(new SpecReporter({
+  spec: { displayStacktrace: StacktraceOption.PRETTY }
+}))
+
+/* Start test runner */
+jasmine.execute()

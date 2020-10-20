@@ -139,12 +139,12 @@ export function handler<
         statusCode: undefined,
         headers: {},
         body: undefined,
-        ...(await cb({
+        ...await cb({
           path: event.path,
           pathParameters: event.pathParameters as TParameters,
           headers: event.headers,
           body: data
-        }))
+        })
       }
       return {
         statusCode: statusCode || (body ? 200 : 204),

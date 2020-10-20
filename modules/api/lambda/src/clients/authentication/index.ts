@@ -22,7 +22,7 @@
 
 import { AWSError } from "aws-sdk"
 import { validate } from "email-validator"
-import * as uuid from "uuid/v4"
+import { v4 as uuid } from "uuid"
 
 import { Session } from "../../common"
 import {

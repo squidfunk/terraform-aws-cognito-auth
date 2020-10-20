@@ -41,6 +41,7 @@ import { middleware } from "./middleware"
       console.log(`API server listening on http://localhost:9091`)
     })
   } catch (err) {
+    // tslint:disable-next-line no-console
     console.log(err)
   }
 })()
