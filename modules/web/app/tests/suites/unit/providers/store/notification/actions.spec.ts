@@ -21,9 +21,9 @@
  */
 
 import {
+  NotificationActionTypes,
   dismissNotificationAction,
-  displayNotificationAction,
-  NotificationActionTypes
+  displayNotificationAction
 } from "providers/store/notification"
 
 import {

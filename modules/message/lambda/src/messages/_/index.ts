@@ -22,7 +22,7 @@
 
 // tslint:disable no-duplicate-string
 
-import { readdir, readFile } from "fs"
+import { readFile, readdir } from "fs"
 import { getType } from "mime"
 import { Entity, factory } from "mimemessage"
 import { render } from "mustache"

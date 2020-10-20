@@ -24,8 +24,8 @@ import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  enhance,
-  Render
+  Render,
+  enhance
 } from "components/Loading/Loading"
 
 import { find } from "_/helpers"

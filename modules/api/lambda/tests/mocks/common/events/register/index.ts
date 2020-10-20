@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { generate, Options } from "generate-password"
+import { Options, generate } from "generate-password"
 
 import { chance } from "_/helpers"
 

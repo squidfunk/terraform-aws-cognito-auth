@@ -23,7 +23,7 @@
 import * as dotenv from "dotenv"
 import { Application } from "express"
 import * as HtmlPlugin from "html-webpack-plugin"
-import * as proxy from "http-proxy-middleware"
+import { createProxyMiddleware } from "http-proxy-middleware"
 import * as path from "path"
 import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin"
 import {
@@ -45,7 +45,7 @@ import {
  */
 export default (_env: never, args: Configuration) => {
   const { parsed: env } = dotenv.config()
-  const config: Configuration = {
+  return {
     mode: args.mode,
 
     /* Entrypoint */
@@ -97,8 +97,7 @@ export default (_env: never, args: Configuration) => {
             {
               loader: "html-loader",
               options: {
-                minimize: true,
-                removeAttributeQuotes: false
+                minimize: true
               }
             }
           ]
@@ -154,10 +153,10 @@ export default (_env: never, args: Configuration) => {
       } as any,
 
       /* Proxy all /identity requests to API development server */
-      before: (app: Application) => app.use("/identity", proxy({
+      before: (app: Application) => app.use("/identity", createProxyMiddleware({
         target: "http://localhost:9091",
         changeOrigin: true
-      }))
+      }) as any)
     },
 
     /* Optimizations */
@@ -191,7 +190,4 @@ export default (_env: never, args: Configuration) => {
       ignored: /\/node_modules\//
     }
   }
-
-  /* We're good to go */
-  return config
 }

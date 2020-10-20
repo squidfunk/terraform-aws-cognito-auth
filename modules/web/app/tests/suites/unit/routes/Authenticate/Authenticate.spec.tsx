@@ -24,8 +24,8 @@ import { mount } from "enzyme"
 import * as React from "react"
 
 import {
-  enhance,
-  Render
+  Render,
+  enhance
 } from "routes/Authenticate/Authenticate"
 import {
   AuthenticateWithCredentials

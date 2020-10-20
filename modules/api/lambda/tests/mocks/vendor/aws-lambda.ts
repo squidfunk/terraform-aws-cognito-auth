@@ -20,6 +20,8 @@
  * IN THE SOFTWARE.
  */
 
+// tslint:disable no-null-keyword
+
 import { APIGatewayProxyEvent } from "aws-lambda"
 
 import { chance } from "_/helpers"
@@ -132,7 +134,9 @@ export function mockAPIGatewayProxyEvent<
     requestContext: {
       accountId: chance.string(),
       apiId: chance.string(),
+      authorizer: {},
       connectedAt: chance.integer(),
+      protocol: chance.string(),
       httpMethod: "POST",
       requestId: chance.guid(),
       requestTimeEpoch: chance.timestamp() * 1000 + chance.millisecond(),
@@ -148,6 +152,7 @@ export function mockAPIGatewayProxyEvent<
         cognitoAuthenticationType: null,
         cognitoIdentityId: null,
         cognitoIdentityPoolId: null,
+        principalOrgId: null,
         sourceIp: chance.ip(),
         user: null,
         userAgent: chance.string(),

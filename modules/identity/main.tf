@@ -24,7 +24,9 @@
 
 # data.template_file.cognito_iam_assume_role_policy.rendered
 data "template_file" "cognito_iam_assume_role_policy" {
-  template = file("${path.module}/iam/policies/assume-role/cognito-identity.json")
+  template = file(
+    "${path.module}/iam/policies/assume-role/cognito-identity.json"
+  )
 
   vars = {
     cognito_identity_pool_id = aws_cognito_identity_pool._.id
@@ -59,7 +61,9 @@ resource "aws_iam_role" "cognito" {
 resource "aws_iam_role" "lambda" {
   name = "${var.namespace}-identity-lambda"
 
-  assume_role_policy = file("${path.module}/iam/policies/assume-role/lambda.json")
+  assume_role_policy = file(
+    "${path.module}/iam/policies/assume-role/lambda.json"
+  )
 }
 
 # aws_iam_policy.lambda
@@ -167,7 +171,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "_" {
 resource "aws_lambda_function" "_" {
   function_name = "${var.namespace}-identity-register"
   role          = aws_iam_role.lambda.arn
-  runtime       = "nodejs10.x"
+  runtime       = "nodejs12.x"
   filename      = "${path.module}/lambda/dist.zip"
   handler       = "index.handler"
   timeout       = 30

@@ -20,29 +20,36 @@
  * IN THE SOFTWARE.
  */
 
-// tslint:disable no-console
-
 import "dotenv/config"
 
-import * as express from "express"
-import * as morgan from "morgan"
-
-import { middleware } from "./middleware"
+import Jasmine = require("jasmine")
+import {
+  SpecReporter,
+  StacktraceOption
+} from "jasmine-spec-reporter"
 
 /* ----------------------------------------------------------------------------
- * Application
+ * Entrypoint
  * ------------------------------------------------------------------------- */
 
-/* Initialize and start Express server */
-(async () => {
-  try {
-    const app = express()
-    app.use(morgan("dev"))
-    app.use(`/${process.env.API_BASE_PATH!}`, await middleware())
-    app.listen(9091, () => {
-      console.log(`API server listening on http://localhost:9091`)
-    })
-  } catch (err) {
-    console.log(err)
-  }
-})()
+/* Reset console in watch mode */
+if (process.env.NODE_ENV === "development")
+  process.stdout.write("\x1Bc")
+
+/* Create new test suite from config file */
+const jasmine = new Jasmine({})
+jasmine.loadConfig({
+  spec_dir: "tests",
+  spec_files: [process.argv[2] || "suites/**/*.spec.ts"],
+  stopSpecOnExpectationFailure: false,
+  random: false
+})
+
+/* Configure reporters */
+jasmine.env.clearReporters()
+jasmine.env.addReporter(new SpecReporter({
+  spec: { displayStacktrace: StacktraceOption.PRETTY }
+}))
+
+/* Start test runner */
+jasmine.execute()

@@ -63,12 +63,14 @@ export function mockValidateWithError(): jasmine.Spy {
   return mockValidate({
     errors: [
       {
+        path: [chance.string()],
         property: chance.string(),
         message: chance.string(),
         schema: chance.string(),
         instance: chance.string(),
         name: chance.string(),
-        argument: chance.string()
+        argument: chance.string(),
+        stack: chance.string()
       }
     ],
     valid: false

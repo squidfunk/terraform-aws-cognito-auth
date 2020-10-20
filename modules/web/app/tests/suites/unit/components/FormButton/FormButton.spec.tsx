@@ -24,9 +24,9 @@ import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  enhance,
   Render,
-  RenderProps
+  RenderProps,
+  enhance
 } from "components/FormButton/FormButton"
 
 import { chance, find } from "_/helpers"
