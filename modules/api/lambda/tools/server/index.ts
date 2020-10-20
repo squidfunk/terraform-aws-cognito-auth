@@ -20,6 +20,8 @@
  * IN THE SOFTWARE.
  */
 
+// tslint:disable no-console
+
 import "dotenv/config"
 
 import * as express from "express"
@@ -41,7 +43,6 @@ import { middleware } from "./middleware"
       console.log(`API server listening on http://localhost:9091`)
     })
   } catch (err) {
-    // tslint:disable-next-line no-console
     console.log(err)
   }
 })()
