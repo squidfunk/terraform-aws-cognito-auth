@@ -1,3 +1,4 @@
+terraform-aws-cognito-auth-0.4.3 (2020-10-20)
 
   * Updated all dependencies to fix security vulnerabilities
   * Upgraded Lambda Node.js runtime to 12.x
