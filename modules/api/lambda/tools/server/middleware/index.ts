@@ -45,7 +45,7 @@ export async function middleware() {
 
   /* Mount Lambda handlers as endpoints */
   const base = path.resolve(__dirname, "../../../src/handlers")
-  await Promise.all(glob.sync(path.resolve(base, "*/**/*.ts"))
+  await Promise.all(glob.sync(path.resolve(base, "!_*/**/*.ts"))
     .map(async file => {
 
       /* Load handler and normalize name */
