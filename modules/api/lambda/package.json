@@ -46,6 +46,6 @@
     "header-case-normalizer": "^1.0.3",
     "morgan": "^1.10.0",
     "supertest": "^6.0.1",
-    "typescript-json-schema": "^0.46.0"
+    "typescript-json-schema": "^0.47.0"
   }
 }
