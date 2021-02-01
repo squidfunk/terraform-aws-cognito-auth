@@ -45,7 +45,7 @@
     "glob": "^7.1.6",
     "header-case-normalizer": "^1.0.3",
     "morgan": "^1.10.0",
-    "supertest": "^6.1.1",
+    "supertest": "^6.1.3",
     "typescript-json-schema": "^0.48.0"
   }
 }
