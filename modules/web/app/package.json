@@ -67,7 +67,7 @@
     "enzyme-adapter-react-16": "^1.15.6",
     "enzyme-to-json": "^3.6.1",
     "html-loader": "^2.0.0",
-    "html-webpack-plugin": "^4.5.1",
+    "html-webpack-plugin": "^5.1.0",
     "http-proxy-middleware": "^1.0.6",
     "jest": "^26.6.3",
     "redux-mock-store": "^1.5.4",
