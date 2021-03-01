@@ -75,7 +75,7 @@
     "ts-jest": "^24.3.0",
     "ts-loader": "^8.0.17",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
-    "webpack": "^5.23.0",
+    "webpack": "^5.24.2",
     "webpack-cli": "4.5.0",
     "webpack-dev-server": "^3.11.2"
   }
