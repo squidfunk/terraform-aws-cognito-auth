@@ -65,7 +65,7 @@
     "babel-loader": "^8.2.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
-    "enzyme-to-json": "^3.6.1",
+    "enzyme-to-json": "^3.6.2",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
     "http-proxy-middleware": "^1.1.0",
