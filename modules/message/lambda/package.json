@@ -37,7 +37,7 @@
     "browser-sync": "^2.26.14",
     "html-minifier": "^4.0.0",
     "imagemin-cli": "^6.0.0",
-    "mjml": "^4.9.0",
+    "mjml": "^4.9.1",
     "svgexport": "^0.4.1",
     "watch-cli": "^0.2.3"
   }
