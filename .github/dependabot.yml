@@ -1,0 +1,61 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@types/node"
+    versions:
+    - "< 11, >= 10.a"
+  - dependency-name: "@types/aws-lambda"
+    versions:
+    - 8.10.71
+    - 8.10.72
+    - 8.10.73
+  - dependency-name: "@types/jasmine"
+    versions:
+    - 3.6.6
+    - 3.6.7
+- package-ecosystem: npm
+  directory: "/modules/api/lambda"
+  schedule:
+    interval: weekly
+    time: "04:00"
+  open-pull-requests-limit: 10
+- package-ecosystem: npm
+  directory: "/modules/identity/lambda"
+  schedule:
+    interval: weekly
+    time: "04:00"
+  open-pull-requests-limit: 10
+- package-ecosystem: npm
+  directory: "/modules/message/lambda"
+  schedule:
+    interval: weekly
+    time: "04:00"
+  open-pull-requests-limit: 10
+- package-ecosystem: npm
+  directory: "/modules/web/app"
+  schedule:
+    interval: weekly
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: react-redux
+    versions:
+    - "< 7, >= 6.a"
+  - dependency-name: "@types/ramda"
+    versions:
+    - 0.27.36
+    - 0.27.37
+    - 0.27.38
+    - 0.27.39
+- package-ecosystem: npm
+  directory: "/modules/web/lambda"
+  schedule:
+    interval: weekly
+    time: "04:00"
+  open-pull-requests-limit: 10
