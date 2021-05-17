@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^4.9.1",
+    "@material-ui/icons": "^4.11.2",
     "axios": "^0.21.1",
     "query-string": "^7.0.0",
     "ramda": "^0.27.1",
