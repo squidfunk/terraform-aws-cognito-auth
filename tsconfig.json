@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
-    "baseUrl": "src",
-    "experimentalDecorators": true,
+    "baseUrl": ".",
     "lib": [
       "es2017",
       "esnext"
@@ -15,18 +14,19 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "dist",
-    "preserveConstEnums": true,
-    "removeComments": true,
+    "paths": {},
+    "removeComments": false,
     "resolveJsonModule": true,
-    "sourceMap": false,
-    "strict": true,
+    "skipLibCheck": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "stripInternal": true,
     "target": "es2017"
   },
   "include": [
-    "src",
-    "typings"
+    "share"
   ],
   "exclude": [
     "node_modules"

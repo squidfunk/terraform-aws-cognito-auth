@@ -34,7 +34,7 @@ provider "aws" {
 
 # local.*
 locals {
-  enabled = "${length(var.app_domain) == 0 ? 0 : 1}"
+  enabled = length(var.app_domain) == 0 ? 0 : 1
 }
 
 # -----------------------------------------------------------------------------
@@ -43,7 +43,7 @@ locals {
 
 # data.external.dist
 data "external" "dist" {
-  count   = "${local.enabled}"
+  count   = local.enabled
   program = ["${path.module}/s3/scripts/trigger.sh"]
 
   query = {
@@ -57,15 +57,13 @@ data "external" "dist" {
 
 # data.template_file.s3_bucket_policy.rendered
 data "template_file" "s3_bucket_policy" {
-  count    = "${local.enabled}"
-  template = "${file("${path.module}/s3/bucket/policy.json")}"
+  count    = local.enabled
+  template = file("${path.module}/s3/bucket/policy.json")
 
   vars = {
-    bucket = "${var.bucket}"
+    bucket = var.bucket
 
-    cloudfront_origin_access_identity_iam_arn = "${
-      aws_cloudfront_origin_access_identity._.0.iam_arn
-    }"
+    cloudfront_origin_access_identity_iam_arn = aws_cloudfront_origin_access_identity._[0].iam_arn
   }
 }
 
@@ -73,13 +71,13 @@ data "template_file" "s3_bucket_policy" {
 
 # data.template_file.index.rendered
 data "template_file" "index" {
-  count    = "${local.enabled}"
-  template = "${file("${path.module}/app/dist/index.html")}"
+  count    = local.enabled
+  template = file("${path.module}/app/dist/index.html")
 
   vars = {
-    api_base_path              = "${var.api_base_path}"
-    app_origin                 = "${var.app_origin}"
-    cognito_identity_pool_name = "${var.cognito_identity_pool_name}"
+    api_base_path              = var.api_base_path
+    app_origin                 = var.app_origin
+    cognito_identity_pool_name = var.cognito_identity_pool_name
   }
 }
 
@@ -89,29 +87,27 @@ data "template_file" "index" {
 
 # aws_iam_role.lambda
 resource "aws_iam_role" "lambda" {
-  count = "${local.enabled}"
+  count = local.enabled
   name  = "${var.namespace}-web-lambda"
 
-  assume_role_policy = "${
-    file("${path.module}/iam/policies/assume-role/lambda.json")
-  }"
+  assume_role_policy = file("${path.module}/iam/policies/assume-role/lambda.json")
 }
 
 # aws_iam_policy.lambda
 resource "aws_iam_policy" "lambda" {
-  count = "${local.enabled}"
+  count = local.enabled
   name  = "${var.namespace}-web-lambda"
 
-  policy = "${file("${path.module}/iam/policies/lambda.json")}"
+  policy = file("${path.module}/iam/policies/lambda.json")
 }
 
 # aws_iam_policy_attachment.lambda
 resource "aws_iam_policy_attachment" "lambda" {
-  count = "${local.enabled}"
+  count = local.enabled
   name  = "${var.namespace}-web-lambda"
 
-  policy_arn = "${aws_iam_policy.lambda.0.arn}"
-  roles      = ["${aws_iam_role.lambda.0.name}"]
+  policy_arn = aws_iam_policy.lambda[0].arn
+  roles      = [aws_iam_role.lambda[0].name]
 }
 
 # -----------------------------------------------------------------------------
@@ -120,10 +116,10 @@ resource "aws_iam_policy_attachment" "lambda" {
 
 # null_resource.dist
 resource "null_resource" "dist" {
-  count = "${local.enabled}"
+  count = local.enabled
 
   triggers = {
-    md5 = "${data.external.dist.0.result["checksum"]}"
+    md5 = data.external.dist[0].result["checksum"]
   }
 
   # Sync whole directory to S3
@@ -132,7 +128,7 @@ resource "null_resource" "dist" {
 
     environment = {
       DIRECTORY = "${path.module}/app/dist"
-      BUCKET    = "${aws_s3_bucket._.0.bucket}"
+      BUCKET    = aws_s3_bucket._[0].bucket
     }
   }
 }
@@ -143,18 +139,18 @@ resource "null_resource" "dist" {
 
 # aws_s3_bucket._
 resource "aws_s3_bucket" "_" {
-  count  = "${local.enabled}"
-  bucket = "${var.bucket}"
+  count  = local.enabled
+  bucket = var.bucket
   acl    = "private"
-  policy = "${data.template_file.s3_bucket_policy.0.rendered}"
+  policy = data.template_file.s3_bucket_policy[0].rendered
 }
 
 # aws_s3_bucket_object.index
 resource "aws_s3_bucket_object" "index" {
-  count         = "${local.enabled}"
-  bucket        = "${aws_s3_bucket._.0.bucket}"
+  count         = local.enabled
+  bucket        = aws_s3_bucket._[0].bucket
   key           = "index.html"
-  content       = "${data.template_file.index.0.rendered}"
+  content       = data.template_file.index[0].rendered
   acl           = "private"
   cache_control = "public, max-age=0, must-revalidate"
   content_type  = "text/html"
@@ -166,26 +162,24 @@ resource "aws_s3_bucket_object" "index" {
 
 # aws_cloudfront_origin_access_identity._
 resource "aws_cloudfront_origin_access_identity" "_" {
-  count = "${local.enabled}"
+  count = local.enabled
 }
 
 # aws_cloudfront_distribution._
 resource "aws_cloudfront_distribution" "_" {
-  count           = "${local.enabled}"
-  aliases         = ["${var.app_domain}"]
+  count           = local.enabled
+  aliases         = [var.app_domain]
   enabled         = true
   is_ipv6_enabled = true
   price_class     = "PriceClass_All"
 
   origin {
-    domain_name = "${aws_s3_bucket._.0.bucket_domain_name}"
+    domain_name = aws_s3_bucket._[0].bucket_domain_name
 
     origin_id = "web"
 
     s3_origin_config {
-      origin_access_identity = "${
-        aws_cloudfront_origin_access_identity._.0.cloudfront_access_identity_path
-      }"
+      origin_access_identity = aws_cloudfront_origin_access_identity._[0].cloudfront_access_identity_path
     }
   }
 
@@ -233,7 +227,7 @@ resource "aws_cloudfront_distribution" "_" {
 
     lambda_function_association {
       event_type = "origin-response"
-      lambda_arn = "${aws_lambda_function._.0.qualified_arn}"
+      lambda_arn = aws_lambda_function._[0].qualified_arn
     }
 
     viewer_protocol_policy = "redirect-to-https"
@@ -307,7 +301,7 @@ resource "aws_cloudfront_distribution" "_" {
 
     minimum_protocol_version = "TLSv1.1_2016"
     ssl_support_method       = "sni-only"
-    acm_certificate_arn      = "${var.app_certificate_arn}"
+    acm_certificate_arn      = var.app_certificate_arn
   }
 }
 
@@ -317,32 +311,30 @@ resource "aws_cloudfront_distribution" "_" {
 
 # aws_lambda_function._
 resource "aws_lambda_function" "_" {
-  count         = "${local.enabled}"
+  count         = local.enabled
   function_name = "${var.namespace}-web-security"
-  role          = "${aws_iam_role.lambda.0.arn}"
-  runtime       = "nodejs8.10"
+  role          = aws_iam_role.lambda[0].arn
+  runtime       = "nodejs12.x"
   filename      = "${path.module}/lambda/dist.zip"
   handler       = "index.handler"
   timeout       = 30
   memory_size   = 512
 
-  source_code_hash = "${
-    base64sha256(filebase64("${path.module}/lambda/dist.zip"))
-  }"
+  source_code_hash = base64sha256(filebase64("${path.module}/lambda/dist.zip"))
 
   # Lambda@Edge function must be located in us-east-1
-  provider = "aws.lambda"
+  provider = aws.lambda
   publish  = true
 }
 
 # aws_lambda_permission._
 resource "aws_lambda_permission" "_" {
-  count         = "${local.enabled}"
+  count         = local.enabled
   principal     = "cloudfront.amazonaws.com"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function._.0.arn}"
-  source_arn    = "${aws_cloudfront_distribution._.0.arn}"
+  function_name = aws_lambda_function._[0].arn
+  source_arn    = aws_cloudfront_distribution._[0].arn
 
   # Lambda@Edge function must be located in us-east-1
-  provider = "aws.lambda"
+  provider = aws.lambda
 }

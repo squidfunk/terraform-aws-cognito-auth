@@ -23,7 +23,5 @@
     "lint": "make lint",
     "test": "make test",
     "watch": "make watch"
-  },
-  "dependencies": {},
-  "devDependencies": {}
+  }
 }

@@ -21,8 +21,8 @@
  */
 
 import {
-  initSessionAction,
   SessionActionTypes,
+  initSessionAction,
   terminateSessionAction
 } from "providers/store/session"
 

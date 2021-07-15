@@ -29,15 +29,15 @@ import {
   withRememberMe
 } from "enhancers"
 import {
-  enhance,
-  Render
+  Render,
+  enhance
 } from "routes/Authenticate/AuthenticateSuccess"
 
 import { find } from "_/helpers"
 import { mockSession } from "_/mocks/common"
 import {
-  mockComponent,
-  Placeholder
+  Placeholder,
+  mockComponent
 } from "_/mocks/components"
 import {
   mockWithCallback,

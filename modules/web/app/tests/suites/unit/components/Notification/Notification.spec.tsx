@@ -25,9 +25,9 @@ import * as React from "react"
 import { compose } from "recompose"
 
 import {
-  enhance,
   Render,
-  RenderProps
+  RenderProps,
+  enhance
 } from "components/Notification/Notification"
 import { withNotification } from "enhancers"
 

@@ -1,0 +1,83 @@
+# Copyright (c) 2018-2019 Martin Donath <martin.donath@squidfunk.com>
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to
+# deal in the Software without restriction, including without limitation the
+# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+# sell copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+# IN THE SOFTWARE.
+
+name: ci
+on:
+  - push
+  - pull_request
+
+# Empty environment variable for unit tests
+env:
+  API_BASE_PATH:
+  COGNITO_USER_POOL_ID:
+  COGNITO_USER_POOL_CLIENT_ID:
+  COGNITO_IDENTITY_POOL_NAME:
+  COGNITO_IDENTITY_POOL_PROVIDER: auth.example.com
+  DYNAMODB_TABLE:
+  SNS_TOPIC_ARN:
+  SES_SENDER_ADDRESS:
+
+# Jobs to run
+jobs:
+
+  # Build all modules
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          - { module: modules/api/lambda }
+          - { module: modules/identity/lambda }
+          - { module: modules/message/lambda }
+          - { module: modules/web/app }
+          - { module: modules/web/lambda }
+    steps:
+
+      # Limit clone depth to speed up build
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 5
+
+      # Install Node runtime and dependencies
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+
+      - uses: actions/cache@v1
+        id: cache-root
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - if: steps.cache-root.outputs.cache-hit != 'true'
+        run: npm install --no-audit
+
+      - run: npm install --prefix ${{ matrix.config.module }} --no-audit
+
+      # Run linter and build distribution files
+      - run: npm run --prefix ${{ matrix.config.module }} lint
+      - run: npm run --prefix ${{ matrix.config.module }} build
+
+      # Run tests
+      - run: npm run --prefix ${{ matrix.config.module }} test

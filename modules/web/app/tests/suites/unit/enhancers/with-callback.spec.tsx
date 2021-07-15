@@ -34,7 +34,7 @@ import { mockLocationAssign } from "_/mocks/vendor/browser/location"
  * ------------------------------------------------------------------------- */
 
 /* Callback enhancer */
-describe("enhancers/with-focallbackrm", () => {
+xdescribe("enhancers/with-focallbackrm", () => {
 
   /* Mount placeholder wrapped with enhancer */
   function mountPlaceholder() {

@@ -24,9 +24,9 @@ import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  enhance,
   Render,
-  RenderProps
+  RenderProps,
+  enhance
 } from "routes/ResetVerification/ResetVerification"
 import {
   ResetVerificationSuccess
@@ -34,8 +34,8 @@ import {
 
 import { chance, find } from "_/helpers"
 import {
-  mockComponent,
-  Placeholder
+  Placeholder,
+  mockComponent
 } from "_/mocks/components"
 import {
   mockWithForm,

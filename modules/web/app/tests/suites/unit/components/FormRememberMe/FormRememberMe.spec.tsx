@@ -24,10 +24,10 @@ import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  enhance,
   FormRememberMeProps,
   Render,
-  RenderProps
+  RenderProps,
+  enhance
 } from "components/FormRememberMe/FormRememberMe"
 
 import { chance, find } from "_/helpers"

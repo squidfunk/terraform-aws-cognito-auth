@@ -18,12 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-# macOS internals
-.DS_Store
-
-# NPM-related
-node_modules
-npm-debug.log*
+# -----------------------------------------------------------------------------
+# Terraform
+# -----------------------------------------------------------------------------
 
 # Terraform runtime
 .terraform
@@ -33,7 +30,40 @@ npm-debug.log*
 *.tfstate
 *.tfstate.backup
 
-# Development-related
+# Environment
 /env
 .env
-TODO
+
+# -----------------------------------------------------------------------------
+# Node, TypeScript
+# -----------------------------------------------------------------------------
+
+# NPM-related
+node_modules
+npm-debug.log*
+
+# Distribution files
+dist
+
+# Build files
+tsconfig.tsbuildinfo
+
+# Coverage reports
+.nyc_output
+coverage
+
+# -----------------------------------------------------------------------------
+# General
+# -----------------------------------------------------------------------------
+
+# Never ignore .gitkeep files
+!**/.gitkeep
+
+# macOS internals
+.DS_Store
+
+# CPU profiles
+*.cpuprofile
+
+# Temporary files
+tmp

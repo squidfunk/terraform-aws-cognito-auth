@@ -20,6 +20,8 @@
  * IN THE SOFTWARE.
  */
 
+// tslint:disable no-console
+
 import "dotenv/config"
 
 import * as express from "express"

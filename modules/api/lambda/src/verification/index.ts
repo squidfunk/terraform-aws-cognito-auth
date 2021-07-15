@@ -22,7 +22,6 @@
 
 import { DynamoDB, SNS } from "aws-sdk"
 import { randomBytes } from "crypto"
-import { promisify } from "util"
 
 /* ----------------------------------------------------------------------------
  * Types
@@ -87,7 +86,7 @@ export class Verification {
     context: VerificationContext, subject: string
   ): Promise<VerificationCode> {
     const code: VerificationCode = {
-      id: (await promisify(randomBytes)(16)).toString("hex"),
+      id: randomBytes(16).toString("hex"),
       context,
       subject,
       expires: Math.floor(Date.now() / 1000) + 60 * 60 * 24

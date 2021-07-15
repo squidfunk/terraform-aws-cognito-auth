@@ -54,15 +54,12 @@ clean:
 
 # Lint source files
 lint: node_modules
-	$(shell npm bin --prefix ${ROOT})/tslint \
-		-p tsconfig.json "src/**/*.ts*"
-	$(shell npm bin --prefix ${ROOT})/tslint \
-		-p tests/tsconfig.json "tests/**/*.ts*"
+	${NPM_BIN}/tslint -p tsconfig.json "src/**/*.ts*"
+	${NPM_BIN}/tslint -p tests/tsconfig.json "tests/**/*.ts*"
 
 # Start API server and webpack development server
 start: node_modules
 	@ [ ! -f ${ROOT}/terraform.tfstate ] || make --silent .env
-	make -C ../../api/lambda start &
 	$(shell npm bin)/webpack-dev-server --mode development --hot --open
 
 # Execute unit tests

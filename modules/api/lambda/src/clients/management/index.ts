@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { Client } from "clients"
+import { Client } from "../_"
 
 /* ----------------------------------------------------------------------------
  * Class
@@ -86,12 +86,6 @@ export class ManagementClient extends Client {
   public async changePassword(
     username: string, password: string
   ): Promise<void> {
-    console.log({
-      UserPoolId: process.env.COGNITO_USER_POOL_ID!,
-      Username: username,
-      Password: password,
-      Permanent: true
-    })
     await this.cognito.adminSetUserPassword({
       UserPoolId: process.env.COGNITO_USER_POOL_ID!,
       Username: username,

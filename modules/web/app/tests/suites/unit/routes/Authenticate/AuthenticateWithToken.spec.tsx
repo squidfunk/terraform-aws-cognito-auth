@@ -29,14 +29,14 @@ import {
   AuthenticateSuccess
 } from "routes/Authenticate/AuthenticateSuccess"
 import {
-  enhance,
-  Render
+  Render,
+  enhance
 } from "routes/Authenticate/AuthenticateWithToken"
 
 import { find } from "_/helpers"
 import {
-  mockComponent,
-  Placeholder
+  Placeholder,
+  mockComponent
 } from "_/mocks/components"
 import {
   mockWithFormSubmit,

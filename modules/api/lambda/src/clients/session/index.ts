@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { Client } from "clients"
+import { Client } from "../_"
 
 /* ----------------------------------------------------------------------------
  * Class

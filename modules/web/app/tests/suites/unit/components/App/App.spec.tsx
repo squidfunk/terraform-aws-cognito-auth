@@ -24,9 +24,9 @@ import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  enhance,
   Render,
-  RenderProps
+  RenderProps,
+  enhance
 } from "components/App/App"
 import {
   Authenticate,

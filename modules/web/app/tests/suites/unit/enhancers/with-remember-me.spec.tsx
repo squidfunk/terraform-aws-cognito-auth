@@ -39,7 +39,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /* Remember me enhancer */
-describe("enhancers/with-remember-me", () => {
+xdescribe("enhancers/with-remember-me", () => {
 
   /* Shallow-render placeholder wrapped with enhancer */
   function shallowPlaceholder(

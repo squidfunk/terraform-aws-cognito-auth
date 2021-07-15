@@ -20,20 +20,20 @@
  * IN THE SOFTWARE.
  */
 
-import { AuthenticationClient } from "clients/authentication"
+import { AuthenticationClient } from "../../clients"
 import {
   AuthenticateRequestWithCredentials,
   AuthenticateRequestWithToken,
   Session
-} from "common"
-import { handler } from "handlers"
+} from "../../common"
 import {
   issueTokenCookie,
   parseTokenCookie,
   resetTokenCookie
-} from "utilities"
+} from "../../utilities"
+import { handler } from "../_"
 
-import schema = require("common/events/authenticate/index.json")
+import schema = require("../../common/events/authenticate/index.json")
 
 /* ----------------------------------------------------------------------------
  * Types

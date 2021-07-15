@@ -20,7 +20,7 @@
  * IN THE SOFTWARE.
  */
 
-import { HandlerCallbackResponse } from "handlers"
+import { HandlerCallbackResponse } from "handlers/_"
 
 /* ----------------------------------------------------------------------------
  * Functions

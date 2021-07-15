@@ -24,15 +24,15 @@ import { mount, shallow } from "enzyme"
 import * as React from "react"
 
 import {
-  enhance,
-  Render
+  Render,
+  enhance
 } from "routes/Leave/Leave"
 import { LeaveSuccess } from "routes/Leave/LeaveSuccess"
 
 import { find, wait } from "_/helpers"
 import {
-  mockComponent,
-  Placeholder
+  Placeholder,
+  mockComponent
 } from "_/mocks/components"
 import {
   mockWithFormSubmit,

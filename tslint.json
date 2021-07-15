@@ -5,10 +5,12 @@
   ],
   "linterOptions": {
     "exclude": [
-      "src/**/*.d.ts"
+      "**/src/**/*.d.ts"
     ]
   },
   "rules": {
+    "arguments-order": false,
+    "array-type": false,
     "arrow-parens": [
       true,
       "ban-single-arg-parens"
@@ -18,17 +20,18 @@
       ["fit"],
       ["fdescribe"],
       ["xit"],
-      ["xdescribe"],
       {
         "name": "Object.assign",
         "message": "Use the spread operator instead."
       }
     ],
+    "bool-param-default": false,
     "class-name": true,
     "comment-format": [
       true,
       "check-space"
     ],
+    "cognitive-complexity": false,
     "curly": false,
     "indent": [
       true,
@@ -36,10 +39,18 @@
     ],
     "interface-name": false,
     "jsdoc-format": true,
+    "max-union-size": false,
+    "no-big-function": false,
+    "no-bitwise": false,
+    "no-duplicate-string": false,
     "no-empty-interface": false,
     "no-implicit-dependencies": false,
+    "no-identical-functions": false,
     "no-internal-module": true,
+    "no-namespace": false,
+    "no-nested-switch": false,
     "no-null-keyword": true,
+    "no-object-literal-type-assertion": false,
     "no-reference": false,
     "no-submodule-imports": false,
     "no-trailing-whitespace": true,
@@ -54,7 +65,15 @@
       "check-open-brace",
       "check-whitespace"
     ],
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "case-insensitive-legacy",
+        "named-imports-order": "lowercase-last"
+      }
+    ],
     "prefer-const": true,
+    "prefer-for-of": false,
     "quotemark": [
       true,
       "double",
@@ -93,12 +112,7 @@
         "variable-declaration": "onespace"
       }
     ],
-    "variable-name": [
-      true,
-      "allow-leading-underscore",
-      "ban-keywords",
-      "check-format"
-    ],
+    "variable-name": false,
     "whitespace": [
       true,
       "check-branch",

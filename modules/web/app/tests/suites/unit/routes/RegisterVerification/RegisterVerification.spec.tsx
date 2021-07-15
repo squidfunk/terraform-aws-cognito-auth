@@ -26,8 +26,8 @@ import { compose } from "recompose"
 
 import { withRememberMe } from "enhancers"
 import {
-  enhance,
-  Render
+  Render,
+  enhance
 } from "routes/RegisterVerification/RegisterVerification"
 import {
   RegisterVerificationSuccess
@@ -35,8 +35,8 @@ import {
 
 import { find } from "_/helpers"
 import {
-  mockComponent,
-  Placeholder
+  Placeholder,
+  mockComponent
 } from "_/mocks/components"
 import {
   mockWithFormSubmit,

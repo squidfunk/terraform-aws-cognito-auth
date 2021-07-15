@@ -20,15 +20,15 @@
  * IN THE SOFTWARE.
  */
 
-import { SessionClient } from "clients/session"
-import { LeaveRequest } from "common"
-import { handler } from "handlers"
+import { SessionClient } from "../../clients"
+import { LeaveRequest } from "../../common"
 import {
   parseTokenFromHeader,
   resetTokenCookie
-} from "utilities"
+} from "../../utilities"
+import { handler } from "../_"
 
-import schema = require("common/events/leave/index.json")
+import schema = require("../../common/events/leave/index.json")
 
 /* ----------------------------------------------------------------------------
  * Handler

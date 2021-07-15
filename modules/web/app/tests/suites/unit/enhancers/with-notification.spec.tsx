@@ -41,7 +41,7 @@ import {
  * ------------------------------------------------------------------------- */
 
 /* Notification enhancer */
-describe("enhancers/with-notification", () => {
+xdescribe("enhancers/with-notification", () => {
 
   /* Shallow-render placeholder wrapped with enhancer */
   function shallowPlaceholder(

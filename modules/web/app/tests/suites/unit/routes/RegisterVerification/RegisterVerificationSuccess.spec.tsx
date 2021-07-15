@@ -26,8 +26,8 @@ import { MemoryRouter } from "react-router"
 import { RedirectProps } from "react-router-dom"
 
 import {
-  enhance,
-  Render
+  Render,
+  enhance
 } from "routes/RegisterVerification/RegisterVerificationSuccess"
 
 import { find } from "_/helpers"

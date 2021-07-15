@@ -29,15 +29,15 @@ import {
   AuthenticateSuccess
 } from "routes/Authenticate/AuthenticateSuccess"
 import {
-  enhance,
   Render,
-  RenderProps
+  RenderProps,
+  enhance
 } from "routes/Authenticate/AuthenticateWithCredentials"
 
 import { chance, find } from "_/helpers"
 import {
-  mockComponent,
-  Placeholder
+  Placeholder,
+  mockComponent
 } from "_/mocks/components"
 import {
   mockWithForm,

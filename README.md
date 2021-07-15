@@ -1,19 +1,16 @@
-[![Travis][travis-image]][travis-link]
+[![Github Action][action-image]][action-link]
 [![Codecov][codecov-image]][codecov-link]
 [![Gitter][gitter-image]][gitter-link]
 [![GitHub][github-image]][github-link]
-[![dependabot][dependabot-image]][dependabot-link]
 
-  [travis-image]: https://travis-ci.org/squidfunk/terraform-aws-cognito-auth.svg?branch=master
-  [travis-link]: https://travis-ci.org/squidfunk/terraform-aws-cognito-auth
+  [action-image]: https://github.com/squidfunk/terraform-aws-cognito-auth/workflows/ci/badge.svg?branch=master
+  [action-link]: https://github.com/squidfunk/terraform-aws-cognito-auth/actions
   [codecov-image]: https://img.shields.io/codecov/c/github/squidfunk/terraform-aws-cognito-auth/master.svg
   [codecov-link]: https://codecov.io/gh/squidfunk/terraform-aws-cognito-auth
   [gitter-image]: https://badges.gitter.im/squidfunk/terraform-aws-cognito-auth.svg
   [gitter-link]: https://gitter.im/squidfunk/terraform-aws-cognito-auth
   [github-image]: https://img.shields.io/github/release/squidfunk/terraform-aws-cognito-auth.svg
   [github-link]: https://github.com/squidfunk/terraform-aws-cognito-auth/releases
-  [dependabot-image]: https://img.shields.io/badge/dependabot-enabled-06f.svg
-  [dependabot-link]: https://dependabot.com
 
 # Terraform AWS Cognito Auth
 
@@ -85,8 +82,8 @@ Add the following module to your Terraform configuration and apply it:
 
 ``` hcl
 module "cognito-auth" {
-  source  = "github.com/squidfunk/terraform-aws-cognito-auth"
-  version = "0.4.0"
+  source  = "squidfunk/cognito-auth/aws"
+  version = "0.4.3"
 
   namespace                      = "<namespace>"
   region                         = "<region>"
@@ -199,8 +196,8 @@ and apply it:
 
 ``` hcl
 module "cognito-auth" {
-  source  = "github.com/squidfunk/terraform-aws-cognito-auth"
-  version = "0.4.0"
+  source  = "squidfunk/cognito-auth/aws"
+  version = "0.4.3"
 
   namespace                      = "example-auth"
   region                         = "us-east-1"
