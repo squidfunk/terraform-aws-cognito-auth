@@ -16,7 +16,8 @@
         "cognito-idp:AdminConfirmSignUp",
         "cognito-idp:AdminDeleteUser",
         "cognito-idp:AdminGetUser",
-        "cognito-idp:AdminUpdateUserAttributes"
+        "cognito-idp:AdminUpdateUserAttributes",
+        "cognito-idp:AdminSetUserPassword"
       ],
       "Resource": "${cognito_user_pool_arn}"
     },
