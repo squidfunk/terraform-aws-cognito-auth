@@ -91,6 +91,6 @@ export class ManagementClient extends Client {
       Username: username,
       Password: password,
       Permanent: true
-    })
+    }).promise()
   }
 }
