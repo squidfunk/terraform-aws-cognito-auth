@@ -27,6 +27,7 @@
 export * from "./cognito/admin-confirm-sign-up"
 export * from "./cognito/admin-delete-user"
 export * from "./cognito/admin-get-user"
+export * from "./cognito/admin-set-user-password"
 export * from "./cognito/admin-update-user-attributes"
 export * from "./cognito/global-sign-out"
 export * from "./cognito/initiate-auth"

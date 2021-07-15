@@ -23,11 +23,11 @@
     "lint": "make lint",
     "start": "make start",
     "test": "make test",
-    "test:acceptance": "make test-acceptance",
     "watch": "make watch"
   },
   "dependencies": {
-    "cookie": "^0.4.1",
+    "aws-sdk": "^2.469.0",
+    "cookie": "^0.4.0",
     "email-validator": "^2.0.4",
     "jsonschema": "^1.4.0",
     "password-rules": "0.0.3",
