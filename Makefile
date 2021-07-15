@@ -18,6 +18,10 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
+ifeq (, $(shell which jq))
+  $(error jq is not installed, installation instructions at https://stedolan.github.io/jq/)
+endif
+
 all: lint | build
 
 # -----------------------------------------------------------------------------
