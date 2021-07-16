@@ -143,6 +143,7 @@ export function mockAPIGatewayProxyEvent<
       resourceId: chance.string(),
       resourcePath: "/",
       identity: {
+        clientCert: null,
         accountId: null,
         apiKey: chance.string(),
         apiKeyId: chance.string(),
