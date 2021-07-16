@@ -49,7 +49,7 @@ export const TOKEN_COOKIE_PATH = `/${process.env.API_BASE_PATH}/authenticate`
  *
  * @return Refresh token
  */
-export function parseTokenCookie(value: string) {
+export function parseTokenCookie(value: string | undefined) {
   if (!(value && value.length))
     throw new TypeError("Invalid request")
   const { [TOKEN_COOKIE_NAME]: token } = cookie.parse(value)

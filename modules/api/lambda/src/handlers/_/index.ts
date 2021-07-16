@@ -45,7 +45,7 @@ export interface HandlerCallbackEvent<
   path: string                         /* Event path */
   pathParameters: TParameters          /* Event path parameters */
   headers: {                           /* Event headers */
-    [name: string]: string
+    [name: string]: string | undefined
   }
   body: TEvent                         /* Event body */
 }
