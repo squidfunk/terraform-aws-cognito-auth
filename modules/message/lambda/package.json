@@ -36,6 +36,7 @@
     "@types/quoted-printable": "^0.2.2",
     "browser-sync": "^2.27.4",
     "html-minifier": "^4.0.0",
+    "imagemin-cli": "^6.0.0",
     "mjml": "^4.10.1",
     "svgexport": "^0.4.2"
   }
