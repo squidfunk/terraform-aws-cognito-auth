@@ -171,7 +171,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "_" {
 resource "aws_lambda_function" "_" {
   function_name = "${var.namespace}-identity-register"
   role          = aws_iam_role.lambda.arn
-  runtime       = "nodejs12.x"
+  runtime       = "nodejs14.x"
   filename      = "${path.module}/lambda/dist.zip"
   handler       = "index.handler"
   timeout       = 30

@@ -103,7 +103,7 @@ resource "aws_api_gateway_integration" "verify" {
 resource "aws_lambda_function" "_" {
   function_name = "${var.namespace}-api-reset"
   role          = var.lambda_role_arn
-  runtime       = "nodejs12.x"
+  runtime       = "nodejs14.x"
   filename      = var.lambda_filename
   handler       = "handlers/reset/index.post"
   timeout       = 30
@@ -146,7 +146,7 @@ resource "aws_lambda_permission" "_" {
 resource "aws_lambda_function" "verify" {
   function_name = "${var.namespace}-api-reset-verify"
   role          = var.lambda_role_arn
-  runtime       = "nodejs12.x"
+  runtime       = "nodejs14.x"
   filename      = var.lambda_filename
   handler       = "handlers/reset/verify.post"
   timeout       = 30

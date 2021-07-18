@@ -91,7 +91,7 @@ resource "aws_lambda_function" "_" {
   count         = local.enabled
   function_name = "${var.namespace}-message"
   role          = aws_iam_role.lambda[0].arn
-  runtime       = "nodejs12.x"
+  runtime       = "nodejs14.x"
   filename      = "${path.module}/lambda/dist.zip"
   handler       = "index.handler"
   timeout       = 10
