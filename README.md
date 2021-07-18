@@ -289,11 +289,6 @@ authentication flow - specifically multi-part emails are not supported; welcome
 to the 21st century. To work around these restrictions registration and password
 reset were decoupled using the Cognito Identity Service Provider admin APIs.
 Verification is implemented with custom verification codes and email delivery.
-However, as Cognito currently does not support setting the password for a user
-through the admin API, the user is deleted and recreated with the exact same
-identifier (a UUID). This is heavily tested with acceptance tests and just
-works, but it's not ideal. Hopefully AWS will address these issues in the
-future.
 
 ## License
 
