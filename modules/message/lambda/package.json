@@ -32,13 +32,11 @@
   },
   "devDependencies": {
     "@types/mime": "^2.0.3",
-    "@types/mustache": "^4.1.1",
+    "@types/mustache": "^4.1.2",
     "@types/quoted-printable": "^0.2.2",
-    "browser-sync": "^2.26.14",
+    "browser-sync": "^2.27.4",
     "html-minifier": "^4.0.0",
-    "imagemin-cli": "^6.0.0",
-    "mjml": "^4.9.3",
-    "svgexport": "^0.4.2",
-    "watch-cli": "^0.2.3"
+    "mjml": "^4.10.1",
+    "svgexport": "^0.4.2"
   }
 }
