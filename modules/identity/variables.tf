@@ -45,3 +45,11 @@ variable "cognito_identity_pool_name" {
 variable "cognito_identity_pool_provider" {
   description = "Cognito identity pool provider"
 }
+
+# -----------------------------------------------------------------------------
+# Variables: tags
+# -----------------------------------------------------------------------------
+variable "tags" {
+  type = map(string)
+  default = {}
+}

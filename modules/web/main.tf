@@ -91,6 +91,8 @@ resource "aws_iam_role" "lambda" {
   name  = "${var.namespace}-web-lambda"
 
   assume_role_policy = file("${path.module}/iam/policies/assume-role/lambda.json")
+
+  tags = var.tags
 }
 
 # aws_iam_policy.lambda
@@ -99,6 +101,8 @@ resource "aws_iam_policy" "lambda" {
   name  = "${var.namespace}-web-lambda"
 
   policy = file("${path.module}/iam/policies/lambda.json")
+
+  tags = var.tags
 }
 
 # aws_iam_policy_attachment.lambda
@@ -143,6 +147,8 @@ resource "aws_s3_bucket" "_" {
   bucket = var.bucket
   acl    = "private"
   policy = data.template_file.s3_bucket_policy[0].rendered
+
+  tags = var.tags
 }
 
 # aws_s3_bucket_object.index
@@ -154,6 +160,8 @@ resource "aws_s3_bucket_object" "index" {
   acl           = "private"
   cache_control = "public, max-age=0, must-revalidate"
   content_type  = "text/html"
+
+  tags = var.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -303,6 +311,8 @@ resource "aws_cloudfront_distribution" "_" {
     ssl_support_method       = "sni-only"
     acm_certificate_arn      = var.app_certificate_arn
   }
+
+  tags = var.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -325,6 +335,8 @@ resource "aws_lambda_function" "_" {
   # Lambda@Edge function must be located in us-east-1
   provider = aws.lambda
   publish  = true
+
+  tags = var.tags
 }
 
 # aws_lambda_permission._

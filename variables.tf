@@ -103,3 +103,11 @@ variable "bucket" {
   description = "S3 bucket name"
   default     = ""
 }
+
+# -----------------------------------------------------------------------------
+# Variables: tags
+# -----------------------------------------------------------------------------
+variable "tags" {
+  type = map(string)
+  default = {}
+}
