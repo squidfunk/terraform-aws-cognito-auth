@@ -74,3 +74,11 @@ variable "ses_sender_address" {
   description = "SES sender email address"
   default     = ""
 }
+
+# -----------------------------------------------------------------------------
+# Variables: tags
+# -----------------------------------------------------------------------------
+variable "tags" {
+  type = map(string)
+  default = {}
+}

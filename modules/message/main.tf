@@ -51,6 +51,8 @@ resource "aws_iam_role" "lambda" {
   name  = "${var.namespace}-message-lambda"
 
   assume_role_policy = file("${path.module}/iam/policies/assume-role/lambda.json")
+
+  tags = var.tags
 }
 
 # aws_iam_policy.lambda
@@ -59,6 +61,8 @@ resource "aws_iam_policy" "lambda" {
   name  = "${var.namespace}-message-lambda"
 
   policy = data.template_file.lambda_iam_policy[0].rendered
+
+  tags = var.tags
 }
 
 # aws_iam_policy_attachment.lambda
@@ -106,6 +110,8 @@ resource "aws_lambda_function" "_" {
       SES_SENDER_ADDRESS             = var.ses_sender_address
     }
   }
+
+  tags = var.tags
 }
 
 # aws_lambda_permission._

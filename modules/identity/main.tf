@@ -53,6 +53,8 @@ resource "aws_iam_role" "cognito" {
   name = "${var.namespace}-identity"
 
   assume_role_policy = data.template_file.cognito_iam_assume_role_policy.rendered
+
+  tags = var.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -64,6 +66,8 @@ resource "aws_iam_role" "lambda" {
   assume_role_policy = file(
     "${path.module}/iam/policies/assume-role/lambda.json"
   )
+
+  tags = var.tags
 }
 
 # aws_iam_policy.lambda
@@ -71,6 +75,8 @@ resource "aws_iam_policy" "lambda" {
   name = "${var.namespace}-identity-lambda"
 
   policy = data.template_file.lambda_iam_policy.rendered
+
+  tags = var.tags
 }
 
 # aws_iam_policy_attachment.lambda
@@ -120,6 +126,8 @@ resource "aws_cognito_user_pool" "_" {
   lifecycle {
     ignore_changes = [schema]
   }
+
+  tags = var.tags
 }
 
 # aws_cognito_user_pool_client._
@@ -152,6 +160,8 @@ resource "aws_cognito_identity_pool" "_" {
       aws_cognito_user_pool._.id
     }"
   }
+
+  tags = var.tags
 }
 
 # aws_cognito_identity_pool_roles_attachment._
@@ -178,6 +188,8 @@ resource "aws_lambda_function" "_" {
   memory_size   = 512
 
   source_code_hash = base64sha256(filebase64("${path.module}/lambda/dist.zip"))
+
+  tags = var.tags
 }
 
 # aws_lambda_permission._

@@ -43,6 +43,8 @@ module "api" {
   cognito_user_pool_client_id = "${module.identity.cognito_user_pool_client_id}"
 
   cognito_identity_pool_provider = "${var.cognito_identity_pool_provider}"
+
+  tags = var.tags
 }
 
 # module.identity
@@ -54,6 +56,8 @@ module "identity" {
 
   cognito_identity_pool_name     = "${var.cognito_identity_pool_name}"
   cognito_identity_pool_provider = "${var.cognito_identity_pool_provider}"
+
+  tags = var.tags
 }
 
 # module.message
@@ -72,6 +76,8 @@ module "message" {
   sns_topic_arn = "${module.api.sns_topic_arn}"
 
   ses_sender_address = "${var.ses_sender_address}"
+
+  tags = var.tags
 }
 
 # module.route
@@ -91,6 +97,8 @@ module "route" {
   cloudfront_distribution_hosted_zone_id = "${
     module.web.cloudfront_distribution_hosted_zone_id
   }"
+
+  tags = var.tags
 }
 
 # module.web
@@ -115,4 +123,6 @@ module "web" {
     ? var.namespace
     : var.bucket
   }"
+
+  tags = var.tags
 }

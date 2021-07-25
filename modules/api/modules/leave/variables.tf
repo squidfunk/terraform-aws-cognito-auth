@@ -73,3 +73,11 @@ variable "lambda_role_arn" {
 variable "lambda_filename" {
   description = "Lambda filename"
 }
+
+# -----------------------------------------------------------------------------
+# Variables: tags
+# -----------------------------------------------------------------------------
+variable "tags" {
+  type = map(string)
+  default = {}
+}

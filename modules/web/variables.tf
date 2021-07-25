@@ -92,3 +92,11 @@ variable "cognito_identity_pool_name" {
 variable "bucket" {
   description = "S3 bucket name"
 }
+
+# -----------------------------------------------------------------------------
+# Variables: tags
+# -----------------------------------------------------------------------------
+variable "tags" {
+  type = map(string)
+  default = {}
+}

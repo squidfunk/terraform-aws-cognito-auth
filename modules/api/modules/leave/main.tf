@@ -82,6 +82,8 @@ resource "aws_lambda_function" "_" {
       COGNITO_IDENTITY_POOL_PROVIDER = var.cognito_identity_pool_provider
     }
   }
+
+  tags = var.tags
 }
 
 # aws_lambda_permission._
