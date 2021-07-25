@@ -59,3 +59,11 @@ variable "cloudfront_distribution_domain_name" {
 variable "cloudfront_distribution_hosted_zone_id" {
   description = "CloudFront distribution hosted zone identifier"
 }
+
+# -----------------------------------------------------------------------------
+# Variables: tags
+# -----------------------------------------------------------------------------
+variable "tags" {
+  type = map(string)
+  default = {}
+}

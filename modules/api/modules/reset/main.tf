@@ -119,6 +119,8 @@ resource "aws_lambda_function" "_" {
       SNS_TOPIC_ARN               = var.sns_topic_arn
     }
   }
+
+  tags = var.tags
 }
 
 # aws_lambda_permission._
@@ -162,6 +164,8 @@ resource "aws_lambda_function" "verify" {
       SNS_TOPIC_ARN               = var.sns_topic_arn
     }
   }
+
+  tags = var.tags
 }
 
 # aws_lambda_permission.verify

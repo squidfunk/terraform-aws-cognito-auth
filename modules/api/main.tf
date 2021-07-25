@@ -42,6 +42,8 @@ resource "aws_iam_role" "lambda" {
   name = "${var.namespace}-api-lambda"
 
   assume_role_policy = file("${path.module}/iam/policies/assume-role/lambda.json")
+
+  tags = var.tags
 }
 
 # aws_iam_policy.lambda
@@ -49,6 +51,8 @@ resource "aws_iam_policy" "lambda" {
   name = "${var.namespace}-api-lambda"
 
   policy = data.template_file.lambda_iam_policy.rendered
+
+  tags = var.tags
 }
 
 # aws_iam_policy_attachment.lambda
@@ -80,6 +84,8 @@ resource "aws_dynamodb_table" "_" {
     attribute_name = "expires"
     enabled        = true
   }
+
+  tags = var.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -89,6 +95,8 @@ resource "aws_dynamodb_table" "_" {
 # aws_sns_topic._
 resource "aws_sns_topic" "_" {
   name = "${var.namespace}-verification"
+
+  tags = var.tags
 }
 
 # -----------------------------------------------------------------------------
@@ -98,6 +106,8 @@ resource "aws_sns_topic" "_" {
 # aws_api_gateway_rest_api._
 resource "aws_api_gateway_rest_api" "_" {
   name = var.namespace
+
+  tags = var.tags
 }
 
 # aws_api_gateway_resource._
@@ -112,6 +122,8 @@ resource "aws_api_gateway_stage" "_" {
   stage_name    = var.api_stage
   rest_api_id   = aws_api_gateway_rest_api._.id
   deployment_id = aws_api_gateway_deployment._.id
+
+  tags = var.tags
 }
 
 # aws_api_gateway_deployment._
@@ -160,6 +172,8 @@ module "authenticate" {
 
   lambda_role_arn = aws_iam_role.lambda.arn
   lambda_filename = "${path.module}/lambda/dist.zip"
+  
+  tags = var.tags
 }
 
 # module.leave
@@ -177,6 +191,8 @@ module "leave" {
 
   lambda_role_arn = aws_iam_role.lambda.arn
   lambda_filename = "${path.module}/lambda/dist.zip"
+
+  tags = var.tags
 }
 
 # module.register
@@ -197,6 +213,8 @@ module "register" {
 
   lambda_role_arn = aws_iam_role.lambda.arn
   lambda_filename = "${path.module}/lambda/dist.zip"
+
+  tags = var.tags
 }
 
 # module.reset
@@ -217,4 +235,6 @@ module "reset" {
 
   lambda_role_arn = aws_iam_role.lambda.arn
   lambda_filename = "${path.module}/lambda/dist.zip"
+
+  tags = var.tags
 }
