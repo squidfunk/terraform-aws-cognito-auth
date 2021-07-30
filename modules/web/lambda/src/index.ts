@@ -46,10 +46,11 @@ export async function handler(
   /* Define security headers */
   const headers = {
 
-    /* Block all external and inline resources except CSS (needed by JSS) */
+    /* Block all external and inline resources except CSS and Google Fonts (needed by JSS) */
     "Content-Security-Policy": [
       "default-src 'self'",
-      "style-src 'self' 'unsafe-inline'"
+      "font-src fonts.gstatic.com",
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com"
     ].join("; "),
 
     /* Clients may only connect via HTTPS */
