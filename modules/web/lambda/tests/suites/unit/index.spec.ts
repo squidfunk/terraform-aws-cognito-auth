@@ -40,7 +40,7 @@ describe("handler", () => {
     expect(headers["Content-Security-Policy"]).toBeDefined()
     expect(headers["Content-Security-Policy"][0]).toEqual({
       key: "Content-Security-Policy",
-      value: "default-src 'self'; style-src 'self' 'unsafe-inline'"
+      value: "default-src 'self'; font-src fonts.gstatic.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com"
     })
   })
 
