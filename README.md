@@ -1,6 +1,6 @@
 > ⚠️ __UNMAINTAINED: I'm lacking the time to keep this project updated, which is
 > why this project will not receive any further updates. Use it at your own
-> risk. Furthermore, issues have been disabled.__
+> risk. Issues have been disabled.__
 
 [![Github Action][action-image]][action-link]
 [![Codecov][codecov-image]][codecov-link]
